@@ -1,0 +1,8 @@
+{
+  "name": "Si Driss - Prof 2ème Bac PC BIOF",
+  "description": "Plateforme d'entraînement et de coaching socratique intensif en Physique-Chimie pour 2ème Bac PC BIOF (Maroc) avec Si Driss.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
