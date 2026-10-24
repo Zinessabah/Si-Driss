@@ -4,6 +4,7 @@ import { NATIONAL_EXERCISES, NationalExercise, NationalQuestion } from '../data/
 import { MathView } from './MathView';
 import { ShieldCheck, Award, AlertTriangle, CheckCircle, HelpCircle, FileCheck, ArrowRight, BookOpen, Lightbulb, RefreshCw, Key } from 'lucide-react';
 import { useApiKey } from '../hooks/useApiKey';
+import { useBranch } from '../hooks/useBranch';
 import { ApiKeyModal } from './ApiKeyModal';
 
 interface EvaluationResult {
@@ -22,6 +23,7 @@ interface EvaluationResult {
 
 export const AuditWorkspace: React.FC = () => {
   const { hasApiKey, getAuthHeaders } = useApiKey();
+  const { branch, isSM } = useBranch();
   const [isKeyModalOpen, setIsKeyModalOpen] = useState<boolean>(false);
   const [selectedExIndex, setSelectedExIndex] = useState<number>(0);
   const [selectedQIndex, setSelectedQIndex] = useState<number>(0);
@@ -31,8 +33,13 @@ export const AuditWorkspace: React.FC = () => {
   const [showHint, setShowHint] = useState<boolean>(false);
   const [showModelAnswer, setShowModelAnswer] = useState<boolean>(false);
 
-  const currentExercise: NationalExercise = NATIONAL_EXERCISES[selectedExIndex];
-  const currentQuestion: NationalQuestion = currentExercise.questions[selectedQIndex];
+  const exercises = NATIONAL_EXERCISES.filter(
+    (ex) => !ex.branches || ex.branches.includes(branch)
+  );
+
+  const safeExIndex = selectedExIndex < exercises.length ? selectedExIndex : 0;
+  const currentExercise: NationalExercise = exercises[safeExIndex] || exercises[0] || NATIONAL_EXERCISES[0];
+  const currentQuestion: NationalQuestion = currentExercise.questions[selectedQIndex] || currentExercise.questions[0];
 
   const handleAudit = async () => {
     if (!studentAnswer.trim() || isAuditing) return;
@@ -56,6 +63,7 @@ export const AuditWorkspace: React.FC = () => {
           exerciseTitle: `${currentExercise.title} (${currentExercise.session})`,
           questionText: currentQuestion.text,
           studentAnswer,
+          branch,
         }),
       });
 
@@ -104,7 +112,7 @@ export const AuditWorkspace: React.FC = () => {
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-amber-400" />
-              Sujets Types du National (PC BIOF)
+              Sujets Types du National ({branch} BIOF)
             </h3>
             <span className="text-[11px] font-mono text-amber-400 font-semibold bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">
               {currentExercise.domain}
@@ -112,7 +120,7 @@ export const AuditWorkspace: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 gap-2">
-            {NATIONAL_EXERCISES.map((ex, idx) => (
+            {exercises.map((ex, idx) => (
               <button
                 key={ex.id}
                 onClick={() => {

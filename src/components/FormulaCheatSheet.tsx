@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { CURRICULUM, ChapterInfo } from '../data/curriculum';
 import { MathView } from './MathView';
 import { Search, Filter, Copy, Check, Sparkles, BookMarked, ArrowUpRight } from 'lucide-react';
+import { useBranch } from '../hooks/useBranch';
 
 interface FormulaCheatSheetProps {
   onAskProfAboutChapter: (chapter: ChapterInfo) => void;
 }
 
 export const FormulaCheatSheet: React.FC<FormulaCheatSheetProps> = ({ onAskProfAboutChapter }) => {
+  const { branch, isSM } = useBranch();
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedDomain, setSelectedDomain] = useState<string>('Tous');
   const [copiedFormula, setCopiedFormula] = useState<string | null>(null);
@@ -15,12 +17,13 @@ export const FormulaCheatSheet: React.FC<FormulaCheatSheetProps> = ({ onAskProfA
   const domains = ['Tous', 'Ondes', 'Nucléaire', 'Électricité', 'Mécanique', 'Cinétique Chimique', 'Équilibre & Acido-basique', 'Électrochimie', 'Chimie Organique'];
 
   const filteredChapters = CURRICULUM.filter((c) => {
+    const matchesBranch = !c.branches || c.branches.includes(branch);
     const matchesDomain = selectedDomain === 'Tous' || c.domain.toLowerCase().includes(selectedDomain.toLowerCase());
     const matchesSearch =
       c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       c.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
       c.keyFormulas.some((f) => f.name.toLowerCase().includes(searchTerm.toLowerCase()) || f.latex.toLowerCase().includes(searchTerm.toLowerCase()));
-    return matchesDomain && matchesSearch;
+    return matchesBranch && matchesDomain && matchesSearch;
   });
 
   const handleCopy = (latex: string) => {
@@ -86,9 +89,20 @@ export const FormulaCheatSheet: React.FC<FormulaCheatSheetProps> = ({ onAskProfA
                     {chapter.title}
                   </h3>
                 </div>
-                <span className="text-[11px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 shrink-0">
-                  {chapter.weightInExam}
-                </span>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {chapter.branches && chapter.branches.length === 1 && (
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                      chapter.branches.includes('SM')
+                        ? 'bg-blue-500/15 text-blue-400 border-blue-500/30'
+                        : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                    }`}>
+                      Spécifique {chapter.branches[0]}
+                    </span>
+                  )}
+                  <span className="text-[11px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    {chapter.weightInExam}
+                  </span>
+                </div>
               </div>
 
               <p className="text-xs text-slate-400 leading-relaxed">

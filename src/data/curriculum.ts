@@ -3,6 +3,7 @@ export interface ChapterInfo {
   title: string;
   subject: 'Physique' | 'Chimie';
   domain: string;
+  branches?: ('PC' | 'SM')[];
   weightInExam: string; // e.g. "2.5 à 3 pts"
   summary: string;
   keyFormulas: {
@@ -339,6 +340,7 @@ export const CURRICULUM: ChapterInfo[] = [
     title: 'Modulation et Démodulation d\'Amplitude (AM) - Spécifique PC',
     subject: 'Physique',
     domain: 'Électricité',
+    branches: ['PC'],
     weightInExam: '1.5 à 2.0 pts',
     summary: 'Transmission d\'un signal informatif BF sur une onde porteuse HF. Circuit multiplieur, signal modulé $s(t)$, taux de modulation $m$, condition de bonne modulation, détection d\'enveloppe.',
     keyFormulas: [
@@ -378,6 +380,55 @@ export const CURRICULUM: ChapterInfo[] = [
       'Oublier la condition sur $\\tau = RC$ : si $\\tau > T_s$, la décharge est trop lente (mauvais suivi) ; si $\\tau < T_p$, l\'onde porteuse n\'est pas filtrée.',
     ],
     suggestedPrompt: 'Prof, comment exploiter la figure du trapèze en mode XY pour prouver que la modulation est de bonne qualité ?',
+  },
+  {
+    id: 'oscillations-electriques-forcees-rlc',
+    title: 'Oscillations Électriques Forcées RLC & Résonance d\'Intensité - Spécifique SM',
+    subject: 'Physique',
+    domain: 'Électricité',
+    branches: ['SM'],
+    weightInExam: '3.0 à 4.0 pts',
+    summary: 'Régime sinusoïdal forcé imposé par un GBF $u(t) = U_m \\cos(\\omega t)$. Impédance du dipôle RLC série $Z$, déphasage $\\varphi$, résonance d\'intensité à $\\omega_0 = 1/\\sqrt{LC}$, facteur de qualité $Q$, bande passante à $-3dB$ et acuité de la résonance.',
+    keyFormulas: [
+      {
+        name: 'Impédance du circuit RLC série',
+        latex: 'Z = \\frac{U_m}{I_m} = \\sqrt{R_T^2 + \\left(L\\omega - \\frac{1}{C\\omega}\\right)^2}',
+        units: '$Z$ en Ohms ($\\Omega$), $R_T = R + r$',
+      },
+      {
+        name: 'Déphasage tension/courant',
+        latex: '\\tan \\varphi = \\frac{L\\omega - \\frac{1}{C\\omega}}{R_T} \\quad \\text{avec } u(t) = U_m \\cos(\\omega t), \\ i(t) = I_m \\cos(\\omega t - \\varphi)',
+        units: '$\\varphi = \\varphi_u - \\varphi_i$ en radians',
+      },
+      {
+        name: 'Condition de résonance d\'intensité',
+        latex: 'L\\omega_0 - \\frac{1}{C\\omega_0} = 0 \\implies \\omega_0 = \\frac{1}{\\sqrt{LC}} \\quad \\text{et} \\quad Z_{min} = R_T, \\quad I_{0,m} = \\frac{U_m}{R_T}',
+        units: 'À la résonance : $\\varphi = 0$ (tension et courant sont en phase)',
+      },
+      {
+        name: 'Facteur de surtension / qualité Q',
+        latex: 'Q = \\frac{U_{C,0}}{U} = \\frac{U_{L,0}}{U} = \\frac{L\\omega_0}{R_T} = \\frac{1}{R_T C \\omega_0} = \\frac{1}{R_T}\\sqrt{\\frac{L}{C}}',
+        units: '$Q$ sans unité. Si $Q > 1$, il y a phénomène de surtension aux bornes de $C$ et $L$',
+      },
+      {
+        name: 'Bande passante à -3 dB',
+        latex: '\\Delta N = N_2 - N_1 = \\frac{R_T}{2\\pi L} = \\frac{N_0}{Q}',
+        units: 'Définie pour $I \\ge \\frac{I_0}{\\sqrt{2}}$ et $P \\ge \\frac{P_{max}}{2}$',
+      },
+    ],
+    nationalChecklist: [
+      'Construire ou exploiter le diagramme de Fresnel pour le dipôle RLC série.',
+      'Démontrer l\'expression de l\'impédance $Z$ et de $\\tan\\varphi$ par méthode analytique ou vectorielle.',
+      'Identifier la résonance sur un graphe $I = f(N)$ : sommet $I_0 = U/R_T$ à $N = N_0$.',
+      'Déterminer la bande passante $\\Delta N$ à $I_0/\\sqrt{2} \\approx 0.707 I_0$ et en déduire le facteur $Q = N_0/\\Delta N$.',
+      'Justifier si le circuit est inductif ($\\varphi > 0, L\\omega > 1/C\\omega$) ou capacitif ($\\varphi < 0, L\\omega < 1/C\\omega$).',
+    ],
+    classicPitfalls: [
+      'GROS PIÈGE SM : Confondre la fréquence propre $N_0 = \\frac{1}{2\\pi\\sqrt{LC}}$ et la fréquence imposée $N$ par le GBF (seule $N_0$ est fixe, $N$ varie !).',
+      'Oublier de diviser $I_{max}$ par $\\sqrt{2}$ (et non par 2) pour lire la bande passante à $-3\\text{ dB}$.',
+      'Attention au signe du déphasage : $\\varphi = \\varphi_u - \\varphi_i$. Si le courant est en avance, $\\varphi < 0$.',
+    ],
+    suggestedPrompt: 'Si Driss, montre-moi la démonstration complète de l\'impédance $Z$ et de la bande passante $\\Delta N = N_0/Q$ pour le National SM.',
   },
 
   // --- PHYSIQUE : MÉCANIQUE ---
@@ -506,6 +557,100 @@ export const CURRICULUM: ChapterInfo[] = [
       'Dérivée de $x^2$ par rapport au temps : attention $\\frac{d(x^2)}{dt} = 2 x \\dot{x}$ !',
     ],
     suggestedPrompt: 'Si Driss, comment démontrer l\'équation différentielle du pendule élastique en utilisant la conservation de l\'énergie mécanique ?',
+  },
+  {
+    id: 'rotation-solide-axe-fixe',
+    title: 'Rotation d\'un solide indéformable autour d\'un axe fixe - Spécifique SM',
+    subject: 'Physique',
+    domain: 'Mécanique',
+    branches: ['SM'],
+    weightInExam: '2.5 à 3.5 pts',
+    summary: 'Relation fondamentale de la dynamique en rotation autour d\'un axe fixe $\\Delta$ : $\\sum M_\\Delta(\\vec{F}) = J_\\Delta \\ddot{\\theta}$. Moment d\'une force $M_\\Delta(\\vec{F}) = \\pm F \\cdot d$, moment d\'inertie $J_\\Delta$, énergie cinétique de rotation $E_{c,rot} = \\frac{1}{2} J_\\Delta \\dot{\\theta}^2$, travail d\'un couple et théorème de l\'énergie cinétique.',
+    keyFormulas: [
+      {
+        name: 'Relation fondamentale de la dynamique (RFD en rotation)',
+        latex: '\\sum M_\\Delta(\\vec{F}_{ext}) = J_\\Delta \\cdot \\ddot{\\theta} = J_\\Delta \\cdot \\alpha',
+        units: '$M_\\Delta$ en $N\\cdot m$, $J_\\Delta$ en $kg\\cdot m^2$, $\\ddot{\\theta}$ en $rad\\cdot s^{-2}$',
+      },
+      {
+        name: 'Moment d\'une force orthogonale à l\'axe',
+        latex: 'M_\\Delta(\\vec{F}) = \\pm F \\cdot d',
+        units: '$d$ distance orthogonale entre l\'axe $\\Delta$ et la droite d\'action en $m$',
+      },
+      {
+        name: 'Énergie cinétique de rotation',
+        latex: 'E_{c,rot} = \\frac{1}{2} J_\\Delta \\dot{\\theta}^2 = \\frac{1}{2} J_\\Delta \\omega^2',
+        units: '$E_{c}$ en Joules ($J$), $\\omega = \\dot{\\theta}$ en $rad\\cdot s^{-1}$',
+      },
+      {
+        name: 'Travail d\'un moment ou couple constant',
+        latex: 'W_{A \\to B}(M) = M_\\Delta \\cdot \\Delta\\theta',
+        units: '$W$ en $J$, $\\Delta\\theta$ en radians ($rad$)',
+      },
+      {
+        name: 'Théorème de l\'énergie cinétique en rotation',
+        latex: '\\Delta E_c = \\frac{1}{2} J_\\Delta \\dot{\\theta}_f^2 - \\frac{1}{2} J_\\Delta \\dot{\\theta}_i^2 = \\sum W_{i \\to f}(\\vec{F}_{ext})',
+        units: 'Applicable entre deux instants dans un référentiel galiléen',
+      },
+      {
+        name: 'Puissance instantanée en rotation',
+        latex: '\\mathcal{P} = M_\\Delta \\cdot \\dot{\\theta} = M_\\Delta \\cdot \\omega',
+        units: '$\\mathcal{P}$ en Watts ($W$)',
+      },
+    ],
+    nationalChecklist: [
+      'Bien définir le sens positif de rotation choisi avant de calculer les moments des forces.',
+      'Ne pas oublier que les forces dont la droite d\'action coupe l\'axe $\\Delta$ ou lui est parallèle ont un moment nul ($M_\\Delta(\\vec{R}) = 0$).',
+      'Appliquer la RFD pour trouver l\'accélération angulaire $\\ddot{\\theta} = \\text{cste}$ (mouvement circulaire uniformément varié) et intégrer : $\\dot{\\theta}(t) = \\ddot{\\theta} t + \\dot{\\theta}_0$ et $\\theta(t) = \\frac{1}{2}\\ddot{\\theta}t^2 + \\dot{\\theta}_0 t + \\theta_0$.',
+      'Associer un solide en translation et un solide en rotation (ex: fil inextensible sans glissement sur une poulie : $a = r \\cdot \\ddot{\\theta}$ et $v = r \\cdot \\dot{\\theta}$).',
+    ],
+    classicPitfalls: [
+      'GROS PIÈGE SM : Oublier la relation de non-glissement du fil sur la poulie : $a = r \\cdot \\ddot{\\theta}$ !',
+      'Erreur de signe sur le moment : vérifier si la force tend à faire tourner le solide dans le sens positif (+ ou -).',
+      'Unité de $J_\\Delta$ : $kg\\cdot m^2$ (ne jamais la confondre avec un moment de force en $N\\cdot m$).',
+    ],
+    suggestedPrompt: 'Si Driss, montre-moi la méthode rigoureuse pour coupler un solide en translation et une poulie en rotation dans un sujet SM.',
+  },
+  {
+    id: 'oscillations-mecaniques-forcees',
+    title: 'Oscillations Mécaniques Forcées & Résonance Mécanique - Spécifique SM',
+    subject: 'Physique',
+    domain: 'Mécanique',
+    branches: ['SM'],
+    weightInExam: '2.0 à 3.0 pts',
+    summary: 'Système oscillant soumis à une force excitatrice périodique $F(t) = F_m \\cos(\\omega t)$. Excitateur et résonateur, régime transitoire et permanent. Phénomène de résonance mécanique d\'amplitude et de vitesse, influence du frottement fluide sur l\'acuité.',
+    keyFormulas: [
+      {
+        name: 'Équation différentielle en régime forcé',
+        latex: 'm \\ddot{x} + h \\dot{x} + k x = F_m \\cos(\\omega t)',
+        units: '$h$ coefficient de frottement fluide en $kg\\cdot s^{-1}$',
+      },
+      {
+        name: 'Solution en régime sinusoïdal établi',
+        latex: 'x(t) = X_m \\cos(\\omega t + \\varphi)',
+        units: 'La fréquence du résonateur est égale à celle de l\'excitateur ($N = N_e$)',
+      },
+      {
+        name: 'Fréquence de résonance d\'amplitude',
+        latex: 'N_r = N_0 \\sqrt{1 - \\frac{h^2}{2 m k}} \\quad (\\text{si amortissement très faible, } N_r \\approx N_0)',
+        units: '$N_0 = \\frac{1}{2\\pi}\\sqrt{\\frac{k}{m}}$ fréquence propre',
+      },
+      {
+        name: 'Résonance de vitesse',
+        latex: 'v_m \\text{ est maximale exactement à } \\omega = \\omega_0 = \\sqrt{\\frac{k}{m}}',
+        units: 'À la résonance de vitesse : la vitesse et la force excitatrice sont en phase ($\\varphi_v = \\varphi_F$)',
+      },
+    ],
+    nationalChecklist: [
+      'Identifier l\'excitateur (qui impose la fréquence $N$) et le résonateur (qui oscille à la fréquence imposée $N$).',
+      'Décrire le phénomène de résonance : amplitude $X_m$ maximale lorsque la fréquence de l\'excitateur est proche de la fréquence propre $N_0$.',
+      'Expliquer l\'effet de l\'amortissement : quand $h$ augmente, l\'amplitude à la résonance diminue et le pic s\'aplatit (résonance floue).',
+    ],
+    classicPitfalls: [
+      'Affirmer que la résonance a lieu à $N = N_0$ pour tout amortissement : pour l\'élongation $x$, $N_r < N_0$ dès qu\'il y a frottement !',
+      'Confondre régime transitoire initial et régime permanent sinusoïdal établi.',
+    ],
+    suggestedPrompt: 'Prof, quelle est la différence exacte entre résonance d\'amplitude et résonance de vitesse pour les Sciences Maths ?',
   },
   {
     id: 'atome-bohr',

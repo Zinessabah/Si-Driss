@@ -197,8 +197,28 @@ function searchLocalDocuments(query: string): string {
   return '';
 }
 
-const SI_DRISS_SYSTEM_INSTRUCTION = `
-Tu es Si Driss (ou "Prof Driss"), un professeur chevronné et respecté de Physique-Chimie au lycée au Maroc, spécialisé dans la préparation intensive des élèves de 2ème Année Baccalauréat - Section Sciences Physiques (Option Français / BIOF).
+function getSiDrissBasePrompt(branch: 'PC' | 'SM' = 'PC'): string {
+  const branchName = branch === 'SM' ? 'Sciences Mathématiques (2ème Bac SM)' : 'Sciences Physiques (2ème Bac PC)';
+  const syllabusSpecifics = branch === 'SM'
+    ? `CADRE DE RÉFÉRENCE OFFICIEL SPÉCIFIQUE 2ÈME BAC SCIENCES MATHÉMATIQUES (SM) :
+- SPÉCIFICITÉS DU PROGRAMME SM :
+  * Rotation d'un solide indéformable autour d'un axe fixe : Relation fondamentale de la dynamique (RFD) $\\sum M_\\Delta(\\vec{F}) = J_\\Delta \\ddot{\\theta}$, moment d'inertie $J_\\Delta$, énergie cinétique $E_c = \\frac{1}{2}J_\\Delta \\dot{\\theta}^2$, condition de non-glissement de fils sur poulies ($a = R\\ddot{\\theta}$, $v = R\\dot{\\theta}$).
+  * Oscillations mécaniques forcées en régime sinusoïdal : excitateur, résonateur, résonance d'amplitude et de vitesse, influence du frottement fluide.
+  * Oscillations électriques forcées dans un circuit RLC série (GBF sinusoïdal) : impédance électrique $Z = \\sqrt{R_t^2 + (L\\omega - \\frac{1}{C\\omega})^2}$, déphasage $\\tan\\varphi = \\frac{L\\omega - \\frac{1}{C\\omega}}{R_t}$, facteur de qualité $Q = \\frac{L\\omega_0}{R_t}$, bande passante à $-3\\text{ dB}$ : $\\Delta N = \\frac{N_0}{Q} = \\frac{R_t}{2\\pi L}$, surtension aux bornes du condensateur ($U_{C,max} = Q\\cdot U$).
+  * Rigueur mathématique accrue : équations différentielles d'ordre 2, résolution analytique détaillée, projections trigonométriques.
+- EXCLUSIONS DU PROGRAMME SM :
+  * La modulation d'amplitude (AM) N'EST PAS au programme des Sciences Mathématiques (elle est exclusive aux PC). Ne propose jamais la modulation AM à un élève SM.`
+    : `CADRE DE RÉFÉRENCE OFFICIEL SPÉCIFIQUE 2ÈME BAC SCIENCES PHYSIQUES (PC) :
+- SPÉCIFICITÉS DU PROGRAMME PC :
+  * Modulation d'amplitude AM : taux de modulation $m = \\frac{S_m}{U_0}$, condition de bonne modulation ($m < 1$ et $F_p \\gg f_s$), méthode du trapèze et démodulation (détecteur d'enveloppe, filtre RC et filtre passe-haut).
+  * Mécanique : translation et chute libre/verticale, projectiles, satellites, oscillateurs harmoniques amortis (RLC libre, pendule élastique).
+- EXCLUSIONS DU PROGRAMME PC :
+  * La rotation du solide autour d'un axe fixe (RFD avec $J_\\Delta \\ddot{\\theta}$) et les oscillations forcées (RLC régime sinusoïdal forcé avec impédance $Z$ et bande passante à -3 dB) NE SONT PAS au programme PC (réservées aux SM).`;
+
+  return `Tu es Si Driss (ou "Prof Driss"), un professeur chevronné et respecté de Physique-Chimie au lycée au Maroc, spécialisé dans la préparation intensive des élèves de 2ème Année Baccalauréat (Option Français / BIOF).
+BRANCHE DE L'ÉLÈVE ACTUELLEMENT SUIVIE : ${branchName}.
+
+${syllabusSpecifics}
 
 TON STYLE & PERSONNALITÉ :
 - Réponse immédiate, rapide, concise et extrêmement claire.
@@ -213,32 +233,33 @@ RÈGLES DE CONDUITE :
 2. RÈGLE EN MODE SOCRATIQUE (si activé pour un exercice) :
    Guide avec une question directrice précise pour débloquer l'élève sans donner la solution brute.
 3. RÈGLE DES 4 PILIERS DU BARÈME :
-   - Mécanique : Système étudié, Référentiel galiléen, Bilan des forces.
+   - Mécanique : Système étudié, Référentiel galiléen, Bilan des forces (ou moments pour SM en rotation).
    - Électricité : Convention récepteur et Loi d'additivité des tensions.
    - Chimie : Tableau d'avancement complet en moles.
    - Formule littérale d'abord, Unités SI, Chiffres significatifs.
 `;
+}
 
 // Helper to build instruction
-function getInstruction(mode: string, socraticEnabled: boolean, matchedDocs: string, context?: string) {
+function getInstruction(mode: string, socraticEnabled: boolean, matchedDocs: string, branch: 'PC' | 'SM' = 'PC', context?: string) {
   let extra = '';
   if (!socraticEnabled || mode === 'direct') {
     extra = `\nMODE ACTIF : RÉPONSE DIRECTE & COURS (DÉMARCHE SOCRATIQUE DÉSACTIVÉE).
-L'élève souhaite une réponse immédiate, une définition officielle ou une formule du Cadre de Référence.
+L'élève de 2ème Bac ${branch} souhaite une réponse immédiate, une définition officielle ou une formule du Cadre de Référence ${branch}.
 RÈGLES EN MODE DIRECT :
-1. Donne DIRECTEMENT et SANS DÉLAI la définition exacte officielle du Ministère marocain ou la formule demandée.
+1. Donne DIRECTEMENT et SANS DÉLAI la définition exacte officielle du Ministère marocain ou la formule demandée adaptée à la section ${branch}.
 2. Précise chaque variable et son unité dans le Système International ($SI$).
 3. Reste rapide, concis, chaleureux ("Tbarkellah 3lik") et sans questions intermédiaires.`;
   } else if (mode === 'socratic') {
-    extra = `\nMODE ACTIF : COACHING SOCRATIQUE.
+    extra = `\nMODE ACTIF : COACHING SOCRATIQUE POUR ÉLÈVE 2ÈME BAC ${branch}.
 L'élève résout un problème. Pose UNE question directrice ciblée pour le guider. Ne donne pas la réponse finale d'emblée.`;
   } else if (mode === 'review') {
-    extra = `\nMODE ACTIF : AUDIT DE RÉDACTION TYPE NATIONAL. Analyse la réponse selon la grille officielle : 1) Système/Référentiel/Forces, 2) Formule littérale, 3) Valeur & CS, 4) Unité SI. Attribue une note sur 20.`;
+    extra = `\nMODE ACTIF : AUDIT DE RÉDACTION TYPE NATIONAL 2ÈME BAC ${branch}. Analyse la réponse selon la grille officielle ${branch} : 1) Système/Référentiel/Forces, 2) Formule littérale, 3) Valeur & CS, 4) Unité SI. Attribue une note sur 20.`;
   } else if (mode === 'trap') {
-    extra = `\nMODE ACTIF : CHASSE AUX PIÈGES DU NATIONAL. Pose un piège récurrent du National 2ème Bac PC.`;
+    extra = `\nMODE ACTIF : CHASSE AUX PIÈGES DU NATIONAL 2ÈME BAC ${branch}. Pose un piège récurrent du National pour la section ${branch}.`;
   }
 
-  let full = SI_DRISS_SYSTEM_INSTRUCTION + extra;
+  let full = getSiDrissBasePrompt(branch) + extra;
   if (matchedDocs) {
     full += `\n\nEXTRAITS OFFICIELS EXTRAITS DES DOCUMENTS DU PROGRAMME DÉPOSÉS DANS /docs/programme/ :\n${matchedDocs}\nUtilise prioritairement ces extraits pour répondre le plus rapidement et fidèlement possible.`;
   }
@@ -353,7 +374,7 @@ app.post('/api/chat/stream', async (req, res) => {
   }
 
   try {
-    const { messages, context, mode, socraticEnabled = true } = req.body;
+    const { messages, context, mode, socraticEnabled = true, branch = 'PC' } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: 'Format invalide.' });
@@ -369,7 +390,7 @@ app.post('/api/chat/stream', async (req, res) => {
     }
     const matchedDocs = searchLocalDocuments(searchTerms);
 
-    const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, context);
+    const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context);
 
     const contents = formatMessagesForGemini(messages);
 
@@ -389,7 +410,7 @@ app.post('/api/chat/stream', async (req, res) => {
       temperature: 0.6,
     });
 
-    console.log(`[Stream] Streaming response started using model: ${model}`);
+    console.log(`[Stream] Streaming response started using model: ${model} (Branch: ${branch})`);
 
     for await (const chunk of stream) {
       const text = chunk.text;
@@ -420,7 +441,7 @@ app.post('/api/chat', async (req, res) => {
   }
 
   try {
-    const { messages, context, mode, socraticEnabled = true } = req.body;
+    const { messages, context, mode, socraticEnabled = true, branch = 'PC' } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: 'Format de message invalide.' });
@@ -435,7 +456,7 @@ app.post('/api/chat', async (req, res) => {
       }
     }
     const matchedDocs = searchLocalDocuments(searchTerms);
-    const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, context);
+    const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context);
 
     const contents = formatMessagesForGemini(messages);
 
@@ -444,7 +465,7 @@ app.post('/api/chat', async (req, res) => {
       temperature: 0.6,
     });
 
-    console.log(`[Chat] Response generated using model: ${model}`);
+    console.log(`[Chat] Response generated using model: ${model} (Branch: ${branch})`);
     const reply = response.text || "Désolé mon élève, peux-tu reformuler ta question, lah yerdi 3lik ?";
     return res.json({ reply, sourceDocs: matchedDocs ? true : false, modelUsed: model });
   } catch (err: any) {
@@ -637,14 +658,15 @@ app.post('/api/evaluate', async (req, res) => {
   }
 
   try {
-    const { exerciseTitle, questionText, studentAnswer } = req.body;
+    const { exerciseTitle, questionText, studentAnswer, branch = 'PC' } = req.body;
+    const branchLabel = branch === 'SM' ? 'Sciences Mathématiques (SM)' : 'Sciences Physiques (PC)';
 
     const prompt = `
-En tant que Si Driss, correcteur officiel de l'Examen National 2ème Bac PC (BIOF Maroc), évalue rigoureusement la réponse suivante d'un élève.
+En tant que Si Driss, correcteur officiel de l'Examen National 2ème Bac ${branchLabel} (BIOF Maroc), évalue rigoureusement la réponse suivante d'un élève.
 
-EXERCICE : ${exerciseTitle || 'Exercice National 2ème Bac PC'}
+EXERCICE : ${exerciseTitle || `Exercice National 2ème Bac ${branch}`}
 QUESTION : ${questionText || 'Résolution du problème'}
-RÉPONSE RÉDIGÉE PAR L'ÉLÈVE :
+RÉPONSE RÉDIGÉE PAR L'ÉLÈVE (Filière ${branch}) :
 ${studentAnswer}
 
 Fournis une évaluation structurée au format JSON suivant :
@@ -659,16 +681,16 @@ Fournis une évaluation structurée au format JSON suivant :
     {"name": "Application numérique & Chiffres significatifs", "status": "ok" | "warning" | "error", "feedback": "..."},
     {"name": "Unités SI obligatoires", "status": "ok" | "warning" | "error", "feedback": "..."}
   ],
-  "nationalTips": "Le conseil clé que le correcteur national attend sur ce type de question",
-  "correctedDraft": "La rédaction modèle idéale attendue par le barème ministériel avec LaTeX"
+  "nationalTips": "Le conseil clé que le correcteur national attend sur ce type de question pour la filière ${branch}",
+  "correctedDraft": "La rédaction modèle idéale attendue par le barème ministériel ${branch} avec LaTeX"
 }
 `;
 
     const { response, model } = await generateWithModelFallback(aiClient, prompt, {
-      systemInstruction: SI_DRISS_SYSTEM_INSTRUCTION,
+      systemInstruction: getSiDrissBasePrompt(branch),
       responseMimeType: 'application/json',
     });
-    console.log(`[Evaluate] Evaluated using model: ${model}`);
+    console.log(`[Evaluate] Evaluated using model: ${model} (Branch: ${branch})`);
 
     const raw = response.text || '{}';
     let data;
@@ -706,31 +728,33 @@ app.post('/api/generate-exercise', async (req, res) => {
   }
 
   try {
-    const { subject, chapter, difficulty, topicStyle } = req.body;
+    const { subject, chapter, difficulty, topicStyle, branch = 'PC' } = req.body;
+    const branchLabel = branch === 'SM' ? 'Sciences Mathématiques (SM)' : 'Sciences Physiques (PC)';
 
     const prompt = `
-Génère un exercice inédit de type Examen National Marocain pour la 2ème Année Bac Sciences Physiques (BIOF).
+Génère un exercice inédit de type Examen National Marocain pour la 2ème Année Bac ${branchLabel} (BIOF).
 
 Matière : ${subject || 'Physique'}
-Chapitre : ${chapter || 'Ondes mécaniques progressives'}
+Chapitre : ${chapter || (branch === 'SM' ? 'Rotation d\'un solide autour d\'un axe fixe' : 'Ondes mécaniques progressives')}
+Filière cible : 2ème Bac ${branch} (respecter strictement le Cadre de Référence officiel du Ministère pour la filière ${branch})
 Difficulté : ${difficulty || 'Standard National'}
 Style : ${topicStyle || 'Problème avec données expérimentales et analyse graphique'}
 
 L'exercice doit comporter :
-- Un énoncé réaliste avec contexte expérimental.
+- Un énoncé réaliste avec contexte expérimental adapté au niveau ${branch}.
 - Données précises avec unités et constantes physiques officielles.
 - 3 à 4 questions progressives et numérotées selon le standard du National.
-- Une question piège classique de 2ème Bac PC.
+- Une question piège classique de 2ème Bac ${branch}.
 
 Réponds au format JSON suivant :
 {
   "title": "Titre officiel",
   "domain": "Physique" | "Chimie",
-  "chapter": "${chapter || 'Ondes'}",
+  "chapter": "${chapter || 'Chapitre'}",
   "duration": "30 min",
   "context": "Texte d'introduction...",
   "parameters": [
-    {"symbol": "lambda", "name": "Longueur d'onde", "value": "632.8 nm"}
+    {"symbol": "lambda", "name": "Grandeur", "value": "valeur"}
   ],
   "questions": [
     {
@@ -738,19 +762,19 @@ Réponds au format JSON suivant :
       "text": "Question 1...",
       "points": "1.0 pt",
       "hint": "Indice socratique",
-      "keyFormula": "$\\\\theta = \\\\frac{\\\\lambda}{a}$"
+      "keyFormula": "$...$"
     }
   ],
-  "commonPitfall": "Le piège fréquent à éviter",
+  "commonPitfall": "Le piège fréquent à éviter en 2ème Bac ${branch}",
   "professorNote": "Conseil de Si Driss"
 }
 `;
 
     const { response, model } = await generateWithModelFallback(aiClient, prompt, {
-      systemInstruction: SI_DRISS_SYSTEM_INSTRUCTION,
+      systemInstruction: getSiDrissBasePrompt(branch),
       responseMimeType: 'application/json',
     });
-    console.log(`[Generate Exercise] Generated using model: ${model}`);
+    console.log(`[Generate Exercise] Generated using model: ${model} (Branch: ${branch})`);
 
     const raw = response.text || '{}';
     const exercise = JSON.parse(raw);

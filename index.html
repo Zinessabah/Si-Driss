@@ -20,27 +20,26 @@
     <script>
       // Suppress Vite HMR WebSocket errors in AI Studio iframe environment (HMR is disabled by platform)
       (function() {
-        function isViteHmrError(err) {
-          if (!err) return false;
-          var msg = String(err.message || '');
-          var stack = String(err.stack || '');
-          var file = String(err.filename || '');
+        function isViteHmrError(err, event) {
+          var str = String(err || '') + ' ' + String(err?.message || '') + ' ' + String(err?.stack || '') + ' ' + String(event?.message || '') + ' ' + String(event?.filename || '');
           return (
-            msg.indexOf('WebSocket') !== -1 ||
-            stack.indexOf('createWebSocketModuleRunnerTransport') !== -1 ||
-            stack.indexOf('@vite/client') !== -1 ||
-            file.indexOf('@vite/client') !== -1
+            str.indexOf('WebSocket') !== -1 ||
+            str.indexOf('createWebSocketModuleRunnerTransport') !== -1 ||
+            str.indexOf('@vite/client') !== -1 ||
+            str.indexOf('vite/client') !== -1 ||
+            str.indexOf('ws:') !== -1 ||
+            str.indexOf('wss:') !== -1
           );
         }
         window.addEventListener('error', function(event) {
-          if (isViteHmrError(event) || isViteHmrError(event.error)) {
+          if (isViteHmrError(event.error, event)) {
             event.stopImmediatePropagation();
             event.preventDefault();
             return true;
           }
         }, true);
         window.addEventListener('unhandledrejection', function(event) {
-          if (isViteHmrError(event.reason)) {
+          if (isViteHmrError(event.reason, event)) {
             event.stopImmediatePropagation();
             event.preventDefault();
             return true;

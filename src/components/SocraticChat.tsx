@@ -27,6 +27,7 @@ import { SessionManagerModal, SavedSession, ChatMessage, ChatAttachment } from '
 import { ExercisePickerModal } from './ExercisePickerModal';
 import { DocumentPickerModal } from './DocumentPickerModal';
 import { useApiKey } from '../hooks/useApiKey';
+import { useBranch } from '../hooks/useBranch';
 import { ApiKeyModal } from './ApiKeyModal';
 
 interface SocraticChatProps {
@@ -34,7 +35,7 @@ interface SocraticChatProps {
   currentContext?: string;
 }
 
-const QUICK_FORMULAS = [
+const QUICK_FORMULAS_PC = [
   '\\tau = RC',
   '\\tau = \\frac{L}{R_T}',
   'T_0 = 2\\pi\\sqrt{LC}',
@@ -47,6 +48,19 @@ const QUICK_FORMULAS = [
   'Q = I \\Delta t = n(e^-) F',
 ];
 
+const QUICK_FORMULAS_SM = [
+  '\\sum M_\\Delta = J_\\Delta \\ddot{\\theta}',
+  'E_c = \\frac{1}{2}J_\\Delta \\dot{\\theta}^2',
+  'Z = \\sqrt{R_t^2 + (L\\omega - \\frac{1}{C\\omega})^2}',
+  'Q = \\frac{L\\omega_0}{R_t}',
+  '\\Delta N = \\frac{N_0}{Q}',
+  'U_{C,max} = Q \\cdot U_m',
+  '\\tau = RC',
+  'T_0 = 2\\pi\\sqrt{LC}',
+  '\\sum \\vec{F}_{ext} = m \\vec{a}_G',
+  'pH = pK_A + \\log\\frac{[A^-]}{[AH]}',
+];
+
 const SOCRATIC_STARTERS = [
   { label: 'Indice socratique', text: "Prof, je bloque sur l'établissement de l'équation différentielle. Peux-tu me guider avec une question intermédiaire ?" },
   { label: 'Vérifier mon référentiel', text: 'Si Driss, voici ma justification du référentiel pour la chute verticale : "Dans le référentiel terrestre supposé galiléen...". Est-ce complet pour le barème ?' },
@@ -54,30 +68,47 @@ const SOCRATIC_STARTERS = [
   { label: 'Piège du National', text: "Pose-moi un piège classique posé récemment à l'Examen National en électricité ou mécanique !" },
 ];
 
-const DIRECT_STARTERS = [
+const DIRECT_STARTERS_PC = [
   { label: 'Définition : Onde progressive', text: "Donne-moi la définition exacte d'une onde mécanique progressive selon le Cadre de Référence officiel du National." },
   { label: 'Définition : Équivalence acido-basique', text: "Quelle est la définition officielle de l'équivalence acido-basique et sa relation stœchiométrique ?" },
   { label: 'Formule : Vitesse limite et constante tau', text: "Donne-moi directement l'expression de la vitesse limite v_lim et du temps caractéristique tau dans la chute avec frottement visqueux." },
   { label: 'Formule : Condition de bonne modulation AM', text: "Quelles sont les formules et conditions obligatoires pour une bonne modulation d'amplitude AM ?" },
 ];
 
-const DEFAULT_WELCOME_MSG: ChatMessage = {
-  id: 'welcome',
-  role: 'assistant',
-  content: `Salam aleykoum ! Bienvenue mon cher élève de 2ème Bac PC. Je suis **Si Driss**, ton professeur de Physique-Chimie.
+const DIRECT_STARTERS_SM = [
+  { label: 'RFD en rotation : Relation fondamentale', text: "Rappelle-moi la Relation Fondamentale de la Dynamique en rotation autour d'un axe fixe et la condition de non-glissement fil-poulie." },
+  { label: 'RLC Série forcé : Impédance et Résonance', text: "Donne-moi l'expression de l'impédance Z, la condition de résonance d'intensité et la largeur de bande passante à -3 dB." },
+  { label: 'Définition : Onde progressive', text: "Donne-moi la définition exacte d'une onde mécanique progressive selon le Cadre de Référence officiel du National." },
+  { label: 'Définition : Équivalence acido-basique', text: "Quelle est la définition officielle de l'équivalence acido-basique et sa relation stœchiométrique ?" },
+];
+
+function getWelcomeMessage(branch: 'PC' | 'SM' = 'PC'): ChatMessage {
+  const isSM = branch === 'SM';
+  const branchTitle = isSM ? '2ème Bac Sciences Mathématiques (SM)' : '2ème Bac Sciences Physiques (PC)';
+  const syllabusHighlights = isSM
+    ? `- 📐 **Spécificités Sciences Mathématiques (SM)** : Rotation d'un solide autour d'un axe fixe (RFD : $\\sum M_\\Delta = J_\\Delta \\ddot{\\theta}$), oscillations mécaniques forcées et résonance, dipôle RLC en régime sinusoïdal forcé (impédance $Z$, bande passante à $-3\\text{ dB}$, facteur de qualité $Q$).`
+    : `- 🔬 **Spécificités Sciences Physiques (PC)** : Modulation et démodulation d'amplitude AM ($m < 1$, trapèze), chute verticale avec frottement et méthode d'Euler.`;
+
+  return {
+    id: 'welcome',
+    role: 'assistant',
+    content: `Salam aleykoum ! Bienvenue mon cher élève de **${branchTitle}**. Je suis **Si Driss**, ton professeur de Physique-Chimie.
 
 Tu as maintenant le choix complet de ta méthode d'apprentissage :
 - 💡 **Démarche Socratique ACTIVÉE** : Je te pose des questions intermédiaires ciblées pour te faire chercher et trouver toi-même la solution (idéal pour les exercices).
 - ⚡ **Démarche Socratique DÉSACTIVÉE (Mode Direct)** : Si tu as besoin d'une **définition officielle** du Cadre de Référence, d'une **formule brute** avec ses unités, ou d'un rappel immédiat de cours.
-- ➕ **Nouveau bouton "+" sur la barre des questions** : Tu peux désormais **joindre une photo ou un document d'exercice (PDF, image, énoncé)**, ou **sélectionner directement un exercice type du Bac** pour que je t'aide pas à pas !
+${syllabusHighlights}
+- ➕ **Bouton "+" sur la barre des questions** : Tu peux désormais **joindre une photo ou un document d'exercice (PDF, image, énoncé)**, ou **sélectionner directement un exercice type du Bac** pour que je t'aide pas à pas !
 
 *Tbarkellah 3lik*, pose ta question ou ajoute un exercice avec le bouton **+** ci-dessous !`,
-  timestamp: 'Maintenant',
-};
+    timestamp: 'Maintenant',
+  };
+}
 
 export const SocraticChat: React.FC<SocraticChatProps> = ({ initialPrompt, currentContext }) => {
-  const [socraticEnabled, setSocraticEnabled] = useState<boolean>(true);
-  const [coachingMode, setCoachingMode] = useState<'socratic' | 'direct' | 'review' | 'trap'>('socratic');
+  // Socratic mode disabled by default at startup as requested
+  const [socraticEnabled, setSocraticEnabled] = useState<boolean>(false);
+  const [coachingMode, setCoachingMode] = useState<'socratic' | 'direct' | 'review' | 'trap'>('direct');
 
   // Session identification and storage
   const [currentSessionId, setCurrentSessionId] = useState<string>(() => {
@@ -98,6 +129,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({ initialPrompt, curre
 
   // API Key management
   const { apiKey, hasApiKey, getAuthHeaders } = useApiKey();
+  const { branch, isSM } = useBranch();
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState<boolean>(false);
 
   // Attachments & modals state
@@ -121,15 +153,20 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({ initialPrompt, curre
 
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     try {
+      const currentStoredBranch = (localStorage.getItem('sidriss_student_branch_v1') as 'PC' | 'SM') || 'PC';
       const active = localStorage.getItem('sidriss_active_session_v1');
       if (active) {
         const parsed = JSON.parse(active);
         if (parsed.messages && parsed.messages.length > 0) {
+          if (parsed.messages.length === 1 && parsed.messages[0].id === 'welcome') {
+            return [getWelcomeMessage(currentStoredBranch)];
+          }
           return parsed.messages;
         }
       }
     } catch {}
-    return [DEFAULT_WELCOME_MSG];
+    const currentStoredBranch = (localStorage.getItem('sidriss_student_branch_v1') as 'PC' | 'SM') || 'PC';
+    return [getWelcomeMessage(currentStoredBranch)];
   });
 
   const [input, setInput] = useState<string>('');
@@ -151,14 +188,12 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({ initialPrompt, curre
     };
   }, [isAddMenuOpen]);
 
-  // Initialize initial settings if saved
+  // Initialize initial settings if saved (Socratic mode remains disabled by default at startup)
   useEffect(() => {
     try {
       const active = localStorage.getItem('sidriss_active_session_v1');
       if (active) {
         const parsed = JSON.parse(active);
-        if (typeof parsed.socraticEnabled === 'boolean') setSocraticEnabled(parsed.socraticEnabled);
-        if (parsed.coachingMode) setCoachingMode(parsed.coachingMode);
         if (parsed.title) setCurrentSessionTitle(parsed.title);
         if (parsed.updatedAt) {
           setLastSavedTime(
@@ -190,6 +225,24 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({ initialPrompt, curre
       console.error('Failed to auto-save active session:', e);
     }
   }, [messages, socraticEnabled, coachingMode, currentSessionId, currentSessionTitle]);
+
+  // Synchronize welcome message when student switches branch (PC <-> SM)
+  useEffect(() => {
+    setMessages((prev) => {
+      if (prev.length === 1 && prev[0].id === 'welcome') {
+        return [getWelcomeMessage(branch)];
+      }
+      if (prev.length > 0 && prev[0].id === 'welcome') {
+        const mentionsWrongBranch = branch === 'SM'
+          ? prev[0].content.includes('2ème Bac PC') || prev[0].content.includes('Sciences Physiques')
+          : prev[0].content.includes('Sciences Mathématiques');
+        if (mentionsWrongBranch) {
+          return [getWelcomeMessage(branch), ...prev.slice(1)];
+        }
+      }
+      return prev;
+    });
+  }, [branch]);
 
   useEffect(() => {
     if (initialPrompt) {
@@ -276,7 +329,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({ initialPrompt, curre
     const newId = `session_${Date.now()}`;
     setCurrentSessionId(newId);
     setCurrentSessionTitle('Nouvelle session');
-    setMessages([DEFAULT_WELCOME_MSG]);
+    setMessages([getWelcomeMessage(branch)]);
     setPendingAttachments([]);
     try {
       localStorage.removeItem('sidriss_active_session_v1');
@@ -464,6 +517,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({ initialPrompt, curre
           context: currentContext,
           mode: currentMode,
           socraticEnabled,
+          branch,
         }),
       });
 
@@ -550,6 +604,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({ initialPrompt, curre
               context: currentContext,
               mode: currentMode,
               socraticEnabled,
+              branch,
             }),
           });
           if (res.ok) {
@@ -580,6 +635,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({ initialPrompt, curre
             context: currentContext,
             mode: currentMode,
             socraticEnabled,
+            branch,
           }),
         });
 
@@ -670,8 +726,12 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({ initialPrompt, curre
               <h2 className="text-sm sm:text-base font-bold text-white tracking-tight">
                 Si Driss
               </h2>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                Professeur PC 2BAC
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                isSM
+                  ? 'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                  : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+              }`}>
+                Professeur {branch} 2BAC
               </span>
             </div>
             <div className="flex items-center gap-2 text-[11px] text-slate-400">
@@ -940,7 +1000,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({ initialPrompt, curre
         <span className="text-[11px] text-slate-500 uppercase tracking-wider font-bold shrink-0">
           {socraticEnabled ? 'Guidage :' : 'Définitions & Formules :'}
         </span>
-        {(socraticEnabled ? SOCRATIC_STARTERS : DIRECT_STARTERS).map((s, idx) => (
+        {(socraticEnabled ? SOCRATIC_STARTERS : isSM ? DIRECT_STARTERS_SM : DIRECT_STARTERS_PC).map((s, idx) => (
           <button
             key={idx}
             onClick={() => handleSend(s.text)}
@@ -959,7 +1019,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({ initialPrompt, curre
       {/* KaTeX Formula Shortcut Bar */}
       <div className="px-4 py-2 bg-slate-950 border-t border-slate-800/80 flex items-center gap-2 overflow-x-auto text-xs">
         <span className="text-xs text-slate-400 font-semibold shrink-0">Formules :</span>
-        {QUICK_FORMULAS.map((f, i) => (
+        {(isSM ? QUICK_FORMULAS_SM : QUICK_FORMULAS_PC).map((f, i) => (
           <button
             key={i}
             onClick={() => insertFormula(f)}

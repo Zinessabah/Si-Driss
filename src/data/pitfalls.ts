@@ -2,6 +2,7 @@ export interface TrapItem {
   id: string;
   category: 'Mécanique' | 'Électricité' | 'Chimie' | 'Ondes & Nucléaire' | 'Rédaction Générale';
   title: string;
+  branches?: ('PC' | 'SM')[];
   penaltyEstimate: string; // e.g. "-0.25 pt"
   trapDescription: string;
   badDraft: string;
@@ -74,6 +75,7 @@ export const NATIONAL_PITFALLS: TrapItem[] = [
     id: 'trap-7',
     category: 'Électricité',
     title: 'Condition de détection d\'enveloppe en modulation AM',
+    branches: ['PC'],
     penaltyEstimate: '-0.5 pt sur la question spécifique PC',
     trapDescription: 'Oublier la double inégalité imposée sur la constante de temps $\\tau = RC$ du filtre passe-bas détecteur d\'enveloppe.',
     badDraft: 'Il faut simplement $\\tau = RC < T_s$',
@@ -89,5 +91,27 @@ export const NATIONAL_PITFALLS: TrapItem[] = [
     badDraft: 'm = (20 * 9.8 * (1 - 900*4.19e-6/20e-3)) / 1.60 = 0.099',
     correctDraft: 'Expression littérale : $k = \\frac{m \\cdot A}{v_{lim}}$\nApplication numérique avec les unités SI : $k = \\frac{20.0 \\times 10^{-3} \\times 7.95}{1.60} = 9.94 \\times 10^{-2}\\text{ kg}\\cdot\\text{s}^{-1}$',
     siDrissTip: 'La Règle d\'Or absolue : Formule littérale d\'abord, substitution numérique avec conversion SI ensuite, résultat encadré avec son unité et ses CS !',
+  },
+  {
+    id: 'trap-sm-1',
+    category: 'Mécanique',
+    title: 'Condition de non-glissement en rotation (Spécifique SM)',
+    branches: ['SM'],
+    penaltyEstimate: '-0.5 pt sur le couplage translation-rotation',
+    trapDescription: 'Oublier la relation fondamentale cinématique $a = R \\cdot \\ddot{\\theta}$ reliant l\'accélération linéaire du solide suspendu et l\'accélération angulaire de la poulie.',
+    badDraft: 'On applique la RFD sans relier theta_seconde à a',
+    correctDraft: 'Par condition de non-glissement du fil sur la poulie de rayon $R$ : $v(t) = R \\cdot \\dot{\\theta}(t) \\implies a(t) = R \\cdot \\ddot{\\theta}(t)$.',
+    siDrissTip: 'Pour les Sciences Maths : Ce lien cinématique est le verrou qui permet d\'éliminer la tension du fil entre les deux équations !',
+  },
+  {
+    id: 'trap-sm-2',
+    category: 'Électricité',
+    title: 'Largeur de bande passante à -3 dB en résonance forcé (Spécifique SM)',
+    branches: ['SM'],
+    penaltyEstimate: '-0.5 pt sur la résonance RLC',
+    trapDescription: 'Définir la bande passante avec $I = I_0 / 2$ au lieu de $I = I_0 / \\sqrt{2} \\approx 0.707 I_0$. C\'est la puissance qui est divisée par 2 ($P = P_{max}/2$), donc l\'intensité efficace est divisée par $\\sqrt{2}$.',
+    badDraft: 'La bande passante correspond à I = I_0 / 2',
+    correctDraft: 'La bande passante à $-3\\text{ dB}$ est l\'intervalle de fréquences $[N_1, N_2]$ pour lequel : $I \\ge \\frac{I_0}{\\sqrt{2}} \\iff P \\ge \\frac{P_{max}}{2}$. Sa largeur est $\\Delta N = N_2 - N_1 = \\frac{N_0}{Q}$.',
+    siDrissTip: 'Attention piège classique du National SM ! Division par $\\sqrt{2} \\approx 1.414$ pour l\'intensité, et par 2 pour la puissance.',
   },
 ];

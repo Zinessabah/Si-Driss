@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Sparkles, RefreshCw, Send, CheckCircle, BookOpen, Key } from 'lucide-react';
 import { MathView } from './MathView';
 import { useApiKey } from '../hooks/useApiKey';
+import { useBranch } from '../hooks/useBranch';
 import { ApiKeyModal } from './ApiKeyModal';
 
 interface GeneratedExercise {
@@ -34,9 +35,10 @@ export const ExerciseGeneratorModal: React.FC<ExerciseGeneratorModalProps> = ({
   onSelectForPractice,
 }) => {
   const { hasApiKey, getAuthHeaders } = useApiKey();
+  const { branch, isSM } = useBranch();
   const [isKeyModalOpen, setIsKeyModalOpen] = useState<boolean>(false);
   const [subject, setSubject] = useState<'Physique' | 'Chimie'>('Physique');
-  const [chapter, setChapter] = useState<string>('Circuit RLC série');
+  const [chapter, setChapter] = useState<string>(isSM ? 'Rotation d\'un solide indéformable autour d\'un axe fixe (RFD)' : 'Circuit RLC série');
   const [difficulty, setDifficulty] = useState<string>('Standard Examen National');
   const [topicStyle, setTopicStyle] = useState<string>('Exploitation de graphe et calculs littéraux');
   const [loading, setLoading] = useState<boolean>(false);
@@ -44,7 +46,7 @@ export const ExerciseGeneratorModal: React.FC<ExerciseGeneratorModalProps> = ({
 
   if (!isOpen) return null;
 
-  const physicsChapters = [
+  const physicsChaptersPC = [
     'Ondes mécaniques progressives et périodiques',
     'Diffraction des ondes lumineuses',
     'Décroissance radioactive et datation',
@@ -59,6 +61,25 @@ export const ExerciseGeneratorModal: React.FC<ExerciseGeneratorModalProps> = ({
     'Pendule élastique horizontal et vertical',
     'Modèle de Bohr et atome d\'hydrogène',
   ];
+
+  const physicsChaptersSM = [
+    'Rotation d\'un solide indéformable autour d\'un axe fixe (RFD)',
+    'Oscillations mécaniques forcées et résonance',
+    'Oscillations électriques forcées RLC série (GBF, impédance Z, bande passante)',
+    'Ondes mécaniques progressives et périodiques',
+    'Diffraction des ondes lumineuses',
+    'Décroissance radioactive et datation',
+    'Noyaux, masse et énergie nucléaire',
+    'Dipôle RC (Charge et décharge)',
+    'Dipôle RL (Établissement du courant)',
+    'Circuit RLC série libre et amortissement',
+    'Lois de Newton et chute verticale avec frottement',
+    'Mouvement de projectiles dans le champ de pesanteur',
+    'Particules chargées dans un champ électrostatique',
+    'Systèmes oscillants mécaniques (Pendule élastique, de torsion, pesant)',
+  ];
+
+  const physicsChapters = isSM ? physicsChaptersSM : physicsChaptersPC;
 
   const chemistryChapters = [
     'Suivi temporel et vitesse volumique de réaction',
@@ -94,6 +115,7 @@ export const ExerciseGeneratorModal: React.FC<ExerciseGeneratorModalProps> = ({
           chapter,
           difficulty,
           topicStyle,
+          branch,
         }),
       });
 
@@ -123,7 +145,7 @@ export const ExerciseGeneratorModal: React.FC<ExerciseGeneratorModalProps> = ({
             </span>
             <div>
               <h3 className="font-bold text-white text-base">Générateur d'Exercice National Type (IA Si Driss)</h3>
-              <p className="text-xs text-slate-400">Génère un sujet inédit conforme au Cadre de Référence 2ème Bac PC</p>
+              <p className="text-xs text-slate-400">Génère un sujet inédit conforme au Cadre de Référence 2ème Bac {branch} (BIOF)</p>
             </div>
           </div>
           <button onClick={onClose} className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">

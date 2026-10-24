@@ -19,6 +19,7 @@ export interface NationalExercise {
   session: string;
   domain: 'Physique' | 'Chimie';
   chapter: string;
+  branches?: ('PC' | 'SM')[];
   totalPoints: number;
   recommendedDuration: string; // e.g. "45 min"
   statementIntro: string;
@@ -120,6 +121,7 @@ $$v_{i+1} = 0.85 + 3.73 \\times 0.020 = 0.85 + 0.0746 = 0.92\\text{ m}\\cdot\\te
     session: 'Inspiré Session Normale 2022 (PC BIOF)',
     domain: 'Physique',
     chapter: 'Circuit RLC série & Modulation AM',
+    branches: ['PC'],
     totalPoints: 5.0,
     recommendedDuration: '45 min',
     statementIntro: `Un circuit comprend un condensateur de capacité $C = 2.0\\,\\mu\\text{F}$ préalablement chargé sous une tension $E = 6.0\\text{ V}$, relié en série à une bobine d'inductance $L$ et de résistance interne $r = 10\\,\\Omega$, et un conducteur ohmique de résistance variable $R$. À $t = 0$, on ferme le circuit. On observe des oscillations pseudo-périodiques sur l'oscilloscope.`,
@@ -509,5 +511,149 @@ $$a = \\frac{2 \\times 6.328 \\times 10^{-7} \\times 2.00}{2.50 \\times 10^{-2}}
       },
     ],
   },
+  {
+    id: 'nat-sm-meca-rotation-solide',
+    title: 'Mécanique (Spécifique SM) : Rotation d\'une poulie & Chute d\'une masse avec RFD',
+    session: 'Inspiré Session Normale 2022 (SM-A & SM-B BIOF)',
+    domain: 'Physique',
+    chapter: 'Rotation d\'un solide autour d\'un axe fixe',
+    branches: ['SM'],
+    totalPoints: 5.5,
+    recommendedDuration: '50 min',
+    statementIntro: `On considère un système constitué d'une poulie homogène de rayon $R = 10.0\\text{ cm}$ et de moment d'inertie $J_\\Delta = 4.0 \\times 10^{-3}\\text{ kg}\\cdot\\text{m}^2$ pouvant tourner sans frottement autour d'un axe fixe horizontal $(\\Delta)$. Sur la gorge de la poulie est enroulé un fil inextensible et de masse négligeable, portant à son extrémité libre un corps solide $(S)$ de masse $m = 200\\text{ g}$. À l'instant $t = 0$, on libère le système sans vitesse initiale. Le fil ne glisse pas sur la poulie.`,
+    givenData: [
+      { label: 'Rayon de la poulie R', value: '10.0', unit: '\\text{cm} = 0.100\\text{ m}' },
+      { label: 'Moment d\'inertie J_Delta', value: '4.0 \\times 10^{-3}', unit: '\\text{kg}\\cdot\\text{m}^2' },
+      { label: 'Masse du solide m', value: '200', unit: '\\text{g} = 0.200\\text{ kg}' },
+      { label: 'Intensité de la pesanteur g', value: '9.80', unit: '\\text{m}\\cdot\\text{s}^{-2}' },
+    ],
+    professorTrapAlert: 'Pour les Sciences Maths : N\'oublie jamais d\'expliciter la condition de non-glissement du fil sur la poulie : $a = R \\cdot \\ddot{\\theta}$. Et n\'oublie pas d\'étudier séparément le solide $(S)$ par la 2ème loi de Newton et la poulie par la RFD en rotation !',
+    questions: [
+      {
+        id: 'q-sm-rot-1',
+        number: '1.1',
+        points: 1.5,
+        text: 'En appliquant la deuxième loi de Newton au corps $(S)$ et la relation fondamentale de la dynamique en rotation à la poulie, établir l\'expression littérale de l\'accélération linéaire $a$ du corps $(S)$ en fonction de $m, g, R$ et $J_\\Delta$.',
+        socraticHint: 'Quelles sont les forces agissant sur le corps $(S)$ ? Et sur la poulie, quelle force crée un moment moteur ? Quelle relation lie la tension $T$ du fil sur $(S)$ et la tension $T\'$ sur la poulie ?',
+        expectedStructure: {
+          systemAndFrame: 'Système 1 : {Solide S}. Système 2 : {Poulie}. Référentiel terrestre galiléen. P - T = m*a et M_Delta(T\') = J_Delta * theta_ddot = T\' * R.',
+          literalFormula: 'a = (m * g) / (m + J_Delta / R^2)',
+          unitAndValue: 'a = (0.200 * 9.80) / (0.200 + 4.0e-3 / 0.01) = 1.96 / (0.200 + 0.400) = 1.96 / 0.600 = 3.27 m/s^2.',
+        },
+        sampleAnswer: `1. Étude du solide $(S)$ :
+- Système : {Solide $(S)$ de masse $m$}
+- Référentiel : Terrestre, supposé galiléen.
+- Forces appliquées : Poids $\\vec{P}$ et tension du fil $\\vec{T}$.
+- D'après la 2ème loi de Newton projetée sur l'axe vertical $(Oz)$ orienté vers le bas :
+$$P - T = m \\cdot a \\iff m g - T = m \\cdot a \\implies T = m(g - a) \\quad (1)$$
+
+2. Étude de la poulie en rotation :
+- Système : {Poulie de moment d'inertie $J_\\Delta$}
+- Forces : Poids de la poulie $\\vec{P}_p$, réaction de l'axe $\\vec{R}$ (moments nuls car leurs lignes d'action coupent l'axe $\\Delta$), et tension du fil $\\vec{T}'$.
+- D'après la relation fondamentale de la dynamique en rotation (RFD) :
+$$\\sum M_\\Delta(\\vec{F}_{ext}) = J_\\Delta \\cdot \\ddot{\\theta} \\iff M_\\Delta(\\vec{T}') = J_\\Delta \\cdot \\ddot{\\theta}$$
+$$T' \\cdot R = J_\\Delta \\cdot \\ddot{\\theta} \\implies T' = \\frac{J_\\Delta \\cdot \\ddot{\\theta}}{R} \\quad (2)$$
+
+3. Couplage du système :
+Le fil étant de masse négligeable et sans frottement : $T = T'$.
+Le fil ne glissant pas sur la gorge de la poulie : $a = R \\cdot \\ddot{\\theta} \\iff \\ddot{\\theta} = \\frac{a}{R}$.
+En substituant dans $(2)$ :
+$$T = \\frac{J_\\Delta \\cdot a}{R^2}$$
+En égalisant avec $(1)$ :
+$$m(g - a) = \\frac{J_\\Delta \\cdot a}{R^2} \\iff m g = \\left(m + \\frac{J_\\Delta}{R^2}\\right) a$$
+D'où l'expression littérale :
+$$a = \\frac{m \\cdot g}{m + \\frac{J_\\Delta}{R^2}}$$
+
+Application numérique :
+$$a = \\frac{0.200 \\times 9.80}{0.200 + \\frac{4.0 \\times 10^{-3}}{(0.100)^2}} = \\frac{1.96}{0.200 + 0.400} = \\frac{1.96}{0.600} \\approx 3.27\\text{ m}\\cdot\\text{s}^{-2}$$`,
+      },
+      {
+        id: 'q-sm-rot-2',
+        number: '1.2',
+        points: 1.0,
+        text: 'Déterminer la vitesse angulaire $\\omega = \\dot{\\theta}$ de la poulie à l\'instant où le corps $(S)$ a parcouru une distance $h = 1.00\\text{ m}$.',
+        socraticHint: 'Le mouvement étant rectiligne uniformément varié sans vitesse initiale, que vaut $v^2$ en fonction de $a$ et $h$ ? Et quelle relation lie la vitesse linéaire $v$ à la vitesse angulaire $\\omega$ ?',
+        expectedStructure: {
+          literalFormula: 'v^2 = 2 * a * h et v = R * omega => omega = sqrt(2 * a * h) / R',
+          unitAndValue: 'omega = sqrt(2 * 3.27 * 1.00) / 0.100 = sqrt(6.54) / 0.100 = 2.557 / 0.100 = 25.6 rad/s.',
+        },
+        sampleAnswer: `Le mouvement du solide $(S)$ est rectiligne uniformément accéléré sans vitesse initiale :
+$$v^2 - v_0^2 = 2 a \\cdot h \\iff v = \\sqrt{2 a \\cdot h}$$
+Or, par condition de non-glissement du fil sur la poulie :
+$$v = R \\cdot \\omega \\iff \\omega = \\frac{v}{R} = \\frac{\\sqrt{2 a \\cdot h}}{R}$$
+Application numérique :
+$$\\omega = \\frac{\\sqrt{2 \\times 3.27 \\times 1.00}}{0.100} = \\frac{\\sqrt{6.54}}{0.100} \\approx \\frac{2.557}{0.100} \\approx 25.6\\text{ rad}\\cdot\\text{s}^{-1}$$`,
+      },
+    ],
+  },
+  {
+    id: 'nat-sm-elec-rlc-force-resonance',
+    title: 'Électricité (Spécifique SM) : RLC série en régime sinusoïdal forcé & Résonance d\'intensité',
+    session: 'Inspiré Session Normale 2023 (SM-A & SM-B BIOF)',
+    domain: 'Physique',
+    chapter: 'Oscillations électriques forcées & Résonance',
+    branches: ['SM'],
+    totalPoints: 5.5,
+    recommendedDuration: '50 min',
+    statementIntro: `Un dipôle RLC série comprend un conducteur ohmique de résistance $R = 40\\,\\Omega$, une bobine d'inductance $L = 0.20\\text{ H}$ et de résistance interne $r = 10\\,\\Omega$, et un condensateur de capacité $C$. Le dipôle est alimenté par un GBF délivrant une tension sinusoïdale de valeur efficace constante $U = 5.0\\text{ V}$ et de fréquence réglable $N$. On mesure l'intensité efficace $I$ traversant le circuit en fonction de $N$. L'intensité maximale est obtenue à la fréquence $N_0 = 500\\text{ Hz}$.`,
+    givenData: [
+      { label: 'Résistance R', value: '40', unit: '\\Omega' },
+      { label: 'Résistance de la bobine r', value: '10', unit: '\\Omega' },
+      { label: 'Inductance L', value: '0.20', unit: '\\text{H}' },
+      { label: 'Tension efficace U', value: '5.0', unit: '\\text{V}' },
+      { label: 'Fréquence de résonance N_0', value: '500', unit: '\\text{Hz}' },
+    ],
+    professorTrapAlert: 'Point clé du barème SM : À la résonance d\'intensité, l\'impédance est minimale et purement résistive ($Z = R_T = R + r$), le déphasage est nul ($\\varphi = 0$), et le facteur de qualité $Q = \\frac{1}{R_T}\\sqrt{\\frac{L}{C}}$ quantifie la surtension et la finesse de la bande passante.',
+    questions: [
+      {
+        id: 'q-sm-elec-1',
+        number: '1.1',
+        points: 1.0,
+        text: 'Déterminer la valeur de l\'intensité efficace $I_0$ à la résonance.',
+        socraticHint: 'À la résonance d\'intensité, que vaut la partie réactive $(L\\omega - 1/C\\omega)$ de l\'impédance ? Que devient l\'impédance $Z$ ?',
+        expectedStructure: {
+          literalFormula: 'Z_0 = R_T = R + r et I_0 = U / R_T',
+          unitAndValue: 'I_0 = 5.0 / (40 + 10) = 5.0 / 50 = 0.10 A = 100 mA.',
+        },
+        sampleAnswer: `À la résonance d'intensité :
+$$L\\omega_0 - \\frac{1}{C\\omega_0} = 0$$
+L'impédance du circuit RLC série est alors minimale et égale à la résistance totale :
+$$Z_0 = R_T = R + r = 40 + 10 = 50\\,\\Omega$$
+L'intensité efficace à la résonance vaut donc :
+$$I_0 = \\frac{U}{Z_0} = \\frac{U}{R + r}$$
+Application numérique :
+$$I_0 = \\frac{5.0\\text{ V}}{50\\,\\Omega} = 0.10\\text{ A} = 100\\text{ mA}$$`,
+      },
+      {
+        id: 'q-sm-elec-2',
+        number: '1.2',
+        points: 1.5,
+        text: 'Calculer la capacité $C$ du condensateur, puis calculer le facteur de qualité $Q$ et la largeur de la bande passante à $-3\\text{ dB}$ notée $\\Delta N$.',
+        socraticHint: 'Rappelle la relation de résonance $N_0 = \\frac{1}{2\\pi\\sqrt{LC}}$, puis $Q = \\frac{2\\pi N_0 L}{R_T}$ et $\\Delta N = \\frac{N_0}{Q}$.',
+        expectedStructure: {
+          literalFormula: 'C = 1 / (4 * pi^2 * N_0^2 * L) ; Q = (2 * pi * N_0 * L) / R_T ; Delta N = N_0 / Q',
+          unitAndValue: 'C approx 0.507 muF ; Q approx 12.6 ; Delta N approx 39.8 Hz.',
+        },
+        sampleAnswer: `1. Capacité $C$ du condensateur :
+À la résonance, la fréquence propre est $N_0 = \\frac{1}{2\\pi\\sqrt{LC}}$.
+En élevant au carré et en isolant $C$ :
+$$C = \\frac{1}{4\\pi^2 N_0^2 L}$$
+Application numérique (avec $\\pi^2 \\approx 9.87$) :
+$$C = \\frac{1}{4 \\times \\pi^2 \\times (500)^2 \\times 0.20} \\approx 5.07 \\times 10^{-7}\\text{ F} \\approx 0.507\\,\\mu\\text{F}$$
+
+2. Facteur de qualité $Q$ :
+$$Q = \\frac{L\\omega_0}{R_T} = \\frac{2\\pi N_0 L}{R + r}$$
+Application numérique :
+$$Q = \\frac{2 \\times \\pi \\times 500 \\times 0.20}{50} = \\frac{200\\pi}{50} = 4\\pi \\approx 12.6$$
+Puisque $Q > 1$, il y a phénomène de surtension aux bornes de la bobine et du condensateur ($U_{C,0} = Q \\cdot U = 12.6 \\times 5 = 63\\text{ V} > U$).
+
+3. Bande passante à $-3\\text{ dB}$ (notée $\\Delta N$) :
+$$\\Delta N = \\frac{N_0}{Q} = \\frac{R_T}{2\\pi L}$$
+Application numérique :
+$$\\Delta N = \\frac{500}{12.6} \\approx 39.8\\text{ Hz}$$`,
+      },
+    ],
+  },
 ];
+
 

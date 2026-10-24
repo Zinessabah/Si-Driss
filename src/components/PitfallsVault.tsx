@@ -2,19 +2,23 @@ import React, { useState } from 'react';
 import { NATIONAL_PITFALLS, TrapItem } from '../data/pitfalls';
 import { MathView } from './MathView';
 import { AlertTriangle, ShieldAlert, CheckCircle2, XCircle, Sparkles, Filter } from 'lucide-react';
+import { useBranch } from '../hooks/useBranch';
 
 interface PitfallsVaultProps {
   onChallengeTrap: (trap: TrapItem) => void;
 }
 
 export const PitfallsVault: React.FC<PitfallsVaultProps> = ({ onChallengeTrap }) => {
+  const { branch, isSM } = useBranch();
   const [selectedCategory, setSelectedCategory] = useState<string>('Tous');
 
   const categories = ['Tous', 'Mécanique', 'Électricité', 'Chimie', 'Ondes & Nucléaire', 'Rédaction Générale'];
 
-  const filtered = NATIONAL_PITFALLS.filter(
-    (t) => selectedCategory === 'Tous' || t.category === selectedCategory
-  );
+  const filtered = NATIONAL_PITFALLS.filter((t) => {
+    const matchBranch = !t.branches || t.branches.includes(branch);
+    const matchCategory = selectedCategory === 'Tous' || t.category === selectedCategory;
+    return matchBranch && matchCategory;
+  });
 
   return (
     <div className="space-y-6">
@@ -25,9 +29,9 @@ export const PitfallsVault: React.FC<PitfallsVaultProps> = ({ onChallengeTrap })
             <ShieldAlert className="w-7 h-7" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">Le Coffre des Pièges Fatals du National (2ème Bac PC)</h3>
+            <h3 className="text-lg font-bold text-white">Le Coffre des Pièges Fatals du National (2ème Bac {branch})</h3>
             <p className="text-xs text-slate-300 mt-0.5">
-              Les 20 erreurs récurrentes sanctionnées impitoyablement par les correcteurs ministériels
+              Les erreurs récurrentes sanctionnées impitoyablement par les correcteurs ministériels ({branch} BIOF)
             </p>
           </div>
         </div>

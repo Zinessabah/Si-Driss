@@ -16,6 +16,7 @@ import {
 import { NATIONAL_EXERCISES, NationalExercise } from '../data/nationalExercises';
 import { MathView } from './MathView';
 import { ChatAttachment } from './SessionManagerModal';
+import { useBranch } from '../hooks/useBranch';
 
 interface ExercisePickerModalProps {
   isOpen: boolean;
@@ -28,15 +29,21 @@ export const ExercisePickerModal: React.FC<ExercisePickerModalProps> = ({
   onClose,
   onSelectExercise,
 }) => {
+  const { branch, isSM } = useBranch();
   const [selectedDomain, setSelectedDomain] = useState<'Tous' | 'Physique' | 'Chimie'>('Tous');
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const branchExercises = NATIONAL_EXERCISES.filter(
+    (ex) => !ex.branches || ex.branches.includes(branch)
+  );
+
   const [previewExercise, setPreviewExercise] = useState<NationalExercise | null>(
-    NATIONAL_EXERCISES[0] || null
+    branchExercises[0] || NATIONAL_EXERCISES[0] || null
   );
 
   if (!isOpen) return null;
 
-  const filteredExercises = NATIONAL_EXERCISES.filter((ex) => {
+  const filteredExercises = branchExercises.filter((ex) => {
     const matchDomain = selectedDomain === 'Tous' || ex.domain === selectedDomain;
     const matchSearch =
       !searchQuery.trim() ||

@@ -15,6 +15,9 @@ import { AndroidBottomNav } from './components/AndroidBottomNav';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { ChapterInfo } from './data/curriculum';
 import { TrapItem } from './data/pitfalls';
+import { useBranch } from './hooks/useBranch';
+import { BranchBadge } from './components/BranchBadge';
+import { BranchSelectorModal } from './components/BranchSelectorModal';
 import {
   MessageSquare,
   ShieldCheck,
@@ -34,6 +37,7 @@ import {
 } from 'lucide-react';
 
 export default function App() {
+  const { branch, hasSelectedBranch, isSM } = useBranch();
   const [activeTab, setActiveTab] = useState<'chat' | 'audit' | 'simulators' | 'formulas' | 'pitfalls' | 'documents'>('chat');
   const [activeSimulator, setActiveSimulator] = useState<'rlc' | 'am' | 'mechanics' | 'titration'>('rlc');
   const [chatInitialPrompt, setChatInitialPrompt] = useState<string>('');
@@ -66,9 +70,7 @@ export default function App() {
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-base font-bold text-white tracking-tight">Si Driss</h1>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    2ème Bac PC BIOF
-                  </span>
+                  <BranchBadge />
                 </div>
                 <p className="text-[11px] text-slate-400">
                   Préparation Intensive à l'Examen National de Physique-Chimie (Maroc)
@@ -82,7 +84,7 @@ export default function App() {
                 <Calendar className="w-4 h-4 text-amber-400" />
                 <span className="font-mono font-bold text-amber-300">Examen National 2026</span>
                 <span className="text-slate-500">•</span>
-                <span className="text-slate-400">2BAC PC</span>
+                <span className="text-slate-400">2BAC {branch}</span>
               </div>
 
               {/* Android App Button */}
@@ -180,7 +182,10 @@ export default function App() {
 
       {/* Moroccan Motivation Ticker */}
       <div className="bg-slate-900/60 border-b border-slate-800/80 py-1.5 px-4 text-center text-[11px] text-amber-300 font-medium">
-        ✨ <em>"Rkkez m3aya f had l-étape • Formule littérale avant les chiffres • Système & Référentiel galiléen d'abord • 20/20 incha'Allah au National !"</em>
+        ✨ <em>{isSM
+          ? `"Rkkez m3aya f had l-étape • Relation fondamentale en rotation • Bande passante et résonance forcé • 20/20 incha'Allah au National SM !"`
+          : `"Rkkez m3aya f had l-étape • Formule littérale avant les chiffres • Système & Référentiel galiléen d'abord • 20/20 incha'Allah au National PC !"`
+        }</em>
       </div>
 
       {/* Main Content Area */}
@@ -311,6 +316,12 @@ export default function App() {
       <ApiKeyModal
         isOpen={isApiKeyModalOpen}
         onClose={() => setIsApiKeyModalOpen(false)}
+      />
+
+      {/* Mandatory Onboarding Branch Selection Modal on initial startup */}
+      <BranchSelectorModal
+        isOpen={!hasSelectedBranch}
+        canClose={false}
       />
     </div>
   );
