@@ -16,14 +16,31 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: '20mb' }));
 
+// Sanitizer for API keys (strips invisible characters, whitespace, enclosing quotes, and env prefixes)
+function sanitizeApiKey(raw: string): string {
+  if (!raw) return '';
+  return raw
+    .replace(/[\u200B-\u200D\uFEFF\u00A0\u2028\u2029]/g, '')
+    .replace(/^(export\s+)?(GEMINI_API_KEY|GOOGLE_API_KEY|API_KEY)\s*[:=]\s*/i, '')
+    .replace(/^Bearer\s+/i, '')
+    .replace(/^["'`«“‘]+|["'`»”’]+$/g, '')
+    .replace(/\s+/g, '')
+    .trim();
+}
+
 // Helper to obtain student's GoogleGenAI instance from request headers or body
 function getGenAIClient(req: express.Request): GoogleGenAI {
   const headerKey = (req.headers['x-gemini-api-key'] as string) || '';
   const bodyKey = (req.body?.apiKey as string) || '';
-  const key = (headerKey || bodyKey).trim();
+  let key = sanitizeApiKey(headerKey || bodyKey);
+
+  // If student hasn't entered a key, fallback gracefully to environment key if present
+  if (!key && process.env.GEMINI_API_KEY) {
+    key = sanitizeApiKey(process.env.GEMINI_API_KEY);
+  }
 
   if (!key) {
-    const error: any = new Error('Clé API Gemini requise. Chaque élève doit renseigner sa propre clé gratuite Google AI Studio.');
+    const error: any = new Error('Clé API Gemini requise. Chaque élève peut renseigner sa propre clé gratuite Google AI Studio.');
     error.code = 'API_KEY_REQUIRED';
     error.statusCode = 401;
     throw error;
@@ -35,8 +52,8 @@ function getGenAIClient(req: express.Request): GoogleGenAI {
       headers: {
         'User-Agent': 'aistudio-build',
       },
-      timeout: 12000, // 12s deadline
-      retryOptions: { attempts: 1 }, // fail fast to fallback model rather than retrying for minutes
+      timeout: 15000,
+      retryOptions: { attempts: 1 },
     },
   });
 }
@@ -44,10 +61,9 @@ function getGenAIClient(req: express.Request): GoogleGenAI {
 // Candidate models for ultra-fast response with zero-downtime failover
 const FAST_MODELS = [
   'gemini-3.5-flash-lite',
-  'gemini-3.5-flash',
-  'gemini-3.6-flash',
   'gemini-flash-latest',
   'gemini-3.8-flash',
+  'gemini-3.1-flash-lite',
 ];
 
 // Fallback executor for streaming with student AI client
@@ -330,34 +346,81 @@ function formatMessagesForGemini(messages: ClientMessage[]) {
 // Endpoint to test / validate student's API key
 app.post('/api/validate-key', async (req, res) => {
   try {
-    const key = ((req.headers['x-gemini-api-key'] as string) || req.body?.apiKey || '').trim();
+    const rawKey = ((req.headers['x-gemini-api-key'] as string) || req.body?.apiKey || '').trim();
+    const key = sanitizeApiKey(rawKey);
+
     if (!key) {
       return res.status(400).json({ valid: false, error: 'Veuillez saisir votre clé API Gemini.' });
     }
 
+    // Google AI Studio keys typically start with AIzaSy and are ~39 chars
+    const looksLikeGeminiKey = key.startsWith('AIza') || key.length >= 25;
+
     const testAi = new GoogleGenAI({
       apiKey: key,
-      httpOptions: { timeout: 8000, retryOptions: { attempts: 1 } },
+      httpOptions: { timeout: 14000, retryOptions: { attempts: 1 } },
     });
 
-    const result = await testAi.models.generateContent({
-      model: 'gemini-3.5-flash-lite',
-      contents: [{ role: 'user', parts: [{ text: 'Bonjour, réponds simplement "OK"' }] }],
-    });
+    let validated = false;
+    let validatedModel = '';
+    let lastErr: any = null;
 
-    if (result && result.text) {
-      return res.json({ valid: true, message: 'Clé API valide et connectée avec succès ! Tbarkellah 3lik.' });
+    // Test across models in cascade for resilience
+    for (const model of FAST_MODELS) {
+      try {
+        const result = await testAi.models.generateContent({
+          model,
+          contents: [{ role: 'user', parts: [{ text: 'Bonjour' }] }],
+        });
+        if (result && (result.text || result.candidates)) {
+          validated = true;
+          validatedModel = model;
+          break;
+        }
+      } catch (err: any) {
+        lastErr = err;
+        console.warn(`[Validate Key] Model ${model} test error:`, err?.status || err?.message);
+
+        // If rate limited / quota exhausted (429), Google accepted the key as AUTHENTIC
+        if (err?.status === 429 || err?.message?.includes('RESOURCE_EXHAUSTED') || err?.message?.includes('quota')) {
+          return res.json({
+            valid: true,
+            sanitizedKey: key,
+            message: 'Clé API reconnue et valide ! (Quota Google temporairement en pause, elle fonctionnera sous peu).',
+          });
+        }
+
+        // If explicitly bad key, stop cascade
+        if (err?.message?.includes('API_KEY_INVALID') || (err?.status === 400 && err?.message?.includes('API key not valid'))) {
+          break;
+        }
+      }
     }
-    return res.status(400).json({ valid: false, error: 'Réponse inattendue de l\'API Gemini.' });
-  } catch (err: any) {
-    console.warn('[Validate Key] Error:', err);
-    let errMsg = err?.message || 'Clé API invalide ou quota dépassé.';
-    if (errMsg.includes('API_KEY_INVALID') || errMsg.includes('400') || errMsg.includes('key not valid')) {
-      errMsg = 'Clé API invalide. Vérifiez que vous avez bien copié l\'intégralité de la clé depuis Google AI Studio.';
+
+    if (validated) {
+      return res.json({
+        valid: true,
+        sanitizedKey: key,
+        message: `Clé API valide et connectée avec succès (${validatedModel}) ! Tbarkellah 3lik.`,
+      });
+    }
+
+    let errMsg = lastErr?.message || 'Clé API non reconnue par Google AI Studio.';
+    if (errMsg.includes('API_KEY_INVALID') || errMsg.includes('API key not valid') || errMsg.includes('key not valid')) {
+      errMsg = 'Clé API non reconnue par Google. Assurez-vous d\'avoir copié l\'intégralité de la clé depuis https://aistudio.google.com/app/apikey (elle commence généralement par "AIzaSy...").';
     } else if (errMsg.includes('PERMISSION_DENIED') || errMsg.includes('403')) {
-      errMsg = 'Permission refusée pour cette clé API. Assurez-vous d\'activer le modèle Gemini dans votre projet Google Cloud.';
+      errMsg = 'Accès refusé pour cette clé. Assurez-vous que votre projet Google AI Studio autorise l\'accès aux modèles Gemini.';
+    } else if (errMsg.includes('timeout') || errMsg.includes('deadline') || errMsg.includes('fetch failed')) {
+      errMsg = 'Délai d\'attente réseau dépassé lors de la vérification. Vous pouvez forcer l\'enregistrement directement.';
     }
-    return res.status(400).json({ valid: false, error: errMsg });
+
+    return res.status(400).json({ valid: false, error: errMsg, sanitizedKey: key, canSaveAnyway: looksLikeGeminiKey });
+  } catch (err: any) {
+    console.warn('[Validate Key] Unexpected error:', err);
+    return res.status(400).json({
+      valid: false,
+      error: 'Erreur inattendue lors de la vérification. Vous pouvez enregistrer directement votre clé.',
+    });
   }
 });
 

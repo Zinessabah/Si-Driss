@@ -14,8 +14,9 @@ import {
   HelpCircle,
   Loader2,
   Smartphone,
+  Check,
 } from 'lucide-react';
-import { useApiKey } from '../hooks/useApiKey';
+import { useApiKey, sanitizeGeminiKey } from '../hooks/useApiKey';
 
 interface ApiKeyModalProps {
   isOpen: boolean;
@@ -29,7 +30,11 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
   const [inputVal, setInputVal] = useState<string>('');
   const [showKey, setShowKey] = useState<boolean>(false);
   const [isValidating, setIsValidating] = useState<boolean>(false);
-  const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [statusMessage, setStatusMessage] = useState<{
+    type: 'success' | 'error';
+    text: string;
+    canSaveAnyway?: boolean;
+  } | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -46,7 +51,8 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
       if (navigator.clipboard && navigator.clipboard.readText) {
         const text = await navigator.clipboard.readText();
         if (text) {
-          setInputVal(text.trim());
+          const cleaned = sanitizeGeminiKey(text);
+          setInputVal(cleaned);
           setStatusMessage(null);
         }
       }
@@ -55,41 +61,55 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
     }
   };
 
-  const handleSaveAndTest = async () => {
-    const trimmed = inputVal.trim();
-    if (!trimmed) {
+  const handleDirectSave = () => {
+    const cleaned = sanitizeGeminiKey(inputVal);
+    if (!cleaned) {
       setStatusMessage({ type: 'error', text: 'Veuillez saisir votre clé API Gemini.' });
       return;
     }
 
-    if (!trimmed.startsWith('AIza') && trimmed.length < 25) {
-      setStatusMessage({
-        type: 'error',
-        text: 'Format suspect : Les clés Google AI Studio commencent généralement par "AIzaSy..." et comportent environ 39 caractères.',
-      });
+    saveApiKey(cleaned);
+    setStatusMessage({
+      type: 'success',
+      text: 'Clé enregistrée avec succès sur votre appareil ! Vous pouvez discuter avec Si Driss.',
+    });
+    setTimeout(() => {
+      onSuccess?.();
+      onClose();
+    }, 1000);
+  };
+
+  const handleSaveAndTest = async () => {
+    const cleaned = sanitizeGeminiKey(inputVal);
+    if (!cleaned) {
+      setStatusMessage({ type: 'error', text: 'Veuillez saisir votre clé API Gemini.' });
       return;
     }
+
+    // Update input with sanitized version
+    setInputVal(cleaned);
 
     setIsValidating(true);
     setStatusMessage(null);
 
-    const result = await validateApiKey(trimmed);
+    const result = await validateApiKey(cleaned);
     setIsValidating(false);
 
     if (result.valid) {
-      saveApiKey(trimmed);
+      saveApiKey(result.sanitizedKey || cleaned);
       setStatusMessage({
         type: 'success',
-        text: 'Tbarkellah 3lik ! Clé vérifiée et enregistrée. Tu peux poser toutes tes questions à Si Driss !',
+        text: result.message || 'Tbarkellah 3lik ! Clé vérifiée et enregistrée avec succès.',
       });
       setTimeout(() => {
         onSuccess?.();
         onClose();
-      }, 1400);
+      }, 1200);
     } else {
       setStatusMessage({
         type: 'error',
-        text: result.message || 'Clé API non valide. Vérifie que tu as copié toute la clé sans espaces supplémentaires.',
+        text: result.message || 'La vérification en ligne a échoué.',
+        canSaveAnyway: true,
       });
     }
   };
@@ -99,6 +119,9 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
     setInputVal('');
     setStatusMessage({ type: 'success', text: 'Clé API supprimée de cet appareil.' });
   };
+
+  const cleanedPreview = sanitizeGeminiKey(inputVal);
+  const isLikelyAIPattern = cleanedPreview.startsWith('AIzaSy');
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
@@ -176,9 +199,17 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
 
           {/* Input field */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-slate-200">
-              Ta clé API Gemini (Google AI Studio) :
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-semibold text-slate-200">
+                Ta clé API Gemini (Google AI Studio) :
+              </label>
+              {cleanedPreview && (
+                <span className="text-[10px] text-slate-400 font-mono">
+                  {cleanedPreview.length} caractères
+                </span>
+              )}
+            </div>
+
             <div className="relative flex items-center">
               <input
                 type={showKey ? 'text' : 'password'}
@@ -212,23 +243,66 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
                 </button>
               </div>
             </div>
+
+            {/* Live Key Helper Badges */}
+            {cleanedPreview.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[11px]">
+                {isLikelyAIPattern ? (
+                  <span className="inline-flex items-center gap-1 text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md">
+                    <CheckCircle2 className="w-3 h-3" />
+                    Format Google AI Studio valide (commence par AIzaSy)
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md">
+                    <AlertCircle className="w-3 h-3" />
+                    Note : les clés Gemini commencent habituellement par AIzaSy
+                  </span>
+                )}
+
+                {inputVal !== cleanedPreview && (
+                  <span className="inline-flex items-center gap-1 text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2 py-0.5 rounded-md">
+                    <Sparkles className="w-3 h-3" />
+                    Guillemets/espaces superflus nettoyés
+                  </span>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Status Message */}
           {statusMessage && (
             <div
-              className={`p-3 rounded-xl flex items-start gap-2.5 text-xs ${
+              className={`p-3.5 rounded-xl text-xs space-y-2 ${
                 statusMessage.type === 'success'
                   ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-300'
                   : 'bg-rose-500/10 border border-rose-500/20 text-rose-300'
               }`}
             >
-              {statusMessage.type === 'success' ? (
-                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400 mt-0.5" />
-              ) : (
-                <AlertCircle className="w-4 h-4 shrink-0 text-rose-400 mt-0.5" />
+              <div className="flex items-start gap-2.5">
+                {statusMessage.type === 'success' ? (
+                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400 mt-0.5" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-400 mt-0.5" />
+                )}
+                <div className="flex-1 leading-relaxed">{statusMessage.text}</div>
+              </div>
+
+              {/* If error occurred, offer instant one-click save without forcing online test */}
+              {statusMessage.type === 'error' && (
+                <div className="pt-1 border-t border-rose-500/20 flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleDirectSave}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/30 text-xs font-semibold transition"
+                  >
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Enregistrer quand même cette clé et continuer</span>
+                  </button>
+                  <span className="text-[11px] text-slate-400">
+                    (Utile si la connexion de ton lycée/maison est lente)
+                  </span>
+                </div>
               )}
-              <div className="flex-1 leading-relaxed">{statusMessage.text}</div>
             </div>
           )}
 
@@ -247,7 +321,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
         </div>
 
         {/* Footer */}
-        <div className="p-4 bg-slate-950/80 border-t border-slate-800 flex items-center justify-between gap-3">
+        <div className="p-4 bg-slate-950/80 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2.5">
           {apiKey ? (
             <button
               onClick={handleRemove}
@@ -264,25 +338,38 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
           <div className="flex items-center gap-2">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 text-xs font-medium transition"
+              className="px-3 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 text-xs font-medium transition"
             >
               Fermer
             </button>
 
+            {/* Direct save button (never traps the user) */}
+            <button
+              type="button"
+              onClick={handleDirectSave}
+              disabled={!inputVal.trim()}
+              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition border border-slate-700/60 disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Enregistrer directement sans test de connexion préalable"
+            >
+              <Check className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Enregistrer directement</span>
+            </button>
+
+            {/* Test and save button */}
             <button
               onClick={handleSaveAndTest}
               disabled={isValidating || !inputVal.trim()}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isValidating ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Vérification...</span>
+                  <span>Test en cours...</span>
                 </>
               ) : (
                 <>
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Tester et Enregistrer</span>
+                  <span>Tester & Enregistrer</span>
                 </>
               )}
             </button>

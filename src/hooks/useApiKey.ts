@@ -3,10 +3,22 @@ import { useState, useEffect, useCallback } from 'react';
 const STORAGE_KEY = 'sidriss_student_gemini_api_key_v1';
 const EVENT_NAME = 'sidriss_api_key_changed';
 
+export function sanitizeGeminiKey(raw: string): string {
+  if (!raw) return '';
+  return raw
+    .replace(/[\u200B-\u200D\uFEFF\u00A0\u2028\u2029]/g, '')
+    .replace(/^(export\s+)?(GEMINI_API_KEY|GOOGLE_API_KEY|API_KEY)\s*[:=]\s*/i, '')
+    .replace(/^Bearer\s+/i, '')
+    .replace(/^["'`«“‘]+|["'`»”’]+$/g, '')
+    .replace(/\s+/g, '')
+    .trim();
+}
+
 export function useApiKey() {
   const [apiKey, setApiKey] = useState<string>(() => {
     try {
-      return localStorage.getItem(STORAGE_KEY) || '';
+      const stored = localStorage.getItem(STORAGE_KEY) || '';
+      return sanitizeGeminiKey(stored);
     } catch {
       return '';
     }
@@ -16,7 +28,7 @@ export function useApiKey() {
     const handleKeyChange = () => {
       try {
         const val = localStorage.getItem(STORAGE_KEY) || '';
-        setApiKey(val);
+        setApiKey(sanitizeGeminiKey(val));
       } catch {
         setApiKey('');
       }
@@ -32,14 +44,14 @@ export function useApiKey() {
   }, []);
 
   const saveApiKey = useCallback((key: string) => {
-    const trimmed = key.trim();
+    const cleaned = sanitizeGeminiKey(key);
     try {
-      if (trimmed) {
-        localStorage.setItem(STORAGE_KEY, trimmed);
+      if (cleaned) {
+        localStorage.setItem(STORAGE_KEY, cleaned);
       } else {
         localStorage.removeItem(STORAGE_KEY);
       }
-      setApiKey(trimmed);
+      setApiKey(cleaned);
       window.dispatchEvent(new Event(EVENT_NAME));
     } catch (err) {
       console.warn('Erreur sauvegarde clé API:', err);
@@ -56,8 +68,13 @@ export function useApiKey() {
     }
   }, []);
 
-  const validateApiKey = useCallback(async (keyToTest?: string): Promise<{ valid: boolean; message: string }> => {
-    const testKey = (keyToTest !== undefined ? keyToTest : apiKey).trim();
+  const validateApiKey = useCallback(async (keyToTest?: string): Promise<{
+    valid: boolean;
+    message: string;
+    sanitizedKey?: string;
+    canSaveAnyway?: boolean;
+  }> => {
+    const testKey = sanitizeGeminiKey(keyToTest !== undefined ? keyToTest : apiKey);
     if (!testKey) {
       return { valid: false, message: 'Veuillez saisir votre clé API Gemini.' };
     }
@@ -74,13 +91,24 @@ export function useApiKey() {
 
       const data = await res.json();
       if (res.ok && data.valid) {
-        return { valid: true, message: data.message || 'Clé API connectée avec succès !' };
+        return {
+          valid: true,
+          message: data.message || 'Clé API connectée avec succès !',
+          sanitizedKey: data.sanitizedKey || testKey,
+        };
       }
-      return { valid: false, message: data.error || 'Clé API invalide.' };
+      return {
+        valid: false,
+        message: data.error || 'Clé API non reconnue.',
+        sanitizedKey: data.sanitizedKey || testKey,
+        canSaveAnyway: data.canSaveAnyway ?? (testKey.startsWith('AIza') || testKey.length >= 25),
+      };
     } catch (err: any) {
       return {
         valid: false,
-        message: err?.message || 'Erreur de connexion au serveur pour tester la clé.',
+        message: err?.message || 'Délai d\'attente ou problème de connexion pour tester la clé.',
+        sanitizedKey: testKey,
+        canSaveAnyway: testKey.startsWith('AIza') || testKey.length >= 25,
       };
     }
   }, [apiKey]);
