@@ -8,7 +8,7 @@ interface PWAInstallButtonProps {
 }
 
 export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'nav' }) => {
-  const { isInstallable, isInstalled, install } = usePWAInstall();
+  const { isInstallable, isInstalled, isIOS, install } = usePWAInstall();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleClick = async () => {
@@ -22,12 +22,12 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'n
     }
   };
 
-  // If already running standalone inside Android PWA wrapper
+  // If already running standalone inside PWA wrapper
   if (isInstalled && variant === 'nav') {
     return (
-      <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-semibold">
+      <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-semibold">
         <Smartphone className="w-3.5 h-3.5" />
-        <span>Mode App Android</span>
+        <span>Application installée</span>
       </div>
     );
   }
@@ -35,30 +35,27 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'n
   if (variant === 'banner') {
     return (
       <>
-        <div className="bg-gradient-to-r from-emerald-950/70 via-slate-900 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-lg">
+        <div className="bg-[#1e1f20] border border-[#3c4043] rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-md">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#4285f4] via-[#9b72cb] to-[#f59e0b] flex items-center justify-center text-white shrink-0 shadow-xs">
               <Smartphone className="w-5 h-5" />
             </div>
             <div>
               <div className="font-bold text-white flex items-center gap-2">
-                <span>Disponible en application Android !</span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
-                  PWA / APK
-                </span>
+                <span>Disponible en application mobile (iPhone & Android)</span>
               </div>
-              <p className="text-slate-300 text-[11px] mt-0.5">
-                Installe Si Driss sur ton smartphone Android pour un accès plein écran rapide et réviser tes cours partout.
+              <p className="text-[#8e918f] text-[11px] mt-0.5">
+                Installe Si Driss sur ton écran d'accueil pour réviser tes cours en plein écran rapide.
               </p>
             </div>
           </div>
 
           <button
             onClick={handleClick}
-            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition shadow-md shrink-0"
+            className="px-3.5 py-2 rounded-xl bg-[#282a2c] hover:bg-[#3c4043] text-white font-semibold text-xs flex items-center justify-center gap-2 transition shrink-0 border border-[#3c4043]"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>Installer sur Android</span>
+            <Download className="w-3.5 h-3.5 text-[#8ab4f8]" />
+            <span>{isIOS ? 'Installer sur iPhone' : "Installer l'App"}</span>
           </button>
         </div>
 
@@ -71,11 +68,13 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'n
     <>
       <button
         onClick={handleClick}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-emerald-400 hover:text-emerald-300 text-xs font-semibold transition shadow-sm"
-        title="Installer Si Driss comme application sur Android"
+        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#1e1f20] hover:bg-[#282a2c] text-[#c4c7c5] hover:text-white border border-[#282a2c] text-xs font-medium transition"
+        title={isIOS ? 'Installer Si Driss sur ton iPhone / iPad' : "Installer Si Driss sur ton smartphone ou PC"}
       >
-        <Smartphone className="w-3.5 h-3.5" />
-        <span className="hidden sm:inline">App Android</span>
+        <Smartphone className="w-3.5 h-3.5 text-[#8ab4f8]" />
+        <span className="hidden sm:inline">
+          {isIOS ? 'App iPhone' : 'Installer App'}
+        </span>
         <span className="sm:hidden">App</span>
       </button>
 

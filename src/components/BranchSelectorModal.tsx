@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import {
-  GraduationCap,
   FlaskConical,
   Compass,
   CheckCircle2,
-  Sparkles,
   ArrowRight,
   ShieldCheck,
   X,
-  Zap,
 } from 'lucide-react';
 import { StudentBranch, useBranch } from '../hooks/useBranch';
 
@@ -28,8 +25,9 @@ export const BranchSelectorModal: React.FC<BranchSelectorModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleConfirm = () => {
-    selectBranch(selected);
+  const handleSelectBranch = (b: StudentBranch) => {
+    setSelected(b);
+    selectBranch(b);
     if (typeof window !== 'undefined' && 'vibrate' in navigator) {
       try {
         navigator.vibrate(15);
@@ -69,6 +67,7 @@ export const BranchSelectorModal: React.FC<BranchSelectorModalProps> = ({
             <button
               onClick={onClose}
               className="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition"
+              title="Fermer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -82,20 +81,20 @@ export const BranchSelectorModal: React.FC<BranchSelectorModalProps> = ({
               Dans quelle filière prépares-tu ton Examen National ?
             </h3>
             <p className="text-xs text-slate-400 max-w-lg mx-auto leading-relaxed">
-              Le programme, les sujets du National, les formules et les réponses de Si Driss
-              s'adapteront automatiquement au Cadre de Référence officiel de ta section.
+              Clique directement sur ta filière. Le programme, les formules et les réponses de Si Driss
+              s'adapteront immédiatement au Cadre de Référence officiel.
             </p>
           </div>
 
-          {/* Cards Grid */}
+          {/* Cards Grid - 1-Click Instant Selection */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Card 1: 2ème Bac PC */}
             <div
-              onClick={() => setSelected('PC')}
-              className={`cursor-pointer rounded-2xl p-5 border-2 transition-all relative flex flex-col justify-between ${
+              onClick={() => handleSelectBranch('PC')}
+              className={`group cursor-pointer rounded-2xl p-5 border-2 transition-all relative flex flex-col justify-between ${
                 selected === 'PC'
                   ? 'bg-amber-500/10 border-amber-500 shadow-lg shadow-amber-500/10'
-                  : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60'
+                  : 'bg-slate-950/60 border-slate-800 hover:border-amber-500/60 hover:bg-slate-900/80'
               }`}
             >
               {selected === 'PC' && (
@@ -141,18 +140,22 @@ export const BranchSelectorModal: React.FC<BranchSelectorModalProps> = ({
                 </ul>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-medium">
-                Idéal pour les élèves en section Sciences Physiques.
+              <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+                <span className="text-[11px] text-slate-400">Sciences Physiques</span>
+                <span className="font-bold text-amber-400 group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+                  <span>Choisir PC</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </span>
               </div>
             </div>
 
             {/* Card 2: 2ème Bac SM */}
             <div
-              onClick={() => setSelected('SM')}
-              className={`cursor-pointer rounded-2xl p-5 border-2 transition-all relative flex flex-col justify-between ${
+              onClick={() => handleSelectBranch('SM')}
+              className={`group cursor-pointer rounded-2xl p-5 border-2 transition-all relative flex flex-col justify-between ${
                 selected === 'SM'
                   ? 'bg-blue-500/10 border-blue-500 shadow-lg shadow-blue-500/10'
-                  : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60'
+                  : 'bg-slate-950/60 border-slate-800 hover:border-blue-500/60 hover:bg-slate-900/80'
               }`}
             >
               {selected === 'SM' && (
@@ -198,8 +201,12 @@ export const BranchSelectorModal: React.FC<BranchSelectorModalProps> = ({
                 </ul>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-medium">
-                Spécifiquement conçu pour les élèves de Sciences Math A et B.
+              <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+                <span className="text-[11px] text-slate-400">Sciences Mathématiques</span>
+                <span className="font-bold text-blue-400 group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+                  <span>Choisir SM</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </span>
               </div>
             </div>
           </div>
@@ -212,26 +219,19 @@ export const BranchSelectorModal: React.FC<BranchSelectorModalProps> = ({
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="p-5 bg-slate-950/80 border-t border-slate-800 flex items-center justify-between gap-3">
-          <div className="text-xs text-slate-400">
-            Filière sélectionnée :{' '}
-            <strong className={selected === 'PC' ? 'text-amber-400' : 'text-blue-400'}>
-              {selected === 'PC' ? '2ème Bac Sciences Physiques (PC)' : '2ème Bac Sciences Mathématiques (SM)'}
-            </strong>
-          </div>
-
-          <button
-            onClick={handleConfirm}
-            className={`px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition shadow-lg ${
-              selected === 'PC'
-                ? 'bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950'
-                : 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-400 hover:to-indigo-400 text-white'
-            }`}
-          >
-            <span>Confirmer et Accéder à Si Driss</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+        {/* Footer (Simplified - No redundant confirm button) */}
+        <div className="p-4 bg-slate-950/80 border-t border-slate-800 flex items-center justify-between gap-3 text-xs text-slate-400">
+          <span>
+            Clique directement sur une carte pour valider ton choix instantanément.
+          </span>
+          {canClose && onClose && (
+            <button
+              onClick={onClose}
+              className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium transition"
+            >
+              Fermer
+            </button>
+          )}
         </div>
       </div>
     </div>
