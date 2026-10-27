@@ -101,7 +101,7 @@ export const GeminiSidebar: React.FC<GeminiSidebarProps> = ({
 
       {/* Sidebar Drawer */}
       <aside
-        className={`fixed md:static inset-y-0 left-0 z-50 flex flex-col w-72 bg-[#17181c] border-r border-[#282a2c] text-[#e3e3e3] transition-transform duration-300 ease-in-out ${
+        className={`ios-safe-header fixed md:static inset-y-0 left-0 z-50 flex flex-col w-72 bg-[#17181c] border-r border-[#282a2c] text-[#e3e3e3] transition-transform duration-300 ease-in-out pb-[max(env(safe-area-inset-bottom,0px),0.5rem)] ${
           isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0 md:w-0 md:overflow-hidden md:border-r-0'
         }`}
       >

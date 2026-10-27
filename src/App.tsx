@@ -105,8 +105,19 @@ export default function App() {
     setCurrentSessionId(activeId);
   };
 
+  // Prevent iOS / iPadOS Safari window scroll displacement
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY !== 0 || window.scrollX !== 0) {
+        window.scrollTo(0, 0);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <div className="flex h-screen w-full bg-[#131314] text-[#e3e3e3] overflow-hidden font-sans">
+    <div className="flex h-full w-full bg-[#131314] text-[#e3e3e3] overflow-hidden font-sans">
       {/* GEMINI SIDEBAR */}
       <GeminiSidebar
         isOpen={isSidebarOpen}
@@ -129,67 +140,69 @@ export default function App() {
 
       {/* MAIN VIEW AREA */}
       <div className="flex-1 flex flex-col h-full overflow-hidden min-w-0">
-        {/* GEMINI TOP BAR (Single row, clean & uncluttered) */}
-        <header className="h-14 border-b border-[#282a2c] bg-[#131314]/95 backdrop-blur-md px-3 sm:px-5 flex items-center justify-between shrink-0 z-30">
-          {/* Left: Hamburger menu toggle + Logo + Filière switch */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-2 rounded-full hover:bg-[#202124] text-[#c4c7c5] hover:text-white transition"
-              title="Afficher/Masquer le menu latéral"
-              aria-label="Menu"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
+        {/* GEMINI TOP BAR with iOS & iPad Safe Area insets (avoids notch and Dynamic Island) */}
+        <header className="ios-safe-header w-full border-b border-[#282a2c] bg-[#131314]/95 backdrop-blur-md shrink-0 z-30">
+          <div className="h-14 px-3 sm:px-5 flex items-center justify-between">
+            {/* Left: Hamburger menu toggle + Logo + Filière switch */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                className="p-2.5 rounded-full hover:bg-[#202124] active:bg-[#282a2c] text-[#c4c7c5] hover:text-white transition touch-manipulation cursor-pointer"
+                title="Afficher/Masquer le menu latéral"
+                aria-label="Menu"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
 
-            {/* App Wordmark with Gemini Spark */}
-            <div className="flex items-center gap-2">
-              <span className="text-base font-semibold tracking-tight text-white flex items-center gap-1.5">
-                <span className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#4285f4] via-[#9b72cb] to-[#f59e0b] flex items-center justify-center shadow-xs">
-                  <Sparkles className="w-3.5 h-3.5 text-white" />
+              {/* App Wordmark with Gemini Spark */}
+              <div className="flex items-center gap-2">
+                <span className="text-base font-semibold tracking-tight text-white flex items-center gap-1.5">
+                  <span className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#4285f4] via-[#9b72cb] to-[#f59e0b] flex items-center justify-center shadow-xs">
+                    <Sparkles className="w-3.5 h-3.5 text-white" />
+                  </span>
+                  Si Driss
                 </span>
-                Si Driss
-              </span>
 
-              {/* Branch Selector Dropdown Pill (Gemini model selector style) */}
-              <button
-                onClick={() => setIsBranchModalOpen(true)}
-                className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#1e1f20] hover:bg-[#282a2c] text-xs text-[#c4c7c5] hover:text-white border border-[#282a2c] transition"
-                title="Changer de filière (PC / SM)"
-              >
-                <span className="font-medium">2BAC {branch}</span>
-                <ChevronDown className="w-3 h-3 text-[#8e918f]" />
-              </button>
+                {/* Branch Selector Dropdown Pill (Gemini model selector style) */}
+                <button
+                  onClick={() => setIsBranchModalOpen(true)}
+                  className="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#1e1f20] hover:bg-[#282a2c] text-xs text-[#c4c7c5] hover:text-white border border-[#282a2c] transition"
+                  title="Changer de filière (PC / SM)"
+                >
+                  <span className="font-medium">2BAC {branch}</span>
+                  <ChevronDown className="w-3 h-3 text-[#8e918f]" />
+                </button>
+              </div>
             </div>
-          </div>
 
-          {/* Center: Contextual Return Button if in another tool */}
-          {activeTab !== 'chat' && (
+            {/* Center: Contextual Return Button if in another tool */}
+            {activeTab !== 'chat' && (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setActiveTab('chat')}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1e1f20] hover:bg-[#282a2c] text-xs text-[#8ab4f8] hover:text-white transition border border-[#282a2c]"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span className="font-medium">Retour à la discussion</span>
+                </button>
+              </div>
+            )}
+
+            {/* Right: API Key Badge + New Chat Icon */}
             <div className="flex items-center gap-2">
+              <PWAInstallButton variant="nav" />
+
+              <ApiKeyStatusBadge compact />
+
               <button
-                onClick={() => setActiveTab('chat')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1e1f20] hover:bg-[#282a2c] text-xs text-[#8ab4f8] hover:text-white transition border border-[#282a2c]"
+                onClick={handleNewChat}
+                className="p-2.5 rounded-full hover:bg-[#202124] active:bg-[#282a2c] text-[#c4c7c5] hover:text-white transition touch-manipulation cursor-pointer"
+                title="Nouvelle discussion"
+                aria-label="Nouvelle discussion"
               >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span className="font-medium">Retour à la discussion</span>
+                <SquarePen className="w-4 h-4 text-[#8ab4f8]" />
               </button>
             </div>
-          )}
-
-          {/* Right: API Key Badge + New Chat Icon */}
-          <div className="flex items-center gap-2">
-            <PWAInstallButton variant="nav" />
-
-            <ApiKeyStatusBadge compact />
-
-            <button
-              onClick={handleNewChat}
-              className="p-2 rounded-full hover:bg-[#202124] text-[#c4c7c5] hover:text-white transition"
-              title="Nouvelle discussion"
-              aria-label="Nouvelle discussion"
-            >
-              <SquarePen className="w-4 h-4 text-[#8ab4f8]" />
-            </button>
           </div>
         </header>
 
@@ -318,7 +331,13 @@ export default function App() {
                     Toutes les formules exigibles au Baccalauréat 2BAC {branch} (BIOF)
                   </p>
                 </div>
-                <FormulaCheatSheet onAskProfAboutChapter={handleAskProfFromChapter} />
+                <FormulaCheatSheet
+                  onAskProfAboutChapter={handleAskProfFromChapter}
+                  onAskProfCustom={(prompt) => {
+                    setChatInitialPrompt(prompt);
+                    setActiveTab('chat');
+                  }}
+                />
               </div>
             </div>
           )}

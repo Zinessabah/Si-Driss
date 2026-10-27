@@ -126,6 +126,8 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   const [previewImageModal, setPreviewImageModal] = useState<{ url: string; name: string } | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const pdfInputRef = useRef<HTMLInputElement | null>(null);
+  const photoInputRef = useRef<HTMLInputElement | null>(null);
   const addMenuRef = useRef<HTMLDivElement | null>(null);
   const formulaMenuRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -158,6 +160,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   const [input, setInput] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const chatScrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Inform parent of sessions list
   useEffect(() => {
@@ -238,13 +241,18 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     if (initialPrompt) {
       setInput(initialPrompt);
       if (textareaRef.current) {
-        textareaRef.current.focus();
+        textareaRef.current.focus({ preventScroll: true });
       }
     }
   }, [initialPrompt]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatScrollContainerRef.current) {
+      chatScrollContainerRef.current.scrollTo({
+        top: chatScrollContainerRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
   }, [messages, loading]);
 
   const toggleSocratic = (enabled: boolean) => {
@@ -359,6 +367,12 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
+    if (pdfInputRef.current) {
+      pdfInputRef.current.value = '';
+    }
+    if (photoInputRef.current) {
+      photoInputRef.current.value = '';
+    }
   };
 
   const handleSelectExercise = (attachment: ChatAttachment, defaultPrompt?: string) => {
@@ -432,7 +446,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
     const assistantMsgId = String(Date.now() + 1);
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 25000);
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
 
     try {
       const streamRes = await fetch('/api/chat/stream', {
@@ -606,7 +620,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     setInput((prev) => (prev ? `${prev} $${formula}$ ` : `$${formula}$ `));
     setIsFormulaMenuOpen(false);
     if (textareaRef.current) {
-      textareaRef.current.focus();
+      textareaRef.current.focus({ preventScroll: true });
     }
   };
 
@@ -640,18 +654,37 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
   return (
     <div className="flex-1 flex flex-col h-full bg-[#131314] relative text-[#e3e3e3] overflow-hidden">
-      {/* Hidden File Input */}
+      {/* Hidden File Inputs: Strictly separated so mobile OS opens files for PDF and camera/photos for images (no videos) */}
+      <input
+        type="file"
+        ref={pdfInputRef}
+        onChange={handleFileUpload}
+        accept="application/pdf,.pdf"
+        multiple
+        className="hidden"
+      />
+      <input
+        type="file"
+        ref={photoInputRef}
+        onChange={handleFileUpload}
+        accept="image/png,image/jpeg,image/webp,image/jpg"
+        multiple
+        className="hidden"
+      />
       <input
         type="file"
         ref={fileInputRef}
         onChange={handleFileUpload}
-        accept="image/*,application/pdf,.txt,.md"
+        accept="application/pdf,.pdf,image/png,image/jpeg,image/webp"
         multiple
         className="hidden"
       />
 
       {/* Main Chat Canvas Area */}
-      <div className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-6 no-scrollbar">
+      <div
+        ref={chatScrollContainerRef}
+        className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-6 no-scrollbar"
+      >
         <div className="max-w-3xl mx-auto space-y-6">
           {/* GEMINI EMPTY STATE: Shown when no question has been asked yet */}
           {!hasUserMessages && (
@@ -891,7 +924,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
       </div>
 
       {/* FLOATING GEMINI PROMPT INPUT BAR */}
-      <div className="sticky bottom-0 z-20 w-full px-3 sm:px-4 pb-3 pt-2 bg-gradient-to-t from-[#131314] via-[#131314]/95 to-transparent">
+      <div className="sticky bottom-0 z-20 w-full px-3 sm:px-4 pb-[max(0.75rem,calc(env(safe-area-inset-bottom,0px)+0.25rem))] pt-2 bg-gradient-to-t from-[#131314] via-[#131314]/95 to-transparent">
         <div className="max-w-3xl mx-auto">
           {/* Pending Attachments Pill Tray */}
           {pendingAttachments.length > 0 && (
@@ -967,15 +1000,45 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                   {/* Add Popover Menu */}
                   {isAddMenuOpen && (
                     <div className="absolute bottom-full left-0 mb-2 w-72 bg-[#1e1f20] border border-[#3c4043] rounded-2xl shadow-2xl p-1.5 z-50 space-y-0.5 backdrop-blur-md animate-in fade-in slide-in-from-bottom-2">
+                      {/* Option 1: PDF Document (.pdf only - opens Files on iOS/Android without camera or video prompt) */}
                       <button
                         type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="w-full text-left p-2 rounded-xl hover:bg-[#282a2c] text-[#e3e3e3] transition flex items-center gap-2.5"
+                        onClick={() => {
+                          setIsAddMenuOpen(false);
+                          pdfInputRef.current?.click();
+                        }}
+                        className="w-full text-left p-2 rounded-xl hover:bg-[#282a2c] text-[#e3e3e3] transition flex items-center gap-2.5 group"
                       >
-                        <ImageIcon className="w-4 h-4 text-[#8ab4f8]" />
+                        <div className="w-7 h-7 rounded-lg bg-rose-500/15 flex items-center justify-center text-rose-400 group-hover:scale-105 transition-transform flex-shrink-0">
+                          <FileText className="w-4 h-4" />
+                        </div>
                         <div className="text-xs">
-                          <div className="font-medium">Photo ou Document</div>
-                          <div className="text-[10px] text-[#8e918f]">Énoncé, schéma ou PDF</div>
+                          <div className="font-medium flex items-center gap-1.5">
+                            Document PDF
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-semibold tracking-wide">.PDF</span>
+                          </div>
+                          <div className="text-[10px] text-[#8e918f]">Sujet d'examen, devoir ou résumé</div>
+                        </div>
+                      </button>
+
+                      {/* Option 2: Exercise Photo (strict images only - no videos allowed) */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsAddMenuOpen(false);
+                          photoInputRef.current?.click();
+                        }}
+                        className="w-full text-left p-2 rounded-xl hover:bg-[#282a2c] text-[#e3e3e3] transition flex items-center gap-2.5 group"
+                      >
+                        <div className="w-7 h-7 rounded-lg bg-[#8ab4f8]/15 flex items-center justify-center text-[#8ab4f8] group-hover:scale-105 transition-transform flex-shrink-0">
+                          <ImageIcon className="w-4 h-4" />
+                        </div>
+                        <div className="text-xs">
+                          <div className="font-medium flex items-center gap-1.5">
+                            Photo d'énoncé
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#8ab4f8]/20 text-[#8ab4f8] font-semibold tracking-wide">IMAGE</span>
+                          </div>
+                          <div className="text-[10px] text-[#8e918f]">Photo ou scan d'exercice (.jpg, .png)</div>
                         </div>
                       </button>
 

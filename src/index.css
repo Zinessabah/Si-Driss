@@ -3,6 +3,50 @@
 
 :root {
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+/* iOS Safari & iPadOS absolute viewport locking: prevents document scrolling that hides top header */
+html,
+body {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+  -webkit-text-size-adjust: 100%;
+  touch-action: pan-y;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* iOS Safe Area Header: ensures top navigation bar is never masked by notch, status bar or dynamic island */
+.ios-safe-header {
+  padding-top: max(env(safe-area-inset-top, 0px), 0px);
+}
+
+/* Standalone PWA on iOS (iPad & iPhone): guarantee status bar clearance even if env() returns 0 on iPad */
+@media all and (display-mode: standalone) {
+  .ios-safe-header {
+    padding-top: max(env(safe-area-inset-top, 0px), 24px);
+  }
 }
 
 code, pre, .font-mono {
