@@ -477,7 +477,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
           {
             id: assistantMsgId,
             role: 'assistant',
-            content: '⚠️ **Clé API Gemini requise** : Renseigne ta clé API gratuite Google AI Studio pour que Si Driss puisse te répondre.',
+            content: '⚠️ **Configuration IA requise** : Renseigne ta clé API (Google Gemini, Groq, OpenAI, Claude, DeepSeek, Mistral...) ou connecte Ollama en local pour discuter avec Si Driss.',
             mode: currentMode,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           },

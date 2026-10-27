@@ -1,0 +1,48 @@
+services:
+  # ---------------------------------------------------------------------------
+  # Si Driss - Application Principale
+  # ---------------------------------------------------------------------------
+  si-driss:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: si_driss_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      # Fournisseur par défaut optionnel (gemini, groq, openai, anthropic, deepseek, mistral, openrouter, custom)
+      - AI_PROVIDER=${AI_PROVIDER:-gemini}
+      # Clé API par défaut (laisser vide si vous souhaitez que chaque élève utilise sa propre clé dans l'UI)
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      # Pour connecter Ollama exécuté sur la machine hôte :
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://host.docker.internal:11434/v1}
+    extra_hosts:
+      # Permet au conteneur d'accéder à Ollama hébergé sur la machine hôte
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # Persistance des documents du programme déposés dans /docs/programme/
+      - ./docs/programme:/app/docs/programme
+
+  # ---------------------------------------------------------------------------
+  # Optionnel : Service Ollama 100% Local & Hors-ligne (Décommenter pour activer)
+  # ---------------------------------------------------------------------------
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: si_driss_ollama
+  #   restart: unless-stopped
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_models:/root/.ollama
+
+# volumes:
+#   ollama_models:
