@@ -285,12 +285,12 @@ Peux-tu m'expliquer ce que signifie physiquement cette valeur pour l'épreuve du
                 </div>
 
                 {/* Mathematical Substitution Step */}
-                <div className="bg-[#1e1f20]/60 border border-[#2e3034]/70 rounded-xl p-2.5 text-xs">
-                  <div className="text-[10px] text-[#8e918f] font-semibold mb-0.5">
+                <div className="py-1.5 text-xs">
+                  <div className="text-[10px] text-[#8e918f] font-semibold mb-1">
                     Application numérique :
                   </div>
-                  <div className="overflow-x-auto text-sky-300 font-mono py-0.5">
-                    <MathView content={`$${item.substitutionLatex}$`} />
+                  <div className="text-sky-300 font-bold py-1.5 leading-relaxed">
+                    <MathView content={`$${item.substitutionLatex}$`} className="font-bold" />
                   </div>
                 </div>
 

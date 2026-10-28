@@ -263,9 +263,9 @@ export const FormulaCheatSheet: React.FC<FormulaCheatSheetProps> = ({
                     </div>
                   </div>
 
-                  <p className="text-xs text-[#8e918f] leading-relaxed">
-                    {chapter.summary}
-                  </p>
+                  <div className="text-xs text-[#8e918f] leading-relaxed">
+                    <MathView content={chapter.summary} />
+                  </div>
 
                   {/* Key Formulas Section */}
                   <div className="space-y-2 pt-1">
@@ -280,14 +280,16 @@ export const FormulaCheatSheet: React.FC<FormulaCheatSheetProps> = ({
                             key={i}
                             className="bg-[#131314] p-3 rounded-xl border border-[#282a2c] flex items-center justify-between gap-3 text-xs"
                           >
-                            <div className="space-y-0.5 overflow-x-auto min-w-0">
-                              <div className="text-[10px] text-slate-400 font-semibold truncate">
-                                {f.name}
+                            <div className="space-y-1.5 min-w-0 py-1">
+                              <div className="text-[10px] text-slate-400 font-semibold">
+                                <MathView content={f.name} className="inline" />
                               </div>
-                              <MathView
-                                content={`$${f.latex}$`}
-                                className="font-bold text-sky-300"
-                              />
+                              <div className="py-1.5">
+                                <MathView
+                                  content={`$${f.latex}$`}
+                                  className="font-bold text-sky-300 text-sm"
+                                />
+                              </div>
                               <div className="text-[10px] text-[#8e918f] font-mono">
                                 <MathView content={f.units} className="inline" />
                               </div>

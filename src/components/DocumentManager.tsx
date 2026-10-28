@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   FolderOpen,
   Upload,
@@ -14,8 +14,20 @@ import {
   Zap,
   ArrowRight,
   Copy,
+  ShieldCheck,
+  Download,
+  UploadCloud,
+  FileUp,
 } from 'lucide-react';
 import { MathView } from './MathView';
+import {
+  saveDocumentToVault,
+  removeDocumentFromVault,
+  syncVaultWithServer,
+  exportVaultBackup,
+  importVaultBackup,
+  getAllDocumentsFromVault,
+} from '../utils/documentVault';
 
 interface DocFile {
   name: string;
@@ -32,14 +44,16 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
   const [files, setFiles] = useState<DocFile[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [uploading, setUploading] = useState<boolean>(false);
-  const [statusMsg, setStatusMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+  const [statusMsg, setStatusMsg] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
+  const [vaultCount, setVaultCount] = useState<number>(0);
 
   // New text file creation modal/form
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [newFileName, setNewFileName] = useState<string>('');
   const [newFileContent, setNewFileContent] = useState<string>('');
-  const [previewContent, setPreviewContent] = useState<{ name: string; content: string } | null>(null);
   const [copiedPath, setCopiedPath] = useState<boolean>(false);
+
+  const importFileInputRef = useRef<HTMLInputElement | null>(null);
 
   const fetchDocuments = async () => {
     setLoading(true);
@@ -56,8 +70,32 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
     }
   };
 
+  // Synchronise le coffre-fort IndexedDB avec le serveur au chargement
+  const syncAndLoad = async () => {
+    setLoading(true);
+    try {
+      const syncResult = await syncVaultWithServer();
+      setVaultCount(syncResult.totalVaultCount);
+
+      if (syncResult.restoredCount > 0) {
+        setStatusMsg({
+          text: `🛡️ ${syncResult.restoredCount} document(s) automatiquement restauré(s) depuis votre sauvegarde locale permanente suite à la mise à jour !`,
+          type: 'success',
+        });
+      }
+
+      await fetchDocuments();
+    } catch (err) {
+      console.warn('Erreur synchro coffre:', err);
+      await fetchDocuments();
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetchDocuments();
+    syncAndLoad();
+    getAllDocumentsFromVault().then((docs) => setVaultCount(docs.length));
   }, []);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,23 +106,42 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
     setStatusMsg(null);
 
     try {
+      let uploadedCount = 0;
       for (let i = 0; i < uploadedFiles.length; i++) {
         const file = uploadedFiles[i];
         let bodyPayload: { filename: string; content?: string; base64?: string } = { filename: file.name };
+        const isPdf = file.name.toLowerCase().endsWith('.pdf');
 
-        if (file.name.toLowerCase().endsWith('.pdf')) {
+        if (isPdf) {
           const arrayBuffer = await file.arrayBuffer();
           const bytes = new Uint8Array(arrayBuffer);
           let binary = '';
-          // Convert in chunks to prevent callstack limits
           const chunkSize = 8192;
           for (let b = 0; b < bytes.byteLength; b += chunkSize) {
             const chunk = bytes.subarray(b, Math.min(b + chunkSize, bytes.byteLength));
             binary += String.fromCharCode.apply(null, Array.from(chunk));
           }
-          bodyPayload.base64 = btoa(binary);
+          const base64Data = btoa(binary);
+          bodyPayload.base64 = base64Data;
+
+          // Sauvegarde immédiate dans le coffre-fort permanent IndexedDB
+          await saveDocumentToVault({
+            name: file.name,
+            isPdf: true,
+            base64: base64Data,
+            size: file.size,
+          });
         } else {
-          bodyPayload.content = await file.text();
+          const textContent = await file.text();
+          bodyPayload.content = textContent;
+
+          // Sauvegarde immédiate dans le coffre-fort permanent IndexedDB
+          await saveDocumentToVault({
+            name: file.name,
+            isPdf: false,
+            content: textContent,
+            size: file.size,
+          });
         }
 
         const res = await fetch('/api/documents/upload', {
@@ -94,10 +151,14 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
         });
 
         if (!res.ok) throw new Error(`Erreur lors de l'upload de ${file.name}`);
+        uploadedCount++;
       }
 
+      const allVault = await getAllDocumentsFromVault();
+      setVaultCount(allVault.length);
+
       setStatusMsg({
-        text: `Fichier(s) indexé(s) avec succès dans /docs/programme/ ! Si Driss y a accès immédiatement.`,
+        text: `${uploadedCount} fichier(s) indexé(s) et sauvegardé(s) en permanence dans votre coffre-fort local ! Ils ne disparaîtront plus lors des mises à jour.`,
         type: 'success',
       });
       await fetchDocuments();
@@ -118,6 +179,15 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
     }
 
     try {
+      // 1. Sauvegarde dans le coffre IndexedDB
+      await saveDocumentToVault({
+        name: finalName,
+        isPdf: false,
+        content: newFileContent,
+        size: new Blob([newFileContent]).size,
+      });
+
+      // 2. Upload sur le serveur
       const res = await fetch('/api/documents/upload', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -128,10 +198,15 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
       });
 
       if (res.ok) {
-        setStatusMsg({ text: `Document "${finalName}" enregistré et indexé avec succès !`, type: 'success' });
+        setStatusMsg({
+          text: `Document "${finalName}" enregistré et protégé en local de manière permanente !`,
+          type: 'success',
+        });
         setShowCreateModal(false);
         setNewFileName('');
         setNewFileContent('');
+        const allVault = await getAllDocumentsFromVault();
+        setVaultCount(allVault.length);
         await fetchDocuments();
       }
     } catch (err) {
@@ -141,13 +216,18 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
 
   const handleDelete = async (filename: string) => {
     try {
-      const res = await fetch(`/api/documents/${encodeURIComponent(filename)}`, {
+      // 1. Supprimer du serveur
+      await fetch(`/api/documents/${encodeURIComponent(filename)}`, {
         method: 'DELETE',
       });
-      if (res.ok) {
-        setFiles((prev) => prev.filter((f) => f.name !== filename));
-        setStatusMsg({ text: `Le document "${filename}" a été supprimé de /docs/programme/.`, type: 'success' });
-      }
+
+      // 2. Supprimer du coffre-fort local
+      await removeDocumentFromVault(filename);
+
+      setFiles((prev) => prev.filter((f) => f.name !== filename));
+      const allVault = await getAllDocumentsFromVault();
+      setVaultCount(allVault.length);
+      setStatusMsg({ text: `Le document "${filename}" a été supprimé.`, type: 'info' });
     } catch (err) {
       console.error(err);
       setStatusMsg({ text: `Impossible de supprimer "${filename}".`, type: 'error' });
@@ -160,8 +240,88 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
     setTimeout(() => setCopiedPath(false), 2000);
   };
 
+  const handleExportBackup = async () => {
+    try {
+      await exportVaultBackup();
+      setStatusMsg({
+        text: 'Fichier de sauvegarde exporté avec succès ! Tu pourras le restaurer à tout moment.',
+        type: 'success',
+      });
+    } catch (err: any) {
+      setStatusMsg({ text: 'Erreur lors de l\'exportation de la sauvegarde.', type: 'error' });
+    }
+  };
+
+  const handleImportBackup = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const count = await importVaultBackup(text);
+      setStatusMsg({
+        text: `Sauvegarde importée avec succès : ${count} document(s) restauré(s) et indexé(s) !`,
+        type: 'success',
+      });
+      await fetchDocuments();
+      const allVault = await getAllDocumentsFromVault();
+      setVaultCount(allVault.length);
+    } catch (err: any) {
+      setStatusMsg({ text: `Erreur import : ${err?.message || 'Fichier invalide'}`, type: 'error' });
+    } finally {
+      e.target.value = '';
+    }
+  };
+
   return (
     <div className="space-y-6">
+      {/* Permanent Storage Guarantee Banner */}
+      <div className="bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 shadow-xl flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+            <ShieldCheck className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h4 className="text-sm font-bold text-white">Stockage Permanent & Auto-Restauration Activé</h4>
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                Anti-Perte Garanti
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 mt-0.5">
+              Tes fichiers sont sauvegardés dans le coffre-fort local ({vaultCount} document(s) sécurisé(s)) et <strong>ré-injectés automatiquement sur le serveur</strong> à chaque mise à jour ou redémarrage !
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleExportBackup}
+            className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition"
+            title="Télécharger une copie de secours de tous mes documents"
+          >
+            <Download className="w-3.5 h-3.5 text-amber-400" />
+            <span>Sauvegarder (.json)</span>
+          </button>
+
+          <button
+            onClick={() => importFileInputRef.current?.click()}
+            className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition"
+            title="Restaurer des documents depuis un fichier de sauvegarde"
+          >
+            <UploadCloud className="w-3.5 h-3.5 text-sky-400" />
+            <span>Restaurer</span>
+          </button>
+          <input
+            ref={importFileInputRef}
+            type="file"
+            accept=".json"
+            onChange={handleImportBackup}
+            className="hidden"
+          />
+        </div>
+      </div>
+
       {/* Directory Location Banner */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
@@ -188,12 +348,13 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
 
             <label className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md transition-all">
               <Upload className="w-4 h-4" />
-              <span>Téléverser des fichiers (.pdf, .md, .txt)</span>
+              <span>{uploading ? 'Téléversement...' : 'Téléverser des fichiers (.pdf, .md, .txt)'}</span>
               <input
                 type="file"
                 multiple
                 accept=".pdf,.md,.txt,.json,.csv"
                 onChange={handleFileUpload}
+                disabled={uploading}
                 className="hidden"
               />
             </label>
@@ -221,7 +382,7 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
           </div>
 
           <div className="text-xs text-slate-400 max-w-md">
-            💡 <strong>Pourquoi les réponses deviennent instantanées ?</strong> Lorsque des documents sont présents dans ce répertoire, Si Driss extrait immédiatement le paragraphe exact au lieu de réfléchir de zéro. Le streaming mot-par-mot évite toute latence.
+            💡 <strong>Restauration Automatique :</strong> Chaque document que tu téléverses est dorénavant sauvegardé dans la mémoire permanente de ton navigateur. Même si le serveur se redéploie ou se met à jour, l'application ré-injecte automatiquement tes cours sans que tu aies besoin de les retéléverser !
           </div>
         </div>
 
@@ -230,11 +391,15 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
             className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
               statusMsg.type === 'success'
                 ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-300'
+                : statusMsg.type === 'info'
+                ? 'bg-sky-950/40 border-sky-500/30 text-sky-300'
                 : 'bg-rose-950/40 border-rose-500/30 text-rose-300'
             }`}
           >
             {statusMsg.type === 'success' ? (
               <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+            ) : statusMsg.type === 'info' ? (
+              <Sparkles className="w-4 h-4 text-sky-400 shrink-0" />
             ) : (
               <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
             )}
@@ -251,18 +416,19 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
             Documents Actuellement Indexés ({files.length})
           </h4>
           <button
-            onClick={fetchDocuments}
+            onClick={syncAndLoad}
             disabled={loading}
             className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors text-xs flex items-center gap-1.5"
+            title="Vérifier et synchroniser le coffre-fort"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            Actualiser
+            <span>Synchroniser</span>
           </button>
         </div>
 
         {loading ? (
           <div className="p-8 text-center text-xs text-slate-500">
-            Chargement des documents du répertoire...
+            Chargement et synchronisation des documents du répertoire...
           </div>
         ) : files.length === 0 ? (
           <div className="p-8 text-center text-slate-400 text-xs bg-slate-950 rounded-xl border border-dashed border-slate-800 space-y-2">
@@ -326,7 +492,7 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <h3 className="font-bold text-white text-sm flex items-center gap-2">
                 <Plus className="w-4 h-4 text-amber-400" />
-                Créer un document dans /docs/programme/
+                Créer un document permanent dans /docs/programme/
               </h3>
               <button
                 onClick={() => setShowCreateModal(false)}

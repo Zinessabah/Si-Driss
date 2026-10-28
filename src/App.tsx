@@ -21,6 +21,7 @@ import { useApiKey } from './hooks/useApiKey';
 import { BranchSelectorModal } from './components/BranchSelectorModal';
 import { GeminiSidebar } from './components/GeminiSidebar';
 import { SavedSession } from './components/SessionManagerModal';
+import { syncVaultWithServer } from './utils/documentVault';
 import {
   Menu,
   Sparkles,
@@ -114,6 +115,13 @@ export default function App() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Synchronise automatiquement les documents locaux du coffre-fort vers le serveur après mise à jour
+  useEffect(() => {
+    syncVaultWithServer().catch((err) => {
+      console.warn('Synchro auto documents:', err);
+    });
   }, []);
 
   return (

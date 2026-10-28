@@ -1,3 +1,6 @@
+import dns from 'dns';
+dns.setDefaultResultOrder('ipv4first');
+
 import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -41,13 +44,13 @@ function sanitizeApiKey(raw: string): string {
 }
 
 const DEFAULT_MODELS: Record<SupportedProvider, string> = {
-  gemini: 'gemini-2.5-flash',
+  gemini: 'gemini-3.5-flash-lite',
   groq: 'llama-3.3-70b-versatile',
   openai: 'gpt-4o-mini',
   anthropic: 'claude-3-5-haiku-20241022',
   deepseek: 'deepseek-chat',
   mistral: 'mistral-small-latest',
-  openrouter: 'google/gemini-2.5-flash',
+  openrouter: 'google/gemini-3.8-flash',
   custom: 'llama3.3',
 };
 
@@ -61,14 +64,22 @@ const DEFAULT_BASE_URLS: Partial<Record<SupportedProvider, string>> = {
   custom: process.env.OLLAMA_BASE_URL || 'http://localhost:11434/v1',
 };
 
-// Candidate models for Gemini fallback
+// Candidate models for Gemini fallback (sub-second responsive models prioritized)
 const GEMINI_FAST_MODELS = [
-  'gemini-2.5-flash',
-  'gemini-3.8-flash',
-  'gemini-flash-latest',
   'gemini-3.5-flash-lite',
   'gemini-3.1-flash-lite',
+  'gemini-3-flash-preview',
 ];
+
+const DEPRECATED_OR_SLOW_GEMINI_MODELS = new Set([
+  'gemini-2.5-flash',
+  'gemini-2.5-pro',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
+  'gemini-1.5-pro',
+  'gemini-3.8-flash',
+  'gemini-flash-latest',
+]);
 
 interface ResolvedAIConfig {
   provider: SupportedProvider;
@@ -105,7 +116,7 @@ function resolveAIConfig(req: express.Request): ResolvedAIConfig {
   if (!apiKey) {
     switch (provider) {
       case 'gemini':
-        apiKey = sanitizeApiKey(process.env.GEMINI_API_KEY || process.env.AI_API_KEY || '');
+        apiKey = (process.env.GEMINI_API_KEY || process.env.AI_API_KEY || '').trim();
         break;
       case 'groq':
         apiKey = sanitizeApiKey(process.env.GROQ_API_KEY || process.env.AI_API_KEY || '');
@@ -131,10 +142,19 @@ function resolveAIConfig(req: express.Request): ResolvedAIConfig {
     }
   }
 
+  // If the client selected a non-Gemini provider without providing a key and the server has GEMINI_API_KEY, fall back to server Gemini
+  if (!apiKey && provider !== 'custom' && process.env.GEMINI_API_KEY) {
+    provider = 'gemini';
+    apiKey = process.env.GEMINI_API_KEY.trim();
+  }
+
   // Model
   const headerModel = (req.headers['x-ai-model'] as string) || '';
   const bodyModel = (req.body?.model as string) || '';
-  const model = headerModel || bodyModel || process.env.AI_MODEL || DEFAULT_MODELS[provider] || 'gemini-2.5-flash';
+  let model = headerModel || bodyModel || process.env.AI_MODEL || DEFAULT_MODELS[provider] || 'gemini-3.5-flash-lite';
+  if (provider === 'gemini' && (DEPRECATED_OR_SLOW_GEMINI_MODELS.has(model) || !model.startsWith('gemini-'))) {
+    model = 'gemini-3.5-flash-lite';
+  }
 
   // Base URL
   const headerBaseUrl = (req.headers['x-ai-base-url'] as string) || '';
@@ -172,7 +192,7 @@ interface ClientMessage {
 }
 
 function formatMessagesForGemini(messages: ClientMessage[]) {
-  return messages.map((m) => {
+  const rawTurns = messages.map((m) => {
     const parts: any[] = [];
     const textContent = (m.content || '').trim();
 
@@ -213,6 +233,27 @@ function formatMessagesForGemini(messages: ClientMessage[]) {
       parts,
     };
   });
+
+  // Drop leading 'model' welcome messages so conversation starts with 'user'
+  const firstUserIdx = rawTurns.findIndex((t) => t.role === 'user');
+  const slicedTurns = firstUserIdx >= 0 ? rawTurns.slice(firstUserIdx) : rawTurns;
+
+  // Coalesce consecutive turns with the same role to satisfy strict Gemini turn alternation
+  const normalized: { role: string; parts: any[] }[] = [];
+  for (const turn of slicedTurns) {
+    const prev = normalized[normalized.length - 1];
+    if (prev && prev.role === turn.role) {
+      prev.parts.push(...turn.parts);
+    } else {
+      normalized.push({ role: turn.role, parts: [...turn.parts] });
+    }
+  }
+
+  if (normalized.length === 0) {
+    normalized.push({ role: 'user', parts: [{ text: 'Bonjour Si Driss' }] });
+  }
+
+  return normalized;
 }
 
 function formatMessagesForOpenAI(messages: ClientMessage[], systemInstruction: string) {
@@ -335,15 +376,8 @@ async function streamUnifiedChat(
   const { provider, apiKey, model, baseUrl } = config;
 
   if (provider === 'gemini') {
-    const ai = new GoogleGenAI({
-      apiKey,
-      httpOptions: {
-        headers: { 'User-Agent': 'sidriss-universal' },
-        timeout: 50000,
-        retryOptions: { attempts: 2 },
-      },
-    });
-
+    const serverGeminiKey = (process.env.GEMINI_API_KEY || process.env.AI_API_KEY || '').trim();
+    const candidateKeys = Array.from(new Set([apiKey, serverGeminiKey].filter(Boolean)));
     const contents = formatMessagesForGemini(messages);
     const candidateModels = [model, ...GEMINI_FAST_MODELS.filter((m) => m !== model)];
 
@@ -351,22 +385,35 @@ async function streamUnifiedChat(
     let usedModel = model;
     let lastError: any = null;
 
-    for (const mod of candidateModels) {
-      try {
-        const stream = await ai.models.generateContentStream({
-          model: mod,
-          contents,
-          config: {
-            systemInstruction,
-            temperature: 0.1,
-          },
-        });
-        streamResult = stream;
-        usedModel = mod;
-        break;
-      } catch (err: any) {
-        console.warn(`[Gemini Stream] Failover from ${mod}:`, err?.message);
-        lastError = err;
+    outerStreamLoop: for (const keyToTry of candidateKeys) {
+      const ai = new GoogleGenAI({
+        apiKey: keyToTry,
+        httpOptions: {
+          headers: { 'User-Agent': 'aistudio-build' },
+        },
+      });
+
+      for (const mod of candidateModels) {
+        try {
+          const stream = await ai.models.generateContentStream({
+            model: mod,
+            contents,
+            config: {
+              systemInstruction,
+              temperature: 0.1,
+            },
+          });
+          streamResult = stream;
+          usedModel = mod;
+          break outerStreamLoop;
+        } catch (err: any) {
+          console.warn(`[Gemini Stream] Failover from ${mod}:`, err?.message);
+          lastError = err;
+          // If API key itself is invalid, break inner model loop to try server fallback key
+          if (err?.message?.includes('API_KEY_INVALID') || err?.status === 400 || err?.status === 403) {
+            break;
+          }
+        }
       }
     }
 
@@ -514,30 +561,39 @@ async function generateUnifiedCompletion(
   const { provider, apiKey, model, baseUrl } = config;
 
   if (provider === 'gemini') {
-    const ai = new GoogleGenAI({
-      apiKey,
-      httpOptions: { timeout: 50000, retryOptions: { attempts: 2 } },
-    });
-
+    const serverGeminiKey = (process.env.GEMINI_API_KEY || process.env.AI_API_KEY || '').trim();
+    const candidateKeys = Array.from(new Set([apiKey, serverGeminiKey].filter(Boolean)));
     const contents = formatMessagesForGemini(messages);
     const candidateModels = [model, ...GEMINI_FAST_MODELS.filter((m) => m !== model)];
 
     let lastError: any = null;
-    for (const mod of candidateModels) {
-      try {
-        const response = await ai.models.generateContent({
-          model: mod,
-          contents,
-          config: {
-            systemInstruction,
-            temperature: 0.1,
-            responseMimeType: jsonMode ? 'application/json' : undefined,
-          },
-        });
-        return { text: response.text || '', model: mod };
-      } catch (err: any) {
-        console.warn(`[Gemini Complete] Failover from ${mod}:`, err?.message);
-        lastError = err;
+    for (const keyToTry of candidateKeys) {
+      const ai = new GoogleGenAI({
+        apiKey: keyToTry,
+        httpOptions: {
+          headers: { 'User-Agent': 'aistudio-build' },
+        },
+      });
+
+      for (const mod of candidateModels) {
+        try {
+          const response = await ai.models.generateContent({
+            model: mod,
+            contents,
+            config: {
+              systemInstruction,
+              temperature: 0.1,
+              responseMimeType: jsonMode ? 'application/json' : undefined,
+            },
+          });
+          return { text: response.text || '', model: mod };
+        } catch (err: any) {
+          console.warn(`[Gemini Complete] Failover from ${mod}:`, err?.message);
+          lastError = err;
+          if (err?.message?.includes('API_KEY_INVALID') || err?.status === 400 || err?.status === 403) {
+            break;
+          }
+        }
       }
     }
     throw lastError || new Error('Erreur de génération Gemini.');
@@ -790,7 +846,7 @@ CONSIGNE CRITIQUE N°2 : PROTOCOLE D'EXCELLENCE POUR LA RÉSOLUTION (ZÉRO ERREU
 1. Énonciation du Principe & Justification théorique (Système, Référentiel, Forces / Convention récepteur / Équation bilan).
 2. Expression littérale isolée avant calcul.
 3. Conversions SI détaillées et application numérique rigoureuse.
-4. Contrôle de cohérence physique et résultat encadré.
+4. Contrôle de cohérence physique et résultat final mis en gras (sans utiliser \\boxed ni cadre).
 `;
 }
 
@@ -969,12 +1025,22 @@ app.post('/api/chat/stream', async (req, res) => {
 
     res.write(': ping\n\n');
 
-    await streamUnifiedChat(aiConfig, messages, fullInstruction, res);
+    const heartbeat = setInterval(() => {
+      try {
+        res.write(': keepalive\n\n');
+      } catch {}
+    }, 10000);
+
+    try {
+      await streamUnifiedChat(aiConfig, messages, fullInstruction, res);
+    } finally {
+      clearInterval(heartbeat);
+    }
 
     res.write('data: [DONE]\n\n');
     res.end();
   } catch (err: any) {
-    console.error('Erreur API Chat Stream:', err);
+    console.warn('Erreur API Chat Stream:', err?.message || err);
     res.write(`data: ${JSON.stringify({ error: err?.message || 'Erreur de flux' })}\n\n`);
     res.end();
   }

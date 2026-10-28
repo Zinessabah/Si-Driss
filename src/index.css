@@ -72,15 +72,28 @@ code, pre, .font-mono {
   background: rgba(148, 163, 184, 0.6);
 }
 
-/* KaTeX styling tweaks for dark mode */
+/* KaTeX styling: bold formulas without constraining frames or vertical clipping */
 .katex {
-  font-size: 1.08em;
-  color: #f1f5f9;
+  font-size: 1.12em;
+  font-weight: 700 !important;
+  color: #f8fafc;
+  line-height: 1.6;
+}
+
+.katex * {
+  font-weight: 700 !important;
+}
+
+.katex .fbox,
+.katex .boxed {
+  border: none !important;
+  padding: 0 !important;
+  background: transparent !important;
 }
 
 .katex-display {
-  margin: 0.75em 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 0.5em 0;
+  margin: 0.85em 0;
+  overflow: visible !important;
+  padding: 0.65em 0;
 }
+

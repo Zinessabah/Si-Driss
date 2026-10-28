@@ -25,10 +25,23 @@ function getInitialConfig(): AIProviderConfig {
     if (stored) {
       const parsed = JSON.parse(stored);
       if (parsed && parsed.provider) {
+        const deprecatedGemini = new Set([
+          'gemini-2.5-flash',
+          'gemini-2.5-pro',
+          'gemini-2.0-flash',
+          'gemini-1.5-flash',
+          'gemini-1.5-pro',
+          'gemini-3.8-flash',
+          'gemini-flash-latest',
+        ]);
+        const effectiveModel =
+          parsed.provider === 'gemini' && deprecatedGemini.has(parsed.model)
+            ? 'gemini-3.5-flash-lite'
+            : parsed.model || getProviderDef(parsed.provider).defaultModel;
         return {
           provider: parsed.provider,
           apiKey: sanitizeKeyString(parsed.apiKey || ''),
-          model: parsed.model || getProviderDef(parsed.provider).defaultModel,
+          model: effectiveModel,
           baseUrl: parsed.baseUrl || getProviderDef(parsed.provider).defaultBaseUrl || '',
         };
       }
@@ -42,7 +55,7 @@ function getInitialConfig(): AIProviderConfig {
         const migrated: AIProviderConfig = {
           provider: 'gemini',
           apiKey: cleaned,
-          model: 'gemini-2.5-flash',
+          model: 'gemini-3.5-flash-lite',
           baseUrl: '',
         };
         localStorage.setItem(NEW_STORAGE_KEY, JSON.stringify(migrated));
@@ -53,19 +66,19 @@ function getInitialConfig(): AIProviderConfig {
     console.warn('Erreur lecture configuration IA locale:', err);
   }
 
-  // Default to Gemini with recommended model
+  // Default to Gemini with recommended fast model (gemini-3.5-flash-lite)
   return {
     provider: 'gemini',
     apiKey: '',
-    model: 'gemini-2.5-flash',
+    model: 'gemini-3.5-flash-lite',
     baseUrl: '',
   };
 }
 
 export function useApiKey() {
   const [config, setConfig] = useState<AIProviderConfig>(getInitialConfig);
-  const [serverHasKey, setServerHasKey] = useState<boolean>(false);
-  const [serverDefaultProvider, setServerDefaultProvider] = useState<string>('');
+  const [serverHasKey, setServerHasKey] = useState<boolean>(true);
+  const [serverDefaultProvider, setServerDefaultProvider] = useState<string>('gemini');
 
   // Probe server configuration status on mount
   useEffect(() => {
@@ -74,8 +87,8 @@ export function useApiKey() {
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (!isMounted || !data) return;
+        setServerHasKey(Boolean(data.serverConfigured));
         if (data.serverConfigured) {
-          setServerHasKey(true);
           setServerDefaultProvider(data.serverProvider || 'gemini');
         }
       })

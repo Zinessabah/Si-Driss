@@ -215,10 +215,10 @@ Peux-tu me confirmer si les unités sont conformes au barème du Bac et si cet o
             </select>
           </div>
 
-          {/* Formula Card Preview */}
-          <div className="bg-[#1e1f20] border border-[#2e3034] rounded-xl p-4 flex flex-col items-center justify-center text-center space-y-2">
+          {/* Formula Preview */}
+          <div className="py-3 flex flex-col items-center justify-center text-center space-y-2">
             <div className="text-xs text-amber-400 font-medium">{formula.description}</div>
-            <div className="py-1">
+            <div className="py-2.5">
               <MathView content={`$$${formula.latex}$$`} block className="text-sky-300 font-bold text-lg" />
             </div>
             {formula.examNote && (
@@ -313,17 +313,17 @@ Peux-tu me confirmer si les unités sont conformes au barème du Bac et si cet o
               </div>
               <div className="text-xs font-mono text-[#8e918f]">
                 Écriture scientifique :{' '}
-                <MathView content={`$${calculationResult.scientific}$`} className="inline text-white" />
+                <MathView content={`$${calculationResult.scientific}$`} className="inline text-white font-bold" />
               </div>
             </div>
 
-            {/* Substitution step */}
-            <div className="bg-[#131314]/90 rounded-xl p-3 border border-[#2e3034] text-xs space-y-1">
+            {/* Substitution step without constraining frame */}
+            <div className="py-2 text-xs space-y-1.5">
               <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 Application Numérique (Rédaction recommandée) :
               </div>
-              <div className="overflow-x-auto text-sky-300 font-mono py-1">
-                <MathView content={`$${calculationResult.substitutionLatex}$`} block={false} />
+              <div className="text-sky-300 font-bold py-2 leading-relaxed">
+                <MathView content={`$${calculationResult.substitutionLatex}$`} block={false} className="font-bold" />
               </div>
             </div>
           </div>

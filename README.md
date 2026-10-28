@@ -11,7 +11,7 @@ L'application intègre un **moteur universel multi-fournisseurs** compatible ave
 
 | Fournisseur | Modèles recommandés | Type de clé | Vitesse / Caractéristiques |
 | :--- | :--- | :--- | :--- |
-| **Google Gemini** | `gemini-2.5-flash`, `gemini-2.5-pro` | Gratuite ([Google AI Studio](https://aistudio.google.com/app/apikey)) | Vision, calculs détaillés & gratuit |
+| **Google Gemini** | `gemini-3.8-flash`, `gemini-flash-latest` | Gratuite ([Google AI Studio](https://aistudio.google.com/app/apikey)) | Vision, calculs détaillés & gratuit |
 | **Groq Cloud** | `llama-3.3-70b-versatile`, `deepseek-r1-distill-llama-70b` | Gratuite ([console.groq.com](https://console.groq.com/keys)) | **Ultra-rapide (~300 tokens/sec)** |
 | **OpenAI** | `gpt-4o-mini`, `gpt-4o`, `o3-mini` | API Key ([platform.openai.com](https://platform.openai.com/api-keys)) | Précision STEM de haut niveau |
 | **Anthropic Claude** | `claude-3-5-sonnet`, `claude-3-5-haiku` | API Key ([console.anthropic.com](https://console.anthropic.com/settings/keys)) | Élite rédactionnelle & rigueur |

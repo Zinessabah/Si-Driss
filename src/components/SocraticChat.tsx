@@ -28,6 +28,7 @@ import { MathView } from './MathView';
 import { SessionManagerModal, SavedSession, ChatMessage, ChatAttachment } from './SessionManagerModal';
 import { ExercisePickerModal } from './ExercisePickerModal';
 import { DocumentPickerModal } from './DocumentPickerModal';
+import { ExportResponseButtons } from './ExportResponseButtons';
 import { useApiKey } from '../hooks/useApiKey';
 import { useBranch } from '../hooks/useBranch';
 import { ApiKeyModal } from './ApiKeyModal';
@@ -446,7 +447,17 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
     const assistantMsgId = String(Date.now() + 1);
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 60000);
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+    const resetInactivityTimeout = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        controller.abort('TIMEOUT');
+      }, 120000);
+    };
+
+    resetInactivityTimeout();
+    let accumulated = '';
 
     try {
       const streamRes = await fetch('/api/chat/stream', {
@@ -470,7 +481,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
       });
 
       if (streamRes.status === 401) {
-        clearTimeout(timeoutId);
+        if (timeoutId) clearTimeout(timeoutId);
         setIsApiKeyModalOpen(true);
         setMessages((prev) => [
           ...prev,
@@ -500,10 +511,10 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
         const reader = streamRes.body.getReader();
         const decoder = new TextDecoder();
-        let accumulated = '';
         let buffer = '';
 
         while (true) {
+          resetInactivityTimeout();
           const { done, value } = await reader.read();
           if (done) break;
 
@@ -534,6 +545,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         }
 
         if (!accumulated.trim()) {
+          resetInactivityTimeout();
           const res = await fetch('/api/chat', {
             method: 'POST',
             headers: {
@@ -564,6 +576,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
           }
         }
       } else {
+        resetInactivityTimeout();
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: {
@@ -597,8 +610,11 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         ]);
       }
     } catch (err: any) {
-      console.error('Chat error:', err);
-      const isTimeout = err?.name === 'AbortError';
+      // Si du texte a déjà été reçu en streaming, on le conserve sans afficher d'erreur bloquante
+      if (accumulated.trim().length > 0) {
+        return;
+      }
+      const isTimeout = err === 'TIMEOUT' || err?.name === 'AbortError' || String(err).includes('aborted');
       setMessages((prev) => [
         ...prev.filter((m) => m.id !== assistantMsgId || m.content.trim() !== ''),
         {
@@ -611,7 +627,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         },
       ]);
     } finally {
-      clearTimeout(timeoutId);
+      if (timeoutId) clearTimeout(timeoutId);
       setLoading(false);
     }
   };
@@ -900,6 +916,15 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                       <Volume2 className="w-3.5 h-3.5" />
                       <span>Écouter</span>
                     </button>
+
+                    <div className="h-3 w-px bg-[#3c4043] mx-1" />
+
+                    {/* Exporter en PDF et Docx */}
+                    <ExportResponseButtons
+                      content={msg.content}
+                      title={currentSessionTitle}
+                      branch={branch}
+                    />
                   </div>
                 )}
               </div>
@@ -950,10 +975,10 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
           {/* Live Mathematical Preview if user wrote/inserted LaTeX */}
           {(input.includes('$') || input.includes('\\')) && (
-            <div className="mb-2 px-3 py-1.5 rounded-2xl bg-[#1e1f20] border border-[#3c4043] text-xs flex items-center gap-2 overflow-x-auto text-[#e3e3e3] shadow-sm">
-              <span className="text-[10px] font-semibold text-[#8ab4f8] shrink-0">Aperçu formule :</span>
-              <div className="text-xs overflow-x-auto no-scrollbar py-0.5">
-                <MathView content={input} />
+            <div className="mb-2.5 px-2 py-2.5 text-sm flex flex-wrap items-center gap-3 text-[#f8fafc] font-bold">
+              <span className="text-xs font-bold text-[#8ab4f8] shrink-0">Aperçu formule :</span>
+              <div className="text-sm font-bold py-1.5 leading-relaxed">
+                <MathView content={input} className="font-bold text-white" />
               </div>
             </div>
           )}

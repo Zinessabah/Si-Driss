@@ -6,6 +6,7 @@ import { ShieldCheck, Award, AlertTriangle, CheckCircle, HelpCircle, FileCheck, 
 import { useApiKey } from '../hooks/useApiKey';
 import { useBranch } from '../hooks/useBranch';
 import { ApiKeyModal } from './ApiKeyModal';
+import { ExportResponseButtons } from './ExportResponseButtons';
 
 interface EvaluationResult {
   score: number;
@@ -173,7 +174,7 @@ export const AuditWorkspace: React.FC = () => {
             <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
             <div>
               <span className="font-bold text-rose-300">Alerte Piège National : </span>
-              {currentExercise.professorTrapAlert}
+              <MathView content={currentExercise.professorTrapAlert} className="inline" />
             </div>
           </div>
         </div>
@@ -328,13 +329,20 @@ export const AuditWorkspace: React.FC = () => {
                 </div>
               </div>
 
-              <div className="text-right">
+              <div className="text-right space-y-1.5">
                 <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20">
                   {evalResult.gradeWord}
                 </span>
-                <p className="text-xs text-slate-400 mt-1 max-w-xs italic">
-                  "{evalResult.appreciation}"
-                </p>
+                <div className="text-xs text-slate-400 max-w-xs italic">
+                  "<MathView content={evalResult.appreciation} className="inline" />"
+                </div>
+                <div className="flex items-center gap-1.5 justify-end pt-1">
+                  <ExportResponseButtons
+                    content={`# Audit et Corrigé — ${currentExercise.title}\n\n**Note :** ${evalResult.score} / ${evalResult.maxScore} (${evalResult.gradeWord})\n\n**Appréciation de Si Driss :**\n${evalResult.appreciation}\n\n## Grille de notation officielle :\n${evalResult.criteria.map((c) => `- **${c.name}** : ${c.feedback}`).join('\n')}\n\n## Conseil clé du National :\n${evalResult.nationalTips}\n\n## Rédaction modèle conforme au barème :\n${evalResult.correctedDraft || ''}`}
+                    title={`Correction_${currentExercise.title}`}
+                    branch={branch}
+                  />
+                </div>
               </div>
             </div>
 
@@ -356,14 +364,16 @@ export const AuditWorkspace: React.FC = () => {
                     }`}
                   >
                     <div className="flex items-center justify-between font-bold">
-                      <span>{crit.name}</span>
+                      <span><MathView content={crit.name} className="inline" /></span>
                       {crit.status === 'ok' ? (
                         <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
                       ) : (
                         <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
                       )}
                     </div>
-                    <p className="text-[11px] opacity-90 leading-tight">{crit.feedback}</p>
+                    <div className="text-[11px] opacity-90 leading-tight">
+                      <MathView content={crit.feedback} />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -374,9 +384,20 @@ export const AuditWorkspace: React.FC = () => {
               <Lightbulb className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
               <div>
                 <span className="font-bold text-amber-300">Conseil d'or pour le National : </span>
-                {evalResult.nationalTips}
+                <MathView content={evalResult.nationalTips} className="inline" />
               </div>
             </div>
+
+            {/* Corrected Draft */}
+            {evalResult.correctedDraft && (
+              <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs text-slate-200 space-y-2">
+                <div className="font-bold text-emerald-400 flex items-center gap-1.5">
+                  <CheckCircle className="w-4 h-4" />
+                  Rédaction Modèle Corrigée par Si Driss :
+                </div>
+                <MathView content={evalResult.correctedDraft} className="leading-relaxed" />
+              </div>
+            )}
           </div>
         )}
       </div>

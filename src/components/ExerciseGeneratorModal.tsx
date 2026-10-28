@@ -4,6 +4,7 @@ import { MathView } from './MathView';
 import { useApiKey } from '../hooks/useApiKey';
 import { useBranch } from '../hooks/useBranch';
 import { ApiKeyModal } from './ApiKeyModal';
+import { ExportResponseButtons } from './ExportResponseButtons';
 
 interface GeneratedExercise {
   title: string;
@@ -265,11 +266,20 @@ export const ExerciseGeneratorModal: React.FC<ExerciseGeneratorModalProps> = ({
                   <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400">
                     {generated.domain} • {generated.chapter}
                   </span>
-                  <h4 className="text-sm font-bold text-white mt-0.5">{generated.title}</h4>
+                  <h4 className="text-sm font-bold text-white mt-0.5">
+                    <MathView content={generated.title} className="inline" />
+                  </h4>
                 </div>
-                <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
-                  Durée conseillée : {generated.duration}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
+                    Durée : {generated.duration}
+                  </span>
+                  <ExportResponseButtons
+                    content={`# ${generated.title}\n**Matière :** ${generated.domain} | **Chapitre :** ${generated.chapter} | **Filière :** 2ème Bac ${branch}\n**Durée :** ${generated.duration}\n\n## Énoncé de l'exercice :\n${generated.context}\n\n${generated.parameters?.length ? '### Paramètres et données :\n' + generated.parameters.map((p) => `- **${p.name} (${p.symbol})** : ${p.value}`).join('\n') : ''}\n\n## Questions de l'épreuve :\n${generated.questions.map((q) => `### Question ${q.number} (${q.points})\n${q.text}\n\n*Indice socratique :* ${q.hint}\n*Formule clé :* ${q.keyFormula}`).join('\n\n')}\n\n${generated.commonPitfall ? '### Piège classique à éviter :\n' + generated.commonPitfall : ''}\n\n${generated.professorNote ? '### Note de Si Driss :\n' + generated.professorNote : ''}`}
+                    title={generated.title}
+                    branch={branch}
+                  />
+                </div>
               </div>
 
               {/* Statement */}
@@ -280,11 +290,16 @@ export const ExerciseGeneratorModal: React.FC<ExerciseGeneratorModalProps> = ({
 
               {/* Parameters */}
               {generated.parameters && generated.parameters.length > 0 && (
-                <div className="bg-slate-900 p-3 rounded-lg border border-slate-800 text-xs grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <div className="bg-slate-900 p-3 rounded-lg border border-slate-800 text-xs grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                   {generated.parameters.map((p, i) => (
                     <div key={i} className="text-slate-400 font-mono">
-                      <span>{p.name} ({p.symbol}) : </span>
-                      <span className="text-amber-300 font-bold">{p.value}</span>
+                      <span>
+                        <MathView content={p.name} className="inline" /> (
+                        <MathView content={p.symbol} className="inline" />) :{' '}
+                      </span>
+                      <span className="text-amber-300 font-bold">
+                        <MathView content={p.value} className="inline" />
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -302,8 +317,14 @@ export const ExerciseGeneratorModal: React.FC<ExerciseGeneratorModalProps> = ({
                     <MathView content={q.text} className="text-slate-200" />
                     {q.hint && (
                       <div className="text-[11px] text-slate-400 bg-slate-950/70 p-2 rounded border border-slate-800/80 flex items-start gap-1.5">
-                        <span className="text-amber-400 font-bold">Indice Prof :</span>
+                        <span className="text-amber-400 font-bold shrink-0">Indice Prof :</span>
                         <MathView content={q.hint} className="inline" />
+                      </div>
+                    )}
+                    {q.keyFormula && (
+                      <div className="text-[11px] text-sky-300 bg-slate-950/70 p-2 rounded border border-slate-800/80 flex items-center gap-1.5">
+                        <span className="text-sky-400 font-bold shrink-0">Formule clé :</span>
+                        <MathView content={q.keyFormula} className="inline" />
                       </div>
                     )}
                   </div>
@@ -314,7 +335,15 @@ export const ExerciseGeneratorModal: React.FC<ExerciseGeneratorModalProps> = ({
               {generated.commonPitfall && (
                 <div className="bg-rose-950/40 border border-rose-500/30 p-3 rounded-xl text-xs text-rose-200">
                   <span className="font-bold text-rose-300">Piège classique à éviter : </span>
-                  {generated.commonPitfall}
+                  <MathView content={generated.commonPitfall} className="inline" />
+                </div>
+              )}
+
+              {/* Professor Note */}
+              {generated.professorNote && (
+                <div className="bg-amber-500/10 border border-amber-500/20 p-3 rounded-xl text-xs text-amber-200">
+                  <span className="font-bold text-amber-300">Note de Si Driss : </span>
+                  <MathView content={generated.professorNote} className="inline" />
                 </div>
               )}
             </div>

@@ -282,7 +282,7 @@ ${ex.professorTrapAlert}`;
                   <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
                   <div>
                     <span className="font-bold">Avertissement de Si Driss : </span>
-                    {previewExercise.professorTrapAlert}
+                    <MathView content={previewExercise.professorTrapAlert} className="inline" />
                   </div>
                 </div>
 
