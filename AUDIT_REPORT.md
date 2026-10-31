@@ -1,5 +1,7 @@
 # 🔍 Si Driss — Rapport d'Audit Complet (2026-10-31)
 
+> **✅ SPRINT 1 LIVRÉ** (commit `c6b44f3`) : C1, C2, C3, H1, H2, H3, H4, H6, H7, M1, M2, M3, M4, M5, M8 corrigés et vérifiés par tests d'attaque en direct (SSRF bloqué, 429 au 11ᵉ appel, gate admin prod 401/401/200). Voir le commit pour le détail.
+
 **Périmètre :** backend `server.ts` (1434 lignes), frontend `src/` (28 composants), infra (Docker, Vite, PWA, dépendances).
 **Vérifié par exécution :** `tsc --noEmit` ✓ propre, `npm run build` ✓ ~15 s, `npm audit` : 10 vulns (8 modérées, 2 basses — toutes build-time via vite-plugin-pwa/workbox), grep de secrets ✓ aucune vraie clé dans le dépôt.
 **Bugs déjà corrigés :** conflit esbuild `^0.25.0` vs Vite 8 → bump `^0.28.0` (npm install cassait à froid).
