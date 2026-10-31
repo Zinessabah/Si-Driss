@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useModalA11y } from '../hooks/useModalA11y';
 import {
   Key,
   X,
@@ -109,6 +110,9 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
     setBaseUrlInput(def.defaultBaseUrl || '');
     setStatusMessage(null);
   };
+
+  // (M14) Accessibilité : rôle dialog, Échap, piège de focus
+  const dialogRef = useModalA11y(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -225,6 +229,11 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200">
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Configuration du moteur IA"
+        tabIndex={-1}
         className="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >

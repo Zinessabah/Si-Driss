@@ -1,6 +1,8 @@
 # 🔍 Si Driss — Rapport d'Audit Complet (2026-10-31)
 
 > **✅ SPRINT 1 LIVRÉ** (commit `c6b44f3`) : C1, C2, C3, H1, H2, H3, H4, H6, H7, M1, M2, M3, M4, M5, M8 corrigés et vérifiés par tests d'attaque en direct (SSRF bloqué, 429 au 11ᵉ appel, gate admin prod 401/401/200). Voir le commit pour le détail.
+>
+> **✅ SPRINTS 2, 3, 4 + ARCHITECTURE LIVRÉS** : H5, M6, M15 · H8, H9, H10, M12, M16 · M11, M9, M10, M13, M14, dette · découpage de `server.ts` en modules + parser SSE partagé. Détail, mesures et points restants dans le **Journal de livraison** en fin de rapport.
 
 **Périmètre :** backend `server.ts` (1434 lignes), frontend `src/` (28 composants), infra (Docker, Vite, PWA, dépendances).
 **Vérifié par exécution :** `tsc --noEmit` ✓ propre, `npm run build` ✓ ~15 s, `npm audit` : 10 vulns (8 modérées, 2 basses — toutes build-time via vite-plugin-pwa/workbox), grep de secrets ✓ aucune vraie clé dans le dépôt.
@@ -90,3 +92,50 @@ H3 abort/timeout streaming · M11 unmount cleanup · M9 strict TS · M10 toolcha
 - PWA complète et correcte (icônes vérifiées, denylist `/api/*` OK)
 - Boucles rAF des simulateurs avec cleanup propre ; effets React majoritairement bien nettoyés
 - `noopener noreferrer` sur les liens externes ; tsc propre ; build reproductible
+
+---
+
+## 📦 Journal de livraison — Sprints 2, 3, 4 & architecture (2026-10-31)
+
+### Sprint 2 — Fiabilité pédagogique
+
+- **H5 — texte extrait périmé** : ajout de `isExtractedTextFresh()` + `getFreshExtractedPdfText()`. Les 3 chemins (cache RAG, `GET /api/documents`, `GET /api/documents/file`) ré-extraient désormais dès que `mtime(.extracted.txt) < mtime(.pdf)`. `refreshDocumentsCache()` / `searchLocalDocuments()` passés en async (les deux routes de chat les attendent).
+- **M6 — IDs de modèles** : vérification contre la documentation officielle `ai.google.dev/gemini-api/docs/models` (maj 2026-10-28) → `gemini-3.8-flash` est **stable et actuel** et `gemini-flash-latest` un alias valide : tous deux **retirés** des blocklists (serveur + client `useApiKey`). `gemini-3.6-flash` (stable) remplace `gemini-3-flash-preview` (preview) dans les fallbacks. `AI_MODEL=gemini-3.8-flash` de `.env.example` n'est plus réécrit silencieusement (`serverModel` confirmé au smoke test).
+- **M15 — échecs de persistance silencieux** : `saveDocumentToVault()` / `removeDocumentFromVault()` propagent leurs erreurs ; DocumentManager distingue l'indexation serveur de la copie locale permanente et alerte en cas d'échec ; SocraticChat affiche un toast `role="status"` quand l'autosave localStorage échoue (quota).
+- **Bonus zéro-invention (esprit H4)** : `/api/evaluate` ne fabrique plus un « 15/20 Bien » quand le JSON du fournisseur est illisible → 502 honnête, l'UI affiche sa bannière d'erreur ; `/api/generate-exercise` renvoie un 502 explicite au lieu d'un 500 opaque.
+- **H4 / M8** : vérifiés déjà livrés au Sprint 1 (bannière d'erreur honnête dans AuditWorkspace ; retry JSON par message séparé).
+
+### Sprint 3 — Performance
+
+- **H8** : flush SSE throttlé par `requestAnimationFrame` (1 re-render du message en cours par frame, au lieu d'un `setState` par chunk) ; `MathView` et `KatexContainer` mémoïsés ; autosave localStorage debouncée à 1 s.
+- **H9** : 3 pièces jointes max par message, 5 Mo max par fichier, avec message explicite ; **seul le dernier message utilisateur** transporte ses PJ vers l'API (payload divisé, quotas mémoire préservés).
+- **H10** : `React.lazy` sur les 4 onglets secondaires, les 5 simulateurs et le générateur d'exercices ; `import()` dynamique de l'exporteur (jspdf + html2canvas + docx) au clic ; `manualChunks` vendor-react / vendor-katex.
+  **Mesuré : bundle initial 2,0 Mo (565 ko gz) → ~1,05 Mo (~309 ko gz) ; exporteur 848 ko chargé à la demande ; 23 chunks.**
+- **M12** : un seul rendu KaTeX par formule (`useMemo`, suppression du double rendu « initial + effet »), clés React stables par hash de contenu pendant le streaming, macros non ré-étalées à chaque rendu parent.
+- **M16** : export PDF en **JPEG 0,92** (au lieu de PNG), `setTimeout(0)` entre les pages pour rendre la main au thread principal, progression `PDF 2/5` sur le bouton via `onProgress`.
+
+### Sprint 4 — Robustesse & qualité
+
+- **M11** : SocraticChat **reste monté** (masqué en CSS) → changer d'onglet n'interrompt plus le stream ; à la destruction réelle, `AbortController` et `speechSynthesis.cancel()`.
+- **M9** : `"strict": true` activé — **0 erreur** (seul conflit corrigé : `onClose` optionnel du sélecteur de filière).
+- **M10** : paquet renommé `si-driss` ; `start` = `tsx server.ts` avec `tsx` en dépendance de production ; `@types/pdf-parse` retiré (pdf-parse v2 embarque ses types) ; `bun.lock` supprimé (lockfile unique npm) ; `package-lock.json` resynchronisé.
+  **Constat : `typescript@7.0.2` est le tag `latest` sur npm (pas une preview comme supposé) — version conservée.**
+- **M14** : hook `useModalA11y` (role dialog, aria-modal, Échap, piège de focus, restitution du focus) appliqué aux 7 modales + modale de création de document + visionneuse d'image ; `user-scalable=no` retiré (WCAG 1.4.4) ; bouton « supprimer » de la sidebar visible hors hover + `aria-label`.
+- **M13** : migration de l'ancienne clé Gemini exécutée **une fois au chargement du module** (plus d'écriture impure dans un initializer, plus de double écriture legacy) ; sonde `/api/ai-status` mutualisée (1 appel réseau au démarrage au lieu de 5).
+- **Dette** : `SessionManagerModal` (604 l.), `AndroidBottomNav`, `BranchBadge` supprimés (types déplacés dans `src/types/chat.ts`) ; faux `favicon.ico` (PNG renommé) supprimé et manifest PWA corrigé (plus « Application Android », mention PC & SM) ; script inline d'`index.html` qui masquait de vraies erreurs supprimé ; `initialPrompt` rendu non-stale par nonce ; `serverConfigured` ne ment plus quand seul `OLLAMA_BASE_URL` est défini ; toute route `/api/*` inconnue répond **404 JSON** (plus la SPA en 200).
+
+### Architecture (transverse)
+
+- `server.ts` : **1 768 → 66 lignes**, simple point d'entrée.
+- Nouveaux modules : `server/config.ts` (env, dotenv chargé en premier), `server/security.ts` (limiteurs + gates), `server/ai/providers.ts`, `server/ai/adapters.ts`, `server/ai/sse.ts` (**parser SSE partagé**), `server/ai/completion.ts`, `server/rag.ts`, `server/prompts.ts`, `server/routes/ai.ts`, `server/routes/documents.ts`.
+- **Parser SSE unique** : les deux boucles de lecture dupliquées (Anthropic + OpenAI-compatibles) sont remplacées par `pipeSseEvents()` ; au passage `[DONE]` termine réellement la lecture (l'ancien `break` ne sortait que de la boucle interne).
+- `Dockerfile` mis à jour : le dossier `server/` est copié dans l'image runtime (sinon le conteneur ne démarre plus).
+- **Vérifié par exécution** : `tsc --noEmit` 0 erreur (strict), `npm run build` ✓, smoke test production sur `:3100` (bannière, `/` 200, `/api/ai-status` honnête, `/api/documents` 200 avec previews, `/api/documents/file` contenu, `/api/*` inconnu 404 JSON).
+
+### Reste ouvert (non bloquant)
+
+- **M7** : I/O sync dans le rafraîchissement du cache RAG (`readdirSync/statSync`) — l'extraction PDF est désormais async et déclenchée à la demande.
+- **M5 résiduel** : l'iframe d'export PDF référence encore KaTeX 0.16.21 via CDN pour ses polices (export 100 % hors-ligne à durcir).
+- **M3 partiel** : `/api/ai-status` expose toujours le nom du provider par défaut et le modèle (aucune clé) — utile au diagnostic.
+- `confirm()` natif restant dans la sidebar (suppression de discussion) — migration vers une modale maison à faire.
+- `documentExporter` reste un chunk de 848 ko : lazy, mais scindable en jspdf / docx.

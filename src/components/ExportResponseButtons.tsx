@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { FileText, FileDown, Loader2, Check } from 'lucide-react';
-import { exportToPdf, exportToDocx } from '../utils/documentExporter';
 
 interface ExportResponseButtonsProps {
   content: string;
@@ -17,15 +16,21 @@ export const ExportResponseButtons: React.FC<ExportResponseButtonsProps> = ({
 }) => {
   const [exportingType, setExportingType] = useState<'pdf' | 'docx' | null>(null);
   const [successType, setSuccessType] = useState<'pdf' | 'docx' | null>(null);
+  // (M16) Progression du rendu PDF page par page, affichée sur le bouton
+  const [pdfProgress, setPdfProgress] = useState<string | null>(null);
 
   const handleExportPdf = async () => {
     if (!content.trim() || exportingType) return;
     setExportingType('pdf');
+    setPdfProgress(null);
     try {
+      // (H10) jspdf + html2canvas ne sont chargés qu'au moment du clic
+      const { exportToPdf } = await import('../utils/documentExporter');
       await exportToPdf({
         title,
         content,
         branch,
+        onProgress: (done, total) => setPdfProgress(`${done}/${total}`),
       });
       setSuccessType('pdf');
       setTimeout(() => setSuccessType(null), 2000);
@@ -33,6 +38,7 @@ export const ExportResponseButtons: React.FC<ExportResponseButtonsProps> = ({
       console.error('Erreur export PDF:', err);
     } finally {
       setExportingType(null);
+      setPdfProgress(null);
     }
   };
 
@@ -40,6 +46,8 @@ export const ExportResponseButtons: React.FC<ExportResponseButtonsProps> = ({
     if (!content.trim() || exportingType) return;
     setExportingType('docx');
     try {
+      // (H10) docx n'est chargé qu'au moment du clic
+      const { exportToDocx } = await import('../utils/documentExporter');
       await exportToDocx({
         title,
         content,
@@ -67,6 +75,7 @@ export const ExportResponseButtons: React.FC<ExportResponseButtonsProps> = ({
             : 'bg-[#1e1f20] hover:bg-[#282a2c] text-[#c4c7c5] hover:text-white border-[#3c4043] shadow-xs'
         } disabled:opacity-50`}
         title="Générer et télécharger cette réponse en PDF officiel"
+        aria-live="polite"
       >
         {exportingType === 'pdf' ? (
           <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-400" />
@@ -75,7 +84,7 @@ export const ExportResponseButtons: React.FC<ExportResponseButtonsProps> = ({
         ) : (
           <FileDown className="w-3.5 h-3.5 text-rose-400" />
         )}
-        <span>{compact ? 'PDF' : 'PDF'}</span>
+        <span>{pdfProgress ? `PDF ${pdfProgress}` : 'PDF'}</span>
       </button>
 
       {/* Bouton Word / DOCX */}

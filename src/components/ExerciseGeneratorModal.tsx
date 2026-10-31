@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useModalA11y } from '../hooks/useModalA11y';
 import { X, Sparkles, RefreshCw, Send, CheckCircle, BookOpen, Key } from 'lucide-react';
 import { MathView } from './MathView';
 import { useApiKey } from '../hooks/useApiKey';
@@ -44,6 +45,9 @@ export const ExerciseGeneratorModal: React.FC<ExerciseGeneratorModalProps> = ({
   const [topicStyle, setTopicStyle] = useState<string>('Exploitation de graphe et calculs littéraux');
   const [loading, setLoading] = useState<boolean>(false);
   const [generated, setGenerated] = useState<GeneratedExercise | null>(null);
+
+  // (M14) Accessibilité : rôle dialog, Échap, piège de focus
+  const dialogRef = useModalA11y(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -137,7 +141,14 @@ export const ExerciseGeneratorModal: React.FC<ExerciseGeneratorModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Générateur d'exercices type National"
+        tabIndex={-1}
+        className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl"
+      >
         {/* Header */}
         <div className="p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2">

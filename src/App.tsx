@@ -1,15 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { SocraticChat } from './components/SocraticChat';
-import { AuditWorkspace } from './components/AuditWorkspace';
-import { FormulaCheatSheet } from './components/FormulaCheatSheet';
-import { PitfallsVault } from './components/PitfallsVault';
-import { WavesSimulator } from './components/simulators/WavesSimulator';
-import { RlcSimulator } from './components/simulators/RlcSimulator';
-import { AmModulationSimulator } from './components/simulators/AmModulationSimulator';
-import { MechanicsFallSimulator } from './components/simulators/MechanicsFallSimulator';
-import { TitrationSimulator } from './components/simulators/TitrationSimulator';
-import { ExerciseGeneratorModal } from './components/ExerciseGeneratorModal';
-import { DocumentManager } from './components/DocumentManager';
 import { ApiKeyStatusBadge } from './components/ApiKeyStatusBadge';
 import { PWAInstallButton } from './components/PWAInstallButton';
 import { ApiKeyModal } from './components/ApiKeyModal';
@@ -20,7 +10,7 @@ import { useBranch } from './hooks/useBranch';
 import { useApiKey, setAccessToken, setAdminToken } from './hooks/useApiKey';
 import { BranchSelectorModal } from './components/BranchSelectorModal';
 import { GeminiSidebar } from './components/GeminiSidebar';
-import { SavedSession } from './components/SessionManagerModal';
+import { SavedSession } from './types/chat';
 import { syncVaultWithServer } from './utils/documentVault';
 import {
   Menu,
@@ -35,6 +25,26 @@ import {
   Waves,
 } from 'lucide-react';
 
+// (H10) Code-splitting : les onglets secondaires, les simulateurs et le générateur
+// sont chargés à la demande — le bundle initial n'embarque plus jspdf/docx/KaTeX
+// ni les 5 simulateurs ni les données du mémento.
+const AuditWorkspace = lazy(() => import('./components/AuditWorkspace').then((m) => ({ default: m.AuditWorkspace })));
+const FormulaCheatSheet = lazy(() => import('./components/FormulaCheatSheet').then((m) => ({ default: m.FormulaCheatSheet })));
+const PitfallsVault = lazy(() => import('./components/PitfallsVault').then((m) => ({ default: m.PitfallsVault })));
+const DocumentManager = lazy(() => import('./components/DocumentManager').then((m) => ({ default: m.DocumentManager })));
+const ExerciseGeneratorModal = lazy(() => import('./components/ExerciseGeneratorModal').then((m) => ({ default: m.ExerciseGeneratorModal })));
+const WavesSimulator = lazy(() => import('./components/simulators/WavesSimulator').then((m) => ({ default: m.WavesSimulator })));
+const RlcSimulator = lazy(() => import('./components/simulators/RlcSimulator').then((m) => ({ default: m.RlcSimulator })));
+const AmModulationSimulator = lazy(() => import('./components/simulators/AmModulationSimulator').then((m) => ({ default: m.AmModulationSimulator })));
+const MechanicsFallSimulator = lazy(() => import('./components/simulators/MechanicsFallSimulator').then((m) => ({ default: m.MechanicsFallSimulator })));
+const TitrationSimulator = lazy(() => import('./components/simulators/TitrationSimulator').then((m) => ({ default: m.TitrationSimulator })));
+
+const TabSuspenseFallback = () => (
+  <div className="flex-1 flex items-center justify-center text-xs text-[#8e918f]">
+    Chargement de l'outil…
+  </div>
+);
+
 export default function App() {
   const { branch, hasSelectedBranch, isSM } = useBranch();
   const { hasApiKey } = useApiKey();
@@ -42,6 +52,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'chat' | 'audit' | 'simulators' | 'formulas' | 'pitfalls' | 'documents'>('chat');
   const [activeSimulator, setActiveSimulator] = useState<'waves' | 'rlc' | 'am' | 'mechanics' | 'titration'>('waves');
   const [chatInitialPrompt, setChatInitialPrompt] = useState<string>('');
+  // (dette) Nonce : garantit que le même prompt poussé deux fois relance bien l'effet
+  const [chatPromptNonce, setChatPromptNonce] = useState<number>(0);
   const [isGeneratorOpen, setIsGeneratorOpen] = useState<boolean>(false);
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState<boolean>(false);
   const [isBranchModalOpen, setIsBranchModalOpen] = useState<boolean>(false);
@@ -67,16 +79,21 @@ export default function App() {
   const [externalLoadSession, setExternalLoadSession] = useState<SavedSession | null>(null);
   const [newChatTrigger, setNewChatTrigger] = useState<number>(0);
 
-  const handleAskProfFromChapter = (chapter: ChapterInfo) => {
-    setChatInitialPrompt(chapter.suggestedPrompt);
+  /** Pousse un prompt dans le chat et force l'effet même si le texte est identique. */
+  const pushChatPrompt = (prompt: string) => {
+    setChatInitialPrompt(prompt);
+    setChatPromptNonce((n) => n + 1);
     setActiveTab('chat');
   };
 
+  const handleAskProfFromChapter = (chapter: ChapterInfo) => {
+    pushChatPrompt(chapter.suggestedPrompt);
+  };
+
   const handleChallengeTrap = (trap: TrapItem) => {
-    setChatInitialPrompt(
+    pushChatPrompt(
       `Si Driss, teste-moi sur ce piège du National : "${trap.title}". Pose-moi une question où les élèves tombent souvent dans ce piège !`
     );
-    setActiveTab('chat');
   };
 
   const handleNewChat = () => {
@@ -233,15 +250,17 @@ export default function App() {
 
         {/* CONTENT STAGE */}
         <main className="flex-1 flex flex-col overflow-hidden relative">
-          {/* 1. Socratic Chat (Full Canvas) */}
-          {activeTab === 'chat' && (
+          {/* 1. Socratic Chat (Full Canvas) — (M11) reste monté (masqué en CSS) :
+              changer d'onglet n'interrompt plus le streaming ni la session en cours. */}
+          <div className={activeTab === 'chat' ? 'flex-1 flex flex-col min-h-0' : 'hidden'}>
             <SocraticChat
               initialPrompt={chatInitialPrompt}
+              initialPromptNonce={chatPromptNonce}
               externalLoadSession={externalLoadSession}
               externalNewChatTrigger={newChatTrigger}
               onSessionsUpdated={handleSessionsUpdated}
             />
-          )}
+          </div>
 
           {/* 2. National Exam Audit Workspace */}
           {activeTab === 'audit' && (
@@ -255,7 +274,9 @@ export default function App() {
                     </p>
                   </div>
                 </div>
-                <AuditWorkspace />
+                <Suspense fallback={<TabSuspenseFallback />}>
+                  <AuditWorkspace />
+                </Suspense>
               </div>
             </div>
           )}
@@ -336,12 +357,14 @@ export default function App() {
                   </button>
                 </div>
 
-                {/* Render Selected Simulator */}
-                {activeSimulator === 'waves' && <WavesSimulator />}
-                {activeSimulator === 'rlc' && <RlcSimulator />}
-                {activeSimulator === 'am' && <AmModulationSimulator />}
-                {activeSimulator === 'mechanics' && <MechanicsFallSimulator />}
-                {activeSimulator === 'titration' && <TitrationSimulator />}
+                {/* Render Selected Simulator (H10 : chargé à la demande) */}
+                <Suspense fallback={<TabSuspenseFallback />}>
+                  {activeSimulator === 'waves' && <WavesSimulator />}
+                  {activeSimulator === 'rlc' && <RlcSimulator />}
+                  {activeSimulator === 'am' && <AmModulationSimulator />}
+                  {activeSimulator === 'mechanics' && <MechanicsFallSimulator />}
+                  {activeSimulator === 'titration' && <TitrationSimulator />}
+                </Suspense>
               </div>
             </div>
           )}
@@ -356,13 +379,12 @@ export default function App() {
                     Toutes les formules exigibles au Baccalauréat 2BAC {branch} (BIOF)
                   </p>
                 </div>
-                <FormulaCheatSheet
-                  onAskProfAboutChapter={handleAskProfFromChapter}
-                  onAskProfCustom={(prompt) => {
-                    setChatInitialPrompt(prompt);
-                    setActiveTab('chat');
-                  }}
-                />
+                <Suspense fallback={<TabSuspenseFallback />}>
+                  <FormulaCheatSheet
+                    onAskProfAboutChapter={handleAskProfFromChapter}
+                    onAskProfCustom={(prompt) => pushChatPrompt(prompt)}
+                  />
+                </Suspense>
               </div>
             </div>
           )}
@@ -377,7 +399,9 @@ export default function App() {
                     Les erreurs classiques repérées par les correcteurs du Bac marocain
                   </p>
                 </div>
-                <PitfallsVault onChallengeTrap={handleChallengeTrap} />
+                <Suspense fallback={<TabSuspenseFallback />}>
+                  <PitfallsVault onChallengeTrap={handleChallengeTrap} />
+                </Suspense>
               </div>
             </div>
           )}
@@ -392,27 +416,32 @@ export default function App() {
                     Indexation et consultation des fichiers du dossier /docs/programme/
                   </p>
                 </div>
-                <DocumentManager
-                  onAskQuestionAboutDoc={(docName) => {
-                    setChatInitialPrompt(`Si Driss, explique-moi les notions clés du document "${docName}" indexé dans /docs/programme/`);
-                    setActiveTab('chat');
-                  }}
-                />
+                <Suspense fallback={<TabSuspenseFallback />}>
+                  <DocumentManager
+                    onAskQuestionAboutDoc={(docName) =>
+                      pushChatPrompt(
+                        `Si Driss, explique-moi les notions clés du document "${docName}" indexé dans /docs/programme/`
+                      )
+                    }
+                  />
+                </Suspense>
               </div>
             </div>
           )}
         </main>
       </div>
 
-      {/* Generator Modal */}
-      <ExerciseGeneratorModal
-        isOpen={isGeneratorOpen}
-        onClose={() => setIsGeneratorOpen(false)}
-        onSelectForPractice={() => {
-          setIsGeneratorOpen(false);
-          setActiveTab('audit');
-        }}
-      />
+      {/* Generator Modal (H10 : chargé à la demande) */}
+      <Suspense fallback={null}>
+        <ExerciseGeneratorModal
+          isOpen={isGeneratorOpen}
+          onClose={() => setIsGeneratorOpen(false)}
+          onSelectForPractice={() => {
+            setIsGeneratorOpen(false);
+            setActiveTab('audit');
+          }}
+        />
+      </Suspense>
 
       {/* API Key Modal */}
       <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={() => setIsApiKeyModalOpen(false)} />

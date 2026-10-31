@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useModalA11y } from '../hooks/useModalA11y';
 import {
   CALCULABLE_FORMULAS,
   CalculableFormula,
@@ -94,6 +95,9 @@ export const FormulaCalculatorModal: React.FC<FormulaCalculatorModalProps> = ({
     }
   }, [formula, inputs]);
 
+  // (M14) Accessibilité : rôle dialog, Échap, piège de focus
+  const dialogRef = useModalA11y(isOpen, onClose);
+
   if (!isOpen) return null;
 
   const handleInputChange = (symbol: string, val: string) => {
@@ -164,6 +168,11 @@ Peux-tu me confirmer si les unités sont conformes au barème du Bac et si cet o
       onClick={onClose}
     >
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Calculateur de formules"
+        tabIndex={-1}
         className="bg-[#18191b] border border-[#2e3034] rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >

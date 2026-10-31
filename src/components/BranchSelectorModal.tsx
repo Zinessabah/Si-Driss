@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useModalA11y } from '../hooks/useModalA11y';
 import {
   FlaskConical,
   Compass,
@@ -23,6 +24,12 @@ export const BranchSelectorModal: React.FC<BranchSelectorModalProps> = ({
   const { branch, selectBranch } = useBranch();
   const [selected, setSelected] = useState<StudentBranch>(branch || 'PC');
 
+  // (M14) Accessibilité : rôle dialog, Échap, piège de focus (fermeture interdite
+  // tant que la filière n'est pas choisie)
+  const dialogRef = useModalA11y(isOpen, () => {
+    if (canClose) onClose?.();
+  });
+
   if (!isOpen) return null;
 
   const handleSelectBranch = (b: StudentBranch) => {
@@ -39,6 +46,11 @@ export const BranchSelectorModal: React.FC<BranchSelectorModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200">
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Choix de la filière (PC ou SM)"
+        tabIndex={-1}
         className="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >

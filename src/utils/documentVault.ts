@@ -45,24 +45,23 @@ function openDB(): Promise<IDBDatabase> {
 
 /**
  * Enregistre un document dans le coffre-fort permanent du navigateur.
+ * (M15) Les erreurs sont propagées à l'appelant : l'UI doit pouvoir informer
+ * l'élève qu'un fichier n'a PAS été sauvegardé localement au lieu de le laisser
+ * croire que tout est permanent.
  */
 export async function saveDocumentToVault(doc: Omit<VaultDocument, 'savedAt'>): Promise<void> {
-  try {
-    const db = await openDB();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, 'readwrite');
-      const store = tx.objectStore(STORE_NAME);
-      const record: VaultDocument = {
-        ...doc,
-        savedAt: Date.now(),
-      };
-      const req = store.put(record);
-      req.onsuccess = () => resolve();
-      req.onerror = () => reject(req.error);
-    });
-  } catch (err) {
-    console.warn('[DocumentVault] Erreur sauvegarde IndexedDB:', err);
-  }
+  const db = await openDB();
+  await new Promise<void>((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const record: VaultDocument = {
+      ...doc,
+      savedAt: Date.now(),
+    };
+    const req = store.put(record);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error || new Error('Échec d’écriture IndexedDB'));
+  });
 }
 
 /**
@@ -86,20 +85,17 @@ export async function getAllDocumentsFromVault(): Promise<VaultDocument[]> {
 
 /**
  * Supprime un document du coffre-fort permanent.
+ * (M15) Erreurs propagées pour remontée UI.
  */
 export async function removeDocumentFromVault(name: string): Promise<void> {
-  try {
-    const db = await openDB();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, 'readwrite');
-      const store = tx.objectStore(STORE_NAME);
-      const req = store.delete(name);
-      req.onsuccess = () => resolve();
-      req.onerror = () => reject(req.error);
-    });
-  } catch (err) {
-    console.warn('[DocumentVault] Erreur suppression IndexedDB:', err);
-  }
+  const db = await openDB();
+  await new Promise<void>((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const req = store.delete(name);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error || new Error('Échec de suppression IndexedDB'));
+  });
 }
 
 /**

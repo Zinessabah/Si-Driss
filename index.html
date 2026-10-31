@@ -2,7 +2,7 @@
 <html lang="fr" class="h-full">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Si Driss - Prof 2ème Bac PC BIOF</title>
     <meta name="description" content="Plateforme d'entraînement et de coaching socratique intensif en Physique-Chimie pour 2ème Bac PC BIOF (Maroc) avec Si Driss." />
     <meta name="theme-color" content="#131314" />
@@ -17,62 +17,7 @@
     <meta property="og:description" content="Plateforme d'entraînement et de coaching socratique intensif en Physique-Chimie pour 2ème Bac PC BIOF (Maroc) avec Si Driss." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <script>
-      // Suppress Vite HMR WebSocket errors in AI Studio iframe environment (HMR is disabled by platform)
-      (function() {
-        function isViteHmrText(text) {
-          if (!text) return false;
-          var str = String(text);
-          return (
-            str.indexOf('[vite]') !== -1 ||
-            str.indexOf('@vite/client') !== -1 ||
-            str.indexOf('vite/client') !== -1 ||
-            str.indexOf('WebSocket') !== -1 ||
-            str.indexOf('createWebSocketModuleRunnerTransport') !== -1 ||
-            str.indexOf('ws://') !== -1 ||
-            str.indexOf('wss://') !== -1
-          );
-        }
 
-        // Filter console logs for [vite]
-        var origConsoleError = console.error;
-        console.error = function() {
-          var firstArg = arguments.length > 0 ? String(arguments[0] || '') : '';
-          if (isViteHmrText(firstArg)) {
-            return;
-          }
-          return origConsoleError.apply(console, arguments);
-        };
-
-        var origConsoleWarn = console.warn;
-        console.warn = function() {
-          var firstArg = arguments.length > 0 ? String(arguments[0] || '') : '';
-          if (isViteHmrText(firstArg)) {
-            return;
-          }
-          return origConsoleWarn.apply(console, arguments);
-        };
-
-        window.addEventListener('error', function(event) {
-          var combined = String(event?.message || '') + ' ' + String(event?.filename || '') + ' ' + String(event?.error?.message || '') + ' ' + String(event?.error?.stack || '');
-          if (isViteHmrText(combined)) {
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            return true;
-          }
-        }, true);
-
-        window.addEventListener('unhandledrejection', function(event) {
-          var reason = event?.reason;
-          var combined = String(reason?.message || '') + ' ' + String(reason?.stack || '') + ' ' + String(reason || '');
-          if (isViteHmrText(combined)) {
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            return true;
-          }
-        }, true);
-      })();
-    </script>
     <!-- KaTeX CSS is bundled with the app (src/main.tsx) — no CDN, works offline -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

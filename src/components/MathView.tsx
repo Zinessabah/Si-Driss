@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useMemo } from 'react';
 import katex from 'katex';
 import DOMPurify from 'dompurify';
 
@@ -120,39 +120,34 @@ function renderKatexToSafeHtml(code: string, displayMode: boolean): string {
   }
 }
 
-const KatexContainer: React.FC<{ math: string; displayMode: boolean; className?: string }> = ({
-  math,
-  displayMode,
-  className = '',
-}) => {
-  const containerRef = useRef<HTMLSpanElement | null>(null);
-  const { code, forceDisplay } = sanitizeLatexForKatex(math, displayMode);
-  const effectiveDisplay = displayMode || forceDisplay;
+/**
+ * (M12) Rendu KaTeX unique et mémoïsé : un seul `renderToString` par formule et par
+ * changement de contenu (plus de double rendu « initial + effet »), et composant
+ * mémoïsé pour ignorer les re-rendus du parent pendant le streaming du chat.
+ */
+const KatexContainer: React.FC<{ math: string; displayMode: boolean; className?: string }> = React.memo(
+  function KatexContainer({ math, displayMode, className = '' }) {
+    const { code, forceDisplay } = sanitizeLatexForKatex(math, displayMode);
+    const effectiveDisplay = displayMode || forceDisplay;
 
-  // Rendu synchrone initial pour éviter tout clignotement
-  const initialHtml = renderKatexToSafeHtml(code, effectiveDisplay);
+    // Rendu synchrone initial pour éviter tout clignotement — calculé UNE fois par contenu
+    const initialHtml = useMemo(
+      () => renderKatexToSafeHtml(code, effectiveDisplay),
+      [code, effectiveDisplay]
+    );
 
-  // Injection DOM directe pour garantir que le conteneur KaTeX est toujours peuplé
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const safeHtml = renderKatexToSafeHtml(code, effectiveDisplay);
-    if (safeHtml) {
-      containerRef.current.innerHTML = safeHtml;
-    }
-  }, [code, effectiveDisplay]);
-
-  return (
-    <span
-      ref={containerRef}
-      className={`katex-container katex-render font-bold ${
-        effectiveDisplay
-          ? 'block my-3 py-2.5 px-1 text-center leading-relaxed'
-          : 'inline-block mx-0.5 py-0.5 align-middle leading-normal'
-      } ${className}`}
-      dangerouslySetInnerHTML={{ __html: initialHtml }}
-    />
-  );
-};
+    return (
+      <span
+        className={`katex-container katex-render font-bold ${
+          effectiveDisplay
+            ? 'block my-3 py-2.5 px-1 text-center leading-relaxed'
+            : 'inline-block mx-0.5 py-0.5 align-middle leading-normal'
+        } ${className}`}
+        dangerouslySetInnerHTML={{ __html: initialHtml }}
+      />
+    );
+  }
+);
 
 /**
  * Détecte et enveloppe automatiquement les formules LaTeX brutes qui auraient été écrites
@@ -283,6 +278,15 @@ function renderFormattedPlainText(text: string, keyPrefix: string): React.ReactN
   return parts;
 }
 
+/** Hash rapide (djb2) : clés React stables par contenu pendant le streaming (M12). */
+function stableHash(s: string): string {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) {
+    h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+  }
+  return (h >>> 0).toString(36);
+}
+
 /**
  * Rend une chaîne contenant des formules ($...$ et $$...$$) ainsi que du texte enrichi
  */
@@ -331,7 +335,7 @@ function renderMathAndTextNodes(input: string, forceBlock: boolean, keyPrefix: s
     if (seg.type === 'math') {
       finalNodes.push(
         <KatexContainer
-          key={`${keyPrefix}-math-${idx}`}
+          key={`${keyPrefix}-math-${stableHash(seg.value)}`}
           math={seg.value}
           displayMode={seg.display}
         />
@@ -362,7 +366,7 @@ function renderMathAndTextNodes(input: string, forceBlock: boolean, keyPrefix: s
       }
       finalNodes.push(
         <KatexContainer
-          key={`${keyPrefix}-autokatex-${idx}-${subMatch.index}`}
+          key={`${keyPrefix}-ak-${stableHash(subMatch[1])}`}
           math={subMatch[1]}
           displayMode={false}
         />
@@ -384,9 +388,15 @@ function renderMathAndTextNodes(input: string, forceBlock: boolean, keyPrefix: s
 }
 
 /**
- * Composant universel de rendu mathématique KaTeX + Markdown scientifique
+ * Composant universel de rendu mathématique KaTeX + Markdown scientifique.
+ * (M12) Mémoïsé : un message non modifié (hors message en cours de streaming)
+ * ne redéclenche AUCUN rendu KaTeX lors des re-rendus du chat.
  */
-export const MathView: React.FC<MathViewProps> = ({ content, className = '', block = false }) => {
+export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
+  content,
+  className = '',
+  block = false,
+}) {
   if (!content) return null;
 
   const trimmed = content.trim();
@@ -451,4 +461,4 @@ export const MathView: React.FC<MathViewProps> = ({ content, className = '', blo
       {renderMathAndTextNodes(normalized, block, 'mv')}
     </Container>
   );
-};
+});

@@ -53,9 +53,9 @@ export const AI_PROVIDERS: ProviderDefinition[] = [
     freeTier: true,
     models: [
       { id: 'gemini-3.5-flash-lite', name: 'Gemini 3.5 Flash Lite', tag: 'Défaut Ultra-Rapide', description: 'Réponse instantanée (~0.7s) et haute précision STEM' },
+      { id: 'gemini-3.6-flash', name: 'Gemini 3.6 Flash', tag: 'Équilibré', description: 'Génération précédente stable, multimodale et rapide' },
       { id: 'gemini-3.1-flash-lite', name: 'Gemini 3.1 Flash Lite', tag: 'Rapide & Stable', description: 'Modèle compact pour dialogue socratique réactif' },
-      { id: 'gemini-3-flash-preview', name: 'Gemini 3 Flash Preview', tag: 'Raisonnement', description: 'Idéal pour les démonstrations détaillées' },
-      { id: 'gemini-3.8-flash', name: 'Gemini 3.8 Flash', tag: 'Avancé', description: 'Modèle complet Google Gemini' },
+      { id: 'gemini-3.8-flash', name: 'Gemini 3.8 Flash', tag: 'Avancé', description: 'Le Flash le plus intelligent — idéal pour les démonstrations détaillées' },
     ],
   },
   {

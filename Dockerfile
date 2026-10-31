@@ -31,6 +31,8 @@ RUN npm ci --omit=dev --prefer-offline --no-audit && \
 # Copy compiled frontend and backend code
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/server.ts ./server.ts
+# Modules serveur (architecture modulaire : ai/, routes/, rag, prompts, security, config)
+COPY --from=builder /app/server ./server
 COPY --from=builder /app/docs ./docs
 
 # Run as non-root; docs/programme must be writable for document uploads

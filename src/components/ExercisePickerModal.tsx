@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useModalA11y } from '../hooks/useModalA11y';
 import {
   X,
   BookOpen,
@@ -15,7 +16,7 @@ import {
 } from 'lucide-react';
 import { NATIONAL_EXERCISES, NationalExercise } from '../data/nationalExercises';
 import { MathView } from './MathView';
-import { ChatAttachment } from './SessionManagerModal';
+import { ChatAttachment } from '../types/chat';
 import { useBranch } from '../hooks/useBranch';
 
 interface ExercisePickerModalProps {
@@ -40,6 +41,9 @@ export const ExercisePickerModal: React.FC<ExercisePickerModalProps> = ({
   const [previewExercise, setPreviewExercise] = useState<NationalExercise | null>(
     branchExercises[0] || NATIONAL_EXERCISES[0] || null
   );
+
+  // (M14) Accessibilité : rôle dialog, Échap, piège de focus
+  const dialogRef = useModalA11y(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -99,7 +103,14 @@ ${ex.professorTrapAlert}`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Choisir un exercice type du Bac"
+        tabIndex={-1}
+        className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+      >
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
           <div className="flex items-center gap-3">

@@ -7,6 +7,50 @@ const EVENT_NAME = 'sidriss_ai_config_changed';
 const ACCESS_TOKEN_KEY = 'sidriss_access_token_v1';
 const ADMIN_TOKEN_KEY = 'sidriss_admin_token_v1';
 
+// (dette) Sonde unique du statut serveur : partagée par toutes les instances du
+// hook (App, chat, audit, modales…) — un seul appel /api/ai-status au démarrage
+// au lieu d'un par composant.
+let serverStatusProbe: Promise<{ configured: boolean; provider: string } | null> | null = null;
+
+function probeServerStatus(): Promise<{ configured: boolean; provider: string } | null> {
+  if (!serverStatusProbe) {
+    serverStatusProbe = fetch('/api/ai-status')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data): { configured: boolean; provider: string } | null =>
+        data
+          ? { configured: Boolean(data.serverConfigured), provider: data.serverProvider || 'gemini' }
+          : null
+      )
+      .catch(() => null);
+  }
+  return serverStatusProbe;
+}
+
+/**
+ * (M13) Migration unique de l'ancienne clé Gemini vers la config v2, exécutée
+ * une seule fois au chargement du module — plus d'écriture localStorage dans un
+ * initializer React (impur, doublé sous StrictMode).
+ */
+function migrateLegacyGeminiKey(): void {
+  try {
+    if (localStorage.getItem(NEW_STORAGE_KEY)) return;
+    const oldGeminiKey = localStorage.getItem(OLD_STORAGE_KEY);
+    if (!oldGeminiKey) return;
+    const cleaned = sanitizeKeyString(oldGeminiKey);
+    if (!cleaned) return;
+    localStorage.setItem(
+      NEW_STORAGE_KEY,
+      JSON.stringify({ provider: 'gemini', apiKey: cleaned, model: 'gemini-3.5-flash-lite', baseUrl: '' })
+    );
+  } catch {
+    /* stockage indisponible */
+  }
+}
+
+if (typeof window !== 'undefined') {
+  migrateLegacyGeminiKey();
+}
+
 /** Mot de passe de classe optionnel (SI_DRISS_ACCESS_TOKEN côté serveur). */
 export function getAccessToken(): string {
   try {
@@ -59,14 +103,16 @@ function getInitialConfig(): AIProviderConfig {
     if (stored) {
       const parsed = JSON.parse(stored);
       if (parsed && parsed.provider) {
+        // Modèles Gemini retirés ou d'une génération antérieure → modèle rapide par défaut.
+        // gemini-3.8-flash et gemini-flash-latest sont des IDs publics ACTUELS et valides (M6).
         const deprecatedGemini = new Set([
           'gemini-2.5-flash',
           'gemini-2.5-pro',
+          'gemini-2.5-flash-lite',
           'gemini-2.0-flash',
+          'gemini-2.0-flash-lite',
           'gemini-1.5-flash',
           'gemini-1.5-pro',
-          'gemini-3.8-flash',
-          'gemini-flash-latest',
         ]);
         // Anciens noms DeepSeek (ère V3/R1) → catalogue actuel V4
         const legacyDeepSeek: Record<string, string> = {
@@ -88,21 +134,6 @@ function getInitialConfig(): AIProviderConfig {
       }
     }
 
-    // Check old Gemini storage key for graceful migration
-    const oldGeminiKey = localStorage.getItem(OLD_STORAGE_KEY);
-    if (oldGeminiKey) {
-      const cleaned = sanitizeKeyString(oldGeminiKey);
-      if (cleaned) {
-        const migrated: AIProviderConfig = {
-          provider: 'gemini',
-          apiKey: cleaned,
-          model: 'gemini-3.5-flash-lite',
-          baseUrl: '',
-        };
-        localStorage.setItem(NEW_STORAGE_KEY, JSON.stringify(migrated));
-        return migrated;
-      }
-    }
   } catch (err) {
     console.warn('Erreur lecture configuration IA locale:', err);
   }
@@ -121,21 +152,17 @@ export function useApiKey() {
   const [serverHasKey, setServerHasKey] = useState<boolean>(true);
   const [serverDefaultProvider, setServerDefaultProvider] = useState<string>('gemini');
 
-  // Probe server configuration status on mount
+  // Probe server configuration status on mount (sonde unique partagée entre
+  // toutes les instances du hook — un seul appel réseau au démarrage)
   useEffect(() => {
     let isMounted = true;
-    fetch('/api/ai-status')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (!isMounted || !data) return;
-        setServerHasKey(Boolean(data.serverConfigured));
-        if (data.serverConfigured) {
-          setServerDefaultProvider(data.serverProvider || 'gemini');
-        }
-      })
-      .catch(() => {
-        // Silent catch
-      });
+    probeServerStatus().then((status) => {
+      if (!isMounted || !status) return;
+      setServerHasKey(status.configured);
+      if (status.configured) {
+        setServerDefaultProvider(status.provider);
+      }
+    });
     return () => {
       isMounted = false;
     };
@@ -165,13 +192,6 @@ export function useApiKey() {
       };
 
       localStorage.setItem(NEW_STORAGE_KEY, JSON.stringify(updated));
-
-      // Also sync old storage key if Gemini for legacy readers
-      if (updated.provider === 'gemini') {
-        localStorage.setItem(OLD_STORAGE_KEY, updated.apiKey);
-      } else {
-        localStorage.removeItem(OLD_STORAGE_KEY);
-      }
 
       setConfig(updated);
       window.dispatchEvent(new Event(EVENT_NAME));

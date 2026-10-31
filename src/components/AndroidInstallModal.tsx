@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useModalA11y } from '../hooks/useModalA11y';
 import {
   Smartphone,
   X,
@@ -22,11 +23,19 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
   const { isInstallable, install, isIOS } = usePWAInstall();
   const [activePlatform, setActivePlatform] = useState<'ios' | 'android'>(() => (isIOS ? 'ios' : 'android'));
 
+  // (M14) Accessibilité : rôle dialog, Échap, piège de focus
+  const dialogRef = useModalA11y(isOpen, onClose);
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Installer l'application Si Driss"
+        tabIndex={-1}
         className="w-full max-w-md bg-[#1e1f20] border border-[#3c4043] rounded-3xl shadow-2xl overflow-hidden flex flex-col text-[#e3e3e3]"
         onClick={(e) => e.stopPropagation()}
       >

@@ -28,6 +28,8 @@ export interface ExportOptions {
   branch?: string;
   source?: string;
   date?: string;
+  /** (M16) Progression du rendu PDF page par page, pour indicateur UI. */
+  onProgress?: (pagesDone: number, totalPages: number) => void;
 }
 
 // =============================================================================
@@ -1496,14 +1498,21 @@ export async function exportToPdf(options: ExportOptions): Promise<void> {
         windowWidth: 794,
       });
 
-      const imgData = canvas.toDataURL('image/png');
+      // (M16) JPEG qualité 0.92 : fichier beaucoup plus léger que le PNG pour un
+      // rendu de texte équivalent, et encodage nettement plus rapide.
+      const imgData = canvas.toDataURL('image/jpeg', 0.92);
       const renderedWidthMm = usableWidthMm;
       const renderedHeightMm = Math.min(
         usableHeightMm,
         (canvas.height / canvas.width) * renderedWidthMm
       );
 
-      pdf.addImage(imgData, 'PNG', marginX, headerHeightMm, renderedWidthMm, renderedHeightMm);
+      pdf.addImage(imgData, 'JPEG', marginX, headerHeightMm, renderedWidthMm, renderedHeightMm);
+
+      // (M16) Progression visible + rend la main au thread principal entre chaque
+      // page pour ne pas geler l'interface pendant l'export.
+      options.onProgress?.(pageIdx + 1, totalPages);
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Pied de page vectoriel numéroté
       pdf.setDrawColor(226, 232, 240);

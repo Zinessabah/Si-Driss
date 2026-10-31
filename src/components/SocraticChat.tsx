@@ -23,9 +23,11 @@ import {
   Copy,
   Check,
   Sigma,
+  AlertTriangle,
 } from 'lucide-react';
 import { MathView } from './MathView';
-import { SessionManagerModal, SavedSession, ChatMessage, ChatAttachment } from './SessionManagerModal';
+import { SavedSession, ChatMessage, ChatAttachment } from '../types/chat';
+import { useModalA11y } from '../hooks/useModalA11y';
 import { ExercisePickerModal } from './ExercisePickerModal';
 import { DocumentPickerModal } from './DocumentPickerModal';
 import { ExportResponseButtons } from './ExportResponseButtons';
@@ -35,6 +37,8 @@ import { ApiKeyModal } from './ApiKeyModal';
 
 interface SocraticChatProps {
   initialPrompt?: string;
+  /** Change à chaque nouveau prompt poussé : force l'effet même pour un texte identique. */
+  initialPromptNonce?: number;
   currentContext?: string;
   externalLoadSession?: SavedSession | null;
   externalNewChatTrigger?: number;
@@ -67,6 +71,10 @@ const QUICK_FORMULAS_SM = [
   { label: 'pH acido-basique', formula: 'pH = pK_A + \\log\\frac{[A^-]}{[AH]}' },
 ];
 
+// (H9) Limites anti-saturation mémoire : 3 pièces jointes max par message, 5 Mo par fichier.
+const MAX_ATTACHMENTS_PER_MESSAGE = 3;
+const MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024;
+
 function getWelcomeMessage(branch: 'PC' | 'SM' = 'PC'): ChatMessage {
   const isSM = branch === 'SM';
   const branchTitle = isSM ? '2ème Bac Sciences Mathématiques (SM)' : '2ème Bac Sciences Physiques (PC)';
@@ -88,6 +96,7 @@ Tu peux me poser une question de cours, me demander une démonstration, ou joind
 
 export const SocraticChat: React.FC<SocraticChatProps> = ({
   initialPrompt,
+  initialPromptNonce,
   currentContext,
   externalLoadSession,
   externalNewChatTrigger,
@@ -126,12 +135,17 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   const [pendingAttachments, setPendingAttachments] = useState<ChatAttachment[]>([]);
   const [previewImageModal, setPreviewImageModal] = useState<{ url: string; name: string } | null>(null);
 
+  // (M14) Accessibilité de la visionneuse d'image
+  const lightboxRef = useModalA11y(Boolean(previewImageModal), () => setPreviewImageModal(null));
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const pdfInputRef = useRef<HTMLInputElement | null>(null);
   const photoInputRef = useRef<HTMLInputElement | null>(null);
   const addMenuRef = useRef<HTMLDivElement | null>(null);
   const formulaMenuRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  // (M11) Contrôleur du flux SSE en cours, pour l'abandonner au démontage
+  const activeStreamControllerRef = useRef<AbortController | null>(null);
 
   // Saved sessions list
   const [savedSessions, setSavedSessions] = useState<SavedSession[]>(() => {
@@ -208,25 +222,40 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     }
   }, [input]);
 
-  // Auto-save current active session
+  // Auto-save current active session (H8 : debouncée ~1 s — plus d'écriture
+  // localStorage par chunk de streaming, images base64 comprises)
   useEffect(() => {
     if (messages.length === 0) return;
-    const now = new Date();
+    const t = setTimeout(() => {
+      const now = new Date();
 
-    try {
-      const sessionPayload = {
-        id: currentSessionId,
-        title: currentSessionTitle,
-        messages,
-        socraticEnabled,
-        coachingMode,
-        updatedAt: now.toISOString(),
-      };
-      localStorage.setItem('sidriss_active_session_v1', JSON.stringify(sessionPayload));
-    } catch (e) {
-      console.error('Failed to auto-save active session:', e);
-    }
+      try {
+        const sessionPayload = {
+          id: currentSessionId,
+          title: currentSessionTitle,
+          messages,
+          socraticEnabled,
+          coachingMode,
+          updatedAt: now.toISOString(),
+        };
+        localStorage.setItem('sidriss_active_session_v1', JSON.stringify(sessionPayload));
+      } catch (e) {
+        // (M15) Échec de persistance rendu visible : jamais de fausse promesse de sauvegarde.
+        console.error('Failed to auto-save active session:', e);
+        setSaveToast(
+          "Sauvegarde automatique impossible : la mémoire du navigateur est saturée (probablement à cause d'images jointes). Exporte cette session ou supprime d'anciennes discussions."
+        );
+      }
+    }, 1000);
+    return () => clearTimeout(t);
   }, [messages, socraticEnabled, coachingMode, currentSessionId, currentSessionTitle]);
+
+  // Auto-dismiss du toast d'échec de sauvegarde (M15)
+  useEffect(() => {
+    if (!saveToast) return;
+    const t = setTimeout(() => setSaveToast(null), 8000);
+    return () => clearTimeout(t);
+  }, [saveToast]);
 
   // Synchronize welcome message when student switches branch
   useEffect(() => {
@@ -239,13 +268,27 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   }, [branch]);
 
   useEffect(() => {
+    if (initialPromptNonce === undefined) return;
     if (initialPrompt) {
       setInput(initialPrompt);
       if (textareaRef.current) {
         textareaRef.current.focus({ preventScroll: true });
       }
     }
-  }, [initialPrompt]);
+    // (dette) Le nonce remplace initialPrompt dans les dépendances : pousser deux
+    // fois le même prompt (même document, même chapitre) fonctionne à nouveau.
+  }, [initialPromptNonce]);
+
+  // (M11) Au démontage réel du composant : coupe le flux SSE en cours et la
+  // synthèse vocale (plus de tokens brûlés en silence ni de voix fantôme).
+  useEffect(() => {
+    return () => {
+      activeStreamControllerRef.current?.abort();
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (chatScrollContainerRef.current) {
@@ -311,7 +354,36 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    Array.from(files).forEach((file) => {
+    // (H9) Limites anti-saturation mémoire : 3 pièces jointes max par message,
+    // 5 Mo max par fichier — au-delà, l'élève est informé explicitement.
+    const room = MAX_ATTACHMENTS_PER_MESSAGE - pendingAttachments.length;
+    if (room <= 0) {
+      setSaveToast(
+        `Maximum ${MAX_ATTACHMENTS_PER_MESSAGE} pièces jointes par message. Envoie d'abord celles-ci !`
+      );
+      setIsAddMenuOpen(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      if (pdfInputRef.current) pdfInputRef.current.value = '';
+      if (photoInputRef.current) photoInputRef.current.value = '';
+      return;
+    }
+
+    const candidates = Array.from(files);
+    const accepted = candidates.slice(0, room);
+    if (accepted.length < candidates.length) {
+      setSaveToast(
+        `Seuls les ${accepted.length} premier(s) fichier(s) ont été ajoutés (maximum ${MAX_ATTACHMENTS_PER_MESSAGE} pièces jointes par message).`
+      );
+    }
+
+    accepted.forEach((file) => {
+      if (file.size > MAX_ATTACHMENT_BYTES) {
+        setSaveToast(
+          `"${file.name}" dépasse 5 Mo et n'a pas été joint : réduis sa taille ou photographie seulement l'énoncé.`
+        );
+        return;
+      }
+
       const isImg = file.type.startsWith('image/');
       const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
 
@@ -445,8 +517,25 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     setIsFormulaMenuOpen(false);
     setLoading(true);
 
+    // (H9) Seul le DERNIER message utilisateur transporte ses pièces jointes vers
+    // l'API : l'historique complet (avec ses images base64) n'est pas renvoyé à
+    // chaque requête — payloads divisés d'autant, quotas mémoire préservés.
+    let lastUserMsgIndex = -1;
+    for (let i = newMessages.length - 1; i >= 0; i--) {
+      if (newMessages[i].role === 'user') {
+        lastUserMsgIndex = i;
+        break;
+      }
+    }
+    const messagesForApi = newMessages.map((m, idx) =>
+      idx === lastUserMsgIndex
+        ? { role: m.role, content: m.content, attachments: m.attachments }
+        : { role: m.role, content: m.content }
+    );
+
     const assistantMsgId = String(Date.now() + 1);
     const controller = new AbortController();
+    activeStreamControllerRef.current = controller;
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
     const resetInactivityTimeout = () => {
@@ -468,11 +557,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         },
         signal: controller.signal,
         body: JSON.stringify({
-          messages: newMessages.map((m) => ({
-            role: m.role,
-            content: m.content,
-            attachments: m.attachments,
-          })),
+          messages: messagesForApi,
           context: currentContext,
           mode: currentMode,
           socraticEnabled,
@@ -513,6 +598,20 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         const decoder = new TextDecoder();
         let buffer = '';
 
+        // (H8) Flush throttlé (requestAnimationFrame) : un seul re-render du message
+        // en cours par frame au lieu d'un setState par chunk SSE reçu.
+        let flushScheduled = false;
+        const flushStreamedContent = () => {
+          if (flushScheduled) return;
+          flushScheduled = true;
+          requestAnimationFrame(() => {
+            flushScheduled = false;
+            setMessages((prev) =>
+              prev.map((m) => (m.id === assistantMsgId ? { ...m, content: accumulated } : m))
+            );
+          });
+        };
+
         while (true) {
           resetInactivityTimeout();
           const { done, value } = await reader.read();
@@ -530,19 +629,20 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                 const parsed = JSON.parse(dataStr);
                 if (parsed.text) {
                   accumulated += parsed.text;
-                  setMessages((prev) =>
-                    prev.map((m) => (m.id === assistantMsgId ? { ...m, content: accumulated } : m))
-                  );
+                  flushStreamedContent();
                 } else if (parsed.error) {
                   accumulated = `⚠️ *Note du professeur* : ${parsed.error}`;
-                  setMessages((prev) =>
-                    prev.map((m) => (m.id === assistantMsgId ? { ...m, content: accumulated } : m))
-                  );
+                  flushStreamedContent();
                 }
               } catch {}
             }
           }
         }
+
+        // Flush final : garantit que le message contient l'intégralité du texte reçu
+        setMessages((prev) =>
+          prev.map((m) => (m.id === assistantMsgId ? { ...m, content: accumulated } : m))
+        );
 
         if (!accumulated.trim()) {
           resetInactivityTimeout();
@@ -553,11 +653,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
               ...getAuthHeaders(),
             },
             body: JSON.stringify({
-              messages: newMessages.map((m) => ({
-                role: m.role,
-                content: m.content,
-                attachments: m.attachments,
-              })),
+              messages: messagesForApi,
               context: currentContext,
               mode: currentMode,
               socraticEnabled,
@@ -584,11 +680,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
             ...getAuthHeaders(),
           },
           body: JSON.stringify({
-            messages: newMessages.map((m) => ({
-              role: m.role,
-              content: m.content,
-              attachments: m.attachments,
-            })),
+            messages: messagesForApi,
             context: currentContext,
             mode: currentMode,
             socraticEnabled,
@@ -670,6 +762,18 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
   return (
     <div className="flex-1 flex flex-col h-full bg-[#131314] relative text-[#e3e3e3] overflow-hidden">
+      {/* (M15) Toast d'échec de sauvegarde — jamais de silence sur une perte de données */}
+      {saveToast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="absolute top-3 left-1/2 -translate-x-1/2 z-40 w-[min(92%,28rem)] px-4 py-2.5 rounded-xl bg-rose-950/95 border border-rose-500/40 text-rose-200 text-xs shadow-2xl flex items-start gap-2"
+        >
+          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+          <span>{saveToast}</span>
+        </div>
+      )}
+
       {/* Hidden File Inputs: Strictly separated so mobile OS opens files for PDF and camera/photos for images (no videos) */}
       <input
         type="file"
@@ -1218,7 +1322,14 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
       {/* Lightbox Image Preview Modal */}
       {previewImageModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-          <div className="relative max-w-4xl max-h-[90vh] flex flex-col items-center">
+          <div
+            ref={lightboxRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Aperçu de l'image ${previewImageModal.name}`}
+            tabIndex={-1}
+            className="relative max-w-4xl max-h-[90vh] flex flex-col items-center"
+          >
             <button
               onClick={() => setPreviewImageModal(null)}
               className="absolute -top-10 right-0 p-1.5 rounded-full bg-[#282a2c] text-white hover:bg-[#3c4043] transition"

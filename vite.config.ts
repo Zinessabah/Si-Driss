@@ -11,12 +11,13 @@ export default defineConfig(() => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icon.svg'],
+        includeAssets: ['apple-touch-icon.png', 'icon.svg'],
         manifest: {
           id: '/',
-          name: 'Si Driss - Physique-Chimie 2ème Bac PC',
-          short_name: 'Si Driss PC',
-          description: 'Application Android de préparation intensive au Baccalauréat marocain de Physique-Chimie avec Si Driss',
+          name: 'Si Driss — Physique-Chimie 2ème Bac (PC & SM)',
+          short_name: 'Si Driss',
+          description:
+            "Application d'entraînement et de coaching socratique en Physique-Chimie pour le 2ème Bac marocain (BIOF, filières PC & SM) avec Si Driss",
           theme_color: '#020617',
           background_color: '#020617',
           display: 'standalone',
@@ -82,6 +83,24 @@ export default defineConfig(() => {
       hmr: false,
       // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
+    },
+    // (H10) Chunks vendors séparés pour un meilleur cache long terme
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id: string) {
+            if (id.includes('node_modules/katex')) return 'vendor-katex';
+            if (
+              id.includes('node_modules/react/') ||
+              id.includes('node_modules/react-dom/') ||
+              id.includes('node_modules/scheduler/')
+            ) {
+              return 'vendor-react';
+            }
+            return undefined;
+          },
+        },
+      },
     },
   };
 });

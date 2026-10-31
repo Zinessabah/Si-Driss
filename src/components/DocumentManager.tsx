@@ -20,6 +20,7 @@ import {
   FileUp,
 } from 'lucide-react';
 import { MathView } from './MathView';
+import { useModalA11y } from '../hooks/useModalA11y';
 import { getAdminToken, getAccessToken } from '../hooks/useApiKey';
 import {
   saveDocumentToVault,
@@ -63,6 +64,9 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
   const [copiedPath, setCopiedPath] = useState<boolean>(false);
 
   const importFileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // (M14) Accessibilité de la modale de création de document
+  const createDialogRef = useModalA11y(showCreateModal, () => setShowCreateModal(false));
 
   const fetchDocuments = async () => {
     setLoading(true);
@@ -116,6 +120,7 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
 
     try {
       let uploadedCount = 0;
+      const vaultFailures: string[] = [];
       for (let i = 0; i < uploadedFiles.length; i++) {
         const file = uploadedFiles[i];
         let bodyPayload: { filename: string; content?: string; base64?: string } = { filename: file.name };
@@ -133,24 +138,34 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
           const base64Data = btoa(binary);
           bodyPayload.base64 = base64Data;
 
-          // Sauvegarde immédiate dans le coffre-fort permanent IndexedDB
-          await saveDocumentToVault({
-            name: file.name,
-            isPdf: true,
-            base64: base64Data,
-            size: file.size,
-          });
+          // Sauvegarde immédiate dans le coffre-fort permanent IndexedDB (M15 : échec visible)
+          try {
+            await saveDocumentToVault({
+              name: file.name,
+              isPdf: true,
+              base64: base64Data,
+              size: file.size,
+            });
+          } catch (vaultErr) {
+            console.warn('[DocumentVault] Échec sauvegarde locale:', vaultErr);
+            vaultFailures.push(file.name);
+          }
         } else {
           const textContent = await file.text();
           bodyPayload.content = textContent;
 
-          // Sauvegarde immédiate dans le coffre-fort permanent IndexedDB
-          await saveDocumentToVault({
-            name: file.name,
-            isPdf: false,
-            content: textContent,
-            size: file.size,
-          });
+          // Sauvegarde immédiate dans le coffre-fort permanent IndexedDB (M15 : échec visible)
+          try {
+            await saveDocumentToVault({
+              name: file.name,
+              isPdf: false,
+              content: textContent,
+              size: file.size,
+            });
+          } catch (vaultErr) {
+            console.warn('[DocumentVault] Échec sauvegarde locale:', vaultErr);
+            vaultFailures.push(file.name);
+          }
         }
 
         const res = await fetch('/api/documents/upload', {
@@ -172,10 +187,18 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
       const allVault = await getAllDocumentsFromVault();
       setVaultCount(allVault.length);
 
-      setStatusMsg({
-        text: `${uploadedCount} fichier(s) indexé(s) et sauvegardé(s) en permanence dans votre coffre-fort local ! Ils ne disparaîtront plus lors des mises à jour.`,
-        type: 'success',
-      });
+      // (M15) Message honnête : distingue l'indexation serveur de la copie locale permanente
+      if (vaultFailures.length > 0) {
+        setStatusMsg({
+          text: `${uploadedCount} fichier(s) indexé(s) sur le serveur, mais la sauvegarde locale permanente a échoué pour : ${vaultFailures.join(', ')} (mémoire du navigateur saturée ?). Ces fichiers ne seront pas restaurés automatiquement — exporte une sauvegarde .json pour les protéger.`,
+          type: 'error',
+        });
+      } else {
+        setStatusMsg({
+          text: `${uploadedCount} fichier(s) indexé(s) et sauvegardé(s) en permanence dans votre coffre-fort local ! Ils ne disparaîtront plus lors des mises à jour.`,
+          type: 'success',
+        });
+      }
       await fetchDocuments();
     } catch (err: any) {
       setStatusMsg({ text: err?.message || 'Erreur lors de l\'upload.', type: 'error' });
@@ -231,9 +254,16 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
         const allVault = await getAllDocumentsFromVault();
         setVaultCount(allVault.length);
         await fetchDocuments();
+      } else {
+        // (M15) Échec serveur signalé explicitement (la copie locale existe, elle)
+        setStatusMsg({
+          text: `Le serveur a refusé "${finalName}" (code ${res.status}). Le document reste sauvegardé dans ton coffre-fort local — réessaie plus tard.`,
+          type: 'error',
+        });
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      // (M15) Plus d'échec silencieux (console seule) : l'élève est informé.
+      setStatusMsg({ text: err?.message || `Impossible d'enregistrer "${finalName}".`, type: 'error' });
     }
   };
 
@@ -519,7 +549,14 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
       {/* New Document Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl space-y-4 p-5">
+          <div
+            ref={createDialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Créer un document du programme"
+            tabIndex={-1}
+            className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl space-y-4 p-5"
+          >
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <h3 className="font-bold text-white text-sm flex items-center gap-2">
                 <Plus className="w-4 h-4 text-amber-400" />

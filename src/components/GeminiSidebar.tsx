@@ -15,7 +15,7 @@ import {
   ChevronRight,
   GraduationCap,
 } from 'lucide-react';
-import { SavedSession } from './SessionManagerModal';
+import { SavedSession } from '../types/chat';
 
 interface GeminiSidebarProps {
   isOpen: boolean;
@@ -178,8 +178,9 @@ export const GeminiSidebar: React.FC<GeminiSidebarProps> = ({
                             onDeleteSession(session.id);
                           }
                         }}
-                        className="opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-[#3c4043] text-[#8e918f] hover:text-rose-400 transition"
+                        className="opacity-60 group-hover:opacity-100 focus:opacity-100 p-1 rounded-md hover:bg-[#3c4043] text-[#8e918f] hover:text-rose-400 transition"
                         title="Supprimer cette discussion"
+                        aria-label={`Supprimer la discussion ${session.title}`}
                       >
                         <Trash2 className="w-3 h-3" />
                       </button>
