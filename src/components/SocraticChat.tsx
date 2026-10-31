@@ -24,12 +24,14 @@ import {
   Check,
   Sigma,
   AlertTriangle,
+  TrendingUp,
 } from 'lucide-react';
 import { MathView } from './MathView';
 import { SavedSession, ChatMessage, ChatAttachment } from '../types/chat';
 import { useModalA11y } from '../hooks/useModalA11y';
 import { ExercisePickerModal } from './ExercisePickerModal';
 import { DocumentPickerModal } from './DocumentPickerModal';
+import { GraphicsGalleryModal } from './GraphicsGalleryModal';
 import { ExportResponseButtons } from './ExportResponseButtons';
 import { useApiKey } from '../hooks/useApiKey';
 import { useBranch } from '../hooks/useBranch';
@@ -132,6 +134,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   const [isFormulaMenuOpen, setIsFormulaMenuOpen] = useState<boolean>(false);
   const [isExercisePickerOpen, setIsExercisePickerOpen] = useState<boolean>(false);
   const [isDocPickerOpen, setIsDocPickerOpen] = useState<boolean>(false);
+  const [isGraphicsModalOpen, setIsGraphicsModalOpen] = useState<boolean>(false);
   const [pendingAttachments, setPendingAttachments] = useState<ChatAttachment[]>([]);
   const [previewImageModal, setPreviewImageModal] = useState<{ url: string; name: string } | null>(null);
 
@@ -1212,9 +1215,40 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                           <div className="text-[10px] text-[#8e918f]">Cadres de référence /docs</div>
                         </div>
                       </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsAddMenuOpen(false);
+                          setIsGraphicsModalOpen(true);
+                        }}
+                        className="w-full text-left p-2 rounded-xl hover:bg-[#282a2c] text-[#e3e3e3] transition flex items-center gap-2.5 group"
+                      >
+                        <div className="w-7 h-7 rounded-lg bg-sky-500/15 flex items-center justify-center text-sky-400 group-hover:scale-105 transition-transform flex-shrink-0">
+                          <TrendingUp className="w-4 h-4" />
+                        </div>
+                        <div className="text-xs">
+                          <div className="font-medium flex items-center gap-1.5">
+                            Courbe / Graphique
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-semibold tracking-wide">GRAPHE</span>
+                          </div>
+                          <div className="text-[10px] text-[#8e918f]">RC, RL, RLC, Titrage, Chute...</div>
+                        </div>
+                      </button>
                     </div>
                   )}
                 </div>
+
+                {/* THE (📈 Courbes) GRAPHICS BUTTON */}
+                <button
+                  type="button"
+                  onClick={() => setIsGraphicsModalOpen(true)}
+                  className="px-2 py-1 rounded-full hover:bg-[#282a2c] text-[#8e918f] hover:text-sky-400 transition flex items-center gap-1 text-xs font-semibold"
+                  title="Tracer ou explorer des courbes graphiques du Bac (RC, RL, RLC, Titrage, etc.)"
+                >
+                  <TrendingUp className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">Courbes</span>
+                </button>
 
                 {/* THE (fx) QUICK FORMULA SHORTCUT BUTTON */}
                 <div className="relative" ref={formulaMenuRef}>
@@ -1317,6 +1351,16 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         isOpen={isDocPickerOpen}
         onClose={() => setIsDocPickerOpen(false)}
         onSelectDoc={handleSelectDoc}
+      />
+
+      <GraphicsGalleryModal
+        isOpen={isGraphicsModalOpen}
+        onClose={() => setIsGraphicsModalOpen(false)}
+        userBranch={branch}
+        onSelectCurveForPrompt={(promptText) => {
+          setInput(promptText);
+          textareaRef.current?.focus();
+        }}
       />
 
       {/* Lightbox Image Preview Modal */}

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import katex from 'katex';
 import DOMPurify from 'dompurify';
+import { ScientificGraphicsRenderer, GraphicSpec } from './ScientificGraphicsRenderer';
 
 interface MathViewProps {
   content: string;
@@ -452,7 +453,59 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
     );
   }
 
-  // Cas 3 : Contenu mixte (texte + formules en ligne $...$ + équations bloc $$...$$)
+  // Cas 3 : Contenu mixte (texte + graphiques scientifiques interactifs + formules LaTeX)
+  const graphicBlockRegex =
+    /```(?:curve|mindmap|graph|chart)\s*([\s\S]*?)```|```json\s*(\{[\s\S]*?"type"\s*:\s*"(?:curve|mindmap)"[\s\S]*?\})\s*```/gi;
+
+  if (graphicBlockRegex.test(content)) {
+    graphicBlockRegex.lastIndex = 0;
+    const elements: React.ReactNode[] = [];
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = graphicBlockRegex.exec(content)) !== null) {
+      if (match.index > lastIndex) {
+        const textChunk = content.slice(lastIndex, match.index);
+        const normalizedChunk = normalizeAllMathDelimiters(textChunk);
+        elements.push(...renderMathAndTextNodes(normalizedChunk, block, `mv-txt-${lastIndex}`));
+      }
+
+      const rawBlock = (match[1] || match[2] || '').trim();
+      const spec = tryParseGraphicSpec(rawBlock);
+      if (spec) {
+        elements.push(
+          <div key={`mv-graphic-${match.index}`} className="my-3 w-full">
+            <ScientificGraphicsRenderer spec={spec} />
+          </div>
+        );
+      } else {
+        elements.push(
+          <pre
+            key={`mv-raw-code-${match.index}`}
+            className="my-2 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-amber-300 overflow-x-auto"
+          >
+            <code>{match[0]}</code>
+          </pre>
+        );
+      }
+
+      lastIndex = graphicBlockRegex.lastIndex;
+    }
+
+    if (lastIndex < content.length) {
+      const textChunk = content.slice(lastIndex);
+      const normalizedChunk = normalizeAllMathDelimiters(textChunk);
+      elements.push(...renderMathAndTextNodes(normalizedChunk, block, `mv-txt-end-${lastIndex}`));
+    }
+
+    return (
+      <div className={`leading-relaxed ${className}`}>
+        {elements}
+      </div>
+    );
+  }
+
+  // Contenu standard sans blocs graphiques
   const normalized = normalizeAllMathDelimiters(content);
   const Container = block ? 'div' : 'span';
 
@@ -462,3 +515,24 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
     </Container>
   );
 });
+
+function tryParseGraphicSpec(raw: string): GraphicSpec | null {
+  try {
+    const trimmed = raw.trim();
+    const parsed = JSON.parse(trimmed);
+    if (parsed && typeof parsed === 'object') {
+      if (
+        parsed.type === 'curve' ||
+        parsed.type === 'mindmap' ||
+        typeof parsed.function === 'string' ||
+        Array.isArray(parsed.curves) ||
+        parsed.root
+      ) {
+        return parsed as GraphicSpec;
+      }
+    }
+  } catch {
+    // Non-bloquant si le bloc est en cours de streaming
+  }
+  return null;
+}

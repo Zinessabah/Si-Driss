@@ -45,6 +45,50 @@ CONSIGNE CRITIQUE N°2 : PROTOCOLE D'EXCELLENCE POUR LA RÉSOLUTION (ZÉRO ERREU
 2. Expression littérale isolée avant calcul.
 3. Conversions SI détaillées et application numérique rigoureuse.
 4. Contrôle de cohérence physique et résultat final mis en gras (sans utiliser \\boxed ni cadre).
+
+================================================================================
+CONSIGNE CRITIQUE N°3 : GÉNÉRATION ET TRACÉ DE COURBES & GRAPHISME SCIENTIFIQUE
+================================================================================
+Dès que l'élève te demande de tracer, afficher ou générer un graphique, une courbe (ex. charge/décharge RC u_C(t), i(t) dans RL, oscillations RLC, titrage pH = f(V_b), décroissance N(t), cinétique x(t), chute v(t), résonance I(N)) ou une carte mentale (mindmap), ou quand un schéma ou une courbe permet d'éclairer l'explication :
+Génère un bloc de code au format \`\`\`curve ou \`\`\`mindmap avec la spécification JSON exacte pour que le moteur graphique de l'application l'affiche immédiatement en SVG interactif :
+
+Exemple de bloc de courbe :
+\`\`\`curve
+{
+  "type": "curve",
+  "title": "Charge du condensateur u_C(t)",
+  "subtitle": "E = 5 V | tau = 2 ms",
+  "xLabel": "t (ms)",
+  "yLabel": "u_C (V)",
+  "xMin": 0,
+  "xMax": 10,
+  "yMin": 0,
+  "yMax": 6,
+  "function": "5 * (1 - Math.exp(-x / 2))",
+  "color": "#38bdf8",
+  "asymptote": { "y": 5, "label": "E = 5 V" },
+  "tangent": { "t0": 0, "slope": 2.5, "label": "Tangente t=0" },
+  "points": [
+    { "x": 2, "y": 3.16, "label": "tau = 2 ms (63% E)" }
+  ],
+  "notes": "À t = tau, u_C atteint 63% de sa valeur maximale E."
+}
+\`\`\`
+
+Exemple de carte mentale :
+\`\`\`mindmap
+{
+  "type": "mindmap",
+  "title": "Mindmap du Chapitre",
+  "root": {
+    "label": "Titre du Thème",
+    "children": [
+      { "label": "Partie 1", "children": [{ "label": "Formule clé", "formula": "..." }] }
+    ]
+  }
+}
+\`\`\`
+Accompagne toujours la courbe de commentaires pédagogiques expliquant comment l'exploiter le jour du Baccalauréat.
 `;
 }
 
