@@ -270,7 +270,7 @@ function renderFormattedPlainText(text: string, keyPrefix: string): React.ReactN
 
   if (lastIdx < text.length) {
     parts.push(
-      <span key={`${keyPrefix}-txt-end`} className="whitespace-pre-wrap">
+      <span key={`${keyPrefix}-end-${lastIdx}`} className="whitespace-pre-wrap">
         {text.slice(lastIdx)}
       </span>
     );
@@ -336,7 +336,7 @@ function renderMathAndTextNodes(input: string, forceBlock: boolean, keyPrefix: s
     if (seg.type === 'math') {
       finalNodes.push(
         <KatexContainer
-          key={`${keyPrefix}-math-${stableHash(seg.value)}`}
+          key={`${keyPrefix}-m-${idx}-${stableHash(seg.value)}`}
           math={seg.value}
           displayMode={seg.display}
         />
@@ -347,13 +347,14 @@ function renderMathAndTextNodes(input: string, forceBlock: boolean, keyPrefix: s
     // Détection automatique de LaTeX brut oublié hors délimiteurs $
     const autoWrapped = autoWrapBareLatexInText(seg.value);
     if (autoWrapped === seg.value) {
-      finalNodes.push(...renderFormattedPlainText(seg.value, `${keyPrefix}-plain-${idx}`));
+      finalNodes.push(...renderFormattedPlainText(seg.value, `${keyPrefix}-p-${idx}`));
       return;
     }
 
     // Re-découpe le segment après auto-enveloppement des formules brutes
     const subRegex = /\$([^$\n]+?)\$/g;
     let subLast = 0;
+    let subCount = 0;
     let subMatch: RegExpExecArray | null;
 
     while ((subMatch = subRegex.exec(autoWrapped)) !== null) {
@@ -361,25 +362,26 @@ function renderMathAndTextNodes(input: string, forceBlock: boolean, keyPrefix: s
         finalNodes.push(
           ...renderFormattedPlainText(
             autoWrapped.slice(subLast, subMatch.index),
-            `${keyPrefix}-subtxt-${idx}-${subLast}`
+            `${keyPrefix}-st-${idx}-${subCount}-${subLast}`
           )
         );
       }
       finalNodes.push(
         <KatexContainer
-          key={`${keyPrefix}-ak-${stableHash(subMatch[1])}`}
+          key={`${keyPrefix}-ak-${idx}-${subCount}-${stableHash(subMatch[1])}`}
           math={subMatch[1]}
           displayMode={false}
         />
       );
       subLast = subRegex.lastIndex;
+      subCount++;
     }
 
     if (subLast < autoWrapped.length) {
       finalNodes.push(
         ...renderFormattedPlainText(
           autoWrapped.slice(subLast),
-          `${keyPrefix}-subtxt-end-${idx}`
+          `${keyPrefix}-st-end-${idx}-${subLast}`
         )
       );
     }
