@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import katex from 'katex';
+import DOMPurify from 'dompurify';
 
 interface MathViewProps {
   content: string;
@@ -99,6 +100,26 @@ function sanitizeLatexForKatex(rawMath: string, isDisplay: boolean): { code: str
  * Sous-composant dédié qui injecte directement le rendu LaTeX dans un conteneur DOM KaTeX
  * sans cadre contraignant et en gras avec hauteur libre
  */
+/**
+ * Rendu KaTeX sécurisé : trust désactivé (bloque \htmlStyle, \htmlClass,
+ * \includegraphics, \href...) + double passage DOMPurify sur le HTML généré,
+ * car le contenu vient de réponses IA non fiables.
+ */
+function renderKatexToSafeHtml(code: string, displayMode: boolean): string {
+  try {
+    const html = katex.renderToString(code, {
+      displayMode,
+      throwOnError: false,
+      strict: false,
+      trust: false,
+      macros: { ...KATEX_MACROS },
+    });
+    return DOMPurify.sanitize(html, { USE_PROFILES: { html: true, mathMl: true } });
+  } catch {
+    return '';
+  }
+}
+
 const KatexContainer: React.FC<{ math: string; displayMode: boolean; className?: string }> = ({
   math,
   displayMode,
@@ -109,32 +130,14 @@ const KatexContainer: React.FC<{ math: string; displayMode: boolean; className?:
   const effectiveDisplay = displayMode || forceDisplay;
 
   // Rendu synchrone initial pour éviter tout clignotement
-  let initialHtml = '';
-  try {
-    initialHtml = katex.renderToString(code, {
-      displayMode: effectiveDisplay,
-      throwOnError: false,
-      strict: false,
-      trust: true,
-      macros: { ...KATEX_MACROS },
-    });
-  } catch {
-    initialHtml = '';
-  }
+  const initialHtml = renderKatexToSafeHtml(code, effectiveDisplay);
 
-  // Injection DOM directe via katex.render pour garantir que le conteneur KaTeX est toujours peuplé
+  // Injection DOM directe pour garantir que le conteneur KaTeX est toujours peuplé
   useEffect(() => {
     if (!containerRef.current) return;
-    try {
-      katex.render(code, containerRef.current, {
-        displayMode: effectiveDisplay,
-        throwOnError: false,
-        strict: false,
-        trust: true,
-        macros: { ...KATEX_MACROS },
-      });
-    } catch {
-      // Fallback déjà géré par initialHtml
+    const safeHtml = renderKatexToSafeHtml(code, effectiveDisplay);
+    if (safeHtml) {
+      containerRef.current.innerHTML = safeHtml;
     }
   }, [code, effectiveDisplay]);
 

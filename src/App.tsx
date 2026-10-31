@@ -17,7 +17,7 @@ import { AndroidInstallModal } from './components/AndroidInstallModal';
 import { ChapterInfo } from './data/curriculum';
 import { TrapItem } from './data/pitfalls';
 import { useBranch } from './hooks/useBranch';
-import { useApiKey } from './hooks/useApiKey';
+import { useApiKey, setAccessToken, setAdminToken } from './hooks/useApiKey';
 import { BranchSelectorModal } from './components/BranchSelectorModal';
 import { GeminiSidebar } from './components/GeminiSidebar';
 import { SavedSession } from './components/SessionManagerModal';
@@ -122,6 +122,23 @@ export default function App() {
     syncVaultWithServer().catch((err) => {
       console.warn('Synchro auto documents:', err);
     });
+  }, []);
+
+  // Capture ?token= (mot de passe de classe) et ?admin= (jeton admin documents) depuis
+  // l'URL une seule fois, les stocke localement, puis nettoie l'URL.
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get('token');
+      const admin = params.get('admin');
+      if (!token && !admin) return;
+      if (token) setAccessToken(token);
+      if (admin) setAdminToken(admin);
+      params.delete('token');
+      params.delete('admin');
+      const clean = `${window.location.pathname}${params.size ? `?${params.toString()}` : ''}${window.location.hash}`;
+      window.history.replaceState({}, '', clean);
+    } catch {}
   }, []);
 
   return (

@@ -20,6 +20,7 @@ import {
   FileUp,
 } from 'lucide-react';
 import { MathView } from './MathView';
+import { getAdminToken, getAccessToken } from '../hooks/useApiKey';
 import {
   saveDocumentToVault,
   removeDocumentFromVault,
@@ -28,6 +29,14 @@ import {
   importVaultBackup,
   getAllDocumentsFromVault,
 } from '../utils/documentVault';
+
+/** En-têtes d'authentification pour les routes admin (upload/delete documents). */
+function adminHeaders(): Record<string, string> {
+  const headers: Record<string, string> = { 'x-access-token': getAccessToken() };
+  const admin = getAdminToken();
+  if (admin) headers['x-admin-token'] = admin;
+  return headers;
+}
 
 interface DocFile {
   name: string;
@@ -146,10 +155,16 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
 
         const res = await fetch('/api/documents/upload', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', ...adminHeaders() },
           body: JSON.stringify(bodyPayload),
         });
 
+        if (res.status === 401) {
+          throw new Error('Jeton administrateur requis : ajoute ?admin=TON_JETON à l’URL puis réessaie.');
+        }
+        if (res.status === 503) {
+          throw new Error("Le serveur n'a pas de ADMIN_TOKEN configuré : la gestion des documents est désactivée en production.");
+        }
         if (!res.ok) throw new Error(`Erreur lors de l'upload de ${file.name}`);
         uploadedCount++;
       }
@@ -190,12 +205,20 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
       // 2. Upload sur le serveur
       const res = await fetch('/api/documents/upload', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...adminHeaders() },
         body: JSON.stringify({
           filename: finalName,
           content: newFileContent,
         }),
       });
+
+      if (res.status === 401) {
+        setStatusMsg({
+          text: 'Jeton administrateur requis : ajoute ?admin=TON_JETON à l’URL puis réessaie.',
+          type: 'error',
+        });
+        return;
+      }
 
       if (res.ok) {
         setStatusMsg({
@@ -217,9 +240,17 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
   const handleDelete = async (filename: string) => {
     try {
       // 1. Supprimer du serveur
-      await fetch(`/api/documents/${encodeURIComponent(filename)}`, {
+      const res = await fetch(`/api/documents/${encodeURIComponent(filename)}`, {
         method: 'DELETE',
+        headers: adminHeaders(),
       });
+      if (res.status === 401) {
+        setStatusMsg({
+          text: 'Jeton administrateur requis : ajoute ?admin=TON_JETON à l’URL puis réessaie.',
+          type: 'error',
+        });
+        return;
+      }
 
       // 2. Supprimer du coffre-fort local
       await removeDocumentFromVault(filename);

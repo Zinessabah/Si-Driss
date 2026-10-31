@@ -31,6 +31,7 @@ export const AuditWorkspace: React.FC = () => {
   const [studentAnswer, setStudentAnswer] = useState<string>('');
   const [isAuditing, setIsAuditing] = useState<boolean>(false);
   const [evalResult, setEvalResult] = useState<EvaluationResult | null>(null);
+  const [auditError, setAuditError] = useState<string | null>(null);
   const [showHint, setShowHint] = useState<boolean>(false);
   const [showModelAnswer, setShowModelAnswer] = useState<boolean>(false);
 
@@ -52,6 +53,7 @@ export const AuditWorkspace: React.FC = () => {
 
     setIsAuditing(true);
     setEvalResult(null);
+    setAuditError(null);
 
     try {
       const res = await fetch('/api/evaluate', {
@@ -70,7 +72,7 @@ export const AuditWorkspace: React.FC = () => {
 
       if (res.status === 401) {
         setIsKeyModalOpen(true);
-        throw new Error('API_KEY_REQUIRED');
+        return;
       }
 
       if (!res.ok) throw new Error('Erreur évaluation');
@@ -86,19 +88,10 @@ export const AuditWorkspace: React.FC = () => {
       }
     } catch (err) {
       console.error(err);
-      setEvalResult({
-        score: 14,
-        maxScore: 20,
-        gradeWord: 'Bien',
-        appreciation: 'Bonne démarche globale, attention à la rigueur des unités !',
-        criteria: [
-          { name: 'Démarche et justifications', status: 'ok', feedback: 'Bilan et repère bien posés.' },
-          { name: 'Expression littérale', status: 'ok', feedback: 'Formule préalable correcte.' },
-          { name: 'Unités SI et chiffres significatifs', status: 'warning', feedback: 'Vérifie bien le nombre de CS.' },
-        ],
-        nationalTips: 'Précise toujours les conditions initiales avant d\'intégrer.',
-        correctedDraft: currentQuestion.sampleAnswer,
-      });
+      // Jamais de note inventée : on affiche une erreur honnête à l'élève.
+      setAuditError(
+        "Si Driss n'a pas pu corriger ta copie (problème de connexion ou de fournisseur IA). Réessaie dans un instant — aucune note n'a été attribuée."
+      );
     } finally {
       setIsAuditing(false);
     }
@@ -128,6 +121,7 @@ export const AuditWorkspace: React.FC = () => {
                   setSelectedExIndex(idx);
                   setSelectedQIndex(0);
                   setEvalResult(null);
+                  setAuditError(null);
                   setShowHint(false);
                   setShowModelAnswer(false);
                 }}
@@ -194,6 +188,7 @@ export const AuditWorkspace: React.FC = () => {
                     onClick={() => {
                       setSelectedQIndex(idx);
                       setEvalResult(null);
+                      setAuditError(null);
                       setShowHint(false);
                       setShowModelAnswer(false);
                     }}
@@ -308,6 +303,17 @@ export const AuditWorkspace: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Error Banner — aucune note inventée */}
+        {auditError && !evalResult && (
+          <div className="bg-rose-950/40 border border-rose-500/30 rounded-2xl p-4 shadow-lg text-xs text-rose-200 flex items-start gap-2.5 animate-fadeIn">
+            <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold text-rose-300">Correction impossible : </span>
+              {auditError}
+            </div>
+          </div>
+        )}
 
         {/* Evaluation Feedback Panel */}
         {evalResult && (

@@ -25,6 +25,9 @@ services:
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
       # Pour connecter Ollama exécuté sur la machine hôte :
       - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://host.docker.internal:11434/v1}
+      # Sécurité : mot de passe de classe (?token= dans l'URL) et jeton admin documents (?admin=)
+      - SI_DRISS_ACCESS_TOKEN=${SI_DRISS_ACCESS_TOKEN:-}
+      - ADMIN_TOKEN=${ADMIN_TOKEN:-}
     extra_hosts:
       # Permet au conteneur d'accéder à Ollama hébergé sur la machine hôte
       - "host.docker.internal:host-gateway"

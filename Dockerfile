@@ -22,16 +22,21 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Install production dependencies only
+# Install production dependencies only (tsx pinned — used to run the TS server)
 COPY package*.json ./
 RUN npm ci --omit=dev --prefer-offline --no-audit && \
-    npm install -g tsx && \
+    npm install -g tsx@4.21.0 && \
     npm cache clean --force
 
 # Copy compiled frontend and backend code
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/server.ts ./server.ts
 COPY --from=builder /app/docs ./docs
+
+# Run as non-root; docs/programme must be writable for document uploads
+# (with a bind-mounted volume, chown the host dir accordingly: chown -R 1000:1000 docs/programme)
+RUN mkdir -p /app/docs/programme && chown -R node:node /app
+USER node
 
 # Expose server port
 EXPOSE 3000

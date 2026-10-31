@@ -8,6 +8,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 import { PDFParse } from 'pdf-parse';
+import { rateLimit } from 'express-rate-limit';
 
 dotenv.config();
 
@@ -17,7 +18,74 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust a single reverse-proxy hop (Nginx/Cloud Run) so rate limiting sees real client IPs
+app.set('trust proxy', 1);
+
 app.use(express.json({ limit: '25mb' }));
+
+// -----------------------------------------------------------------------------
+// Security Middleware: Rate Limiting, Access Gate & Admin Gate
+// -----------------------------------------------------------------------------
+
+const RATE_LIMIT_MSG = { error: 'Trop de requêtes. Réessaie dans quelques minutes, lah yerdi 3lik.' };
+
+const apiLimiter = rateLimit({
+  windowMs: 5 * 60_000,
+  limit: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: RATE_LIMIT_MSG,
+});
+
+const validateKeyLimiter = rateLimit({
+  windowMs: 10 * 60_000,
+  limit: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: RATE_LIMIT_MSG,
+});
+
+const documentMutationLimiter = rateLimit({
+  windowMs: 10 * 60_000,
+  limit: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: RATE_LIMIT_MSG,
+});
+
+app.use('/api/', apiLimiter);
+
+// Optional classroom access token: when SI_DRISS_ACCESS_TOKEN is set, every /api/*
+// route (except the harmless status probe) requires the matching x-access-token header.
+const ACCESS_TOKEN = (process.env.SI_DRISS_ACCESS_TOKEN || '').trim();
+app.use('/api/', (req, res, next) => {
+  if (!ACCESS_TOKEN) return next();
+  if (req.path === '/ai-status') return next();
+  const provided = String(req.headers['x-access-token'] || '');
+  if (provided && provided === ACCESS_TOKEN) return next();
+  return res.status(401).json({
+    error: 'ACCESS_TOKEN_REQUIRED',
+    message: 'Mot de passe de classe requis. Ajoute ?token=... à l’URL ou contacte ton professeur.',
+  });
+});
+
+// Document mutation (upload/delete) requires ADMIN_TOKEN. In local development with no
+// ADMIN_TOKEN configured, mutations stay open (single-user machine); in production they
+// are refused until the admin configures a token.
+const ADMIN_TOKEN = (process.env.ADMIN_TOKEN || '').trim();
+function requireAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!ADMIN_TOKEN) {
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(503).json({
+        error: 'Gestion des documents désactivée : configurez la variable ADMIN_TOKEN côté serveur.',
+      });
+    }
+    return next();
+  }
+  const provided = String(req.headers['x-admin-token'] || '');
+  if (provided && provided === ADMIN_TOKEN) return next();
+  return res.status(401).json({ error: 'Jeton administrateur requis (en-tête x-admin-token).' });
+}
 
 // -----------------------------------------------------------------------------
 // Universal AI Provider Configuration & Sanitation
@@ -86,6 +154,35 @@ interface ResolvedAIConfig {
   apiKey: string;
   model: string;
   baseUrl?: string;
+  /** True when the client sent its own key (vs. server env fallback). Server keys must never be sent to client-chosen URLs. */
+  clientProvidedKey: boolean;
+}
+
+/**
+ * SSRF guard: custom/local providers (Ollama) may only target loopback, RFC1918
+ * or host.docker.internal endpoints over http(s).
+ */
+function isAllowedLocalBaseUrl(rawUrl: string): boolean {
+  try {
+    const u = new URL(rawUrl);
+    if (u.protocol !== 'http:' && u.protocol !== 'https:') return false;
+    const host = u.hostname.toLowerCase();
+    if (host === 'localhost' || host === 'host.docker.internal' || host === '::1' || host === '[::1]') {
+      return true;
+    }
+    const m = host.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+    if (m) {
+      const a = Number(m[1]);
+      const b = Number(m[2]);
+      if (a > 255 || b > 255 || Number(m[3]) > 255 || Number(m[4]) > 255) return false;
+      if (a === 127 || a === 10) return true;
+      if (a === 172 && b >= 16 && b <= 31) return true;
+      if (a === 192 && b === 168) return true;
+    }
+    return false;
+  } catch {
+    return false;
+  }
 }
 
 function resolveAIConfig(req: express.Request): ResolvedAIConfig {
@@ -110,13 +207,14 @@ function resolveAIConfig(req: express.Request): ResolvedAIConfig {
   // Extract key
   const headerKey = (req.headers['x-ai-key'] as string) || (req.headers['x-gemini-api-key'] as string) || '';
   const bodyKey = (req.body?.apiKey as string) || '';
-  let apiKey = sanitizeApiKey(headerKey || bodyKey);
+  const clientProvidedKey = sanitizeApiKey(headerKey || bodyKey);
+  let apiKey = clientProvidedKey;
 
   // Fallback to provider-specific or generic env key if not passed by client
   if (!apiKey) {
     switch (provider) {
       case 'gemini':
-        apiKey = (process.env.GEMINI_API_KEY || process.env.AI_API_KEY || '').trim();
+        apiKey = sanitizeApiKey(process.env.GEMINI_API_KEY || process.env.AI_API_KEY || '');
         break;
       case 'groq':
         apiKey = sanitizeApiKey(process.env.GROQ_API_KEY || process.env.AI_API_KEY || '');
@@ -142,12 +240,6 @@ function resolveAIConfig(req: express.Request): ResolvedAIConfig {
     }
   }
 
-  // If the client selected a non-Gemini provider without providing a key and the server has GEMINI_API_KEY, fall back to server Gemini
-  if (!apiKey && provider !== 'custom' && process.env.GEMINI_API_KEY) {
-    provider = 'gemini';
-    apiKey = process.env.GEMINI_API_KEY.trim();
-  }
-
   // Model
   const headerModel = (req.headers['x-ai-model'] as string) || '';
   const bodyModel = (req.body?.model as string) || '';
@@ -156,10 +248,36 @@ function resolveAIConfig(req: express.Request): ResolvedAIConfig {
     model = 'gemini-3.5-flash-lite';
   }
 
-  // Base URL
+  // Base URL — SSRF protection:
+  // A client-supplied baseUrl is honored ONLY (a) for the local `custom` provider and
+  // restricted to loopback/RFC1918 hosts, or (b) when the client also supplied its OWN
+  // API key (BYOK against their own gateway). A server env key is never sent to a
+  // client-chosen URL.
   const headerBaseUrl = (req.headers['x-ai-base-url'] as string) || '';
   const bodyBaseUrl = (req.body?.baseUrl as string) || '';
-  const baseUrl = headerBaseUrl || bodyBaseUrl || process.env.AI_BASE_URL || DEFAULT_BASE_URLS[provider] || '';
+  const clientBaseUrl = headerBaseUrl || bodyBaseUrl;
+
+  if (clientBaseUrl) {
+    if (provider === 'custom') {
+      if (!isAllowedLocalBaseUrl(clientBaseUrl)) {
+        const error: any = new Error(
+          'URL locale non autorisée : seuls localhost / réseau privé (Ollama) sont acceptés pour le fournisseur Custom.'
+        );
+        error.code = 'INVALID_BASE_URL';
+        error.statusCode = 400;
+        throw error;
+      }
+    } else if (!clientProvidedKey) {
+      const error: any = new Error(
+        'URL personnalisée interdite sans clé API client : fournis ta propre clé pour utiliser une passerelle personnalisée.'
+      );
+      error.code = 'BASE_URL_REQUIRES_CLIENT_KEY';
+      error.statusCode = 400;
+      throw error;
+    }
+  }
+
+  const baseUrl = clientBaseUrl || process.env.AI_BASE_URL || DEFAULT_BASE_URLS[provider] || '';
 
   // Validation: Custom/Local endpoints don't strictly require a key
   if (provider !== 'custom' && !apiKey) {
@@ -171,7 +289,7 @@ function resolveAIConfig(req: express.Request): ResolvedAIConfig {
     throw error;
   }
 
-  return { provider, apiKey, model, baseUrl };
+  return { provider, apiKey, model, baseUrl, clientProvidedKey: Boolean(clientProvidedKey) };
 }
 
 // -----------------------------------------------------------------------------
@@ -367,17 +485,36 @@ function formatMessagesForAnthropic(messages: ClientMessage[]) {
 // -----------------------------------------------------------------------------
 // Unified AI Generation & Streaming Core
 // -----------------------------------------------------------------------------
+
+/** Truncates upstream provider error bodies before they reach logs or clients. */
+function trimUpstreamError(text: string, max = 300): string {
+  const clean = String(text || '').replace(/\s+/g, ' ').trim();
+  return clean.length > max ? `${clean.slice(0, max)}…` : clean;
+}
+
+/** SSE write that silently stops once the client has disconnected. */
+function sseWrite(res: express.Response, payload: object): void {
+  if (res.writableEnded || res.destroyed) return;
+  try {
+    res.write(`data: ${JSON.stringify(payload)}\n\n`);
+  } catch {}
+}
+
 async function streamUnifiedChat(
   config: ResolvedAIConfig,
   messages: ClientMessage[],
   systemInstruction: string,
-  res: express.Response
+  res: express.Response,
+  abortSignal?: AbortSignal
 ) {
   const { provider, apiKey, model, baseUrl } = config;
+  const upstreamSignal = abortSignal
+    ? AbortSignal.any([abortSignal, AbortSignal.timeout(180_000)])
+    : AbortSignal.timeout(180_000);
 
   if (provider === 'gemini') {
-    const serverGeminiKey = (process.env.GEMINI_API_KEY || process.env.AI_API_KEY || '').trim();
-    const candidateKeys = Array.from(new Set([apiKey, serverGeminiKey].filter(Boolean)));
+    // Single key: resolveAIConfig already applied the server env fallback when the
+    // client sent no key. A client key is never "rescued" by the server key (quota theft).
     const contents = formatMessagesForGemini(messages);
     const candidateModels = [model, ...GEMINI_FAST_MODELS.filter((m) => m !== model)];
 
@@ -385,34 +522,33 @@ async function streamUnifiedChat(
     let usedModel = model;
     let lastError: any = null;
 
-    outerStreamLoop: for (const keyToTry of candidateKeys) {
-      const ai = new GoogleGenAI({
-        apiKey: keyToTry,
-        httpOptions: {
-          headers: { 'User-Agent': 'aistudio-build' },
-        },
-      });
+    const ai = new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        headers: { 'User-Agent': 'si-driss-universal' },
+      },
+    });
 
-      for (const mod of candidateModels) {
-        try {
-          const stream = await ai.models.generateContentStream({
-            model: mod,
-            contents,
-            config: {
-              systemInstruction,
-              temperature: 0.1,
-            },
-          });
-          streamResult = stream;
-          usedModel = mod;
-          break outerStreamLoop;
-        } catch (err: any) {
-          console.warn(`[Gemini Stream] Failover from ${mod}:`, err?.message);
-          lastError = err;
-          // If API key itself is invalid, break inner model loop to try server fallback key
-          if (err?.message?.includes('API_KEY_INVALID') || err?.status === 400 || err?.status === 403) {
-            break;
-          }
+    for (const mod of candidateModels) {
+      try {
+        const stream = await ai.models.generateContentStream({
+          model: mod,
+          contents,
+          config: {
+            systemInstruction,
+            temperature: 0.1,
+            abortSignal: upstreamSignal,
+          },
+        });
+        streamResult = stream;
+        usedModel = mod;
+        break;
+      } catch (err: any) {
+        console.warn(`[Gemini Stream] Failover from ${mod}:`, trimUpstreamError(err?.message || ''));
+        lastError = err;
+        // Invalid key: no point trying other models
+        if (err?.message?.includes('API_KEY_INVALID') || err?.status === 400 || err?.status === 403) {
+          break;
         }
       }
     }
@@ -423,9 +559,10 @@ async function streamUnifiedChat(
 
     console.log(`[Stream] Provider: gemini | Model: ${usedModel}`);
     for await (const chunk of streamResult) {
+      if (res.writableEnded || res.destroyed) break;
       const text = chunk.text;
       if (text) {
-        res.write(`data: ${JSON.stringify({ text })}\n\n`);
+        sseWrite(res, { text });
       }
     }
     return;
@@ -437,6 +574,7 @@ async function streamUnifiedChat(
 
     const apiRes = await fetch(targetUrl, {
       method: 'POST',
+      signal: upstreamSignal,
       headers: {
         'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',
@@ -454,7 +592,7 @@ async function streamUnifiedChat(
 
     if (!apiRes.ok) {
       const errText = await apiRes.text();
-      throw new Error(`Erreur Anthropic (${apiRes.status}): ${errText}`);
+      throw new Error(`Erreur Anthropic (${apiRes.status}): ${trimUpstreamError(errText)}`);
     }
 
     if (!apiRes.body) throw new Error('Corps de réponse Anthropic vide.');
@@ -464,6 +602,10 @@ async function streamUnifiedChat(
     let buffer = '';
 
     while (true) {
+      if (res.writableEnded || res.destroyed) {
+        reader.cancel().catch(() => {});
+        break;
+      }
       const { done, value } = await reader.read();
       if (done) break;
 
@@ -478,7 +620,7 @@ async function streamUnifiedChat(
           try {
             const parsed = JSON.parse(rawData);
             if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
-              res.write(`data: ${JSON.stringify({ text: parsed.delta.text })}\n\n`);
+              sseWrite(res, { text: parsed.delta.text });
             }
           } catch {}
         }
@@ -508,6 +650,7 @@ async function streamUnifiedChat(
 
   const apiRes = await fetch(targetUrl, {
     method: 'POST',
+    signal: upstreamSignal,
     headers: reqHeaders,
     body: JSON.stringify({
       model,
@@ -519,7 +662,7 @@ async function streamUnifiedChat(
 
   if (!apiRes.ok) {
     const errText = await apiRes.text();
-    throw new Error(`Erreur ${provider.toUpperCase()} (${apiRes.status}): ${errText}`);
+    throw new Error(`Erreur ${provider.toUpperCase()} (${apiRes.status}): ${trimUpstreamError(errText)}`);
   }
 
   if (!apiRes.body) throw new Error('Corps de flux vide.');
@@ -529,6 +672,10 @@ async function streamUnifiedChat(
   let buffer = '';
 
   while (true) {
+    if (res.writableEnded || res.destroyed) {
+      reader.cancel().catch(() => {});
+      break;
+    }
     const { done, value } = await reader.read();
     if (done) break;
 
@@ -544,7 +691,7 @@ async function streamUnifiedChat(
           const parsed = JSON.parse(rawData);
           const chunkText = parsed.choices?.[0]?.delta?.content || '';
           if (chunkText) {
-            res.write(`data: ${JSON.stringify({ text: chunkText })}\n\n`);
+            sseWrite(res, { text: chunkText });
           }
         } catch {}
       }
@@ -561,38 +708,34 @@ async function generateUnifiedCompletion(
   const { provider, apiKey, model, baseUrl } = config;
 
   if (provider === 'gemini') {
-    const serverGeminiKey = (process.env.GEMINI_API_KEY || process.env.AI_API_KEY || '').trim();
-    const candidateKeys = Array.from(new Set([apiKey, serverGeminiKey].filter(Boolean)));
     const contents = formatMessagesForGemini(messages);
     const candidateModels = [model, ...GEMINI_FAST_MODELS.filter((m) => m !== model)];
 
-    let lastError: any = null;
-    for (const keyToTry of candidateKeys) {
-      const ai = new GoogleGenAI({
-        apiKey: keyToTry,
-        httpOptions: {
-          headers: { 'User-Agent': 'aistudio-build' },
-        },
-      });
+    const ai = new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        headers: { 'User-Agent': 'si-driss-universal' },
+      },
+    });
 
-      for (const mod of candidateModels) {
-        try {
-          const response = await ai.models.generateContent({
-            model: mod,
-            contents,
-            config: {
-              systemInstruction,
-              temperature: 0.1,
-              responseMimeType: jsonMode ? 'application/json' : undefined,
-            },
-          });
-          return { text: response.text || '', model: mod };
-        } catch (err: any) {
-          console.warn(`[Gemini Complete] Failover from ${mod}:`, err?.message);
-          lastError = err;
-          if (err?.message?.includes('API_KEY_INVALID') || err?.status === 400 || err?.status === 403) {
-            break;
-          }
+    let lastError: any = null;
+    for (const mod of candidateModels) {
+      try {
+        const response = await ai.models.generateContent({
+          model: mod,
+          contents,
+          config: {
+            systemInstruction,
+            temperature: 0.1,
+            responseMimeType: jsonMode ? 'application/json' : undefined,
+          },
+        });
+        return { text: response.text || '', model: mod };
+      } catch (err: any) {
+        console.warn(`[Gemini Complete] Failover from ${mod}:`, trimUpstreamError(err?.message || ''));
+        lastError = err;
+        if (err?.message?.includes('API_KEY_INVALID') || err?.status === 400 || err?.status === 403) {
+          break;
         }
       }
     }
@@ -621,7 +764,7 @@ async function generateUnifiedCompletion(
 
     if (!apiRes.ok) {
       const errText = await apiRes.text();
-      throw new Error(`Erreur Anthropic (${apiRes.status}): ${errText}`);
+      throw new Error(`Erreur Anthropic (${apiRes.status}): ${trimUpstreamError(errText)}`);
     }
 
     const data: any = await apiRes.json();
@@ -664,10 +807,14 @@ async function generateUnifiedCompletion(
   });
 
   if (!apiRes.ok) {
-    // If json_object was rejected, retry without it
+    // If json_object was rejected, retry without it — appending a separate instruction
+    // message instead of mutating messages[0].content (which can be a multimodal array)
     if (jsonMode && apiRes.status === 400) {
       delete reqBody.response_format;
-      reqBody.messages[0].content += '\n\nIMPORTANT: Réponds UNIQUEMENT avec un objet JSON pur sans balise markdown.';
+      reqBody.messages = [
+        ...openAiMessages,
+        { role: 'user', content: 'IMPORTANT: Réponds UNIQUEMENT avec un objet JSON pur sans balise markdown.' },
+      ];
       const retryRes = await fetch(targetUrl, {
         method: 'POST',
         headers: reqHeaders,
@@ -680,7 +827,7 @@ async function generateUnifiedCompletion(
     }
 
     const errText = await apiRes.text();
-    throw new Error(`Erreur ${provider.toUpperCase()} (${apiRes.status}): ${errText}`);
+    throw new Error(`Erreur ${provider.toUpperCase()} (${apiRes.status}): ${trimUpstreamError(errText)}`);
   }
 
   const data: any = await apiRes.json();
@@ -913,7 +1060,7 @@ app.get('/api/ai-status', (_req, res) => {
 });
 
 // Key & Connection Validator (Universal for all providers)
-app.post('/api/validate-key', async (req, res) => {
+app.post('/api/validate-key', validateKeyLimiter, async (req, res) => {
   try {
     const rawProvider = (req.headers['x-ai-provider'] || req.body?.provider || 'gemini') as string;
     const provider = rawProvider.toLowerCase() as SupportedProvider;
@@ -929,6 +1076,14 @@ app.post('/api/validate-key', async (req, res) => {
     const model = (req.headers['x-ai-model'] || req.body?.model || DEFAULT_MODELS[provider]) as string;
     const baseUrl = (req.headers['x-ai-base-url'] || req.body?.baseUrl || DEFAULT_BASE_URLS[provider] || '') as string;
 
+    // SSRF guard: local/custom endpoints only, loopback/RFC1918 hosts
+    if (provider === 'custom' && baseUrl && !isAllowedLocalBaseUrl(baseUrl)) {
+      return res.status(400).json({
+        valid: false,
+        error: 'URL locale non autorisée : seuls localhost / réseau privé (Ollama) sont acceptés.',
+      });
+    }
+
     if (provider !== 'custom' && !apiKey) {
       return res.status(400).json({ valid: false, error: `Veuillez saisir votre clé API pour ${provider}.` });
     }
@@ -938,6 +1093,7 @@ app.post('/api/validate-key', async (req, res) => {
       apiKey,
       model,
       baseUrl,
+      clientProvidedKey: Boolean(apiKey),
     };
 
     const testMessages: ClientMessage[] = [{ role: 'user', content: 'Bonjour' }];
@@ -951,19 +1107,17 @@ app.post('/api/validate-key', async (req, res) => {
 
       return res.json({
         valid: true,
-        sanitizedKey: apiKey,
         modelTested: result.model,
         providerTested: provider,
         message: `Fournisseur ${provider.toUpperCase()} connecté avec succès avec le modèle ${result.model} ! Tbarkellah 3lik.`,
       });
     } catch (testErr: any) {
-      const errMsg = testErr?.message || '';
+      const errMsg = trimUpstreamError(testErr?.message || '');
 
       // If rate limited (429), provider recognized key as authentic!
       if (errMsg.includes('429') || errMsg.includes('RESOURCE_EXHAUSTED') || errMsg.includes('quota')) {
         return res.json({
           valid: true,
-          sanitizedKey: apiKey,
           modelTested: model,
           providerTested: provider,
           message: `Clé ${provider.toUpperCase()} reconnue et authentifiée ! (Quota en attente de réinitialisation).`,
@@ -974,7 +1128,6 @@ app.post('/api/validate-key', async (req, res) => {
       return res.status(400).json({
         valid: false,
         error: `Erreur de connexion avec ${provider.toUpperCase()} : ${errMsg}`,
-        sanitizedKey: apiKey,
         canSaveAnyway: true,
       });
     }
@@ -1025,24 +1178,32 @@ app.post('/api/chat/stream', async (req, res) => {
 
     res.write(': ping\n\n');
 
+    // Abort upstream provider requests the moment the client disconnects
+    const disconnectController = new AbortController();
+    res.on('close', () => {
+      if (!res.writableEnded) disconnectController.abort();
+    });
+
     const heartbeat = setInterval(() => {
       try {
-        res.write(': keepalive\n\n');
+        if (!res.writableEnded && !res.destroyed) res.write(': keepalive\n\n');
       } catch {}
     }, 10000);
 
     try {
-      await streamUnifiedChat(aiConfig, messages, fullInstruction, res);
+      await streamUnifiedChat(aiConfig, messages, fullInstruction, res, disconnectController.signal);
     } finally {
       clearInterval(heartbeat);
     }
 
-    res.write('data: [DONE]\n\n');
-    res.end();
+    if (!res.writableEnded && !res.destroyed) {
+      res.write('data: [DONE]\n\n');
+      res.end();
+    }
   } catch (err: any) {
     console.warn('Erreur API Chat Stream:', err?.message || err);
-    res.write(`data: ${JSON.stringify({ error: err?.message || 'Erreur de flux' })}\n\n`);
-    res.end();
+    sseWrite(res, { error: trimUpstreamError(err?.message || 'Erreur de flux') });
+    if (!res.writableEnded && !res.destroyed) res.end();
   }
 });
 
@@ -1083,7 +1244,7 @@ app.post('/api/chat', async (req, res) => {
     console.error('Erreur API Chat:', err);
     return res.status(500).json({
       error: 'Erreur lors de la communication avec Si Driss.',
-      details: err?.message || String(err),
+      details: trimUpstreamError(err?.message || String(err)),
     });
   }
 });
@@ -1293,7 +1454,6 @@ app.get('/api/documents', async (_req, res) => {
 
     return res.json({
       directory: '/docs/programme',
-      absolutePath: DOCS_DIR,
       files,
     });
   } catch (err: any) {
@@ -1336,7 +1496,11 @@ app.get('/api/documents/file', async (req, res) => {
   }
 });
 
-app.post('/api/documents/upload', async (req, res) => {
+const UPLOAD_ALLOWED_EXTENSIONS = new Set(['.pdf', '.md', '.txt', '.json', '.csv']);
+const UPLOAD_MAX_BASE64_BYTES = 15 * 1024 * 1024; // ~15 MB encoded ≈ 11 MB file
+const UPLOAD_MAX_TEXT_CHARS = 2_000_000;
+
+app.post('/api/documents/upload', requireAdmin, documentMutationLimiter, async (req, res) => {
   try {
     const { filename, content, base64 } = req.body;
     if (!filename || (content === undefined && !base64)) {
@@ -1344,8 +1508,33 @@ app.post('/api/documents/upload', async (req, res) => {
     }
 
     const safeName = path.basename(filename).replace(/[^a-zA-Z0-9_\-\.]/g, '_');
+
+    if (!safeName || safeName === '.' || safeName === '..') {
+      return res.status(400).json({ error: 'Nom de fichier invalide.' });
+    }
+
+    // Never accept pre-extracted sidecars: they would bypass PDF parsing and inject
+    // arbitrary text straight into the RAG index.
+    if (safeName.toLowerCase().endsWith('.extracted.txt')) {
+      return res.status(400).json({ error: 'Ce nom de fichier est réservé au système d’indexation.' });
+    }
+
+    const ext = path.extname(safeName).toLowerCase();
+    if (!UPLOAD_ALLOWED_EXTENSIONS.has(ext)) {
+      return res.status(400).json({
+        error: `Extension "${ext}" non autorisée. Formats acceptés : ${[...UPLOAD_ALLOWED_EXTENSIONS].join(', ')}.`,
+      });
+    }
+
+    if (base64 && String(base64).length > UPLOAD_MAX_BASE64_BYTES) {
+      return res.status(413).json({ error: 'Fichier trop volumineux (max ~11 Mo).' });
+    }
+    if (content !== undefined && String(content).length > UPLOAD_MAX_TEXT_CHARS) {
+      return res.status(413).json({ error: 'Document texte trop volumineux (max 2 millions de caractères).' });
+    }
+
     const filePath = path.join(DOCS_DIR, safeName);
-    const isPdf = safeName.toLowerCase().endsWith('.pdf');
+    const isPdf = ext === '.pdf';
 
     if (base64) {
       const buf = Buffer.from(base64, 'base64');
@@ -1377,7 +1566,7 @@ app.post('/api/documents/upload', async (req, res) => {
   }
 });
 
-app.delete('/api/documents/:filename', async (req, res) => {
+app.delete('/api/documents/:filename', requireAdmin, documentMutationLimiter, async (req, res) => {
   try {
     const { filename } = req.params;
     const safeName = path.basename(filename);

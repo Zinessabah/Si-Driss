@@ -4,6 +4,40 @@ import { AIProviderId, AIProviderConfig, AI_PROVIDERS, getProviderDef } from '..
 const OLD_STORAGE_KEY = 'sidriss_student_gemini_api_key_v1';
 const NEW_STORAGE_KEY = 'sidriss_ai_provider_config_v2';
 const EVENT_NAME = 'sidriss_ai_config_changed';
+const ACCESS_TOKEN_KEY = 'sidriss_access_token_v1';
+const ADMIN_TOKEN_KEY = 'sidriss_admin_token_v1';
+
+/** Mot de passe de classe optionnel (SI_DRISS_ACCESS_TOKEN côté serveur). */
+export function getAccessToken(): string {
+  try {
+    return localStorage.getItem(ACCESS_TOKEN_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+export function setAccessToken(token: string): void {
+  try {
+    if (token) localStorage.setItem(ACCESS_TOKEN_KEY, token);
+    else localStorage.removeItem(ACCESS_TOKEN_KEY);
+  } catch {}
+}
+
+/** Jeton admin optionnel pour la gestion des documents (ADMIN_TOKEN côté serveur). */
+export function getAdminToken(): string {
+  try {
+    return localStorage.getItem(ADMIN_TOKEN_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+export function setAdminToken(token: string): void {
+  try {
+    if (token) localStorage.setItem(ADMIN_TOKEN_KEY, token);
+    else localStorage.removeItem(ADMIN_TOKEN_KEY);
+  } catch {}
+}
 
 export function sanitizeKeyString(raw: string): string {
   if (!raw) return '';
@@ -204,6 +238,7 @@ export function useApiKey() {
             'x-ai-model': targetModel,
             'x-ai-base-url': targetBaseUrl || '',
             'x-gemini-api-key': targetProvider === 'gemini' ? targetKey : '',
+            'x-access-token': getAccessToken(),
           },
           body: JSON.stringify({
             provider: targetProvider,
@@ -247,6 +282,7 @@ export function useApiKey() {
       'x-ai-provider': config.provider,
       'x-ai-key': config.apiKey || '',
       'x-ai-model': config.model || getProviderDef(config.provider).defaultModel,
+      'x-access-token': getAccessToken(),
     };
 
     if (config.baseUrl) {
