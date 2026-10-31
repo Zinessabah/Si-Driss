@@ -68,10 +68,17 @@ function getInitialConfig(): AIProviderConfig {
           'gemini-3.8-flash',
           'gemini-flash-latest',
         ]);
-        const effectiveModel =
-          parsed.provider === 'gemini' && deprecatedGemini.has(parsed.model)
-            ? 'gemini-3.5-flash-lite'
-            : parsed.model || getProviderDef(parsed.provider).defaultModel;
+        // Anciens noms DeepSeek (ère V3/R1) → catalogue actuel V4
+        const legacyDeepSeek: Record<string, string> = {
+          'deepseek-chat': 'deepseek-flash',
+          'deepseek-reasoner': 'deepseek-flash',
+        };
+        let effectiveModel = parsed.model || getProviderDef(parsed.provider).defaultModel;
+        if (parsed.provider === 'gemini' && deprecatedGemini.has(effectiveModel)) {
+          effectiveModel = 'gemini-3.5-flash-lite';
+        } else if (parsed.provider === 'deepseek' && legacyDeepSeek[effectiveModel]) {
+          effectiveModel = legacyDeepSeek[effectiveModel];
+        }
         return {
           provider: parsed.provider,
           apiKey: sanitizeKeyString(parsed.apiKey || ''),

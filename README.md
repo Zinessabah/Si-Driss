@@ -15,7 +15,7 @@ L'application intègre un **moteur universel multi-fournisseurs** compatible ave
 | **Groq Cloud** | `llama-3.3-70b-versatile`, `deepseek-r1-distill-llama-70b` | Gratuite ([console.groq.com](https://console.groq.com/keys)) | **Ultra-rapide (~300 tokens/sec)** |
 | **OpenAI** | `gpt-4o-mini`, `gpt-4o`, `o3-mini` | API Key ([platform.openai.com](https://platform.openai.com/api-keys)) | Précision STEM de haut niveau |
 | **Anthropic Claude** | `claude-3-5-sonnet`, `claude-3-5-haiku` | API Key ([console.anthropic.com](https://console.anthropic.com/settings/keys)) | Élite rédactionnelle & rigueur |
-| **DeepSeek** | `deepseek-chat` (V3), `deepseek-reasoner` (R1) | API Key ([platform.deepseek.com](https://platform.deepseek.com/api_keys)) | Rapport qualité/prix imbattable |
+| **DeepSeek** | `deepseek-flash` (V4.1), `deepseek-v4-pro` | API Key ([platform.deepseek.com](https://platform.deepseek.com/api_keys)) | Rapport qualité/prix imbattable, mode Thinking par défaut |
 | **Mistral AI** | `mistral-small-latest`, `mistral-large-latest` | API Key ([console.mistral.ai](https://console.mistral.ai/api-keys/)) | Modèles européens, excellence en français |
 | **OpenRouter** | Tous modèles (+100) avec 1 seule clé | API Key ([openrouter.ai](https://openrouter.ai/keys)) | Agrégateur universel |
 | **Ollama / Local** | `llama3.3`, `qwen2.5:14b`, `deepseek-r1:14b` | **Sans clé (100% gratuit & hors-ligne)** | Confidentialité totale sur PC personnel |

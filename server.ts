@@ -116,7 +116,7 @@ const DEFAULT_MODELS: Record<SupportedProvider, string> = {
   groq: 'llama-3.3-70b-versatile',
   openai: 'gpt-4o-mini',
   anthropic: 'claude-3-5-haiku-20241022',
-  deepseek: 'deepseek-chat',
+  deepseek: 'deepseek-flash',
   mistral: 'mistral-small-latest',
   openrouter: 'google/gemini-3.8-flash',
   custom: 'llama3.3',
@@ -126,11 +126,20 @@ const DEFAULT_BASE_URLS: Partial<Record<SupportedProvider, string>> = {
   groq: 'https://api.groq.com/openai/v1',
   openai: 'https://api.openai.com/v1',
   anthropic: 'https://api.anthropic.com/v1',
-  deepseek: 'https://api.deepseek.com/v1',
+  // Canonical DeepSeek endpoint (no /v1): https://api.deepseek.com/chat/completions
+  deepseek: 'https://api.deepseek.com',
   mistral: 'https://api.mistral.ai/v1',
   openrouter: 'https://openrouter.ai/api/v1',
   custom: process.env.OLLAMA_BASE_URL || 'http://localhost:11434/v1',
 };
+
+// Legacy DeepSeek model names (V3/R1 era) remapped to the current catalog
+const LEGACY_DEEPSEEK_MODELS: Record<string, string> = {
+  'deepseek-chat': 'deepseek-flash',
+  'deepseek-reasoner': 'deepseek-flash',
+};
+
+const DEEPSEEK_REASONING_EFFORTS = new Set(['none', 'low', 'high', 'max', 'minimal', 'medium', 'xhigh']);
 
 // Candidate models for Gemini fallback (sub-second responsive models prioritized)
 const GEMINI_FAST_MODELS = [
@@ -156,6 +165,8 @@ interface ResolvedAIConfig {
   baseUrl?: string;
   /** True when the client sent its own key (vs. server env fallback). Server keys must never be sent to client-chosen URLs. */
   clientProvidedKey: boolean;
+  /** DeepSeek thinking-mode effort: none/low/high/max (aliases accepted). Undefined = API default (enabled, high). */
+  reasoningEffort?: string;
 }
 
 /**
@@ -247,6 +258,26 @@ function resolveAIConfig(req: express.Request): ResolvedAIConfig {
   if (provider === 'gemini' && (DEPRECATED_OR_SLOW_GEMINI_MODELS.has(model) || !model.startsWith('gemini-'))) {
     model = 'gemini-3.5-flash-lite';
   }
+  // Remap retired DeepSeek model names (V3/R1 era) to the current catalog
+  if (provider === 'deepseek' && LEGACY_DEEPSEEK_MODELS[model]) {
+    model = LEGACY_DEEPSEEK_MODELS[model];
+  }
+
+  // DeepSeek thinking-mode effort control (header/body/env), validated against the API vocabulary
+  let reasoningEffort: string | undefined;
+  if (provider === 'deepseek') {
+    const rawEffort = String(
+      (req.headers['x-ai-reasoning-effort'] as string) ||
+        req.body?.reasoningEffort ||
+        process.env.DEEPSEEK_REASONING_EFFORT ||
+        ''
+    )
+      .toLowerCase()
+      .trim();
+    if (rawEffort && DEEPSEEK_REASONING_EFFORTS.has(rawEffort)) {
+      reasoningEffort = rawEffort;
+    }
+  }
 
   // Base URL — SSRF protection:
   // A client-supplied baseUrl is honored ONLY (a) for the local `custom` provider and
@@ -289,7 +320,7 @@ function resolveAIConfig(req: express.Request): ResolvedAIConfig {
     throw error;
   }
 
-  return { provider, apiKey, model, baseUrl, clientProvidedKey: Boolean(clientProvidedKey) };
+  return { provider, apiKey, model, baseUrl, clientProvidedKey: Boolean(clientProvidedKey), reasoningEffort };
 }
 
 // -----------------------------------------------------------------------------
@@ -492,6 +523,23 @@ function trimUpstreamError(text: string, max = 300): string {
   return clean.length > max ? `${clean.slice(0, max)}…` : clean;
 }
 
+/**
+ * DeepSeek API specifics (api-docs.deepseek.com):
+ * - temperature is clamped/ignored (thinking: 0.95–1.0; non-thinking: fixed 1.0) → don't send it
+ * - thinking mode is ON by default (effort high); reasoning_effort=none disables it
+ * - reasoning deltas stream as `reasoning_content` (ignored by our parser — only `content` is forwarded)
+ */
+function applyDeepSeekParams(reqBody: any, config: ResolvedAIConfig): void {
+  if (config.provider !== 'deepseek') return;
+  delete reqBody.temperature;
+  if (config.reasoningEffort) {
+    reqBody.reasoning_effort = config.reasoningEffort;
+    if (config.reasoningEffort === 'none') {
+      reqBody.thinking = { type: 'disabled' };
+    }
+  }
+}
+
 /** SSE write that silently stops once the client has disconnected. */
 function sseWrite(res: express.Response, payload: object): void {
   if (res.writableEnded || res.destroyed) return;
@@ -648,16 +696,19 @@ async function streamUnifiedChat(
 
   console.log(`[Stream] Provider: ${provider} | Model: ${model} | Endpoint: ${targetUrl}`);
 
+  const streamBody: any = {
+    model,
+    messages: openAiMessages,
+    stream: true,
+    temperature: 0.1,
+  };
+  applyDeepSeekParams(streamBody, config);
+
   const apiRes = await fetch(targetUrl, {
     method: 'POST',
     signal: upstreamSignal,
     headers: reqHeaders,
-    body: JSON.stringify({
-      model,
-      messages: openAiMessages,
-      stream: true,
-      temperature: 0.1,
-    }),
+    body: JSON.stringify(streamBody),
   });
 
   if (!apiRes.ok) {
@@ -794,11 +845,14 @@ async function generateUnifiedCompletion(
     messages: openAiMessages,
     temperature: 0.1,
   };
+  applyDeepSeekParams(reqBody, config);
 
   if (jsonMode) {
     // Some local models or deepseek reasoners don't support response_format, so append instruction
     reqBody.response_format = { type: 'json_object' };
   }
+
+  console.log(`[Complete] Provider: ${provider} | Model: ${model} | Endpoint: ${targetUrl}`);
 
   const apiRes = await fetch(targetUrl, {
     method: 'POST',
