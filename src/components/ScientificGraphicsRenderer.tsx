@@ -83,24 +83,23 @@ export type GraphicSpec = CurveChartSpec | MindMapSpec;
  */
 function evaluateMathFunction(fnStr: string, x: number): number {
   try {
-    // Remplacement des fonctions mathématiques standard
-    const sanitized = fnStr
-      .replace(/\bexp\b/g, 'Math.exp')
-      .replace(/\bsin\b/g, 'Math.sin')
-      .replace(/\bcos\b/g, 'Math.cos')
-      .replace(/\btan\b/g, 'Math.tan')
-      .replace(/\bsqrt\b/g, 'Math.sqrt')
+    // 1. Éliminer d'abord tout préfixe 'Math.' déjà présent pour repartir d'une base saine
+    let sanitized = fnStr.replace(/Math\./g, '');
+
+    // 2. Préfixer rigoureusement toutes les fonctions et constantes mathématiques par Math.
+    sanitized = sanitized
+      .replace(/\b(exp|sin|cos|tan|sqrt|log10|log|abs|pow|asin|acos|atan|min|max|ceil|floor|round)\b/g, 'Math.$1')
       .replace(/\bln\b/g, 'Math.log')
-      .replace(/\blog\b/g, 'Math.log10')
-      .replace(/\babs\b/g, 'Math.abs')
       .replace(/\bpi\b/gi, 'Math.PI')
+      .replace(/\be\b/g, 'Math.E')
       .replace(/\^/g, '**');
 
-    // Évaluation sécurisée avec scope restreint
+    // 3. Évaluation sécurisée
     const fn = new Function('x', 'Math', `return (${sanitized});`);
     const val = fn(x, Math);
     return typeof val === 'number' && !isNaN(val) && isFinite(val) ? val : 0;
-  } catch {
+  } catch (err) {
+    console.warn('[ScientificCurve] Erreur calcul f(x):', fnStr, err);
     return 0;
   }
 }
@@ -126,24 +125,27 @@ export const ScientificCurveChart: React.FC<{ spec: CurveChartSpec }> = ({ spec 
     notes,
   } = spec;
 
-  // Normalisation des séries
+  // Normalisation des séries : conserve TOUJOURS la fonction principale et les courbes complémentaires
   const series: CurveSeries[] = useMemo(() => {
-    if (spec.curves && spec.curves.length > 0) {
-      return spec.curves;
-    }
+    const list: CurveSeries[] = [];
     if (spec.function) {
-      return [
-        {
-          id: 'main',
-          name: yLabel,
-          color: spec.color || '#38bdf8',
-          fn: spec.function,
-          strokeWidth: 2.5,
-        },
-      ];
+      list.push({
+        id: 'main',
+        name: spec.yLabel || yLabel || 'f(t)',
+        color: spec.color || '#38bdf8',
+        fn: spec.function,
+        strokeWidth: 3,
+      });
     }
-    return [];
-  }, [spec.curves, spec.function, spec.color, yLabel]);
+    if (spec.curves && spec.curves.length > 0) {
+      spec.curves.forEach((c) => {
+        if (!list.some((existing) => existing.id === c.id)) {
+          list.push(c);
+        }
+      });
+    }
+    return list;
+  }, [spec.curves, spec.function, spec.color, spec.yLabel, yLabel]);
 
   // Dimensions SVG internes
   const width = 640;
@@ -156,18 +158,28 @@ export const ScientificCurveChart: React.FC<{ spec: CurveChartSpec }> = ({ spec 
   const effectiveXMax = xMin + (xMax - xMin) / zoomLevel;
   const effectiveYMax = yMin + (yMax - yMin) / zoomLevel;
 
-  const scaleX = (x: number) => margin.left + ((x - xMin) / (effectiveXMax - xMin)) * plotWidth;
-  const scaleY = (y: number) => margin.top + plotHeight - ((y - yMin) / (effectiveYMax - yMin)) * plotHeight;
+  const scaleX = (x: number) => {
+    const span = effectiveXMax - xMin;
+    if (span <= 0) return margin.left + plotWidth / 2;
+    return margin.left + ((x - xMin) / span) * plotWidth;
+  };
+
+  const scaleY = (y: number) => {
+    const span = effectiveYMax - yMin;
+    if (span <= 0) return margin.top + plotHeight / 2;
+    return margin.top + plotHeight - ((y - yMin) / span) * plotHeight;
+  };
+
   const unscaleX = (px: number) => xMin + ((px - margin.left) / plotWidth) * (effectiveXMax - xMin);
 
   // Génération des points d'échantillonnage pour chaque fonction
-  const sampleSteps = 240;
+  const sampleSteps = 300;
   const renderedPaths = useMemo(() => {
     return series.map((s) => {
       if (s.data && s.data.length > 0) {
         const points = s.data
           .filter((pt) => pt.x >= xMin && pt.x <= effectiveXMax)
-          .map((pt) => `${scaleX(pt.x)},${scaleY(pt.y)}`)
+          .map((pt) => `${scaleX(pt.x).toFixed(1)},${scaleY(pt.y).toFixed(1)}`)
           .join(' ');
         return { ...s, d: points ? `M ${points.replace(/ /g, ' L ')}` : '' };
       }
@@ -178,9 +190,11 @@ export const ScientificCurveChart: React.FC<{ spec: CurveChartSpec }> = ({ spec 
         for (let i = 0; i <= sampleSteps; i++) {
           const x = xMin + i * stepSize;
           const y = evaluateMathFunction(s.fn, x);
-          const px = scaleX(x);
-          const py = Math.max(margin.top - 10, Math.min(margin.top + plotHeight + 10, scaleY(y)));
-          pts.push(`${px.toFixed(1)},${py.toFixed(1)}`);
+          if (typeof y === 'number' && !isNaN(y) && isFinite(y)) {
+            const px = scaleX(x);
+            const py = Math.max(margin.top - 20, Math.min(margin.top + plotHeight + 20, scaleY(y)));
+            pts.push(`${px.toFixed(1)},${py.toFixed(1)}`);
+          }
         }
         return { ...s, d: pts.length > 0 ? `M ${pts.join(' L ')}` : '' };
       }
@@ -489,10 +503,19 @@ export const ScientificCurveChart: React.FC<{ spec: CurveChartSpec }> = ({ spec 
             {/* Tangentes à l'origine ou en un point */}
             {allTangents.map((tg, i) => {
               const x0 = tg.t0;
-              const y0 = series[0]?.fn ? evaluateMathFunction(series[0].fn, x0) : 0;
-              // Équation de la tangente : y - y0 = slope * (x - x0)
-              const xEnd = Math.min(effectiveXMax, x0 + (effectiveYMax - y0) / (tg.slope || 1));
-              const yEnd = y0 + tg.slope * (xEnd - x0);
+              const mainFn = series.find((s) => s.fn)?.fn;
+              const y0 = mainFn ? evaluateMathFunction(mainFn, x0) : 0;
+
+              let xEnd = effectiveXMax;
+              let yEnd = y0 + tg.slope * (xEnd - x0);
+              if (tg.slope > 0) {
+                const targetY = allAsymptotes[0]?.y ?? effectiveYMax;
+                xEnd = Math.min(effectiveXMax, x0 + (targetY - y0) / tg.slope);
+                yEnd = y0 + tg.slope * (xEnd - x0);
+              } else if (tg.slope < 0) {
+                xEnd = Math.min(effectiveXMax, x0 - y0 / tg.slope);
+                yEnd = y0 + tg.slope * (xEnd - x0);
+              }
 
               const px1 = scaleX(x0);
               const py1 = scaleY(y0);
@@ -527,18 +550,28 @@ export const ScientificCurveChart: React.FC<{ spec: CurveChartSpec }> = ({ spec 
               );
             })}
 
-            {/* Tracé des courbes mathématiques */}
+            {/* Tracé des courbes mathématiques principales */}
             {renderedPaths.map((s) => (
               <g key={`series-${s.id}`}>
+                {/* Halo d'ambiance lumineux sous la courbe */}
                 <path
                   d={s.d}
                   fill="none"
                   stroke={s.color}
-                  strokeWidth={s.strokeWidth || 2.5}
+                  strokeWidth={(s.strokeWidth || 3) + 4}
+                  strokeOpacity="0.3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                {/* Tracé principal net et éclatant */}
+                <path
+                  d={s.d}
+                  fill="none"
+                  stroke={s.color}
+                  strokeWidth={s.strokeWidth || 3}
                   strokeDasharray={s.dashArray || 'none'}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  filter="url(#glowEffect)"
                 />
               </g>
             ))}
