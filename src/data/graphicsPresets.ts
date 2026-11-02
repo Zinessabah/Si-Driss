@@ -243,27 +243,27 @@ export const CURVE_PRESETS: CurvePreset[] = [
 export const MINDMAP_PRESETS: MindMapSpec[] = [
   {
     type: 'mindmap',
-    title: 'Mindmap — Circuit RLC Série',
-    subtitle: 'Régimes, équation différentielle et conservation d’énergie',
+    title: 'Mindmap — Circuit RLC Série Libre',
+    subtitle: 'Régimes d’oscillation, équation différentielle et bilan énergétique',
     root: {
       label: 'Circuit RLC Série Libre',
-      badge: 'Électricité',
+      badge: 'Électricité 2BAC',
       children: [
         {
           label: 'Équation Différentielle',
-          formula: 'd^2 u_C / dt^2 + (R_t / L) du_C/dt + (1 / LC) u_C = 0',
+          formula: '\\frac{d^2 u_C}{dt^2} + \\frac{R_t}{L} \\frac{du_C}{dt} + \\frac{1}{LC} u_C = 0',
           children: [
-            { label: 'R_t = 0 (Idéal)', badge: 'Périodique T_0 = 2*pi*sqrt(LC)' },
-            { label: 'R_t faible', badge: 'Pseudo-périodique T ~ T_0' },
-            { label: 'R_t élevée', badge: 'Apériodique (sans oscillation)' },
+            { label: '$R_t = 0$ (Régime idéal)', badge: 'Périodique : $T_0 = 2\\pi\\sqrt{LC}$' },
+            { label: '$R_t$ faible (Faible amortissement)', badge: 'Pseudo-périodique : $T \\approx T_0$' },
+            { label: '$R_t$ élevée (Fort amortissement)', badge: 'Apériodique (sans oscillation)' },
           ],
         },
         {
-          label: 'Énergie Totale E_t',
-          formula: 'E_t = 1/2 C u_C^2 + 1/2 L i^2',
+          label: 'Énergie Totale $E_t$',
+          formula: 'E_t = \\frac{1}{2} C u_C^2 + \\frac{1}{2} L i^2',
           children: [
-            { label: 'Dissipation par effet Joule', formula: 'dE_t / dt = -R_t * i^2 <= 0' },
-            { label: 'Si R_t = 0', badge: 'E_t = constante' },
+            { label: 'Dissipation par effet Joule', formula: '\\frac{dE_t}{dt} = -R_t \\cdot i^2 \\le 0' },
+            { label: 'Si $R_t = 0$ (Circuit LC pur)', badge: '$E_t = \\text{constante} \\text{ (conservée)}$' },
           ],
         },
       ],
@@ -278,21 +278,75 @@ export const MINDMAP_PRESETS: MindMapSpec[] = [
       badge: 'Ondes',
       children: [
         {
-          label: 'Célérité v',
-          formula: 'v = d / Delta t = lambda / T = lambda * N',
+          label: 'Célérité $v$',
+          formula: 'v = \\frac{d}{\\Delta t} = \\frac{\\lambda}{T} = \\lambda \\cdot N',
           children: [
-            { label: 'Corde tendue', formula: 'v = sqrt(F / mu)' },
-            { label: 'Milieu dispersif', badge: 'v dépend de la fréquence N' },
+            { label: 'Corde tendue sous tension $F$', formula: 'v = \\sqrt{\\frac{F}{\\mu}}' },
+            { label: 'Milieu dispersif', badge: '$v$ dépend de la fréquence $N$' },
           ],
         },
         {
-          label: 'Retard Temporel tau',
-          formula: 'y_M(t) = y_S(t - tau)  avec  tau = SM / v',
+          label: 'Retard Temporel $\\tau$',
+          formula: 'y_M(t) = y_S(t - \\tau) \\quad \\text{avec} \\quad \\tau = \\frac{SM}{v}',
         },
         {
-          label: 'Diffraction',
-          badge: 'a <= lambda',
-          formula: 'theta = lambda / a  (écart angulaire)',
+          label: 'Phénomène de Diffraction',
+          badge: 'Condition : $a \\le \\lambda$',
+          formula: '\\theta = \\frac{\\lambda}{a} \\quad (\\text{écart angulaire en rad})',
+        },
+      ],
+    },
+  },
+  {
+    type: 'mindmap',
+    title: 'Mindmap — Physique Nucléaire',
+    subtitle: 'Loi de décroissance, énergie de liaison et réactions',
+    root: {
+      label: 'Noyaux, Masse et Énergie',
+      badge: 'Nucléaire 2BAC',
+      children: [
+        {
+          label: 'Loi de Décroissance Radioactive',
+          formula: 'N(t) = N_0 \\cdot e^{-\\lambda t}',
+          children: [
+            { label: 'Demi-vie $t_{1/2}$', badge: '$\\lambda = \\frac{\\ln 2}{t_{1/2}} \\approx \\frac{0,693}{t_{1/2}}$' },
+            { label: 'Activité radioactive $A(t)$', formula: 'A(t) = \\lambda \\cdot N(t) = A_0 \\cdot e^{-\\lambda t} \\quad (\\text{Bq})' },
+          ],
+        },
+        {
+          label: 'Bilan Énergétique d’Einstein',
+          formula: '\\Delta E = \\Delta m \\cdot c^2 = [m(\\text{produits}) - m(\\text{réactifs})] \\cdot c^2',
+          children: [
+            { label: 'Énergie de liaison $E_l$', formula: 'E_l = [Z m_p + (A - Z) m_n - m(X)] \\cdot c^2 > 0' },
+            { label: 'Critère de stabilité', badge: '$\\frac{E_l}{A}$ maximale $\\implies$ noyau plus stable' },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    type: 'mindmap',
+    title: 'Mindmap — Chimie : Équilibres Acido-Basiques',
+    subtitle: 'pH-métrie, avancement, constante d’acidité et titrage',
+    root: {
+      label: 'Solutions Aqueuses & Réactions Acide-Base',
+      badge: 'Chimie 2BAC',
+      children: [
+        {
+          label: 'Constante d’Acidité $K_A$ et relation pH',
+          formula: '\\text{pH} = \\text{pK}_A + \\log\\left(\\frac{[A^-]_{\\text{éq}}}{[AH]_{\\text{éq}}}\\right)',
+          children: [
+            { label: 'Taux d’avancement final $\\tau$', formula: '\\tau = \\frac{x_f}{x_{\\text{max}}} \\quad (\\tau < 1 \\implies \\text{réaction limitée})' },
+            { label: 'Produit ionique de l’eau $K_e$', badge: '$K_e = [H_3O^+][HO^-] = 10^{-14} \\text{ à } 25^\\circ\\text{C}$' },
+          ],
+        },
+        {
+          label: 'Titrage pH-métrique',
+          formula: 'C_A \\cdot V_A = C_B \\cdot V_{bE} \\quad (\\text{Relation à l’équivalence } E)',
+          children: [
+            { label: 'À la demi-équivalence ($V_b = \\frac{V_{bE}}{2}$)', badge: '$\\text{pH} = \\text{pK}_A$' },
+            { label: 'Méthode des tangentes parallèles', badge: 'Détermination graphique exacte de $E(V_{bE}, \\text{pH}_E)$' },
+          ],
         },
       ],
     },

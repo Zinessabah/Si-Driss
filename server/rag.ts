@@ -61,11 +61,12 @@ async function refreshDocumentsCache() {
   }
 }
 
-export async function searchLocalDocuments(query: string): Promise<string> {
+export async function searchLocalDocuments(query: string, branch: string = 'PC'): Promise<string> {
   try {
     await refreshDocumentsCache();
     if (!documentsCache.length) return '';
 
+    const branchUpper = (branch || 'PC').toUpperCase();
     const keywords = query
       .toLowerCase()
       .split(/\s+/)
@@ -76,6 +77,14 @@ export async function searchLocalDocuments(query: string): Promise<string> {
     const matchedSnippets: { score: number; text: string }[] = [];
 
     for (const doc of documentsCache) {
+      const docNameLower = doc.name.toLowerCase();
+      // Filtrage par filière : exclure les référentiels de l'autre filière
+      const isDocForSM = docNameLower.includes('_sm') || docNameLower.includes('-sm') || docNameLower.includes('sm.');
+      const isDocForPC = docNameLower.includes('_pc') || docNameLower.includes('-pc') || docNameLower.includes('pc.');
+
+      if (branchUpper === 'PC' && isDocForSM && !isDocForPC) continue;
+      if (branchUpper === 'SM' && isDocForPC && !isDocForSM) continue;
+
       for (const sec of doc.sections) {
         let score = 0;
         for (const kw of keywords) {
@@ -84,9 +93,13 @@ export async function searchLocalDocuments(query: string): Promise<string> {
           }
         }
         if (score > 0) {
+          // Bonus de pertinence si le document correspond exactement à la filière
+          if ((branchUpper === 'PC' && isDocForPC) || (branchUpper === 'SM' && isDocForSM)) {
+            score += 2;
+          }
           matchedSnippets.push({
             score,
-            text: `[Source officielle: ${doc.name}]\n${sec.raw}`,
+            text: `[Source officielle ${branchUpper}: ${doc.name}]\n${sec.raw}`,
           });
         }
       }

@@ -16,11 +16,13 @@ export interface VaultDocument {
   base64?: string;
   size: number;
   savedAt: number;
+  branch?: 'PC' | 'SM' | 'ALL';
+  category?: 'cours' | 'exercice' | 'devoir' | 'resume';
 }
 
 const DB_NAME = 'sidriss_document_vault_db';
 const STORE_NAME = 'documents';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -44,10 +46,7 @@ function openDB(): Promise<IDBDatabase> {
 }
 
 /**
- * Enregistre un document dans le coffre-fort permanent du navigateur.
- * (M15) Les erreurs sont propagées à l'appelant : l'UI doit pouvoir informer
- * l'élève qu'un fichier n'a PAS été sauvegardé localement au lieu de le laisser
- * croire que tout est permanent.
+ * Enregistre un document de l'élève dans le coffre-fort permanent local du navigateur.
  */
 export async function saveDocumentToVault(doc: Omit<VaultDocument, 'savedAt'>): Promise<void> {
   const db = await openDB();
@@ -56,6 +55,7 @@ export async function saveDocumentToVault(doc: Omit<VaultDocument, 'savedAt'>): 
     const store = tx.objectStore(STORE_NAME);
     const record: VaultDocument = {
       ...doc,
+      branch: doc.branch || 'PC',
       savedAt: Date.now(),
     };
     const req = store.put(record);
@@ -65,18 +65,22 @@ export async function saveDocumentToVault(doc: Omit<VaultDocument, 'savedAt'>): 
 }
 
 /**
- * Récupère tous les documents enregistrés dans le coffre-fort IndexedDB.
+ * Récupère tous les documents enregistrés dans le coffre-fort IndexedDB,
+ * avec filtrage optionnel par filière (PC, SM ou ALL).
  */
-export async function getAllDocumentsFromVault(): Promise<VaultDocument[]> {
+export async function getAllDocumentsFromVault(branchFilter?: 'PC' | 'SM'): Promise<VaultDocument[]> {
   try {
     const db = await openDB();
-    return new Promise((resolve, reject) => {
+    const docs = await new Promise<VaultDocument[]>((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, 'readonly');
       const store = tx.objectStore(STORE_NAME);
       const req = store.getAll();
       req.onsuccess = () => resolve(req.result || []);
       req.onerror = () => reject(req.error);
     });
+
+    if (!branchFilter) return docs;
+    return docs.filter((d) => !d.branch || d.branch === 'ALL' || d.branch === branchFilter);
   } catch (err) {
     console.warn('[DocumentVault] Erreur lecture IndexedDB:', err);
     return [];
@@ -84,8 +88,12 @@ export async function getAllDocumentsFromVault(): Promise<VaultDocument[]> {
 }
 
 /**
+ * Alias explicite pour récupérer les documents de l'élève par filière.
+ */
+export const getStudentDocuments = getAllDocumentsFromVault;
+
+/**
  * Supprime un document du coffre-fort permanent.
- * (M15) Erreurs propagées pour remontée UI.
  */
 export async function removeDocumentFromVault(name: string): Promise<void> {
   const db = await openDB();

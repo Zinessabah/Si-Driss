@@ -408,24 +408,16 @@ export default function App() {
 
           {/* 6. Document Manager */}
           {activeTab === 'documents' && (
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 no-scrollbar">
-              <div className="max-w-4xl mx-auto space-y-4">
-                <div className="pb-2 border-b border-[#282a2c]">
-                  <h2 className="text-xl font-bold text-white">Documents du Programme</h2>
-                  <p className="text-xs text-[#8e918f]">
-                    Indexation et consultation des fichiers du dossier /docs/programme/
-                  </p>
-                </div>
-                <Suspense fallback={<TabSuspenseFallback />}>
-                  <DocumentManager
-                    onAskQuestionAboutDoc={(docName) =>
-                      pushChatPrompt(
-                        `Si Driss, explique-moi les notions clés du document "${docName}" indexé dans /docs/programme/`
-                      )
-                    }
-                  />
-                </Suspense>
-              </div>
+            <div className="flex-1 overflow-y-auto no-scrollbar">
+              <Suspense fallback={<TabSuspenseFallback />}>
+                <DocumentManager
+                  onAskQuestionAboutDoc={(docName, content) =>
+                    pushChatPrompt(
+                      `Si Driss, analyse et explique-moi les notions clés du document "${docName}" (${isSM ? 'Filière SM' : 'Filière PC'}) : ${content ? content.slice(0, 300) : ''}`
+                    )
+                  }
+                />
+              </Suspense>
             </div>
           )}
         </main>

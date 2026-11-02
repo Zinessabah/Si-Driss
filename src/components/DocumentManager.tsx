@@ -11,119 +11,225 @@ import {
   Eye,
   FileCode,
   Sparkles,
-  Zap,
   ArrowRight,
-  Copy,
   ShieldCheck,
   Download,
   UploadCloud,
   FileUp,
+  Cloud,
+  HardDrive,
+  ExternalLink,
+  LogOut,
+  AlertTriangle,
+  X,
+  File,
 } from 'lucide-react';
-import { MathView } from './MathView';
 import { useModalA11y } from '../hooks/useModalA11y';
-import { getAdminToken, getAccessToken } from '../hooks/useApiKey';
+import { useBranch, StudentBranch } from '../hooks/useBranch';
 import {
   saveDocumentToVault,
   removeDocumentFromVault,
-  syncVaultWithServer,
+  getAllDocumentsFromVault,
+  VaultDocument,
   exportVaultBackup,
   importVaultBackup,
-  getAllDocumentsFromVault,
 } from '../utils/documentVault';
-
-/** En-têtes d'authentification pour les routes admin (upload/delete documents). */
-function adminHeaders(): Record<string, string> {
-  const headers: Record<string, string> = { 'x-access-token': getAccessToken() };
-  const admin = getAdminToken();
-  if (admin) headers['x-admin-token'] = admin;
-  return headers;
-}
-
-interface DocFile {
-  name: string;
-  size: number;
-  modified: string;
-  preview: string;
-}
+import {
+  initDriveAuth,
+  signInWithGoogleDrive,
+  signOutFromGoogleDrive,
+  listOfficialDriveDocuments,
+  uploadOfficialDriveDocument,
+  deleteOfficialDriveDocument,
+  downloadDriveDocumentText,
+  getCurrentDriveUser,
+  getDriveAccessToken,
+  DriveDoc,
+  FOLDER_NAMES,
+} from '../utils/googleDrive';
+import type { User } from 'firebase/auth';
 
 interface DocumentManagerProps {
-  onAskQuestionAboutDoc?: (docName: string) => void;
+  onAskQuestionAboutDoc?: (docName: string, content?: string) => void;
 }
 
 export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionAboutDoc }) => {
-  const [files, setFiles] = useState<DocFile[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [uploading, setUploading] = useState<boolean>(false);
+  const { branch: globalBranch } = useBranch();
+  // Selected branch in document manager (PC or SM)
+  const [selectedBranch, setSelectedBranch] = useState<StudentBranch>(globalBranch || 'PC');
+
+  // Active section: 'drive' (Admin/Prof - Google Drive) vs 'local' (Élève - Local IndexedDB)
+  const [activeSection, setActiveSection] = useState<'drive' | 'local'>('drive');
+
+  // Google Drive state
+  const [driveUser, setDriveUser] = useState<User | null>(null);
+  const [driveDocs, setDriveDocs] = useState<DriveDoc[]>([]);
+  const [driveLoading, setDriveLoading] = useState<boolean>(false);
+  const [driveUploading, setDriveUploading] = useState<boolean>(false);
+
+  // Student local documents state (IndexedDB)
+  const [localDocs, setLocalDocs] = useState<VaultDocument[]>([]);
+  const [localLoading, setLocalLoading] = useState<boolean>(false);
+  const [localUploading, setLocalUploading] = useState<boolean>(false);
+
+  // Document preview state
+  const [previewDoc, setPreviewDoc] = useState<{ name: string; content: string; source: 'drive' | 'local' } | null>(null);
+  const [loadingPreview, setLoadingPreview] = useState<boolean>(false);
+
+  // Deletion confirmation modal (MANDATORY for destructive Drive operations)
+  const [docToDelete, setDocToDelete] = useState<{ id: string; name: string; source: 'drive' | 'local' } | null>(null);
+
+  // Status message
   const [statusMsg, setStatusMsg] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
-  const [vaultCount, setVaultCount] = useState<number>(0);
 
-  // New text file creation modal/form
-  const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
-  const [newFileName, setNewFileName] = useState<string>('');
-  const [newFileContent, setNewFileContent] = useState<string>('');
-  const [copiedPath, setCopiedPath] = useState<boolean>(false);
+  // Student new text doc modal
+  const [showCreateLocalModal, setShowCreateLocalModal] = useState<boolean>(false);
+  const [newDocName, setNewDocName] = useState<string>('');
+  const [newDocContent, setNewDocContent] = useState<string>('');
 
-  const importFileInputRef = useRef<HTMLInputElement | null>(null);
+  const importLocalFileInputRef = useRef<HTMLInputElement | null>(null);
+  const driveFileInputRef = useRef<HTMLInputElement | null>(null);
+  const localFileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // (M14) Accessibilité de la modale de création de document
-  const createDialogRef = useModalA11y(showCreateModal, () => setShowCreateModal(false));
+  const previewModalRef = useModalA11y(Boolean(previewDoc), () => setPreviewDoc(null));
+  const deleteModalRef = useModalA11y(Boolean(docToDelete), () => setDocToDelete(null));
+  const createModalRef = useModalA11y(showCreateLocalModal, () => setShowCreateLocalModal(false));
 
-  const fetchDocuments = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/documents');
-      if (res.ok) {
-        const data = await res.json();
-        setFiles(data.files || []);
+  // Initialize Google Auth state
+  useEffect(() => {
+    const unsubscribe = initDriveAuth(
+      (user) => {
+        setDriveUser(user);
+      },
+      () => {
+        setDriveUser(null);
+        setDriveDocs([]);
       }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+    );
+    return () => unsubscribe();
+  }, []);
+
+  // Sync selected branch with global branch if changed
+  useEffect(() => {
+    if (globalBranch) {
+      setSelectedBranch(globalBranch);
     }
-  };
+  }, [globalBranch]);
 
-  // Synchronise le coffre-fort IndexedDB avec le serveur au chargement
-  const syncAndLoad = async () => {
-    setLoading(true);
+  // Load Google Drive documents when authenticated or when branch changes
+  const refreshDriveDocs = async () => {
+    if (!getDriveAccessToken()) {
+      setDriveDocs([]);
+      return;
+    }
+    setDriveLoading(true);
     try {
-      const syncResult = await syncVaultWithServer();
-      setVaultCount(syncResult.totalVaultCount);
-
-      if (syncResult.restoredCount > 0) {
-        setStatusMsg({
-          text: `🛡️ ${syncResult.restoredCount} document(s) automatiquement restauré(s) depuis votre sauvegarde locale permanente suite à la mise à jour !`,
-          type: 'success',
-        });
-      }
-
-      await fetchDocuments();
-    } catch (err) {
-      console.warn('Erreur synchro coffre:', err);
-      await fetchDocuments();
+      const docs = await listOfficialDriveDocuments(selectedBranch);
+      setDriveDocs(docs);
+    } catch (err: any) {
+      console.warn('[GoogleDrive] Erreur chargement documents:', err);
+      setStatusMsg({ text: `Impossible de charger les fichiers Google Drive : ${err?.message || ''}`, type: 'error' });
     } finally {
-      setLoading(false);
+      setDriveLoading(false);
     }
   };
 
   useEffect(() => {
-    syncAndLoad();
-    getAllDocumentsFromVault().then((docs) => setVaultCount(docs.length));
-  }, []);
+    if (driveUser) {
+      refreshDriveDocs();
+    }
+  }, [driveUser, selectedBranch]);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const uploadedFiles = e.target.files;
-    if (!uploadedFiles || uploadedFiles.length === 0) return;
+  // Load Student local documents from IndexedDB
+  const refreshLocalDocs = async () => {
+    setLocalLoading(true);
+    try {
+      const docs = await getAllDocumentsFromVault(selectedBranch);
+      setLocalDocs(docs);
+    } catch (err) {
+      console.warn('[LocalVault] Erreur chargement documents:', err);
+    } finally {
+      setLocalLoading(false);
+    }
+  };
 
-    setUploading(true);
+  useEffect(() => {
+    refreshLocalDocs();
+  }, [selectedBranch]);
+
+  // Google Sign-in Handler
+  const handleGoogleSignIn = async () => {
+    setStatusMsg(null);
+    try {
+      const { user } = await signInWithGoogleDrive();
+      setDriveUser(user);
+      setStatusMsg({
+        text: `Connecté à Google Drive avec succès (${user.email}). Vos documents officiels ${selectedBranch} sont synchronisés !`,
+        type: 'success',
+      });
+    } catch (err: any) {
+      setStatusMsg({
+        text: err?.message || 'Connexion à Google Drive annulée ou échouée.',
+        type: 'error',
+      });
+    }
+  };
+
+  // Google Sign-out Handler
+  const handleGoogleSignOut = async () => {
+    try {
+      await signOutFromGoogleDrive();
+      setDriveUser(null);
+      setDriveDocs([]);
+      setStatusMsg({ text: 'Déconnecté de Google Drive.', type: 'info' });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Upload file to Google Drive (Admin/Prof)
+  const handleDriveFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setDriveUploading(true);
     setStatusMsg(null);
 
     try {
-      let uploadedCount = 0;
-      const vaultFailures: string[] = [];
-      for (let i = 0; i < uploadedFiles.length; i++) {
-        const file = uploadedFiles[i];
-        let bodyPayload: { filename: string; content?: string; base64?: string } = { filename: file.name };
+      let count = 0;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        await uploadOfficialDriveDocument(file, selectedBranch);
+        count++;
+      }
+      setStatusMsg({
+        text: `✅ ${count} document(s) officiel(s) téléversé(s) dans Google Drive sous "${FOLDER_NAMES[selectedBranch]}" !`,
+        type: 'success',
+      });
+      await refreshDriveDocs();
+    } catch (err: any) {
+      setStatusMsg({
+        text: `Échec du téléversement vers Google Drive : ${err?.message || 'Erreur inconnue'}`,
+        type: 'error',
+      });
+    } finally {
+      setDriveUploading(false);
+      if (driveFileInputRef.current) driveFileInputRef.current.value = '';
+    }
+  };
+
+  // Upload file to Local Student Vault (IndexedDB)
+  const handleLocalFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setLocalUploading(true);
+    setStatusMsg(null);
+
+    try {
+      let count = 0;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
         const isPdf = file.name.toLowerCase().endsWith('.pdf');
 
         if (isPdf) {
@@ -136,484 +242,837 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
             binary += String.fromCharCode.apply(null, Array.from(chunk));
           }
           const base64Data = btoa(binary);
-          bodyPayload.base64 = base64Data;
 
-          // Sauvegarde immédiate dans le coffre-fort permanent IndexedDB (M15 : échec visible)
-          try {
-            await saveDocumentToVault({
-              name: file.name,
-              isPdf: true,
-              base64: base64Data,
-              size: file.size,
-            });
-          } catch (vaultErr) {
-            console.warn('[DocumentVault] Échec sauvegarde locale:', vaultErr);
-            vaultFailures.push(file.name);
-          }
+          await saveDocumentToVault({
+            name: file.name,
+            isPdf: true,
+            base64: base64Data,
+            size: file.size,
+            branch: selectedBranch,
+          });
         } else {
-          const textContent = await file.text();
-          bodyPayload.content = textContent;
-
-          // Sauvegarde immédiate dans le coffre-fort permanent IndexedDB (M15 : échec visible)
-          try {
-            await saveDocumentToVault({
-              name: file.name,
-              isPdf: false,
-              content: textContent,
-              size: file.size,
-            });
-          } catch (vaultErr) {
-            console.warn('[DocumentVault] Échec sauvegarde locale:', vaultErr);
-            vaultFailures.push(file.name);
-          }
+          const text = await file.text();
+          await saveDocumentToVault({
+            name: file.name,
+            isPdf: false,
+            content: text,
+            size: file.size,
+            branch: selectedBranch,
+          });
         }
-
-        const res = await fetch('/api/documents/upload', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', ...adminHeaders() },
-          body: JSON.stringify(bodyPayload),
-        });
-
-        if (res.status === 401) {
-          throw new Error('Jeton administrateur requis : ajoute ?admin=TON_JETON à l’URL puis réessaie.');
-        }
-        if (res.status === 503) {
-          throw new Error("Le serveur n'a pas de ADMIN_TOKEN configuré : la gestion des documents est désactivée en production.");
-        }
-        if (!res.ok) throw new Error(`Erreur lors de l'upload de ${file.name}`);
-        uploadedCount++;
+        count++;
       }
 
-      const allVault = await getAllDocumentsFromVault();
-      setVaultCount(allVault.length);
-
-      // (M15) Message honnête : distingue l'indexation serveur de la copie locale permanente
-      if (vaultFailures.length > 0) {
-        setStatusMsg({
-          text: `${uploadedCount} fichier(s) indexé(s) sur le serveur, mais la sauvegarde locale permanente a échoué pour : ${vaultFailures.join(', ')} (mémoire du navigateur saturée ?). Ces fichiers ne seront pas restaurés automatiquement — exporte une sauvegarde .json pour les protéger.`,
-          type: 'error',
-        });
-      } else {
-        setStatusMsg({
-          text: `${uploadedCount} fichier(s) indexé(s) et sauvegardé(s) en permanence dans votre coffre-fort local ! Ils ne disparaîtront plus lors des mises à jour.`,
-          type: 'success',
-        });
-      }
-      await fetchDocuments();
+      setStatusMsg({
+        text: `💾 ${count} document(s) sauvegardé(s) dans le stockage local de l'élève (Filière ${selectedBranch}) !`,
+        type: 'success',
+      });
+      await refreshLocalDocs();
     } catch (err: any) {
-      setStatusMsg({ text: err?.message || 'Erreur lors de l\'upload.', type: 'error' });
+      setStatusMsg({
+        text: `Erreur enregistrement local : ${err?.message || 'Erreur'}`,
+        type: 'error',
+      });
     } finally {
-      setUploading(false);
-      e.target.value = '';
+      setLocalUploading(false);
+      if (localFileInputRef.current) localFileInputRef.current.value = '';
     }
   };
 
-  const handleCreateDocument = async () => {
-    if (!newFileName.trim() || !newFileContent.trim()) return;
+  // Create custom student text document locally
+  const handleCreateLocalDocument = async () => {
+    if (!newDocName.trim() || !newDocContent.trim()) return;
 
-    let finalName = newFileName.trim();
-    if (!finalName.endsWith('.md') && !finalName.endsWith('.txt')) {
-      finalName += '.md';
+    let cleanName = newDocName.trim();
+    if (!cleanName.endsWith('.md') && !cleanName.endsWith('.txt')) {
+      cleanName += '.md';
     }
 
     try {
-      // 1. Sauvegarde dans le coffre IndexedDB
       await saveDocumentToVault({
-        name: finalName,
+        name: cleanName,
         isPdf: false,
-        content: newFileContent,
-        size: new Blob([newFileContent]).size,
+        content: newDocContent,
+        size: new Blob([newDocContent]).size,
+        branch: selectedBranch,
       });
 
-      // 2. Upload sur le serveur
-      const res = await fetch('/api/documents/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...adminHeaders() },
-        body: JSON.stringify({
-          filename: finalName,
-          content: newFileContent,
-        }),
+      setStatusMsg({
+        text: `Fiche "${cleanName}" enregistrée localement pour la filière ${selectedBranch} !`,
+        type: 'success',
       });
+      setShowCreateLocalModal(false);
+      setNewDocName('');
+      setNewDocContent('');
+      await refreshLocalDocs();
+    } catch (err: any) {
+      setStatusMsg({ text: `Erreur création document : ${err?.message || 'Erreur'}`, type: 'error' });
+    }
+  };
 
-      if (res.status === 401) {
-        setStatusMsg({
-          text: 'Jeton administrateur requis : ajoute ?admin=TON_JETON à l’URL puis réessaie.',
-          type: 'error',
-        });
-        return;
-      }
+  // Execute deletion with confirmed dialog
+  const handleConfirmDelete = async () => {
+    if (!docToDelete) return;
 
-      if (res.ok) {
+    setStatusMsg(null);
+    try {
+      if (docToDelete.source === 'drive') {
+        await deleteOfficialDriveDocument(docToDelete.id);
         setStatusMsg({
-          text: `Document "${finalName}" enregistré et protégé en local de manière permanente !`,
+          text: `Le document officiel "${docToDelete.name}" a été définitivement supprimé de Google Drive.`,
           type: 'success',
         });
-        setShowCreateModal(false);
-        setNewFileName('');
-        setNewFileContent('');
-        const allVault = await getAllDocumentsFromVault();
-        setVaultCount(allVault.length);
-        await fetchDocuments();
+        await refreshDriveDocs();
       } else {
-        // (M15) Échec serveur signalé explicitement (la copie locale existe, elle)
+        await removeDocumentFromVault(docToDelete.name);
         setStatusMsg({
-          text: `Le serveur a refusé "${finalName}" (code ${res.status}). Le document reste sauvegardé dans ton coffre-fort local — réessaie plus tard.`,
-          type: 'error',
+          text: `Le document local "${docToDelete.name}" a été supprimé de votre appareil.`,
+          type: 'success',
         });
+        await refreshLocalDocs();
       }
     } catch (err: any) {
-      // (M15) Plus d'échec silencieux (console seule) : l'élève est informé.
-      setStatusMsg({ text: err?.message || `Impossible d'enregistrer "${finalName}".`, type: 'error' });
-    }
-  };
-
-  const handleDelete = async (filename: string) => {
-    try {
-      // 1. Supprimer du serveur
-      const res = await fetch(`/api/documents/${encodeURIComponent(filename)}`, {
-        method: 'DELETE',
-        headers: adminHeaders(),
-      });
-      if (res.status === 401) {
-        setStatusMsg({
-          text: 'Jeton administrateur requis : ajoute ?admin=TON_JETON à l’URL puis réessaie.',
-          type: 'error',
-        });
-        return;
-      }
-
-      // 2. Supprimer du coffre-fort local
-      await removeDocumentFromVault(filename);
-
-      setFiles((prev) => prev.filter((f) => f.name !== filename));
-      const allVault = await getAllDocumentsFromVault();
-      setVaultCount(allVault.length);
-      setStatusMsg({ text: `Le document "${filename}" a été supprimé.`, type: 'info' });
-    } catch (err) {
-      console.error(err);
-      setStatusMsg({ text: `Impossible de supprimer "${filename}".`, type: 'error' });
-    }
-  };
-
-  const handleCopyPath = () => {
-    navigator.clipboard.writeText('/docs/programme/');
-    setCopiedPath(true);
-    setTimeout(() => setCopiedPath(false), 2000);
-  };
-
-  const handleExportBackup = async () => {
-    try {
-      await exportVaultBackup();
-      setStatusMsg({
-        text: 'Fichier de sauvegarde exporté avec succès ! Tu pourras le restaurer à tout moment.',
-        type: 'success',
-      });
-    } catch (err: any) {
-      setStatusMsg({ text: 'Erreur lors de l\'exportation de la sauvegarde.', type: 'error' });
-    }
-  };
-
-  const handleImportBackup = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const text = await file.text();
-      const count = await importVaultBackup(text);
-      setStatusMsg({
-        text: `Sauvegarde importée avec succès : ${count} document(s) restauré(s) et indexé(s) !`,
-        type: 'success',
-      });
-      await fetchDocuments();
-      const allVault = await getAllDocumentsFromVault();
-      setVaultCount(allVault.length);
-    } catch (err: any) {
-      setStatusMsg({ text: `Erreur import : ${err?.message || 'Fichier invalide'}`, type: 'error' });
+      setStatusMsg({ text: `Échec de la suppression : ${err?.message || 'Erreur'}`, type: 'error' });
     } finally {
-      e.target.value = '';
+      setDocToDelete(null);
+    }
+  };
+
+  // View document content
+  const handlePreviewDoc = async (doc: { id?: string; name: string; content?: string; isPdf?: boolean; source: 'drive' | 'local' }) => {
+    setLoadingPreview(true);
+    setPreviewDoc({ name: doc.name, content: 'Chargement du document...', source: doc.source });
+
+    try {
+      if (doc.source === 'drive' && doc.id) {
+        if (doc.name.toLowerCase().endsWith('.pdf')) {
+          setPreviewDoc({
+            name: doc.name,
+            content: `Document PDF officiel hébergé sur Google Drive.\n\nNom: ${doc.name}\nFilière: ${selectedBranch}\n\nVous pouvez l'ouvrir directement dans Google Drive via le lien externe ou l'attacher aux questions de Si Driss.`,
+            source: 'drive',
+          });
+        } else {
+          const text = await downloadDriveDocumentText(doc.id);
+          setPreviewDoc({ name: doc.name, content: text, source: 'drive' });
+        }
+      } else {
+        const text = doc.content || 'Document PDF local enregistré dans le coffre-fort de votre navigateur.';
+        setPreviewDoc({ name: doc.name, content: text, source: 'local' });
+      }
+    } catch (err: any) {
+      setPreviewDoc({
+        name: doc.name,
+        content: `Impossible d'afficher l'aperçu : ${err?.message || 'Erreur'}`,
+        source: doc.source,
+      });
+    } finally {
+      setLoadingPreview(false);
     }
   };
 
   return (
-    <div className="space-y-6">
-      {/* Permanent Storage Guarantee Banner */}
-      <div className="bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 shadow-xl flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h4 className="text-sm font-bold text-white">Stockage Permanent & Auto-Restauration Activé</h4>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                Anti-Perte Garanti
-              </span>
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 max-w-6xl mx-auto w-full">
+      {/* Top Header */}
+      <div className="bg-[#18191b] p-5 sm:p-6 rounded-3xl border border-[#282a2c] shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1.5">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center">
+              <FolderOpen className="w-4 h-4" />
             </div>
-            <p className="text-xs text-slate-300 mt-0.5">
-              Tes fichiers sont sauvegardés dans le coffre-fort local ({vaultCount} document(s) sécurisé(s)) et <strong>ré-injectés automatiquement sur le serveur</strong> à chaque mise à jour ou redémarrage !
-            </p>
+            <h2 className="text-lg sm:text-xl font-bold text-white tracking-wide">
+              Gestionnaire de Documents & Cadres de Référence
+            </h2>
           </div>
+          <p className="text-xs text-[#9aa0a6] max-w-2xl leading-relaxed">
+            Architecture à deux niveaux : les <strong>documents officiels du Professeur</strong> sont hébergés sur <strong>Google Drive</strong>,
+            tandis que les <strong>documents de l'élève</strong> restent strictement privés et stockés en <strong>local</strong> sur l'appareil.
+          </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Filière Switcher */}
+        <div className="flex items-center gap-1.5 bg-[#131314] p-1.5 rounded-2xl border border-[#282a2c] shrink-0">
+          <span className="text-[11px] font-semibold text-[#8e918f] px-2.5">Filière :</span>
           <button
-            onClick={handleExportBackup}
-            className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition"
-            title="Télécharger une copie de secours de tous mes documents"
+            type="button"
+            onClick={() => setSelectedBranch('PC')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+              selectedBranch === 'PC'
+                ? 'bg-sky-500 text-slate-950 shadow-md ring-1 ring-sky-400/50'
+                : 'text-[#9aa0a6] hover:text-white hover:bg-[#202124]'
+            }`}
           >
-            <Download className="w-3.5 h-3.5 text-amber-400" />
-            <span>Sauvegarder (.json)</span>
+            <span>2BAC PC</span>
+            <span className="text-[10px] opacity-80">(Physique)</span>
           </button>
-
           <button
-            onClick={() => importFileInputRef.current?.click()}
-            className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition"
-            title="Restaurer des documents depuis un fichier de sauvegarde"
+            type="button"
+            onClick={() => setSelectedBranch('SM')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+              selectedBranch === 'SM'
+                ? 'bg-purple-500 text-white shadow-md ring-1 ring-purple-400/50'
+                : 'text-[#9aa0a6] hover:text-white hover:bg-[#202124]'
+            }`}
           >
-            <UploadCloud className="w-3.5 h-3.5 text-sky-400" />
-            <span>Restaurer</span>
+            <span>2BAC SM</span>
+            <span className="text-[10px] opacity-80">(Maths)</span>
           </button>
-          <input
-            ref={importFileInputRef}
-            type="file"
-            accept=".json"
-            onChange={handleImportBackup}
-            className="hidden"
-          />
         </div>
       </div>
 
-      {/* Directory Location Banner */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-amber-500/10 text-amber-400 rounded-2xl border border-amber-500/20">
-              <FolderOpen className="w-6 h-6" />
+      {/* Notification banner */}
+      {statusMsg && (
+        <div
+          className={`p-4 rounded-2xl border flex items-center justify-between gap-3 text-xs animate-in fade-in ${
+            statusMsg.type === 'success'
+              ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
+              : statusMsg.type === 'error'
+              ? 'bg-rose-950/40 border-rose-500/40 text-rose-200'
+              : 'bg-sky-950/40 border-sky-500/40 text-sky-200'
+          }`}
+        >
+          <div className="flex items-center gap-2.5">
+            {statusMsg.type === 'success' ? (
+              <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+            ) : statusMsg.type === 'error' ? (
+              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+            ) : (
+              <ShieldCheck className="w-4 h-4 text-sky-400 shrink-0" />
+            )}
+            <span>{statusMsg.text}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setStatusMsg(null)}
+            className="text-slate-400 hover:text-white p-1"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Storage Section Tabs: Google Drive (Prof) vs Local (Élève) */}
+      <div className="flex items-center gap-2 border-b border-[#282a2c] pb-3">
+        <button
+          type="button"
+          onClick={() => setActiveSection('drive')}
+          className={`px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2.5 transition ${
+            activeSection === 'drive'
+              ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30 shadow-md'
+              : 'text-[#9aa0a6] hover:text-white hover:bg-[#202124]'
+          }`}
+        >
+          <Cloud className="w-4 h-4 text-sky-400" />
+          <span>Documents Officiels (Google Drive — Professeur)</span>
+          {driveDocs.length > 0 && (
+            <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-[10px] font-mono">
+              {driveDocs.length}
+            </span>
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveSection('local')}
+          className={`px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2.5 transition ${
+            activeSection === 'local'
+              ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-md'
+              : 'text-[#9aa0a6] hover:text-white hover:bg-[#202124]'
+          }`}
+        >
+          <HardDrive className="w-4 h-4 text-emerald-400" />
+          <span>Mes Documents Personnels (Stockage Local — Élève)</span>
+          {localDocs.length > 0 && (
+            <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono">
+              {localDocs.length}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* SECTION 1: GOOGLE DRIVE (PROFESSEUR / ADMIN) */}
+      {activeSection === 'drive' && (
+        <div className="space-y-5 animate-in fade-in">
+          {/* Drive Status & Account Bar */}
+          <div className="bg-[#18191b] p-5 rounded-3xl border border-[#282a2c] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
+                <Cloud className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-white">
+                    Dossier Google Drive : <span className="text-sky-300">{FOLDER_NAMES[selectedBranch]}</span>
+                  </h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#202124] text-[#c4c7c5] font-semibold border border-[#3c4043]">
+                    Filière {selectedBranch}
+                  </span>
+                </div>
+                <p className="text-xs text-[#9aa0a6] mt-0.5">
+                  Les documents officiels du programme déposés ici sont accessibles et indexés par Si Driss pour les élèves de {selectedBranch}.
+                </p>
+              </div>
             </div>
+
+            {/* Auth Button or User Profile */}
             <div>
-              <h3 className="text-base font-bold text-white">Répertoire Officiel des Documents du Programme</h3>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Dépose tes résumés et cours pour des réponses instantanées et précises de Si Driss
+              {driveUser ? (
+                <div className="flex items-center gap-3 bg-[#131314] px-3.5 py-2 rounded-2xl border border-[#282a2c]">
+                  {driveUser.photoURL ? (
+                    <img src={driveUser.photoURL} alt={driveUser.displayName || 'Prof'} className="w-6 h-6 rounded-full" />
+                  ) : (
+                    <div className="w-6 h-6 rounded-full bg-sky-500 text-slate-950 font-bold text-xs flex items-center justify-center">
+                      {(driveUser.displayName || driveUser.email || 'P')[0].toUpperCase()}
+                    </div>
+                  )}
+                  <div className="text-left">
+                    <div className="text-xs font-bold text-white leading-tight">
+                      {driveUser.displayName || 'Professeur connecté'}
+                    </div>
+                    <div className="text-[10px] text-[#9aa0a6] leading-tight truncate max-w-[150px]">
+                      {driveUser.email}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleGoogleSignOut}
+                    className="ml-2 p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-950/30 transition"
+                    title="Déconnexion Google Drive"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  className="px-4 py-2.5 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs flex items-center gap-2.5 shadow-md transition touch-manipulation cursor-pointer"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                    <path
+                      fill="#4285F4"
+                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                    />
+                  </svg>
+                  <span>Connexion Google Drive (Professeur)</span>
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Action Bar for Google Drive */}
+          {driveUser && (
+            <div className="flex flex-wrap items-center justify-between gap-3 p-4 bg-[#18191b] rounded-2xl border border-[#282a2c]">
+              <div className="flex items-center gap-2">
+                <input
+                  type="file"
+                  ref={driveFileInputRef}
+                  onChange={handleDriveFileUpload}
+                  multiple
+                  accept=".pdf,.md,.txt,.json"
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => driveFileInputRef.current?.click()}
+                  disabled={driveUploading}
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-2 shadow-md transition disabled:opacity-50"
+                >
+                  <UploadCloud className="w-4 h-4" />
+                  <span>{driveUploading ? 'Téléversement en cours…' : `Ajouter un document officiel ${selectedBranch}`}</span>
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={refreshDriveDocs}
+                  disabled={driveLoading}
+                  className="p-2 rounded-xl border border-[#3c4043] bg-[#202124] hover:bg-[#282a2c] text-[#c4c7c5] hover:text-white transition"
+                  title="Actualiser la liste Google Drive"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${driveLoading ? 'animate-spin' : ''}`} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Documents Grid / Empty State */}
+          {!driveUser ? (
+            <div className="p-8 sm:p-12 text-center rounded-3xl bg-[#18191b]/70 border border-[#282a2c] space-y-3">
+              <Cloud className="w-12 h-12 text-[#8e918f] mx-auto opacity-40" />
+              <h4 className="text-sm font-bold text-white">Espace Administrateur Google Drive non connecté</h4>
+              <p className="text-xs text-[#9aa0a6] max-w-md mx-auto leading-relaxed">
+                Connectez-vous avec votre compte Google Enseignant pour créer et consulter les dossiers officiels
+                séparés pour le <strong>2BAC PC</strong> et le <strong>2BAC SM</strong>.
+              </p>
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                className="mt-3 px-4 py-2.5 rounded-2xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs inline-flex items-center gap-2 shadow-md transition"
+              >
+                <Cloud className="w-4 h-4" />
+                <span>Se connecter à Google Drive</span>
+              </button>
+            </div>
+          ) : driveLoading ? (
+            <div className="py-16 text-center text-xs text-[#9aa0a6] flex items-center justify-center gap-2">
+              <RefreshCw className="w-4 h-4 animate-spin text-sky-400" />
+              Chargement des documents officiels {selectedBranch} depuis Google Drive…
+            </div>
+          ) : driveDocs.length === 0 ? (
+            <div className="p-8 sm:p-12 text-center rounded-3xl bg-[#18191b]/70 border border-[#282a2c] space-y-2">
+              <File className="w-10 h-10 text-[#8e918f] mx-auto opacity-30" />
+              <h4 className="text-sm font-bold text-white">Aucun document officiel dans {FOLDER_NAMES[selectedBranch]}</h4>
+              <p className="text-xs text-[#9aa0a6] max-w-sm mx-auto">
+                Cliquez sur « Ajouter un document officiel » pour déposer le premier cours ou cadre de référence officiel pour cette filière.
               </p>
             </div>
-          </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {driveDocs.map((doc) => (
+                <div
+                  key={doc.id}
+                  className="p-4 rounded-2xl bg-[#18191b] border border-[#282a2c] hover:border-sky-500/40 space-y-3 transition shadow-md"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2.5 overflow-hidden">
+                      <div className="w-8 h-8 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center shrink-0">
+                        <FileText className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="text-xs font-bold text-white truncate" title={doc.name}>
+                          {doc.name}
+                        </h4>
+                        <div className="text-[10px] text-[#9aa0a6] flex items-center gap-2 mt-0.5">
+                          <span className="px-1.5 py-0.2 rounded bg-[#202124] text-sky-300 font-semibold border border-[#3c4043]">
+                            Officiel {doc.branch}
+                          </span>
+                          {doc.size && <span>{(doc.size / 1024).toFixed(1)} Ko</span>}
+                        </div>
+                      </div>
+                    </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 flex items-center gap-1.5 transition-all"
-            >
-              <Plus className="w-4 h-4 text-amber-400" />
-              Nouveau document texte
-            </button>
+                    <div className="flex items-center gap-1 shrink-0">
+                      {doc.webViewLink && (
+                        <a
+                          href={doc.webViewLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#202124] transition"
+                          title="Ouvrir dans Google Drive"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handlePreviewDoc({ id: doc.id, name: doc.name, source: 'drive' })}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#202124] transition"
+                        title="Aperçu du contenu"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDocToDelete({ id: doc.id, name: doc.name, source: 'drive' })}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-950/30 transition"
+                        title="Supprimer de Google Drive"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
 
-            <label className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md transition-all">
-              <Upload className="w-4 h-4" />
-              <span>{uploading ? 'Téléversement...' : 'Téléverser des fichiers (.pdf, .md, .txt)'}</span>
+                  <div className="pt-2 border-t border-[#282a2c] flex items-center justify-between text-[11px]">
+                    <span className="text-[#8e918f]">Hébergé sur Google Drive</span>
+                    {onAskQuestionAboutDoc && (
+                      <button
+                        type="button"
+                        onClick={() => onAskQuestionAboutDoc(doc.name)}
+                        className="text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-1 transition"
+                      >
+                        <span>Interroger Si Driss</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* SECTION 2: DOCUMENTS PERSONNELS DE L'ÉLÈVE (STOCKAGE LOCAL) */}
+      {activeSection === 'local' && (
+        <div className="space-y-5 animate-in fade-in">
+          {/* Info Card */}
+          <div className="bg-[#18191b] p-5 rounded-3xl border border-[#282a2c] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <HardDrive className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-white">
+                    Coffre-fort Local de l'Élève : <span className="text-emerald-300">Filière {selectedBranch}</span>
+                  </h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">
+                    100% Hors-ligne & Privé
+                  </span>
+                </div>
+                <p className="text-xs text-[#9aa0a6] mt-0.5">
+                  Vos devoirs, fiches personnelles et résumés restent stockés sur votre navigateur sans aucun compte requis.
+                </p>
+              </div>
+            </div>
+
+            {/* Local backup export/import */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => exportVaultBackup()}
+                className="px-3 py-1.5 rounded-xl border border-[#3c4043] bg-[#202124] hover:bg-[#282a2c] text-[#c4c7c5] hover:text-white text-xs font-semibold flex items-center gap-1.5 transition"
+                title="Exporter une sauvegarde de vos documents locaux"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Exporter JSON</span>
+              </button>
               <input
                 type="file"
-                multiple
-                accept=".pdf,.md,.txt,.json,.csv"
-                onChange={handleFileUpload}
-                disabled={uploading}
+                ref={importLocalFileInputRef}
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  try {
+                    const text = await file.text();
+                    const count = await importVaultBackup(text);
+                    setStatusMsg({ text: `${count} document(s) importé(s) avec succès !`, type: 'success' });
+                    await refreshLocalDocs();
+                  } catch (err: any) {
+                    setStatusMsg({ text: `Erreur import : ${err?.message || ''}`, type: 'error' });
+                  }
+                }}
+                accept=".json"
                 className="hidden"
               />
-            </label>
-          </div>
-        </div>
-
-        {/* Directory Path Info Box */}
-        <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-3">
-          <div className="space-y-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
-              Emplacement exact dans le projet :
-            </span>
-            <div className="flex items-center gap-2">
-              <code className="text-sm font-mono text-cyan-300 font-bold bg-slate-900 px-3 py-1 rounded-lg border border-slate-800">
-                /docs/programme/
-              </code>
               <button
-                onClick={handleCopyPath}
-                className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
-                title="Copier le chemin"
+                type="button"
+                onClick={() => importLocalFileInputRef.current?.click()}
+                className="px-3 py-1.5 rounded-xl border border-[#3c4043] bg-[#202124] hover:bg-[#282a2c] text-[#c4c7c5] hover:text-white text-xs font-semibold flex items-center gap-1.5 transition"
+                title="Importer une sauvegarde"
               >
-                {copiedPath ? <CheckCircle className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                <Upload className="w-3.5 h-3.5" />
+                <span>Importer JSON</span>
               </button>
             </div>
           </div>
 
-          <div className="text-xs text-slate-400 max-w-md">
-            💡 <strong>Restauration Automatique :</strong> Chaque document que tu téléverses est dorénavant sauvegardé dans la mémoire permanente de ton navigateur. Même si le serveur se redéploie ou se met à jour, l'application ré-injecte automatiquement tes cours sans que tu aies besoin de les retéléverser !
-          </div>
-        </div>
-
-        {statusMsg && (
-          <div
-            className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
-              statusMsg.type === 'success'
-                ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-300'
-                : statusMsg.type === 'info'
-                ? 'bg-sky-950/40 border-sky-500/30 text-sky-300'
-                : 'bg-rose-950/40 border-rose-500/30 text-rose-300'
-            }`}
-          >
-            {statusMsg.type === 'success' ? (
-              <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-            ) : statusMsg.type === 'info' ? (
-              <Sparkles className="w-4 h-4 text-sky-400 shrink-0" />
-            ) : (
-              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
-            )}
-            <span>{statusMsg.text}</span>
-          </div>
-        )}
-      </div>
-
-      {/* Uploaded Documents List */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-        <div className="flex items-center justify-between">
-          <h4 className="text-sm font-bold text-white flex items-center gap-2">
-            <FileCode className="w-4 h-4 text-cyan-400" />
-            Documents Actuellement Indexés ({files.length})
-          </h4>
-          <button
-            onClick={syncAndLoad}
-            disabled={loading}
-            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors text-xs flex items-center gap-1.5"
-            title="Vérifier et synchroniser le coffre-fort"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span>Synchroniser</span>
-          </button>
-        </div>
-
-        {loading ? (
-          <div className="p-8 text-center text-xs text-slate-500">
-            Chargement et synchronisation des documents du répertoire...
-          </div>
-        ) : files.length === 0 ? (
-          <div className="p-8 text-center text-slate-400 text-xs bg-slate-950 rounded-xl border border-dashed border-slate-800 space-y-2">
-            <FileText className="w-8 h-8 text-slate-600 mx-auto" />
-            <p>Aucun document pour le moment dans <code className="text-amber-400 font-mono">/docs/programme/</code>.</p>
-            <p className="text-[11px] text-slate-500">
-              Dépose tes fiches de cours ou clique sur "Téléverser des fichiers" ci-dessus.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {files.map((file) => (
-              <div
-                key={file.name}
-                className="bg-slate-950 p-4 rounded-xl border border-slate-800/80 hover:border-slate-700 space-y-2.5 transition-all"
+          {/* Action Bar for Student Local Storage */}
+          <div className="flex flex-wrap items-center justify-between gap-3 p-4 bg-[#18191b] rounded-2xl border border-[#282a2c]">
+            <div className="flex items-center gap-2">
+              <input
+                type="file"
+                ref={localFileInputRef}
+                onChange={handleLocalFileUpload}
+                multiple
+                accept=".pdf,.md,.txt"
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => localFileInputRef.current?.click()}
+                disabled={localUploading}
+                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-2 shadow-md transition disabled:opacity-50"
               >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2 overflow-hidden">
-                    <FileText className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span className="font-bold text-slate-200 text-xs font-mono truncate" title={file.name}>
-                      {file.name}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <button
-                      onClick={() => handleDelete(file.name)}
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-950/30 transition-colors"
-                      title="Supprimer le document"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
+                <FileUp className="w-4 h-4" />
+                <span>{localUploading ? 'Enregistrement…' : `Importer un fichier élève (${selectedBranch})`}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowCreateLocalModal(true)}
+                className="px-3.5 py-2 rounded-xl bg-[#202124] hover:bg-[#282a2c] text-white border border-[#3c4043] font-bold text-xs flex items-center gap-1.5 transition"
+              >
+                <Plus className="w-4 h-4 text-emerald-400" />
+                <span>Rédiger une fiche</span>
+              </button>
+            </div>
 
-                <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed bg-slate-900/50 p-2 rounded-lg border border-slate-800/60 font-mono">
-                  {file.preview || 'Contenu indexé'}
-                </p>
-
-                <div className="flex items-center justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-800/50">
-                  <span>{(file.size / 1024).toFixed(1)} Ko</span>
-                  {onAskQuestionAboutDoc && (
-                    <button
-                      onClick={() => onAskQuestionAboutDoc(file.name)}
-                      className="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1 transition-colors"
-                    >
-                      Interroger Si Driss sur ce doc
-                      <ArrowRight className="w-3 h-3" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
+            <button
+              type="button"
+              onClick={refreshLocalDocs}
+              disabled={localLoading}
+              className="p-2 rounded-xl border border-[#3c4043] bg-[#202124] hover:bg-[#282a2c] text-[#c4c7c5] hover:text-white transition"
+              title="Actualiser les documents locaux"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${localLoading ? 'animate-spin' : ''}`} />
+            </button>
           </div>
-        )}
-      </div>
 
-      {/* New Document Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
+          {/* Local documents grid */}
+          {localLoading ? (
+            <div className="py-16 text-center text-xs text-[#9aa0a6] flex items-center justify-center gap-2">
+              <RefreshCw className="w-4 h-4 animate-spin text-emerald-400" />
+              Lecture des documents locaux ({selectedBranch})…
+            </div>
+          ) : localDocs.length === 0 ? (
+            <div className="p-8 sm:p-12 text-center rounded-3xl bg-[#18191b]/70 border border-[#282a2c] space-y-2">
+              <HardDrive className="w-10 h-10 text-[#8e918f] mx-auto opacity-30" />
+              <h4 className="text-sm font-bold text-white">Aucun document élève enregistré pour {selectedBranch}</h4>
+              <p className="text-xs text-[#9aa0a6] max-w-sm mx-auto">
+                Importez vos énoncés d'exercices, résumés de cours ou fiches personnelles. Ils resteront stockés en toute sécurité dans votre navigateur.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {localDocs.map((doc) => (
+                <div
+                  key={doc.name}
+                  className="p-4 rounded-2xl bg-[#18191b] border border-[#282a2c] hover:border-emerald-500/40 space-y-3 transition shadow-md"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2.5 overflow-hidden">
+                      <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+                        <FileCode className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="text-xs font-bold text-white truncate" title={doc.name}>
+                          {doc.name}
+                        </h4>
+                        <div className="text-[10px] text-[#9aa0a6] flex items-center gap-2 mt-0.5">
+                          <span className="px-1.5 py-0.2 rounded bg-[#202124] text-emerald-300 font-semibold border border-[#3c4043]">
+                            Élève {doc.branch || selectedBranch}
+                          </span>
+                          <span>{(doc.size / 1024).toFixed(1)} Ko</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handlePreviewDoc({ name: doc.name, content: doc.content, isPdf: doc.isPdf, source: 'local' })}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-[#202124] transition"
+                        title="Aperçu du document"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDocToDelete({ id: doc.name, name: doc.name, source: 'local' })}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-950/30 transition"
+                        title="Supprimer du coffre local"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-[#282a2c] flex items-center justify-between text-[11px]">
+                    <span className="text-[#8e918f]">Stocké localement (IndexedDB)</span>
+                    {onAskQuestionAboutDoc && (
+                      <button
+                        type="button"
+                        onClick={() => onAskQuestionAboutDoc(doc.name, doc.content)}
+                        className="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1 transition"
+                      >
+                        <span>Interroger Si Driss</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* MODAL 1: PREVIEW DOCUMENT */}
+      {previewDoc && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in">
           <div
-            ref={createDialogRef}
+            ref={previewModalRef}
             role="dialog"
             aria-modal="true"
-            aria-label="Créer un document du programme"
+            aria-label="Aperçu du document"
             tabIndex={-1}
-            className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl space-y-4 p-5"
+            className="bg-[#18191b] border border-[#3c4043] rounded-3xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden"
           >
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="font-bold text-white text-sm flex items-center gap-2">
-                <Plus className="w-4 h-4 text-amber-400" />
-                Créer un document permanent dans /docs/programme/
-              </h3>
+            <div className="flex items-center justify-between p-4 border-b border-[#282a2c] bg-[#1e1f20]">
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-sky-400" />
+                <h3 className="font-bold text-white text-xs sm:text-sm truncate max-w-md">{previewDoc.name}</h3>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#282a2c] text-[#c4c7c5]">
+                  {previewDoc.source === 'drive' ? 'Google Drive (Prof)' : 'Stockage Local (Élève)'}
+                </span>
+              </div>
               <button
-                onClick={() => setShowCreateModal(false)}
-                className="text-slate-400 hover:text-white text-xs"
+                type="button"
+                onClick={() => setPreviewDoc(null)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5">
+              {loadingPreview ? (
+                <div className="py-12 text-center text-xs text-[#9aa0a6] flex items-center justify-center gap-2">
+                  <RefreshCw className="w-4 h-4 animate-spin text-sky-400" />
+                  Chargement de l'aperçu…
+                </div>
+              ) : (
+                <pre className="text-xs text-slate-200 font-mono whitespace-pre-wrap leading-relaxed bg-[#131314] p-4 rounded-2xl border border-[#282a2c]">
+                  {previewDoc.content}
+                </pre>
+              )}
+            </div>
+
+            <div className="p-3 border-t border-[#282a2c] bg-[#1e1f20] flex justify-end">
+              <button
+                type="button"
+                onClick={() => setPreviewDoc(null)}
+                className="px-4 py-2 rounded-xl bg-[#282a2c] hover:bg-[#3c4043] text-white text-xs font-semibold"
               >
                 Fermer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 2: CONFIRM DELETION (MANDATORY REQUIREMENT FOR WORKSPACE APIS) */}
+      {docToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in">
+          <div
+            ref={deleteModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Confirmation de suppression"
+            tabIndex={-1}
+            className="bg-[#18191b] border border-rose-500/30 rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-4"
+          >
+            <div className="flex items-center gap-3 text-rose-400">
+              <div className="w-10 h-10 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white">Confirmer la suppression</h3>
+                <p className="text-[11px] text-slate-400">
+                  {docToDelete.source === 'drive' ? 'Action sur Google Drive' : 'Action sur le stockage local'}
+                </p>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Êtes-vous sûr de vouloir supprimer définitivement le document{' '}
+              <strong className="text-white font-mono">{docToDelete.name}</strong>{' '}
+              {docToDelete.source === 'drive'
+                ? `de votre dossier Google Drive (${FOLDER_NAMES[selectedBranch]}) ? Cette action est irréversible.`
+                : `de votre stockage local ?`}
+            </p>
+
+            <div className="flex items-center justify-end gap-2.5 pt-2">
+              <button
+                type="button"
+                onClick={() => setDocToDelete(null)}
+                className="px-4 py-2 rounded-xl bg-[#282a2c] hover:bg-[#3c4043] text-[#c4c7c5] text-xs font-semibold transition"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition shadow-md"
+              >
+                Supprimer définitivement
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 3: CREATE LOCAL STUDENT DOCUMENT */}
+      {showCreateLocalModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in">
+          <div
+            ref={createModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Créer une fiche élève locale"
+            tabIndex={-1}
+            className="bg-[#18191b] border border-[#3c4043] rounded-3xl w-full max-w-xl p-5 shadow-2xl space-y-4"
+          >
+            <div className="flex items-center justify-between border-b border-[#282a2c] pb-3">
+              <h3 className="font-bold text-white text-sm flex items-center gap-2">
+                <Plus className="w-4 h-4 text-emerald-400" />
+                Rédiger une fiche de révision locale ({selectedBranch})
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowCreateLocalModal(false)}
+                className="text-slate-400 hover:text-white"
+              >
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="space-y-3">
               <div>
                 <label className="text-xs font-semibold text-slate-300 block mb-1">
-                  Nom du fichier (ex: cours_ondes_optiques.md) :
+                  Nom du document (ex: resume_chute_verticale.md) :
                 </label>
                 <input
                   type="text"
-                  value={newFileName}
-                  onChange={(e) => setNewFileName(e.target.value)}
-                  placeholder="mon_resume_physique.md"
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 font-mono focus:outline-none focus:border-amber-500"
+                  value={newDocName}
+                  onChange={(e) => setNewDocName(e.target.value)}
+                  placeholder="mon_resume_rlc.md"
+                  className="w-full bg-[#131314] border border-[#3c4043] rounded-xl px-3 py-2 text-xs text-slate-100 font-mono focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
               <div>
                 <label className="text-xs font-semibold text-slate-300 block mb-1">
-                  Contenu du document (Texte, définitions, formules en $...$) :
+                  Contenu (formules en $...$, notes, définitions) :
                 </label>
                 <textarea
-                  rows={10}
-                  value={newFileContent}
-                  onChange={(e) => setNewFileContent(e.target.value)}
-                  placeholder="# Titre du chapitre
-- Définition 1 : ...
-- Formule clé : $v = d / \Delta t$
-- Piège à éviter : ..."
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 font-mono focus:outline-none focus:border-amber-500 leading-relaxed"
+                  rows={8}
+                  value={newDocContent}
+                  onChange={(e) => setNewDocContent(e.target.value)}
+                  placeholder="# Résumé du chapitre&#10;- Équation différentielle : ...&#10;- Formule de la période propre : $T_0 = 2\pi\sqrt{LC}$&#10;- Piège à retenir : ..."
+                  className="w-full bg-[#131314] border border-[#3c4043] rounded-xl p-3 text-xs text-slate-100 font-mono focus:outline-none focus:border-emerald-500 leading-relaxed"
                 />
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
+            <div className="flex justify-end gap-2 pt-2 border-t border-[#282a2c]">
               <button
-                onClick={() => setShowCreateModal(false)}
-                className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs hover:bg-slate-700"
+                type="button"
+                onClick={() => setShowCreateLocalModal(false)}
+                className="px-4 py-2 rounded-xl bg-[#282a2c] hover:bg-[#3c4043] text-slate-300 text-xs font-semibold"
               >
                 Annuler
               </button>
               <button
-                onClick={handleCreateDocument}
-                disabled={!newFileName.trim() || !newFileContent.trim()}
-                className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs disabled:opacity-40"
+                type="button"
+                onClick={handleCreateLocalDocument}
+                disabled={!newDocName.trim() || !newDocContent.trim()}
+                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs disabled:opacity-40 transition"
               >
-                Enregistrer et indexer
+                Sauvegarder dans mon coffre local
               </button>
             </div>
           </div>

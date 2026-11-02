@@ -163,7 +163,7 @@ router.post('/chat/stream', async (req, res) => {
         if (att.text) searchTerms += ' ' + att.text.slice(0, 200);
       }
     }
-    const matchedDocs = await searchLocalDocuments(searchTerms);
+    const matchedDocs = await searchLocalDocuments(searchTerms, branch);
     const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context);
 
     // Setup SSE headers
@@ -230,7 +230,7 @@ router.post('/chat', async (req, res) => {
         if (att.text) searchTerms += ' ' + att.text.slice(0, 200);
       }
     }
-    const matchedDocs = await searchLocalDocuments(searchTerms);
+    const matchedDocs = await searchLocalDocuments(searchTerms, branch);
     const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context);
 
     const { text, model } = await generateUnifiedCompletion(aiConfig, messages, fullInstruction, false);

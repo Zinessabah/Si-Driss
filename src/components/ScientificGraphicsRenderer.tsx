@@ -1,5 +1,192 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { Download, RefreshCw, ZoomIn, ZoomOut, Info, Activity, GitFork, Copy, Check } from 'lucide-react';
+import katex from 'katex';
+import DOMPurify from 'dompurify';
+
+const KATEX_MACROS: Record<string, string> = {
+  '\\unit': '\\text{#1}',
+  '\\pu': '\\text{#1}',
+  '\\si': '\\text{#1}',
+  '\\SI': '#1\\,\\text{#2}',
+  '\\degree': '^\\circ',
+  '\\d': '\\mathrm{d}',
+  '\\dd': '\\mathrm{d}',
+  '\\vect': '\\vec{#1}',
+  '\\norm': '\\left\\|#1\\right\\|',
+  '\\R': '\\mathbb{R}',
+  '\\N': '\\mathbb{N}',
+  '\\boxed': '#1',
+};
+
+/**
+ * Convertit des notations de physique ASCII (ex: d^2 u_C / dt^2, (R_t / L), T ~ T_0, 2*pi*sqrt(LC)) en code LaTeX valide
+ */
+export function normalizePhysicsMathToLatex(input: string): string {
+  if (!input) return '';
+  let s = input.trim();
+
+  // Enlève d'éventuels délimiteurs $...$ externes
+  if (s.startsWith('$') && s.endsWith('$') && s.length >= 2) {
+    s = s.slice(1, -1).trim();
+  }
+
+  // Détection si déjà du LaTeX avec commandes explicites
+  const hasLatexCommands = /\\(frac|sqrt|cdot|approx|lambda|tau|pi|Delta|theta|mu|le|ge)\b/.test(s);
+
+  // 1. Dérivées secondes : d^2 u_C / dt^2 ou d^2u_C/dt^2 -> \frac{d^2 u_C}{dt^2}
+  s = s.replace(/d\^2\s*([a-zA-Z_]+)\s*\/\s*dt\^2/gi, '\\frac{d^2 $1}{dt^2}');
+  s = s.replace(/d\^2\s*([a-zA-Z_]+)\s*\/\s*d([a-zA-Z_]+)\^2/gi, '\\frac{d^2 $1}{d$2^2}');
+
+  // 2. Dérivées premières : du_C/dt, dq/dt, di/dt, dE_t/dt -> \frac{d...}{dt}
+  s = s.replace(/d([a-zA-Z_]+)\s*\/\s*dt/gi, '\\frac{d$1}{dt}');
+  s = s.replace(/d([a-zA-Z_]+)\s*\/\s*d([a-zA-Z_]+)/gi, '\\frac{d$1}{d$2}');
+
+  // 3. Fractions entre parenthèses : (R_t / L) -> \frac{R_t}{L}, (1 / LC) -> \frac{1}{LC}
+  s = s.replace(/\(\s*([a-zA-Z0-9_]+)\s*\/\s*([a-zA-Z0-9_]+)\s*\)/g, '\\frac{$1}{$2}');
+
+  // 4. Fractions numériques : 1/2 -> \frac{1}{2}, 1/LC -> \frac{1}{LC}
+  s = s.replace(/\b1\/2\b/g, '\\frac{1}{2}');
+  s = s.replace(/\b([0-9]+)\s*\/\s*([a-zA-Z0-9_]+)\b/g, '\\frac{$1}{$2}');
+
+  // 5. Racines : sqrt(...) -> \sqrt{...}
+  s = s.replace(/sqrt\(([^)]+)\)/gi, '\\sqrt{$1}');
+
+  // 6. Lettres grecques si non précédées d'un antislash
+  if (!hasLatexCommands) {
+    s = s.replace(/(?<!\\)\bpi\b/gi, '\\pi');
+    s = s.replace(/(?<!\\)\blambda\b/gi, '\\lambda');
+    s = s.replace(/(?<!\\)\btau\b/gi, '\\tau');
+    s = s.replace(/(?<!\\)\bDelta\b/g, '\\Delta');
+    s = s.replace(/(?<!\\)\bdelta\b/g, '\\delta');
+    s = s.replace(/(?<!\\)\btheta\b/gi, '\\theta');
+    s = s.replace(/(?<!\\)\bmu\b/gi, '\\mu');
+    s = s.replace(/(?<!\\)\bomega\b/gi, '\\omega');
+    s = s.replace(/(?<!\\)\bOmega\b/g, '\\Omega');
+  }
+
+  // 7. Opérateurs
+  s = s.replace(/\s*\*\s*/g, ' \\cdot ');
+  s = s.replace(/<=/g, ' \\le ');
+  s = s.replace(/>=/g, ' \\ge ');
+  s = s.replace(/\s*~\s*/g, ' \\approx ');
+  s = s.replace(/!=/g, ' \\neq ');
+
+  return s;
+}
+
+/**
+ * Rendu KaTeX sécurisé avec dompurify
+ */
+export function renderLatexHtml(code: string, displayMode: boolean): string {
+  try {
+    const html = katex.renderToString(code, {
+      displayMode,
+      throwOnError: false,
+      strict: false,
+      trust: false,
+      macros: KATEX_MACROS,
+    });
+    return DOMPurify.sanitize(html, { USE_PROFILES: { html: true, mathMl: true } });
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Rend un texte mixte (mots français + formules $...$ ou expressions mathématiques sans délimiteur)
+ */
+export const MindMapTextView: React.FC<{ text: string; className?: string }> = ({ text, className = '' }) => {
+  if (!text) return null;
+
+  // Délimiteurs explicites $...$
+  if (text.includes('$')) {
+    const tokens = text.split(/(\$[^$]+\$)/g);
+    return (
+      <span className={className}>
+        {tokens.map((token, i) => {
+          if (token.startsWith('$') && token.endsWith('$') && token.length > 2) {
+            const math = normalizePhysicsMathToLatex(token.slice(1, -1));
+            const html = renderLatexHtml(math, false);
+            return (
+              <span
+                key={i}
+                className="inline-block mx-0.5 align-middle font-bold text-amber-200"
+                dangerouslySetInnerHTML={{ __html: html || token }}
+              />
+            );
+          }
+          return <span key={i}>{token}</span>;
+        })}
+      </span>
+    );
+  }
+
+  // Détection automatique d'expressions mathématiques dans du texte sans délimiteurs
+  // Exemples : "T_0 = 2*pi*sqrt(LC)", "T ~ T_0", "R_t = 0", "R_t", "u_C", "E_t"
+  const mathRegex = /\b([A-Za-z]+_[A-Za-z0-9]+(?:\s*[=~<>]=?\s*[^,()]+)?|[A-Za-z]\s*[=~<>]=?\s*[^,()]+|[A-Za-z]+_[A-Za-z0-9]+)\b/g;
+
+  const parts: { type: 'text' | 'math'; value: string }[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = mathRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push({ type: 'text', value: text.slice(lastIndex, match.index) });
+    }
+    parts.push({ type: 'math', value: match[0].trim() });
+    lastIndex = mathRegex.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push({ type: 'text', value: text.slice(lastIndex) });
+  }
+
+  if (parts.length === 0 || (parts.length === 1 && parts[0].type === 'text')) {
+    return <span className={className}>{text}</span>;
+  }
+
+  return (
+    <span className={className}>
+      {parts.map((p, i) => {
+        if (p.type === 'math') {
+          const math = normalizePhysicsMathToLatex(p.value);
+          const html = renderLatexHtml(math, false);
+          return (
+            <span
+              key={i}
+              className="inline-block mx-0.5 align-middle font-bold text-amber-200"
+              dangerouslySetInnerHTML={{ __html: html || p.value }}
+            />
+          );
+        }
+        return <span key={i}>{p.value}</span>;
+      })}
+    </span>
+  );
+};
+
+/**
+ * Rend une formule complète de carte mentale avec KaTeX en mode display élégant
+ */
+export const MindMapFormulaView: React.FC<{ formula: string }> = ({ formula }) => {
+  const latex = useMemo(() => normalizePhysicsMathToLatex(formula), [formula]);
+  const html = useMemo(() => renderLatexHtml(latex, true), [latex]);
+
+  if (!html) {
+    return (
+      <code className="text-xs font-mono text-amber-300 block text-center py-1">
+        {formula}
+      </code>
+    );
+  }
+
+  return (
+    <div
+      className="text-center font-bold text-slate-100 py-0.5 overflow-x-auto [&_.katex]:text-sm sm:[&_.katex]:text-[15px] select-all"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+};
 
 export interface CurvePoint {
   x: number;
@@ -682,7 +869,7 @@ export const ScientificCurveChart: React.FC<{ spec: CurveChartSpec }> = ({ spec 
             <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
             <div className="leading-relaxed">
               <strong className="text-amber-300">Guide de lecture Bac : </strong>
-              {notes}
+              <MindMapTextView text={notes} />
             </div>
           </div>
         )}
@@ -696,45 +883,54 @@ export const ScientificCurveChart: React.FC<{ spec: CurveChartSpec }> = ({ spec 
  */
 export const ScientificMindMap: React.FC<{ spec: MindMapSpec }> = ({ spec }) => {
   const { title, subtitle, root } = spec;
+  const [copied, setCopied] = useState<boolean>(false);
+
+  const handleCopySpec = () => {
+    navigator.clipboard.writeText(JSON.stringify(spec, null, 2));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const renderTree = (node: MindMapNode, depth = 0, index = 0): React.ReactNode => {
     const isRoot = depth === 0;
     const colors = [
-      'border-amber-500 bg-amber-500/10 text-amber-300',
-      'border-sky-500 bg-sky-500/10 text-sky-300',
-      'border-emerald-500 bg-emerald-500/10 text-emerald-300',
-      'border-purple-500 bg-purple-500/10 text-purple-300',
-      'border-rose-500 bg-rose-500/10 text-rose-300',
+      'border-amber-500/60 bg-amber-500/10 text-amber-200',
+      'border-sky-500/60 bg-sky-500/10 text-sky-200',
+      'border-emerald-500/60 bg-emerald-500/10 text-emerald-200',
+      'border-purple-500/60 bg-purple-500/10 text-purple-200',
+      'border-rose-500/60 bg-rose-500/10 text-rose-200',
     ];
     const colorClass = colors[(depth + index) % colors.length];
 
     return (
-      <div key={`node-${depth}-${index}-${node.label}`} className="flex flex-col items-start gap-2">
+      <div key={`node-${depth}-${index}-${node.label}`} className="flex flex-col items-start gap-2.5">
         <div
-          className={`px-3 py-2 rounded-xl border font-medium text-xs sm:text-sm shadow-md transition-all hover:scale-[1.02] ${
+          className={`px-3.5 py-2.5 rounded-2xl border font-medium text-xs sm:text-sm shadow-md transition-all hover:scale-[1.01] ${
             isRoot
-              ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-amber-400 text-amber-200 font-bold text-sm sm:text-base px-4 py-2.5'
+              ? 'bg-gradient-to-r from-amber-500/20 via-orange-500/15 to-amber-500/10 border-amber-400/80 text-amber-100 font-bold text-sm sm:text-base px-4 py-3'
               : colorClass
           }`}
         >
-          <div className="flex items-center gap-2">
-            <span>{node.label}</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-semibold text-slate-100 tracking-wide">
+              <MindMapTextView text={node.label} />
+            </span>
             {node.badge && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-200 font-semibold border border-slate-700">
-                {node.badge}
+              <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-900/90 text-slate-200 font-medium border border-slate-700/80 shadow-xs inline-flex items-center">
+                <MindMapTextView text={node.badge} />
               </span>
             )}
           </div>
           {node.formula && (
-            <div className="mt-1 text-[11px] font-mono text-slate-200 bg-slate-950/70 px-2 py-0.5 rounded border border-slate-800/80">
-              {node.formula}
+            <div className="mt-2 py-1.5 px-3 rounded-xl bg-slate-950/90 text-slate-100 border border-slate-800/90 shadow-inner overflow-x-auto">
+              <MindMapFormulaView formula={node.formula} />
             </div>
           )}
         </div>
 
         {/* Enfants */}
         {node.children && node.children.length > 0 && (
-          <div className="pl-4 sm:pl-6 border-l-2 border-slate-800/80 my-1 space-y-2.5">
+          <div className="pl-4 sm:pl-6 border-l-2 border-slate-800/80 my-1 space-y-3">
             {node.children.map((child, idx) => renderTree(child, depth + 1, idx))}
           </div>
         )}
@@ -754,9 +950,17 @@ export const ScientificMindMap: React.FC<{ spec: MindMapSpec }> = ({ spec }) => 
             {subtitle && <p className="text-[11px] text-slate-400">{subtitle}</p>}
           </div>
         </div>
+        <button
+          type="button"
+          onClick={handleCopySpec}
+          className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition"
+          title="Copier les paramètres de la carte"
+        >
+          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+        </button>
       </div>
 
-      <div className="p-4 overflow-x-auto">{renderTree(root)}</div>
+      <div className="p-4 sm:p-5 overflow-x-auto">{renderTree(root)}</div>
     </div>
   );
 };

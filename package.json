@@ -21,6 +21,7 @@
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
     "express-rate-limit": "^8.7.2",
+    "firebase": "^13.1.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
     "katex": "^0.19.0",
