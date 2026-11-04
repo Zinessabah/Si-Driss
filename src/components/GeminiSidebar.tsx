@@ -81,8 +81,8 @@ export const GeminiSidebar: React.FC<GeminiSidebarProps> = ({
     },
     {
       id: 'documents' as const,
-      name: 'Documents du Programme',
-      desc: 'Fichiers officiels /docs',
+      name: 'Mon Classeur & Fiches',
+      desc: 'Fiches perso & RAG Officiel',
       icon: FolderOpen,
       color: 'text-purple-400',
     },

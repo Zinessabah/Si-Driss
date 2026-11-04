@@ -29,3 +29,12 @@ export const ACCESS_TOKEN = (process.env.SI_DRISS_ACCESS_TOKEN || '').trim();
 
 /** Jeton admin requis pour téléverser/supprimer des documents du programme. */
 export const ADMIN_TOKEN = (process.env.ADMIN_TOKEN || '').trim();
+
+/** Liens ou identifiants des 2 dossiers Google Drive publics officiels (PC & SM) */
+export const GOOGLE_DRIVE_FOLDER_PC = (process.env.GOOGLE_DRIVE_FOLDER_PC || '').trim();
+export const GOOGLE_DRIVE_FOLDER_SM = (process.env.GOOGLE_DRIVE_FOLDER_SM || '').trim();
+export const GOOGLE_DRIVE_API_KEY = (process.env.GOOGLE_DRIVE_API_KEY || '').trim();
+export const GOOGLE_DRIVE_APPS_SCRIPT_URL = (process.env.GOOGLE_DRIVE_APPS_SCRIPT_URL || '').trim();
+
+/** Fréquence d'auto-synchronisation Drive en heures (par défaut 12h = 2 fois par jour) */
+export const DRIVE_SYNC_INTERVAL_HOURS = Math.max(1, Number(process.env.DRIVE_SYNC_INTERVAL_HOURS || 12));

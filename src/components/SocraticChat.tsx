@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Send,
   Sparkles,
@@ -179,6 +179,10 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const chatScrollContainerRef = useRef<HTMLDivElement | null>(null);
+  // (H3) Flags pour le scroll intelligent : évite de scroller à chaque frame rAF
+  // pendant le streaming si l'élève est en train de relire les messages précédents.
+  const isStreamingRef = useRef<boolean>(false);
+  const scrollRafRef = useRef<number | null>(null);
 
   // Inform parent of sessions list
   useEffect(() => {
@@ -284,23 +288,46 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
   // (M11) Au démontage réel du composant : coupe le flux SSE en cours et la
   // synthèse vocale (plus de tokens brûlés en silence ni de voix fantôme).
+  // (H3) Annule aussi le rAF de scroll en attente.
   useEffect(() => {
     return () => {
       activeStreamControllerRef.current?.abort();
+      if (scrollRafRef.current !== null) {
+        cancelAnimationFrame(scrollRafRef.current);
+      }
       if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
     };
   }, []);
 
+  // (H3) Scroll intelligent :
+  // - Nouveau message envoyé / fin de stream → scroll forcé jusqu'en bas
+  // - Pendant le streaming → scroll throttlé via rAF, uniquement si l'utilisateur
+  //   est déjà proche du bas (< 200 px) pour ne pas perturber la lecture
+  const scrollToBottomForced = useCallback(() => {
+    const el = chatScrollContainerRef.current;
+    if (!el) return;
+    el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+  }, []);
+
+  const scheduleScrollIfNearBottom = useCallback(() => {
+    if (scrollRafRef.current !== null) return; // déjà planifié, on ne surcharge pas
+    scrollRafRef.current = requestAnimationFrame(() => {
+      scrollRafRef.current = null;
+      const el = chatScrollContainerRef.current;
+      if (!el) return;
+      const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+      if (distanceFromBottom < 200) {
+        el.scrollTo({ top: el.scrollHeight, behavior: 'instant' });
+      }
+    });
+  }, []);
+
+  // Scroll forcé uniquement quand loading change (envoi ou fin de stream)
   useEffect(() => {
-    if (chatScrollContainerRef.current) {
-      chatScrollContainerRef.current.scrollTo({
-        top: chatScrollContainerRef.current.scrollHeight,
-        behavior: 'smooth',
-      });
-    }
-  }, [messages, loading]);
+    scrollToBottomForced();
+  }, [loading, scrollToBottomForced]);
 
   const toggleSocratic = (enabled: boolean) => {
     setSocraticEnabled(enabled);
@@ -601,8 +628,11 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         const decoder = new TextDecoder();
         let buffer = '';
 
-        // (H8) Flush throttlé (requestAnimationFrame) : un seul re-render du message
+        // (H3+H8) Flush throttlé (requestAnimationFrame) : un seul re-render du message
         // en cours par frame au lieu d'un setState par chunk SSE reçu.
+        // Le scroll pendant le streaming est aussi planifié ici (si l'utilisateur est
+        // déjà en bas) pour ne pas déclencher un useEffect sur chaque setMessages.
+        isStreamingRef.current = true;
         let flushScheduled = false;
         const flushStreamedContent = () => {
           if (flushScheduled) return;
@@ -612,6 +642,8 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
             setMessages((prev) =>
               prev.map((m) => (m.id === assistantMsgId ? { ...m, content: accumulated } : m))
             );
+            // Scroll discret : uniquement si l'élève est déjà proche du bas
+            scheduleScrollIfNearBottom();
           });
         };
 
@@ -723,6 +755,12 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
       ]);
     } finally {
       if (timeoutId) clearTimeout(timeoutId);
+      // (H3) Fin du streaming : annuler le rAF scroll en attente et remettre le flag
+      isStreamingRef.current = false;
+      if (scrollRafRef.current !== null) {
+        cancelAnimationFrame(scrollRafRef.current);
+        scrollRafRef.current = null;
+      }
       setLoading(false);
     }
   };

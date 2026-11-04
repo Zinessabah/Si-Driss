@@ -3,7 +3,7 @@ dns.setDefaultResultOrder('ipv4first');
 
 import express from 'express';
 import path from 'path';
-import { PORT, ROOT_DIR, DOCS_DIR } from './server/config';
+import { PORT, ROOT_DIR, DOCS_DIR, GOOGLE_DRIVE_FOLDER_PC, GOOGLE_DRIVE_FOLDER_SM } from './server/config';
 import { apiLimiter, accessGate } from './server/security';
 import { createAiRouter } from './server/routes/ai';
 import { createDocumentsRouter } from './server/routes/documents';
@@ -65,7 +65,17 @@ async function startServer() {
     console.log(`📚 Documents repository ready: ${DOCS_DIR}`);
     console.log(`🤖 Universal AI Engine: Gemini, Groq, OpenAI, Claude, DeepSeek, Mistral, Ollama/Local`);
     console.log(`=======================================================`);
+
+    // RAG local 100% autonome et confidentiel (dossiers docs/programme/PC et SM)
+    import('./server/rag').then(({ getLocalRagStatus }) => {
+      const rag = getLocalRagStatus();
+      console.log(`📚 RAG Local Actif : ${rag.pcCount} document(s) 2BAC PC, ${rag.smCount} document(s) 2BAC SM`);
+      console.log(`🔒 Étanchéité pédagogique stricte : PC et SM 100% isolés (sans dossier commun)`);
+    });
   });
 }
 
-startServer();
+startServer().catch((err) => {
+  console.error('Erreur au démarrage du serveur:', err);
+  process.exit(1);
+});

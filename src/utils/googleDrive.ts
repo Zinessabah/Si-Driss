@@ -1,38 +1,15 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  User,
-  signOut,
-} from 'firebase/auth';
-// Configuration Firebase client pour Google Drive (supporte les variables VITE_ ou valeurs par défaut)
-const FIREBASE_CONFIG = {
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'gen-lang-client-0176457762',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:97093970248:web:0859a349ef3f3ab2fc6b7d',
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyBvfihcgHc718J7GzP-UVc-3jDnVIFyyyI',
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'gen-lang-client-0176457762.firebaseapp.com',
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'gen-lang-client-0176457762.firebasestorage.app',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '97093970248',
-};
-
-// Reuse existing Firebase app instance if already initialized
-const app = getApps().length > 0 ? getApp() : initializeApp(FIREBASE_CONFIG);
-const auth = getAuth(app);
-
-// Scopes required for Google Drive official documents management
-export const DRIVE_SCOPES = [
-  'https://www.googleapis.com/auth/drive.file',
-  'https://www.googleapis.com/auth/drive.readonly',
-];
-
-const provider = new GoogleAuthProvider();
-DRIVE_SCOPES.forEach((scope) => provider.addScope(scope));
-
-// In-memory caching for OAuth access token (per workspace-integration skill)
-let cachedAccessToken: string | null = null;
-let isSigningIn = false;
+/**
+ * Google Drive Public Integration (Option 2 — Lecture Seule Universelle)
+ *
+ * Ce module gère l'accès aux documents officiels hébergés sur un dossier Google Drive
+ * public (partagé en mode « Tous les utilisateurs disposant du lien : Lecteur »).
+ *
+ * AVANTAGES :
+ * 1. Aucun compte Google ni popup Firebase requis pour les élèves (100% universel).
+ * 2. Aucune erreur d'autorisation de domaine (auth/unauthorized-domain).
+ * 3. Les documents sont synchronisés vers le serveur (/docs/programme/) et indexés
+ *    directement par le RAG de Si Driss.
+ */
 
 export interface DriveDoc {
   id: string;
@@ -41,312 +18,275 @@ export interface DriveDoc {
   size?: number;
   modifiedTime?: string;
   webViewLink?: string;
+  downloadUrl?: string;
   branch: 'PC' | 'SM';
   preview?: string;
 }
 
-/**
- * Initializes the auth listener. Keeps access token in memory.
- */
-export const initDriveAuth = (
-  onAuthSuccess?: (user: User, token: string) => void,
-  onAuthFailure?: () => void
-) => {
-  return onAuthStateChanged(auth, async (user: User | null) => {
-    if (user && cachedAccessToken) {
-      onAuthSuccess?.(user, cachedAccessToken);
-    } else {
-      if (!isSigningIn) {
-        cachedAccessToken = null;
-        onAuthFailure?.();
-      }
-    }
-  });
-};
-
-/**
- * Initiates Google sign-in for the Professor / Admin to access Google Drive.
- */
-export const signInWithGoogleDrive = async (): Promise<{ user: User; accessToken: string }> => {
-  try {
-    isSigningIn = true;
-    const result = await signInWithPopup(auth, provider);
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    if (!credential?.accessToken) {
-      throw new Error('Impossible de récupérer le jeton d\'accès Google Drive.');
-    }
-
-    cachedAccessToken = credential.accessToken;
-    return { user: result.user, accessToken: cachedAccessToken };
-  } catch (error: any) {
-    console.error('[GoogleDrive] Erreur de connexion:', error);
-    throw error;
-  } finally {
-    isSigningIn = false;
-  }
-};
-
-/**
- * Returns current access token from memory.
- */
-export const getDriveAccessToken = (): string | null => {
-  return cachedAccessToken;
-};
-
-/**
- * Signs out the Professor from Google Drive session.
- */
-export const signOutFromGoogleDrive = async (): Promise<void> => {
-  await signOut(auth);
-  cachedAccessToken = null;
-};
-
-/**
- * Returns the current authenticated Google user.
- */
-export const getCurrentDriveUser = (): User | null => {
-  return auth.currentUser;
-};
-
-/**
- * Names of official folders created in Google Drive for each branch.
- */
 export const FOLDER_NAMES: Record<'PC' | 'SM', string> = {
   PC: 'Si Driss — Documents Officiels PC',
   SM: 'Si Driss — Documents Officiels SM',
 };
 
+const STORAGE_KEY_PC = 'sidriss_public_drive_folder_pc';
+const STORAGE_KEY_SM = 'sidriss_public_drive_folder_sm';
+
 /**
- * Gets or creates the official branch folder in the teacher's Google Drive.
+ * Extrait l'identifiant propre d'un dossier ou fichier Google Drive
+ * depuis une URL complète (ex: https://drive.google.com/drive/folders/1ABC...) ou un ID brut.
  */
-export const getOrCreateBranchFolder = async (branch: 'PC' | 'SM'): Promise<string> => {
-  const token = getDriveAccessToken();
-  if (!token) throw new Error('Authentification Google Drive requise.');
+export function extractDriveFolderId(input: string): string {
+  if (!input) return '';
+  const trimmed = input.trim();
+  const folderMatch = trimmed.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+  if (folderMatch) return folderMatch[1];
+  const fileMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (fileMatch) return fileMatch[1];
+  const idParamMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (idParamMatch) return idParamMatch[1];
+  return trimmed;
+}
 
-  const folderName = FOLDER_NAMES[branch];
+/**
+ * Lien d'affichage web officiel dans Google Drive
+ */
+export function getDriveViewUrl(fileOrFolderId: string): string {
+  const id = extractDriveFolderId(fileOrFolderId);
+  return id ? `https://drive.google.com/file/d/${id}/view` : '';
+}
 
-  // 1. Search for existing folder
-  const query = `name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`;
-  const searchUrl = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=files(id,name)`;
+/**
+ * Lien d'accès direct au dossier public dans Google Drive
+ */
+export function getDriveFolderUrl(folderIdOrUrl: string): string {
+  const id = extractDriveFolderId(folderIdOrUrl);
+  return id ? `https://drive.google.com/drive/folders/${id}` : '';
+}
 
-  const searchRes = await fetch(searchUrl, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+/**
+ * Lien direct de téléchargement d'un fichier Google Drive public (sans passerelle)
+ */
+export function getDriveDownloadUrl(fileId: string): string {
+  const id = extractDriveFolderId(fileId);
+  return id ? `https://drive.google.com/uc?export=download&id=${id}` : '';
+}
 
-  if (!searchRes.ok) {
-    const errText = await searchRes.text();
-    throw new Error(`Erreur recherche dossier Drive: ${errText}`);
+/**
+ * Récupère le lien ou l'ID du dossier public stocké localement pour la filière
+ */
+export function getStoredDriveFolder(branch: 'PC' | 'SM'): string {
+  try {
+    const key = branch === 'SM' ? STORAGE_KEY_SM : STORAGE_KEY_PC;
+    return localStorage.getItem(key) || '';
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Enregistre le lien ou l'ID du dossier public pour la filière
+ */
+export function setStoredDriveFolder(branch: 'PC' | 'SM', folderIdOrUrl: string): void {
+  try {
+    const key = branch === 'SM' ? STORAGE_KEY_SM : STORAGE_KEY_PC;
+    if (folderIdOrUrl) {
+      localStorage.setItem(key, folderIdOrUrl.trim());
+    } else {
+      localStorage.removeItem(key);
+    }
+  } catch {}
+}
+
+/**
+ * Récupère le statut public du RAG (accessible aux élèves sans divulguer de liens ou fichiers)
+ */
+export async function fetchRagStatus(): Promise<{
+  active: boolean;
+  pcIndexed: boolean;
+  smIndexed: boolean;
+  totalIndexedFiles: number;
+  syncSchedule?: string;
+  intervalHours?: number;
+  lastSyncIso?: string | null;
+  nextSyncIso?: string | null;
+  message: string;
+}> {
+  try {
+    const res = await fetch('/api/rag/status');
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch {}
+  return {
+    active: true,
+    pcIndexed: false,
+    smIndexed: false,
+    totalIndexedFiles: 0,
+    message: 'Base de connaissances Si Driss prête.',
+  };
+}
+
+/**
+ * Récupère la configuration des dossiers Google Drive (PC & SM) définie côté serveur (Admin uniquement)
+ */
+export async function fetchServerDriveConfig(adminToken?: string): Promise<{ folderPc: string; folderSm: string }> {
+  try {
+    const headers: Record<string, string> = {};
+    if (adminToken) headers['x-admin-token'] = adminToken;
+    const res = await fetch('/api/documents/drive-config', { headers });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch {}
+  return { folderPc: '', folderSm: '' };
+}
+
+/**
+ * Récupère le dossier Drive effectif pour une filière (local ou fallback serveur)
+ */
+export function getEffectiveDriveFolder(branch: 'PC' | 'SM', serverConfig?: { folderPc: string; folderSm: string }): string {
+  const stored = getStoredDriveFolder(branch);
+  if (stored) return stored;
+  if (serverConfig) {
+    return branch === 'SM' ? serverConfig.folderSm : serverConfig.folderPc;
+  }
+  return '';
+}
+
+/**
+ * Déclenche la synchronisation du dossier Google Drive public avec le serveur
+ * pour télécharger les PDFs officiels et les intégrer dans l'index RAG de Si Driss.
+ */
+export async function syncDriveFolderWithServer(
+  folderIdOrUrl: string,
+  branch: 'PC' | 'SM',
+  adminToken?: string
+): Promise<{ success: boolean; count: number; message: string; files?: string[] }> {
+  const cleanId = extractDriveFolderId(folderIdOrUrl);
+  if (!cleanId) {
+    throw new Error('Veuillez fournir un lien ou un identifiant de dossier Google Drive valide.');
   }
 
-  const searchData = await searchRes.json();
-  if (searchData.files && searchData.files.length > 0) {
-    return searchData.files[0].id;
+  // Mémorise le dossier pour de futures synchronisations
+  setStoredDriveFolder(branch, folderIdOrUrl);
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (adminToken) {
+    headers['x-admin-token'] = adminToken;
   }
 
-  // 2. Create the folder if not found
-  const createRes = await fetch('https://www.googleapis.com/drive/v3/files', {
+  const res = await fetch('/api/documents/sync-drive', {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({
-      name: folderName,
-      mimeType: 'application/vnd.google-apps.folder',
-      description: `Dossier officiel des documents pédagogiques de Physique-Chimie pour 2ème Bac ${branch} (BIOF).`,
+      folderId: cleanId,
+      branch,
     }),
   });
 
-  if (!createRes.ok) {
-    const errText = await createRes.text();
-    throw new Error(`Erreur création dossier Drive: ${errText}`);
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || `Erreur de synchronisation (${res.status})`);
   }
 
-  const newFolder = await createRes.json();
-  return newFolder.id;
-};
-
-/**
- * Lists official documents stored in Google Drive for a specific branch (or both).
- */
-export const listOfficialDriveDocuments = async (branch?: 'PC' | 'SM'): Promise<DriveDoc[]> => {
-  const token = getDriveAccessToken();
-  if (!token) return [];
-
-  const branchesToFetch: ('PC' | 'SM')[] = branch ? [branch] : ['PC', 'SM'];
-  const allDocs: DriveDoc[] = [];
-
-  for (const b of branchesToFetch) {
-    try {
-      const folderId = await getOrCreateBranchFolder(b);
-      const query = `'${folderId}' in parents and trashed = false and mimeType != 'application/vnd.google-apps.folder'`;
-      const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(
-        query
-      )}&fields=files(id,name,mimeType,size,modifiedTime,webViewLink)&orderBy=name`;
-
-      const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        const files: DriveDoc[] = (data.files || []).map((f: any) => ({
-          id: f.id,
-          name: f.name,
-          mimeType: f.mimeType,
-          size: f.size ? Number(f.size) : undefined,
-          modifiedTime: f.modifiedTime,
-          webViewLink: f.webViewLink,
-          branch: b,
-        }));
-        allDocs.push(...files);
-      }
-    } catch (err) {
-      console.warn(`[GoogleDrive] Erreur listing documents pour ${b}:`, err);
-    }
-  }
-
-  return allDocs;
-};
-
-/**
- * Uploads a file directly to the teacher's Google Drive in the branch-specific folder.
- */
-export const uploadOfficialDriveDocument = async (
-  file: File,
-  branch: 'PC' | 'SM',
-  customContent?: string
-): Promise<DriveDoc> => {
-  const token = getDriveAccessToken();
-  if (!token) throw new Error('Veuillez vous connecter à Google Drive.');
-
-  const folderId = await getOrCreateBranchFolder(branch);
-
-  const metadata = {
-    name: file.name,
-    parents: [folderId],
-    description: `Document officiel 2ème Bac ${branch} téléversé par le Professeur.`,
-    properties: {
-      branch,
-      role: 'official',
-    },
-  };
-
-  const boundary = '-------314159265358979323846';
-  const delimiter = `\r\n--${boundary}\r\n`;
-  const closeDelimiter = `\r\n--${boundary}--`;
-
-  let body: BodyInit;
-  let contentTypeHeader: string;
-
-  if (customContent !== undefined || file.type.startsWith('text/') || file.name.endsWith('.md') || file.name.endsWith('.txt')) {
-    const textData = customContent !== undefined ? customContent : await file.text();
-    const multipartRequestBody =
-      delimiter +
-      'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
-      JSON.stringify(metadata) +
-      delimiter +
-      `Content-Type: ${file.type || 'text/plain'}\r\n\r\n` +
-      textData +
-      closeDelimiter;
-
-    body = multipartRequestBody;
-    contentTypeHeader = `multipart/related; boundary=${boundary}`;
-  } else {
-    // Binary/PDF files
-    const arrayBuffer = await file.arrayBuffer();
-    const metadataBlob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
-    const fileBlob = new Blob([arrayBuffer], { type: file.type || 'application/octet-stream' });
-
-    const formData = new FormData();
-    formData.append('metadata', metadataBlob);
-    formData.append('file', fileBlob);
-
-    // Using multipart standard upload
-    const uploadUrl = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,mimeType,size,modifiedTime,webViewLink';
-    const uploadRes = await fetch(uploadUrl, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
-
-    if (!uploadRes.ok) {
-      const err = await uploadRes.text();
-      throw new Error(`Échec upload Google Drive (${uploadRes.status}): ${err}`);
-    }
-
-    const uploaded = await uploadRes.json();
-    return {
-      id: uploaded.id,
-      name: uploaded.name,
-      mimeType: uploaded.mimeType,
-      size: uploaded.size ? Number(uploaded.size) : file.size,
-      modifiedTime: uploaded.modifiedTime,
-      webViewLink: uploaded.webViewLink,
-      branch,
-    };
-  }
-
-  const uploadUrl = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name,mimeType,size,modifiedTime,webViewLink';
-  const uploadRes = await fetch(uploadUrl, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': contentTypeHeader,
-    },
-    body,
-  });
-
-  if (!uploadRes.ok) {
-    const err = await uploadRes.text();
-    throw new Error(`Échec upload Google Drive (${uploadRes.status}): ${err}`);
-  }
-
-  const uploaded = await uploadRes.json();
+  const data = await res.json();
   return {
-    id: uploaded.id,
-    name: uploaded.name,
-    mimeType: uploaded.mimeType,
-    size: uploaded.size ? Number(uploaded.size) : file.size,
-    modifiedTime: uploaded.modifiedTime,
-    webViewLink: uploaded.webViewLink,
-    branch,
+    success: Boolean(data.success),
+    count: Number(data.downloadedCount || 0),
+    message: data.message || 'Synchronisation terminée avec succès.',
+    files: data.downloadedFiles || [],
   };
-};
+}
 
 /**
- * Downloads text or extracts content from a Google Drive document.
+ * Récupère la liste des documents officiels accessibles (Admin uniquement).
  */
-export const downloadDriveDocumentText = async (fileId: string): Promise<string> => {
-  const token = getDriveAccessToken();
-  if (!token) throw new Error('Authentification requise.');
+export async function listOfficialDriveDocuments(branch?: 'PC' | 'SM', adminToken?: string): Promise<DriveDoc[]> {
+  try {
+    const headers: Record<string, string> = {};
+    if (adminToken) headers['x-admin-token'] = adminToken;
+    const res = await fetch('/api/documents', { headers });
+    if (!res.ok) return [];
 
-  const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+    const data = await res.json();
+    const files = data.files || [];
 
+    const branchUpper = (branch || 'PC').toUpperCase();
+
+    return files
+      .filter((f: any) => {
+        const nameLower = (f.name || '').toLowerCase();
+        const isSm = nameLower.includes('_sm') || nameLower.includes('-sm') || nameLower.includes('sm.');
+        const isPc = nameLower.includes('_pc') || nameLower.includes('-pc') || nameLower.includes('pc.');
+        if (branchUpper === 'PC' && isSm && !isPc) return false;
+        if (branchUpper === 'SM' && isPc && !isSm) return false;
+        return true;
+      })
+      .map((f: any) => ({
+        id: f.name,
+        name: f.name,
+        mimeType: f.isPdf ? 'application/pdf' : 'text/plain',
+        size: f.size,
+        modifiedTime: f.modified,
+        branch: branchUpper as 'PC' | 'SM',
+        preview: f.preview,
+        downloadUrl: `/api/documents/download?name=${encodeURIComponent(f.name)}`,
+      }));
+  } catch (err) {
+    console.warn('[GoogleDrive] Erreur chargement documents officiels:', err);
+    return [];
+  }
+}
+
+/**
+ * Télécharge le texte d'un document officiel depuis le serveur.
+ */
+export async function downloadDriveDocumentText(fileId: string, adminToken?: string): Promise<string> {
+  const headers: Record<string, string> = {};
+  if (adminToken) headers['x-admin-token'] = adminToken;
+  const res = await fetch(`/api/documents/file?name=${encodeURIComponent(fileId)}`, { headers });
   if (!res.ok) {
     throw new Error(`Impossible de récupérer le document (${res.status}).`);
   }
+  const data = await res.json();
+  return data.content || '';
+}
 
-  return await res.text();
+// -----------------------------------------------------------------------------
+// STUBS DE RÉTROCOMPATIBILITÉ (évite toute régression de compilation)
+// -----------------------------------------------------------------------------
+export const initDriveAuth = (_onSuccess?: any, _onFailure?: any) => {
+  return () => {};
 };
 
-/**
- * Deletes an official document from Google Drive.
- * (MANDATORY: An explicit UI confirmation must be confirmed before calling this function).
- */
-export const deleteOfficialDriveDocument = async (fileId: string): Promise<void> => {
-  const token = getDriveAccessToken();
-  if (!token) throw new Error('Authentification requise.');
+export const signInWithGoogleDrive = async () => {
+  return { user: { displayName: 'Développeur / Professeur' } as any, accessToken: 'public_drive_token' };
+};
 
-  const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}`, {
+export const signOutFromGoogleDrive = async () => {};
+
+export const getCurrentDriveUser = () => null;
+
+export const getDriveAccessToken = () => 'public_drive_token';
+
+export const getOrCreateBranchFolder = async (_branch: 'PC' | 'SM') => '';
+
+export const uploadOfficialDriveDocument = async (_file: File, _branch: 'PC' | 'SM') => {
+  throw new Error(
+    "Pour ajouter un document officiel, déposez-le directement dans votre dossier Google Drive public, puis cliquez sur « Synchroniser » dans l'application."
+  );
+};
+
+export const deleteOfficialDriveDocument = async (fileId: string, adminToken?: string) => {
+  const headers: Record<string, string> = {};
+  if (adminToken) headers['x-admin-token'] = adminToken;
+  const res = await fetch(`/api/documents/${encodeURIComponent(fileId)}`, {
     method: 'DELETE',
-    headers: { Authorization: `Bearer ${token}` },
+    headers,
   });
-
-  if (!res.ok && res.status !== 404) {
-    const err = await res.text();
-    throw new Error(`Erreur lors de la suppression sur Google Drive: ${err}`);
+  if (!res.ok) {
+    throw new Error('Erreur suppression document (Jeton administrateur requis).');
   }
 };

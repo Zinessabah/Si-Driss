@@ -1025,6 +1025,7 @@ function renderInlineMarkdownAndMathToHtml(rawText: string): string {
             displayMode: isDisplay,
             throwOnError: false,
             strict: false,
+            trust: false,
             macros: { '\\boxed': '#1', '\\unit': '\\text{#1}', '\\pu': '\\text{#1}', '\\si': '\\text{#1}' },
           });
           return `<strong class="math-bold">${rendered}</strong>`;
@@ -1131,6 +1132,7 @@ export async function exportToPdf(options: ExportOptions): Promise<void> {
           displayMode: true,
           throwOnError: false,
           strict: false,
+          trust: false,
           macros: { '\\boxed': '#1', '\\unit': '\\text{#1}', '\\pu': '\\text{#1}', '\\si': '\\text{#1}' },
         });
       } catch {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useModalA11y } from '../hooks/useModalA11y';
 import {
   X,
@@ -8,20 +8,14 @@ import {
   FolderOpen,
   Plus,
   RefreshCw,
-  BookOpen,
-  Cloud,
   HardDrive,
   FileCode,
+  ShieldCheck,
+  Upload,
 } from 'lucide-react';
 import { ChatAttachment } from '../types/chat';
 import { useBranch, StudentBranch } from '../hooks/useBranch';
-import { getAllDocumentsFromVault, VaultDocument } from '../utils/documentVault';
-import {
-  listOfficialDriveDocuments,
-  downloadDriveDocumentText,
-  getDriveAccessToken,
-  DriveDoc,
-} from '../utils/googleDrive';
+import { getAllDocumentsFromVault, saveDocumentToVault, VaultDocument } from '../utils/documentVault';
 
 interface DocumentPickerModalProps {
   isOpen: boolean;
@@ -36,26 +30,19 @@ export const DocumentPickerModal: React.FC<DocumentPickerModalProps> = ({
 }) => {
   const { branch: activeBranch } = useBranch();
   const [selectedBranch, setSelectedBranch] = useState<StudentBranch>(activeBranch || 'PC');
-  const [source, setSource] = useState<'drive' | 'local'>('drive');
 
-  // Official docs (Drive + Server fallback)
-  const [driveDocs, setDriveDocs] = useState<DriveDoc[]>([]);
-  const [serverDocs, setServerDocs] = useState<any[]>([]);
-
-  // Student local docs
+  // Student local docs from IndexedDB
   const [localDocs, setLocalDocs] = useState<VaultDocument[]>([]);
-
   const [loading, setLoading] = useState<boolean>(true);
   const [search, setSearch] = useState<string>('');
   const [selectedItem, setSelectedItem] = useState<{
-    id?: string;
     name: string;
     size?: number;
     preview?: string;
-    source: 'drive' | 'local';
     content?: string;
   } | null>(null);
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const dialogRef = useModalA11y(isOpen, onClose);
 
   useEffect(() => {
@@ -64,127 +51,107 @@ export const DocumentPickerModal: React.FC<DocumentPickerModalProps> = ({
     }
   }, [activeBranch]);
 
+  const loadLocalDocs = async () => {
+    setLoading(true);
+    try {
+      const vault = await getAllDocumentsFromVault(selectedBranch);
+      setLocalDocs(vault);
+    } catch (err) {
+      console.warn('Erreur chargement documents locaux:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!isOpen) return;
-
-    let isMounted = true;
-    setLoading(true);
-
-    const loadAll = async () => {
-      try {
-        // 1. Load Local Student Docs
-        const vault = await getAllDocumentsFromVault(selectedBranch);
-        if (isMounted) setLocalDocs(vault);
-
-        // 2. Load Google Drive Docs if authenticated
-        if (getDriveAccessToken()) {
-          const driveList = await listOfficialDriveDocuments(selectedBranch);
-          if (isMounted) setDriveDocs(driveList);
-        } else {
-          if (isMounted) setDriveDocs([]);
-        }
-
-        // 3. Load Server fallback docs
-        const res = await fetch('/api/documents');
-        if (res.ok) {
-          const data = await res.json();
-          if (isMounted) setServerDocs(data.files || []);
-        }
-      } catch (err) {
-        console.warn('Erreur chargement documents pour modal:', err);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-
-    loadAll();
-
-    return () => {
-      isMounted = false;
-    };
+    loadLocalDocs();
   }, [isOpen, selectedBranch]);
 
   if (!isOpen) return null;
 
-  // Filter server official docs based on branch
-  const filteredServerDocs = serverDocs.filter((f) => {
-    const nameLower = (f.name || '').toLowerCase();
-    const isSm = nameLower.includes('_sm') || nameLower.includes('-sm') || nameLower.includes('sm.');
-    const isPc = nameLower.includes('_pc') || nameLower.includes('-pc') || nameLower.includes('pc.');
-    if (selectedBranch === 'PC' && isSm && !isPc) return false;
-    if (selectedBranch === 'SM' && isPc && !isSm) return false;
-    return true;
-  });
-
-  // Items to show based on source tab
-  const officialItems = [
-    ...driveDocs.map((d) => ({
-      id: d.id,
-      name: d.name,
-      size: d.size,
-      preview: `Document officiel hébergé sur Google Drive (${d.branch})`,
-      source: 'drive' as const,
-    })),
-    ...filteredServerDocs.map((f) => ({
-      id: undefined,
-      name: f.name,
-      size: f.size,
-      preview: f.preview || 'Référentiel officiel du programme',
-      source: 'drive' as const,
-    })),
-  ];
-
   const localItems = localDocs.map((d) => ({
-    id: d.name,
     name: d.name,
     size: d.size,
-    preview: d.content?.slice(0, 150) || 'Document enregistré dans votre coffre local',
-    source: 'local' as const,
+    preview: d.content?.slice(0, 180) || 'Fiche personnelle enregistrée localement',
     content: d.content,
   }));
 
-  const currentItems = source === 'drive' ? officialItems : localItems;
-  const filteredItems = currentItems.filter((item) =>
+  const filteredItems = localItems.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handlePick = async (item: typeof selectedItem) => {
+  const handlePick = (item: typeof selectedItem) => {
     if (!item) return;
 
-    try {
-      let textContent = item.preview || '';
+    const isPdf = item.name.toLowerCase().endsWith('.pdf');
+    const attachment: ChatAttachment = {
+      id: `doc_${Date.now()}`,
+      name: item.name,
+      type: isPdf ? 'pdf' : 'text',
+      mimeType: isPdf ? 'application/pdf' : 'text/plain',
+      size: item.size || 0,
+      text: item.content || item.preview || '',
+    };
 
-      if (item.source === 'drive' && item.id) {
-        try {
-          textContent = await downloadDriveDocumentText(item.id);
-        } catch {
-          textContent = `[Document Google Drive: ${item.name}]\nFilière: ${selectedBranch}`;
+    onSelectDoc(attachment);
+    onClose();
+  };
+
+  const handleDeviceUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const isPdf = file.name.toLowerCase().endsWith('.pdf');
+      let textContent = '';
+
+      if (isPdf) {
+        const arrayBuffer = await file.arrayBuffer();
+        const bytes = new Uint8Array(arrayBuffer);
+        let binary = '';
+        const chunkSize = 8192;
+        for (let b = 0; b < bytes.byteLength; b += chunkSize) {
+          const chunk = bytes.subarray(b, Math.min(b + chunkSize, bytes.byteLength));
+          binary += String.fromCharCode.apply(null, Array.from(chunk));
         }
-      } else if (item.source === 'local') {
-        textContent = item.content || item.preview || '';
+        const base64Data = btoa(binary);
+
+        await saveDocumentToVault({
+          name: file.name,
+          isPdf: true,
+          base64: base64Data,
+          size: file.size,
+          branch: selectedBranch,
+        });
+
+        textContent = `[Fichier PDF joint : ${file.name}]`;
       } else {
-        // Server doc
-        const res = await fetch(`/api/documents/file?name=${encodeURIComponent(item.name)}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.content) textContent = data.content;
-        }
+        textContent = await file.text();
+        await saveDocumentToVault({
+          name: file.name,
+          isPdf: false,
+          content: textContent,
+          size: file.size,
+          branch: selectedBranch,
+        });
       }
+
+      await loadLocalDocs();
 
       const attachment: ChatAttachment = {
         id: `doc_${Date.now()}`,
-        name: item.name,
-        type: item.name.toLowerCase().endsWith('.pdf') ? 'pdf' : 'text',
-        mimeType: item.name.toLowerCase().endsWith('.pdf') ? 'application/pdf' : 'text/plain',
-        size: item.size || 0,
+        name: file.name,
+        type: isPdf ? 'pdf' : 'text',
+        mimeType: isPdf ? 'application/pdf' : 'text/plain',
+        size: file.size,
         text: textContent,
       };
 
       onSelectDoc(attachment);
       onClose();
-    } catch (err) {
-      console.warn('Erreur sélection doc:', err);
-      onClose();
+    } catch (err: any) {
+      console.warn('Erreur téléversement fichier local:', err);
     }
   };
 
@@ -194,106 +161,63 @@ export const DocumentPickerModal: React.FC<DocumentPickerModalProps> = ({
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Choisir un document du programme"
+        aria-label="Joindre une fiche personnelle"
         tabIndex={-1}
-        className="bg-[#18191b] border border-[#282a2c] rounded-3xl w-full max-w-4xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden"
+        className="bg-[#18191b] border border-[#282a2c] rounded-3xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden"
       >
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-[#282a2c] flex items-center justify-between bg-[#131314]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
-              <FolderOpen className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+              <HardDrive className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-base sm:text-lg font-bold text-white">
-                  Sélectionner un Document de Référence
+                  Joindre une Fiche ou un Document
                 </h2>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/30">
-                  Filière {selectedBranch}
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">
+                  2BAC {selectedBranch}
                 </span>
               </div>
               <p className="text-xs text-[#9aa0a6]">
-                Attachez un document officiel (Google Drive) ou une fiche personnelle (Local) pour que Si Driss s'y réfère.
+                Vos documents personnels restent 100% privés dans votre navigateur.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* Branch toggle */}
-            <div className="hidden sm:flex items-center gap-1 bg-[#1e1f20] p-1 rounded-xl border border-[#282a2c]">
-              <button
-                type="button"
-                onClick={() => setSelectedBranch('PC')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${
-                  selectedBranch === 'PC'
-                    ? 'bg-sky-500 text-slate-950'
-                    : 'text-[#9aa0a6] hover:text-white'
-                }`}
-              >
-                PC
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedBranch('SM')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${
-                  selectedBranch === 'SM'
-                    ? 'bg-purple-500 text-white'
-                    : 'text-[#9aa0a6] hover:text-white'
-                }`}
-              >
-                SM
-              </button>
-            </div>
-
-            <button
-              onClick={onClose}
-              className="p-2 text-[#9aa0a6] hover:text-white rounded-xl hover:bg-[#202124] transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 text-[#9aa0a6] hover:text-white rounded-xl hover:bg-[#202124] transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
-        {/* Source Tabs: Google Drive vs Local Vault */}
-        <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#282a2c] bg-[#16171a]">
+        {/* Info Banner: RAG status */}
+        <div className="bg-sky-950/30 border-b border-sky-500/20 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-sky-200">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-sky-400 shrink-0" />
+            <span>
+              <strong>Référentiel Officiel 2BAC :</strong> Le programme officiel de Physique-Chimie et Sciences Maths est déjà indexé par Si Driss à chaque réponse.
+            </span>
+          </div>
           <button
             type="button"
-            onClick={() => {
-              setSource('drive');
-              setSelectedItem(null);
-            }}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-              source === 'drive'
-                ? 'bg-sky-500/20 text-sky-300 border border-sky-500/30'
-                : 'text-[#9aa0a6] hover:text-white hover:bg-[#202124]'
-            }`}
+            onClick={() => fileInputRef.current?.click()}
+            className="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shrink-0 transition"
           >
-            <Cloud className="w-4 h-4 text-sky-400" />
-            <span>Documents Officiels (Google Drive — {selectedBranch})</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-300">
-              {officialItems.length}
-            </span>
+            <Upload className="w-3.5 h-3.5" />
+            <span>Importer un fichier</span>
           </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setSource('local');
-              setSelectedItem(null);
-            }}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-              source === 'local'
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                : 'text-[#9aa0a6] hover:text-white hover:bg-[#202124]'
-            }`}
-          >
-            <HardDrive className="w-4 h-4 text-emerald-400" />
-            <span>Mes Documents Locaux (Élève — {selectedBranch})</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300">
-              {localItems.length}
-            </span>
-          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleDeviceUpload}
+            accept=".pdf,.txt,.md"
+            className="hidden"
+          />
         </div>
 
         {/* Search */}
@@ -304,24 +228,32 @@ export const DocumentPickerModal: React.FC<DocumentPickerModalProps> = ({
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={`Rechercher un document ${source === 'drive' ? 'officiel' : 'local'} de la filière ${selectedBranch}…`}
-              className="w-full pl-9 pr-3 py-2 bg-[#18191b] border border-[#282a2c] rounded-xl text-xs text-white placeholder:text-[#8e918f] focus:outline-none focus:border-amber-500"
+              placeholder="Rechercher dans mes fiches personnelles…"
+              className="w-full pl-9 pr-3 py-2 bg-[#18191b] border border-[#282a2c] rounded-xl text-xs text-white placeholder:text-[#8e918f] focus:outline-none focus:border-emerald-500"
             />
           </div>
         </div>
 
-        {/* Main 2-Columns */}
+        {/* Main Content */}
         <div className="flex-1 overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-0">
           {/* List column */}
           <div className="md:col-span-5 border-r border-[#282a2c] overflow-y-auto p-3 space-y-2">
             {loading ? (
               <div className="flex items-center justify-center py-12 text-xs text-[#9aa0a6] gap-2">
-                <RefreshCw className="w-4 h-4 animate-spin text-amber-400" />
-                Chargement des documents…
+                <RefreshCw className="w-4 h-4 animate-spin text-emerald-400" />
+                Chargement de vos fiches…
               </div>
             ) : filteredItems.length === 0 ? (
-              <div className="text-center py-10 text-xs text-[#8e918f]">
-                Aucun document trouvé pour la filière {selectedBranch} dans cet onglet.
+              <div className="text-center py-10 text-xs text-[#8e918f] space-y-2">
+                <p>Aucune fiche trouvée dans votre coffre local ({selectedBranch}).</p>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-3 py-1.5 rounded-xl bg-[#202124] hover:bg-[#282a2c] text-emerald-400 border border-[#3c4043] text-xs font-semibold inline-flex items-center gap-1.5 transition"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Ajouter une fiche ou un PDF</span>
+                </button>
               </div>
             ) : (
               filteredItems.map((item) => {
@@ -333,27 +265,21 @@ export const DocumentPickerModal: React.FC<DocumentPickerModalProps> = ({
                     onClick={() => setSelectedItem(item)}
                     className={`p-3 rounded-2xl border cursor-pointer transition flex items-start gap-2.5 ${
                       isSelected
-                        ? source === 'drive'
-                          ? 'bg-sky-500/10 border-sky-500/50 shadow-sm'
-                          : 'bg-emerald-500/10 border-emerald-500/50 shadow-sm'
+                        ? 'bg-emerald-500/10 border-emerald-500/50 shadow-sm'
                         : 'bg-[#18191b] border-[#282a2c] hover:border-[#3c4043]'
                     }`}
                   >
-                    <div
-                      className={`p-2 rounded-xl shrink-0 ${
-                        source === 'drive' ? 'bg-sky-500/10 text-sky-400' : 'bg-emerald-500/10 text-emerald-400'
-                      }`}
-                    >
+                    <div className="p-2 rounded-xl shrink-0 bg-emerald-500/10 text-emerald-400">
                       {isPdf ? <FileText className="w-4 h-4" /> : <FileCode className="w-4 h-4" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-xs font-bold text-white truncate">{item.name}</h4>
-                      <div className="flex items-center gap-2 mt-1 text-[10px] text-[#9aa0a6]">
-                        <span className="uppercase font-bold px-1.5 py-0.2 rounded bg-[#202124] text-[#c4c7c5]">
-                          {isPdf ? 'PDF' : 'Texte'}
+                      <p className="text-[11px] text-[#9aa0a6] line-clamp-1 mt-0.5">{item.preview}</p>
+                      {item.size && (
+                        <span className="text-[10px] text-[#8e918f] mt-1 block">
+                          {(item.size / 1024).toFixed(1)} Ko
                         </span>
-                        {item.size ? <span>{(item.size / 1024).toFixed(1)} Ko</span> : null}
-                      </div>
+                      )}
                     </div>
                   </div>
                 );
@@ -362,39 +288,48 @@ export const DocumentPickerModal: React.FC<DocumentPickerModalProps> = ({
           </div>
 
           {/* Preview column */}
-          <div className="md:col-span-7 overflow-y-auto p-4 sm:p-5 flex flex-col bg-[#131314]">
+          <div className="md:col-span-7 p-4 flex flex-col justify-between bg-[#141517] overflow-y-auto">
             {selectedItem ? (
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-sm font-bold text-white mb-1">{selectedItem.name}</h3>
-                  <div className="text-xs text-[#9aa0a6] flex items-center gap-2">
-                    <span>Source : {selectedItem.source === 'drive' ? 'Google Drive (Professeur)' : 'Stockage Local (Élève)'}</span>
-                    <span>•</span>
-                    <span>Filière {selectedBranch}</span>
-                  </div>
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-emerald-400" />
+                    <span>{selectedItem.name}</span>
+                  </h3>
+                  <p className="text-[11px] text-[#9aa0a6] mt-0.5">
+                    Stocké localement sur cet appareil dans votre coffre IndexedDB.
+                  </p>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-[#18191b] border border-[#282a2c] space-y-2">
-                  <div className="text-[11px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                    <BookOpen className="w-3.5 h-3.5" />
-                    Aperçu du document
-                  </div>
-                  <div className="text-xs text-slate-300 font-mono leading-relaxed whitespace-pre-wrap max-h-56 overflow-y-auto p-3 bg-[#131314] rounded-xl border border-[#282a2c]">
-                    {selectedItem.content || selectedItem.preview || "Aperçu en cours d'indexation..."}
-                  </div>
+                <div className="p-3.5 rounded-2xl bg-[#18191b] border border-[#282a2c] text-xs text-[#c4c7c5] max-h-60 overflow-y-auto whitespace-pre-wrap font-sans leading-relaxed">
+                  {selectedItem.content || selectedItem.preview}
                 </div>
 
-                <button
-                  onClick={() => handlePick(selectedItem)}
-                  className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition shadow-md"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Attacher ce document à ma question</span>
-                </button>
+                <div className="pt-3 border-t border-[#282a2c] flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedItem(null)}
+                    className="px-3 py-1.5 rounded-xl text-xs text-[#9aa0a6] hover:text-white hover:bg-[#202124] transition"
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handlePick(selectedItem)}
+                    className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-md"
+                  >
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    <span>Joindre à ma question</span>
+                  </button>
+                </div>
               </div>
             ) : (
-              <div className="flex-1 flex items-center justify-center text-xs text-[#8e918f]">
-                Sélectionnez un document à gauche pour en voir l'aperçu.
+              <div className="h-full flex flex-col items-center justify-center text-center p-6 text-xs text-[#8e918f] space-y-2">
+                <FolderOpen className="w-8 h-8 opacity-40 text-emerald-400" />
+                <p className="font-semibold text-white">Sélectionnez une fiche personnelle</p>
+                <p className="max-w-xs text-[#9aa0a6]">
+                  Cliquez sur un document à gauche pour en voir l'aperçu et le joindre à votre échange avec Si Driss.
+                </p>
               </div>
             )}
           </div>

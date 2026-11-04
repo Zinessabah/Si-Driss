@@ -107,8 +107,9 @@ export async function removeDocumentFromVault(name: string): Promise<void> {
 }
 
 /**
- * Synchronise et restaure automatiquement les fichiers du coffre vers le serveur
- * s'ils ont été effacés lors d'une mise à jour ou d'un redéploiement.
+ * Les documents du coffre-fort de l'élève restent 100% locaux dans le navigateur (IndexedDB)
+ * pour garantir une confidentialité absolue et ne jamais mélanger les fiches de l'élève
+ * avec les référentiels officiels du serveur.
  */
 export async function syncVaultWithServer(): Promise<{
   restoredCount: number;
@@ -117,51 +118,12 @@ export async function syncVaultWithServer(): Promise<{
 }> {
   try {
     const vaultDocs = await getAllDocumentsFromVault();
-    if (vaultDocs.length === 0) {
-      return { restoredCount: 0, totalVaultCount: 0, serverFiles: [] };
-    }
-
-    // Récupérer les fichiers actuellement sur le serveur
-    const res = await fetch('/api/documents');
-    if (!res.ok) {
-      return { restoredCount: 0, totalVaultCount: vaultDocs.length, serverFiles: [] };
-    }
-
-    const data = await res.json();
-    const existingServerNames = new Set<string>((data.files || []).map((f: any) => String(f.name || '')));
-
-    let restoredCount = 0;
-
-    for (const doc of vaultDocs) {
-      if (!existingServerNames.has(doc.name)) {
-        try {
-          const uploadRes = await fetch('/api/documents/upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              filename: doc.name,
-              content: doc.content,
-              base64: doc.base64,
-            }),
-          });
-          if (uploadRes.ok) {
-            restoredCount++;
-            existingServerNames.add(doc.name);
-            console.log(`[DocumentVault] Fichier restauré sur le serveur après mise à jour : ${doc.name}`);
-          }
-        } catch (uploadErr) {
-          console.warn(`[DocumentVault] Échec restauration ${doc.name}:`, uploadErr);
-        }
-      }
-    }
-
     return {
-      restoredCount,
+      restoredCount: 0,
       totalVaultCount: vaultDocs.length,
-      serverFiles: Array.from(existingServerNames),
+      serverFiles: [],
     };
   } catch (err) {
-    console.warn('[DocumentVault] Erreur synchronisation coffre-fort:', err);
     return { restoredCount: 0, totalVaultCount: 0, serverFiles: [] };
   }
 }
@@ -192,9 +154,16 @@ export async function exportVaultBackup(): Promise<void> {
 }
 
 /**
- * Importe un fichier de sauvegarde JSON, enregistre dans IndexedDB et pousse sur le serveur.
+ * Importe un fichier de sauvegarde JSON et enregistre les fiches dans IndexedDB local.
  */
-export async function importVaultBackup(jsonStr: string): Promise<number> {
+export async function importVaultBackup(fileOrJsonStr: string | File): Promise<number> {
+  let jsonStr = '';
+  if (typeof fileOrJsonStr === 'string') {
+    jsonStr = fileOrJsonStr;
+  } else {
+    jsonStr = await fileOrJsonStr.text();
+  }
+
   const data = JSON.parse(jsonStr);
   if (!data || !Array.isArray(data.documents)) {
     throw new Error('Format de fichier de sauvegarde invalide.');
@@ -209,19 +178,8 @@ export async function importVaultBackup(jsonStr: string): Promise<number> {
         content: doc.content,
         base64: doc.base64,
         size: doc.size || 0,
+        branch: doc.branch || 'PC',
       });
-
-      // Synchroniser avec le serveur
-      await fetch('/api/documents/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          filename: doc.name,
-          content: doc.content,
-          base64: doc.base64,
-        }),
-      }).catch(() => {});
-
       importedCount++;
     }
   }

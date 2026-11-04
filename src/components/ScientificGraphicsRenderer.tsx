@@ -107,11 +107,14 @@ export const MindMapTextView: React.FC<{ text: string; className?: string }> = (
           if (token.startsWith('$') && token.endsWith('$') && token.length > 2) {
             const math = normalizePhysicsMathToLatex(token.slice(1, -1));
             const html = renderLatexHtml(math, false);
+            // (C2) Fallback sécurisé : si KaTeX échoue, afficher le token comme texte
+            // brut via React (jamais dangerouslySetInnerHTML avec du contenu non sanitisé).
+            if (!html) return <span key={i} className="font-mono text-amber-200">{token}</span>;
             return (
               <span
                 key={i}
                 className="inline-block mx-0.5 align-middle font-bold text-amber-200"
-                dangerouslySetInnerHTML={{ __html: html || token }}
+                dangerouslySetInnerHTML={{ __html: html }}
               />
             );
           }
@@ -151,11 +154,14 @@ export const MindMapTextView: React.FC<{ text: string; className?: string }> = (
         if (p.type === 'math') {
           const math = normalizePhysicsMathToLatex(p.value);
           const html = renderLatexHtml(math, false);
+          // (C2) Fallback sécurisé : si KaTeX échoue, afficher la valeur comme texte
+          // brut via React (jamais dangerouslySetInnerHTML avec du contenu non sanitisé).
+          if (!html) return <span key={i} className="font-mono text-amber-200">{p.value}</span>;
           return (
             <span
               key={i}
               className="inline-block mx-0.5 align-middle font-bold text-amber-200"
-              dangerouslySetInnerHTML={{ __html: html || p.value }}
+              dangerouslySetInnerHTML={{ __html: html }}
             />
           );
         }
