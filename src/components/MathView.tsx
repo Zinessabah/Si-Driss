@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import katex from 'katex';
 import DOMPurify from 'dompurify';
-import { ScientificGraphicsRenderer, GraphicSpec } from './ScientificGraphicsRenderer';
+import { ScientificGraphicsRenderer, GraphicSpec, MindMapSpec } from './ScientificGraphicsRenderer';
 
 interface MathViewProps {
   content: string;
@@ -142,7 +142,7 @@ const KatexContainer: React.FC<{ math: string; displayMode: boolean; className?:
         className={`katex-container katex-render font-bold ${
           effectiveDisplay
             ? 'block my-3 py-2.5 px-1 text-center leading-relaxed'
-            : 'inline-block mx-0.5 py-0.5 align-middle leading-normal'
+            : 'inline mx-1 py-0.5 align-baseline leading-normal'
         } ${className}`}
         dangerouslySetInnerHTML={{ __html: initialHtml }}
       />
@@ -152,7 +152,7 @@ const KatexContainer: React.FC<{ math: string; displayMode: boolean; className?:
 
 /**
  * Détecte et enveloppe automatiquement les formules LaTeX brutes qui auraient été écrites
- * sans délimiteurs $...$ dans un segment de texte.
+ * sans délimiteurs $...$ dans un segment de texte, sans jamais engloutir de mots français.
  */
 function autoWrapBareLatexInText(text: string): string {
   if (!text) return text;
@@ -160,36 +160,36 @@ function autoWrapBareLatexInText(text: string): string {
   const hasBackslashCmd = /\\(frac|dfrac|tfrac|sqrt|vec|overrightarrow|dot|ddot|bar|overline|hat|boxed|sum|prod|int|oint|tau|lambda|Lambda|omega|Omega|Delta|delta|theta|Theta|varphi|phi|Phi|psi|Psi|alpha|beta|gamma|Gamma|pi|Pi|mu|nu|rho|sigma|Sigma|epsilon|varepsilon|eta|zeta|chi|cdot|times|div|pm|mp|approx|simeq|cong|equiv|neq|ne|leq|le|geq|ge|ll|gg|propto|infty|partial|nabla|rightarrow|to|leftarrow|longrightarrow|Rightarrow|Leftrightarrow|iff|rightleftharpoons|leftrightarrows|circ|degree|perp|parallel|angle|sin|cos|tan|ln|log|exp|lim)\b/.test(
     text
   );
-  const hasSubOrSup = /[A-Za-z0-9]_(\{[^{}\n]+\}|[a-zA-Z0-9])|[A-Za-z0-9]\^(\{[^{}\n]+\}|[0-9+\-])/.test(text);
+  const hasSubOrSup = /\b[A-Za-z0-9]+_(\{[^{}\n]+\}|[a-zA-Z0-9]+)|\b[A-Za-z0-9]+\^(\{[^{}\n]+\}|[0-9+\-]+)/.test(text);
 
   if (!hasBackslashCmd && !hasSubOrSup) {
     return text;
   }
 
-  // Atome mathématique LaTeX (commande \cmd{...} ou variable avec indice/exposant x_{...}^2)
+  // Atome mathématique LaTeX (commande \cmd{...} ou variable scientifique avec indice/exposant)
   const atomPattern =
-    '(?:\\\\[a-zA-Z]+(?:\\s*\\[[^\\]\\n]*\\])?(?:\\s*\\{[^{}\\n]*(?:\\{[^{}\\n]*\\}[^{}\\n]*)*\\})*(?:\\s*(?:_\\{[^{}\\n]+\\}|_[a-zA-Z0-9]|\\^\\{[^{}\\n]+\\}|\\^[0-9a-zA-Z+\\-]+))*|[A-Za-z0-9]+(?:\\s*(?:_\\{[^{}\\n]+\\}|_[a-zA-Z0-9]|\\^\\{[^{}\\n]+\\}|\\^[0-9a-zA-Z+\\-]+))+)';
+    '(?:\\\\[a-zA-Z]+(?:\\s*\\[[^\\]\\n]*\\])?(?:\\s*\\{[^{}\\n]*(?:\\{[^{}\\n]*\\}[^{}\\n]*)*\\})*(?:\\s*(?:_\\{[^{}\\n]+\\}|_[a-zA-Z0-9]+|\\^\\{[^{}\\n]+\\}|\\^[0-9a-zA-Z+\\-]+))*|\\b[A-Za-z0-9]+(?:_\\{[^{}\\n]+\\}|_[a-zA-Z0-9]+|\\^\\{[^{}\\n]+\\}|\\^[0-9a-zA-Z+\\-]+)+)';
 
   const regex = new RegExp(atomPattern, 'g');
   let wrapped = text.replace(regex, (m) => `$${m}$`);
 
-  // Fusionne les atomes $...$ adjacents séparés par des opérateurs mathématiques (=, +, -, *, /, nombres, parenthèses)
+  // Fusionne SEULEMENT les atomes mathématiques adjacents séparés par des opérateurs mathématiques purs
+  // Ne JAMAIS engloutir de chiffres précédents (ex: "Figure 1 $u_C$") ni de mots français suivants (ex: "$u_C$ = tension")
   let prev = '';
   let guard = 0;
-  while (wrapped !== prev && guard < 8) {
+  while (wrapped !== prev && guard < 6) {
     prev = wrapped;
     guard++;
-    wrapped = wrapped
-      .replace(/([0-9(]+)\s*\$([^$\n]+)\$/g, (_m, p1, p2) => `$${p1}${p2}$`)
-      .replace(
-        /\$([^$\n]+)\$\s*([=+\-*/<>]\s*[A-Za-z0-9().,]*|[0-9()]+)\s*\$([^$\n]+)\$/g,
-        (_m, p1, mid, p2) => `$${p1} ${mid.trim()} ${p2}$`
-      )
-      .replace(/\$([^$\n]+)\$\s*\$([^$\n]+)\$/g, (_m, p1, p2) => `$${p1} ${p2}$`)
-      .replace(
-        /\$([^$\n]+)\$(\s*[=+\-*/]\s*[A-Za-z0-9().,+-]+)(?=[.,;:\s)\]]|$)/g,
-        (_m, p1, rhs) => `$${p1}${rhs}$`
-      );
+    // Fusionne $a$ + $b$ -> $a + b$
+    wrapped = wrapped.replace(
+      /\$([^$\n]+)\$\s*([=+\-*/<>]\s*|-?\b[0-9]+(?:\.[0-9]+)?\s*)\$([^$\n]+)\$/g,
+      (_m, p1, op, p2) => `$${p1} ${op.trim()} ${p2}$`
+    );
+    // Fusionne $a$ = 0 (valeur numérique ou unité strictement mathématique) -> $a = 0$
+    wrapped = wrapped.replace(
+      /\$([^$\n]+)\$(\s*[=~<>]=?\s*-?[0-9]+(?:\.[0-9]+)?(?:\s*(?:ms|V|A|Hz|rad\/s|s|m|kg|J|F|H|ohm|Ω)\b)?)(?=[.,;:\s)\]]|$)/g,
+      (_m, p1, rhs) => `$${p1}${rhs}$`
+    );
   }
 
   return wrapped;
@@ -457,7 +457,7 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
 
   // Cas 3 : Contenu mixte (texte + graphiques scientifiques interactifs + formules LaTeX)
   const graphicBlockRegex =
-    /```(?:curve|mindmap|graph|chart)\s*([\s\S]*?)```|```json\s*(\{[\s\S]*?"type"\s*:\s*"(?:curve|mindmap)"[\s\S]*?\})\s*```/gi;
+    /```(?:curve|mindmap|graph|chart|mermaid)\s*([\s\S]*?)```|```json\s*(\{[\s\S]*?(?:"type"\s*:\s*"(?:curve|mindmap)"|"root"\s*:|"function"\s*:)[\s\S]*?\})\s*```/gi;
 
   if (graphicBlockRegex.test(content)) {
     graphicBlockRegex.lastIndex = 0;
@@ -518,23 +518,142 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
   );
 });
 
+/**
+ * Nettoie et répare une chaîne JSON générée par un LLM (LaTeX avec antislashs simples, virgules orphelines, commentaires).
+ */
+function cleanJsonString(str: string): string {
+  let cleaned = str.trim();
+  // Enlever les commentaires // en fin de ligne
+  cleaned = cleaned.replace(/\/\/.*$/gm, '');
+  // Remplacer les antislashs simples invalides en JSON (ex: \lambda, \tau, \pi, \omega, \Delta, \approx, etc.) par des doubles \\
+  // En JSON standard, les seuls échappements valides sont " \ / b f n r t u
+  cleaned = cleaned.replace(/\\([^"\\\/bfnrtu]|u[0-9a-fA-F]{0,3}[^0-9a-fA-F])/g, '\\\\$1');
+  // Enlever les virgules orphelines avant un crochet ou une accolade
+  cleaned = cleaned.replace(/,\s*([\]}])/g, '$1');
+  return cleaned;
+}
+
+/**
+ * Analyse une structure de carte mentale écrite sous forme Mermaid ou de liste indentée en Markdown.
+ */
+function parseIndentedTextMindmap(content: string): MindMapSpec | null {
+  const lines = content.split('\n').map((l) => l.trimEnd()).filter((l) => l.trim().length > 0);
+  if (lines.length === 0) return null;
+
+  let title = 'Carte Mentale';
+  let rootNode: any = null;
+  const stack: { depth: number; node: any }[] = [];
+
+  for (const line of lines) {
+    let trimmed = line.trim();
+    if (trimmed.toLowerCase() === 'mindmap') continue;
+    if (trimmed.startsWith('%%')) continue;
+
+    const indent = line.search(/\S/);
+
+    // Supprimer les puces markdown éventuelles (- , * , + , # , 1. )
+    trimmed = trimmed.replace(/^[-*+]\s+/, '');
+    trimmed = trimmed.replace(/^#+\s+/, '');
+    trimmed = trimmed.replace(/^[0-9]+[.)]\s+/, '');
+
+    // Nettoyer les encapsulations Mermaid : root((...)), [ ... ], ( ... )
+    const rootMatch = trimmed.match(/root\s*\(\(\s*(.*?)\s*\)\)/i) || trimmed.match(/\(\(\s*(.*?)\s*\)\)/);
+    if (rootMatch) {
+      trimmed = rootMatch[1];
+      title = trimmed;
+    } else {
+      const squareMatch = trimmed.match(/^\[\s*(.*?)\s*\]$/);
+      if (squareMatch) trimmed = squareMatch[1];
+      const parenMatch = trimmed.match(/^\(\s*(.*?)\s*\)$/);
+      if (parenMatch) trimmed = parenMatch[1];
+    }
+
+    let formula: string | undefined = undefined;
+    const formMatch = trimmed.match(/(?:formule|formula)\s*:\s*(.+)$/i);
+    if (formMatch) {
+      formula = formMatch[1].trim();
+      trimmed = trimmed.replace(/(?:formule|formula)\s*:\s*(.+)$/i, '').trim();
+      if (!trimmed) trimmed = 'Formule';
+    }
+
+    const node: any = { label: trimmed, children: [] };
+    if (formula) node.formula = formula;
+
+    if (!rootNode) {
+      rootNode = node;
+      title = trimmed;
+      stack.push({ depth: indent, node });
+      continue;
+    }
+
+    while (stack.length > 0 && stack[stack.length - 1].depth >= indent) {
+      stack.pop();
+    }
+
+    if (stack.length > 0) {
+      const parent = stack[stack.length - 1].node;
+      parent.children = parent.children || [];
+      parent.children.push(node);
+    } else {
+      rootNode.children = rootNode.children || [];
+      rootNode.children.push(node);
+    }
+
+    stack.push({ depth: indent, node });
+  }
+
+  if (!rootNode) return null;
+  return {
+    type: 'mindmap',
+    title: title || 'Carte Mentale',
+    root: rootNode,
+  };
+}
+
 function tryParseGraphicSpec(raw: string): GraphicSpec | null {
-  try {
-    const trimmed = raw.trim();
-    const parsed = JSON.parse(trimmed);
-    if (parsed && typeof parsed === 'object') {
-      if (
-        parsed.type === 'curve' ||
-        parsed.type === 'mindmap' ||
-        typeof parsed.function === 'string' ||
-        Array.isArray(parsed.curves) ||
-        parsed.root
-      ) {
-        return parsed as GraphicSpec;
+  if (!raw) return null;
+  const trimmed = raw.trim();
+
+  // 1. Essai JSON standard ou nettoyé si commence par { ou contient des clés graphiques
+  if (
+    trimmed.startsWith('{') ||
+    trimmed.includes('"root"') ||
+    trimmed.includes('"function"') ||
+    trimmed.includes('"curves"')
+  ) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (parsed && typeof parsed === 'object') {
+        if (parsed.root && !parsed.type) parsed.type = 'mindmap';
+        if ((parsed.function || parsed.curves) && !parsed.type) parsed.type = 'curve';
+        if (parsed.type === 'mindmap' || parsed.type === 'curve') return parsed as GraphicSpec;
+      }
+    } catch {
+      try {
+        const cleaned = cleanJsonString(trimmed);
+        const parsed = JSON.parse(cleaned);
+        if (parsed && typeof parsed === 'object') {
+          if (parsed.root && !parsed.type) parsed.type = 'mindmap';
+          if ((parsed.function || parsed.curves) && !parsed.type) parsed.type = 'curve';
+          if (parsed.type === 'mindmap' || parsed.type === 'curve') return parsed as GraphicSpec;
+        }
+      } catch {
+        // Non-bloquant si le bloc est en cours de streaming
       }
     }
-  } catch {
-    // Non-bloquant si le bloc est en cours de streaming
   }
+
+  // 2. Essai Mermaid ou Liste indentée
+  if (
+    trimmed.startsWith('mindmap') ||
+    trimmed.startsWith('- ') ||
+    trimmed.startsWith('* ') ||
+    trimmed.startsWith('#') ||
+    trimmed.includes('root((')
+  ) {
+    const mm = parseIndentedTextMindmap(trimmed);
+    if (mm) return mm;
+  }
+
   return null;
 }

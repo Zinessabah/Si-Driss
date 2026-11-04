@@ -93,12 +93,14 @@ export function renderLatexHtml(code: string, displayMode: boolean): string {
 }
 
 /**
- * Rend un texte mixte (mots français + formules $...$ ou expressions mathématiques sans délimiteur)
+ * Rend un texte mixte (mots français + formules $...$ ou variables mathématiques isolées)
+ * en garantissant qu'aucun mot français ne soit avalé dans le mode mathématique KaTeX
+ * (ce qui supprimerait les espaces entre les mots).
  */
 export const MindMapTextView: React.FC<{ text: string; className?: string }> = ({ text, className = '' }) => {
   if (!text) return null;
 
-  // Délimiteurs explicites $...$
+  // 1. Délimiteurs explicites $...$
   if (text.includes('$')) {
     const tokens = text.split(/(\$[^$]+\$)/g);
     return (
@@ -107,13 +109,11 @@ export const MindMapTextView: React.FC<{ text: string; className?: string }> = (
           if (token.startsWith('$') && token.endsWith('$') && token.length > 2) {
             const math = normalizePhysicsMathToLatex(token.slice(1, -1));
             const html = renderLatexHtml(math, false);
-            // (C2) Fallback sécurisé : si KaTeX échoue, afficher le token comme texte
-            // brut via React (jamais dangerouslySetInnerHTML avec du contenu non sanitisé).
             if (!html) return <span key={i} className="font-mono text-amber-200">{token}</span>;
             return (
               <span
                 key={i}
-                className="inline-block mx-0.5 align-middle font-bold text-amber-200"
+                className="inline mx-1 align-baseline font-bold text-amber-200"
                 dangerouslySetInnerHTML={{ __html: html }}
               />
             );
@@ -124,20 +124,21 @@ export const MindMapTextView: React.FC<{ text: string; className?: string }> = (
     );
   }
 
-  // Détection automatique d'expressions mathématiques dans du texte sans délimiteurs
-  // Exemples : "T_0 = 2*pi*sqrt(LC)", "T ~ T_0", "R_t = 0", "R_t", "u_C", "E_t"
-  const mathRegex = /\b([A-Za-z]+_[A-Za-z0-9]+(?:\s*[=~<>]=?\s*[^,()]+)?|[A-Za-z]\s*[=~<>]=?\s*[^,()]+|[A-Za-z]+_[A-Za-z0-9]+)\b/g;
+  // 2. Détection ciblée de variables scientifiques isolées (u_C, T_0, E_t, R_t, \tau, \lambda, etc.)
+  // ou égalités/inégalités simples à valeur numérique/symbolique (ex: "r = 0", "t = 0", "E = 5 V").
+  // RÈGLE STRICTE : Ne JAMAIS capturer de mots français de la phrase pour conserver tous les espaces !
+  const strictMathRegex = /\b([A-Za-z]+_[A-Za-z0-9]+(?:\s*[=~<>]=?\s*(?:-?[0-9]+(?:\.[0-9]+)?(?:\s*(?:ms|V|A|Hz|rad\/s|s|m|kg|J|F|H|ohm|Ω)\b)?|[A-Za-z]+_[A-Za-z0-9]+|[0-9A-Za-z_.*\/+\^\\()-]+)*)?|[A-Za-z]\s*[=~<>]=?\s*(?:-?[0-9]+(?:\.[0-9]+)?(?:\s*(?:ms|V|A|Hz|rad\/s|s|m|kg|J|F|H|ohm|Ω)\b)?|[A-Za-z]+_[A-Za-z0-9]+))\b/g;
 
   const parts: { type: 'text' | 'math'; value: string }[] = [];
   let lastIndex = 0;
   let match: RegExpExecArray | null;
 
-  while ((match = mathRegex.exec(text)) !== null) {
+  while ((match = strictMathRegex.exec(text)) !== null) {
     if (match.index > lastIndex) {
       parts.push({ type: 'text', value: text.slice(lastIndex, match.index) });
     }
-    parts.push({ type: 'math', value: match[0].trim() });
-    lastIndex = mathRegex.lastIndex;
+    parts.push({ type: 'math', value: match[0] });
+    lastIndex = strictMathRegex.lastIndex;
   }
 
   if (lastIndex < text.length) {
@@ -154,13 +155,11 @@ export const MindMapTextView: React.FC<{ text: string; className?: string }> = (
         if (p.type === 'math') {
           const math = normalizePhysicsMathToLatex(p.value);
           const html = renderLatexHtml(math, false);
-          // (C2) Fallback sécurisé : si KaTeX échoue, afficher la valeur comme texte
-          // brut via React (jamais dangerouslySetInnerHTML avec du contenu non sanitisé).
           if (!html) return <span key={i} className="font-mono text-amber-200">{p.value}</span>;
           return (
             <span
               key={i}
-              className="inline-block mx-0.5 align-middle font-bold text-amber-200"
+              className="inline mx-1 align-baseline font-bold text-amber-200"
               dangerouslySetInnerHTML={{ __html: html }}
             />
           );
@@ -888,7 +887,10 @@ export const ScientificCurveChart: React.FC<{ spec: CurveChartSpec }> = ({ spec 
  * Composant de rendu pour une carte mentale (MindMap) scientifique
  */
 export const ScientificMindMap: React.FC<{ spec: MindMapSpec }> = ({ spec }) => {
-  const { title, subtitle, root } = spec;
+  if (!spec || !spec.root) return null;
+  const title = spec.title || spec.root.label || 'Carte Mentale';
+  const subtitle = spec.subtitle;
+  const root = spec.root;
   const [copied, setCopied] = useState<boolean>(false);
 
   const handleCopySpec = () => {

@@ -83,11 +83,20 @@ Exemple de carte mentale :
   "root": {
     "label": "Titre du Thème",
     "children": [
-      { "label": "Partie 1", "children": [{ "label": "Formule clé", "formula": "..." }] }
+      {
+        "label": "Partie 1",
+        "badge": "2BAC",
+        "children": [
+          { "label": "Titre de la notion", "formula": "E = \\frac{1}{2} C u_C^2" }
+        ]
+      }
     ]
   }
 }
 \`\`\`
+RÈGLES ESSENTIELLES POUR LE RENDU :
+- Dans les cartes mentales, sépare TOUJOURS nettement le titre ou concept en français (dans "label") de la formule mathématique (dans "formula").
+- Dans tout ton texte, veille à toujours conserver des espaces clairs entre les mots français et autour des formules pour une lisibilité irréprochable.
 Accompagne toujours la courbe de commentaires pédagogiques expliquant comment l'exploiter le jour du Baccalauréat.
 `;
 }
