@@ -39,6 +39,8 @@ import {
   setStoredDriveFolder,
   fetchServerDriveConfig,
   fetchRagStatus,
+  fetchOfficialDocuments,
+  syncOfficialDocuments,
   listOfficialDriveDocuments,
   DriveDoc,
 } from '../utils/googleDrive';
@@ -102,6 +104,11 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
   const [isSyncingDrive, setIsSyncingDrive] = useState<boolean>(false);
   const [adminOfficialDocs, setAdminOfficialDocs] = useState<DriveDoc[]>([]);
 
+  // Official documents state
+  const [officialDocs, setOfficialDocs] = useState<DriveDoc[]>([]);
+  const [isSyncingOfficial, setIsSyncingOfficial] = useState<boolean>(false);
+  const [showOfficialList, setShowOfficialList] = useState<boolean>(false);
+
   const importLocalFileInputRef = useRef<HTMLInputElement | null>(null);
   const localFileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -138,6 +145,43 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
   useEffect(() => {
     refreshLocalDocs();
   }, [selectedBranch]);
+
+  // Load official documents for the active branch
+  const refreshOfficialDocs = async () => {
+    try {
+      const docs = await fetchOfficialDocuments(selectedBranch);
+      setOfficialDocs(docs);
+    } catch (err) {
+      console.warn('[OfficialDocs] Erreur chargement:', err);
+    }
+  };
+
+  useEffect(() => {
+    refreshOfficialDocs();
+  }, [selectedBranch]);
+
+  // Synchronisation des documents officiels téléchargés et ré-indexation du RAG
+  const handleSyncOfficialDocs = async () => {
+    setIsSyncingOfficial(true);
+    setStatusMsg(null);
+    try {
+      const res = await syncOfficialDocuments(selectedBranch, adminTokenVal);
+      setStatusMsg({
+        text: `✅ ${res.message || 'Documents officiels synchronisés avec succès !'}`,
+        type: 'success',
+      });
+      const updatedRag = await fetchRagStatus();
+      setRagStatus(updatedRag);
+      await refreshOfficialDocs();
+    } catch (err: any) {
+      setStatusMsg({
+        text: `Erreur synchronisation documents officiels : ${err?.message || 'Erreur inconnue'}`,
+        type: 'error',
+      });
+    } finally {
+      setIsSyncingOfficial(false);
+    }
+  };
 
   // If Admin mode is active, load drive config and official docs
   useEffect(() => {
@@ -383,33 +427,103 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
       </div>
 
       {/* RAG Knowledge Base Status Banner (Official Cadre de Référence) */}
-      <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-sky-950/40 via-[#18191b] to-purple-950/40 border border-[#282a2c] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-start gap-3.5">
-          <div className="w-10 h-10 rounded-2xl bg-sky-500/10 border border-sky-500/30 text-sky-400 flex items-center justify-center shrink-0 mt-0.5">
-            <ShieldCheck className="w-5 h-5 text-sky-400" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-white">
-                Référentiel Officiel du Ministère (RAG Actif)
-              </h3>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-semibold border border-emerald-500/30 flex items-center gap-1">
-                <CheckCircle className="w-3 h-3 text-emerald-400" />
-                Synchronisé & Protégé
-              </span>
+      <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-sky-950/40 via-[#18191b] to-purple-950/40 border border-[#282a2c] flex flex-col gap-3 shadow-lg">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-sky-500/10 border border-sky-500/30 text-sky-400 flex items-center justify-center shrink-0 mt-0.5">
+              <ShieldCheck className="w-5 h-5 text-sky-400" />
             </div>
-            <p className="text-xs text-[#9aa0a6] mt-1 max-w-3xl leading-relaxed">
-              {selectedBranch === 'SM'
-                ? 'Si Driss valide vos réponses selon le barème officiel Sciences Mathématiques (Rotation solide autour d’un axe fixe, oscillations forcées & impédance Z, résonance aiguë).'
-                : 'Si Driss valide vos réponses selon le barème officiel Sciences Physiques (Modulation d’amplitude AM, chute verticale avec méthode d’Euler, circuits RC/RL/RLC).'}
-            </p>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-bold text-white">
+                  Référentiel Officiel du Ministère (RAG Actif)
+                </h3>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-semibold border border-emerald-500/30 flex items-center gap-1">
+                  <CheckCircle className="w-3 h-3 text-emerald-400" />
+                  Synchronisé & Protégé
+                </span>
+              </div>
+              <p className="text-xs text-[#9aa0a6] mt-1 max-w-3xl leading-relaxed">
+                {selectedBranch === 'SM'
+                  ? 'Si Driss valide vos réponses selon le barème officiel Sciences Mathématiques (Rotation solide autour d’un axe fixe, oscillations forcées & impédance Z, résonance aiguë).'
+                  : 'Si Driss valide vos réponses selon le barème officiel Sciences Physiques (Modulation d’amplitude AM, chute verticale avec méthode d’Euler, circuits RC/RL/RLC).'}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 shrink-0 self-end sm:self-center">
+            <span className="text-[11px] text-[#8e918f] font-mono bg-[#131314] px-3 py-1.5 rounded-xl border border-[#282a2c]">
+              Filière active : <strong>2BAC {selectedBranch}</strong>
+            </span>
+
+            <button
+              type="button"
+              onClick={handleSyncOfficialDocs}
+              disabled={isSyncingOfficial}
+              className="px-3.5 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 active:scale-95 disabled:opacity-50 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm"
+              title="Synchroniser et ré-indexer les documents officiels téléchargés"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isSyncingOfficial ? 'animate-spin' : ''}`} />
+              <span>{isSyncingOfficial ? 'Synchronisation…' : 'Synchroniser les documents officiels'}</span>
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-          <span className="text-[11px] text-[#8e918f] font-mono bg-[#131314] px-3 py-1.5 rounded-xl border border-[#282a2c]">
-            Filière active : <strong>2BAC {selectedBranch}</strong>
-          </span>
+        {/* Section documents officiels téléchargés */}
+        <div className="pt-2 border-t border-[#282a2c]/60 flex flex-col gap-2 text-xs">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-[#9aa0a6]">
+              <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+              <span>
+                <strong className="text-white">{officialDocs.length}</strong> document(s) officiel(s) téléchargé(s) pour 2BAC {selectedBranch}
+              </span>
+            </div>
+            {officialDocs.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setShowOfficialList((prev) => !prev)}
+                className="text-xs text-sky-400 hover:text-sky-300 font-semibold underline transition"
+              >
+                {showOfficialList ? 'Masquer la liste' : 'Voir les documents officiels'}
+              </button>
+            )}
+          </div>
+
+          {showOfficialList && officialDocs.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1 animate-in fade-in">
+              {officialDocs.map((doc) => (
+                <div
+                  key={doc.id}
+                  className="p-2.5 rounded-xl bg-[#131314]/80 border border-[#282a2c] flex items-center justify-between gap-2"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <FileText className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                    <span className="text-xs text-white font-medium truncate" title={doc.name}>
+                      {doc.name}
+                    </span>
+                    {doc.size ? (
+                      <span className="text-[10px] text-[#8e918f] shrink-0 font-mono">
+                        ({(doc.size / (1024 * 1024)).toFixed(1) === '0.0'
+                          ? `${(doc.size / 1024).toFixed(1)} Ko`
+                          : `${(doc.size / (1024 * 1024)).toFixed(1)} Mo`})
+                      </span>
+                    ) : null}
+                  </div>
+                  {onAskQuestionAboutDoc && (
+                    <button
+                      type="button"
+                      onClick={() => onAskQuestionAboutDoc(doc.name)}
+                      className="text-[11px] text-sky-400 hover:text-sky-300 font-semibold shrink-0 flex items-center gap-1 transition"
+                      title="Poser une question à Si Driss sur ce document officiel"
+                    >
+                      <span>Interroger</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -532,28 +646,8 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
                 : `Votre classeur 2BAC ${selectedBranch} est vide`}
             </h4>
             <p className="text-xs text-[#9aa0a6] max-w-md mx-auto leading-relaxed">
-              Créez vos fiches de révision personnelles ou déposez vos cours et devoirs scannés en PDF. Vos documents restent entièrement privés dans votre navigateur.
+              Créez vos fiches de révision personnelles ou déposez vos cours et devoirs scannés en PDF avec les boutons <strong>« Créer une fiche »</strong> ou <strong>« Importer un PDF »</strong> ci-dessus. Vos documents restent entièrement privés dans votre navigateur.
             </p>
-            {!searchQuery && (
-              <div className="flex items-center justify-center gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowCreateLocalModal(true)}
-                  className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs inline-flex items-center gap-1.5 transition shadow-md"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Nouvelle Fiche</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => localFileInputRef.current?.click()}
-                  className="px-4 py-2 rounded-xl bg-[#202124] hover:bg-[#282a2c] text-white border border-[#3c4043] font-semibold text-xs inline-flex items-center gap-1.5 transition"
-                >
-                  <FileUp className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Importer un PDF</span>
-                </button>
-              </div>
-            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">

@@ -8,6 +8,7 @@ import {
   getFreshExtractedPdfText,
   getLocalRagStatus,
   discoverProgrammeFiles,
+  refreshDocumentsCache,
 } from '../rag';
 import { syncGoogleDriveBranch, extractDriveFolderId } from '../driveSync';
 
@@ -79,6 +80,77 @@ export function createDocumentsRouter(): Router {
    */
   router.get('/rag/status', (_req, res) => {
     return res.json(getLocalRagStatus());
+  });
+
+  /**
+   * Liste publique des documents officiels du programme indexés dans le RAG.
+   * Fournit le nom, la filière, la taille et le format sans exposer de chemin absolu système.
+   */
+  router.get('/documents/official', (_req, res) => {
+    try {
+      if (!fs.existsSync(DOCS_DIR)) {
+        return res.json({ files: [] });
+      }
+
+      const discovered = discoverProgrammeFiles(DOCS_DIR);
+      const files = discovered.map((doc) => {
+        let size = 0;
+        try {
+          size = fs.statSync(doc.absolutePath).size;
+        } catch {}
+
+        return {
+          name: doc.name,
+          relativePath: doc.relativePath,
+          branch: doc.branch,
+          size,
+          isPdf: doc.name.toLowerCase().endsWith('.pdf'),
+        };
+      });
+
+      return res.json({ files });
+    } catch (err: any) {
+      console.error('Erreur get official documents:', err);
+      return res.status(500).json({ error: 'Impossible de lister les documents officiels.' });
+    }
+  });
+
+  /**
+   * Synchronisation des documents officiels téléchargés et ré-indexation du RAG local.
+   * Re-scanne les sous-dossiers PC/ et SM/, extrait les textes des nouveaux PDFs et
+   * met à jour l'index en mémoire de Si Driss.
+   */
+  router.post('/documents/sync', async (req, res) => {
+    try {
+      const adminToken = req.headers['x-admin-token'] as string | undefined;
+      const branch = (String(req.body.branch || 'PC').toUpperCase() === 'SM' ? 'SM' : 'PC') as 'PC' | 'SM';
+      let driveSyncCount = 0;
+
+      // Si un token admin est fourni, synchroniser également le dossier Drive de la filière
+      if (adminToken) {
+        try {
+          const driveResult = await syncGoogleDriveBranch({ branch });
+          if (driveResult.success) {
+            driveSyncCount = driveResult.downloadedCount;
+          }
+        } catch (e) {
+          console.warn('[Sync] Sync Drive facultatif non exécuté :', e);
+        }
+      }
+
+      // Re-scan et ré-indexation complète du RAG local
+      const status = await refreshDocumentsCache(true);
+
+      return res.json({
+        success: true,
+        ...status,
+        driveSyncCount,
+        message: `Base officielle synchronisée : ${status.totalIndexedFiles} document(s) indexé(s) (${status.pcCount} PC, ${status.smCount} SM).`,
+      });
+    } catch (err: any) {
+      console.error('Erreur synchronisation documents officiels:', err);
+      return res.status(500).json({ error: 'Erreur lors de la synchronisation des documents officiels.' });
+    }
   });
 
   /**

@@ -99,13 +99,15 @@ export function discoverProgrammeFiles(dir: string, baseDir: string = dir): Disc
  * Rafraîchit l'index RAG en mémoire à partir du stockage local (docs/programme/PC et docs/programme/SM).
  * L'extraction des PDF ne se fait qu'une seule fois par document via le fichier cache .extracted.txt.
  */
-async function refreshDocumentsCache() {
+export async function refreshDocumentsCache(force: boolean = false) {
   const now = Date.now();
-  if (now - lastCacheRefreshTime < 4000) return;
+  if (!force && now - lastCacheRefreshTime < 4000) {
+    return getLocalRagStatus();
+  }
   lastCacheRefreshTime = now;
 
   try {
-    if (!fs.existsSync(DOCS_DIR)) return;
+    if (!fs.existsSync(DOCS_DIR)) return getLocalRagStatus();
 
     const discovered = discoverProgrammeFiles(DOCS_DIR);
     const updatedCache: CachedDoc[] = [];
@@ -150,6 +152,8 @@ async function refreshDocumentsCache() {
   } catch (err) {
     console.warn('Erreur rafraîchissement cache RAG local:', err);
   }
+
+  return getLocalRagStatus();
 }
 
 /**

@@ -201,6 +201,78 @@ export async function syncDriveFolderWithServer(
 }
 
 /**
+ * Récupère la liste des documents officiels indexés dans le RAG (accessible aux élèves et enseignants).
+ */
+export async function fetchOfficialDocuments(branch?: 'PC' | 'SM'): Promise<DriveDoc[]> {
+  try {
+    const res = await fetch('/api/documents/official');
+    if (!res.ok) return [];
+
+    const data = await res.json();
+    const files = data.files || [];
+    const branchUpper = (branch || 'PC').toUpperCase();
+
+    return files
+      .filter((f: any) => {
+        if (f.branch && f.branch !== 'ALL') {
+          return f.branch === branchUpper;
+        }
+        const nameLower = (f.name || '').toLowerCase();
+        const isSm = nameLower.includes('_sm') || nameLower.includes('-sm') || nameLower.includes('sm.');
+        const isPc = nameLower.includes('_pc') || nameLower.includes('-pc') || nameLower.includes('pc.');
+        if (branchUpper === 'PC' && isSm && !isPc) return false;
+        if (branchUpper === 'SM' && isPc && !isSm) return false;
+        return true;
+      })
+      .map((f: any) => ({
+        id: f.relativePath || f.name,
+        name: f.name,
+        mimeType: f.isPdf ? 'application/pdf' : 'text/plain',
+        size: f.size,
+        branch: (f.branch === 'SM' ? 'SM' : 'PC') as 'PC' | 'SM',
+        downloadUrl: `/api/documents/download?name=${encodeURIComponent(f.relativePath || f.name)}`,
+      }));
+  } catch (err) {
+    console.warn('[GoogleDrive] Erreur chargement documents officiels:', err);
+    return [];
+  }
+}
+
+/**
+ * Déclenche la synchronisation et la ré-indexation des documents officiels téléchargés sur le serveur.
+ */
+export async function syncOfficialDocuments(
+  branch: 'PC' | 'SM',
+  adminToken?: string
+): Promise<{
+  success: boolean;
+  totalIndexedFiles: number;
+  pcCount: number;
+  smCount: number;
+  message: string;
+}> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (adminToken) {
+    headers['x-admin-token'] = adminToken;
+  }
+
+  const res = await fetch('/api/documents/sync', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ branch }),
+  });
+
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || `Erreur de synchronisation (${res.status})`);
+  }
+
+  return await res.json();
+}
+
+/**
  * Récupère la liste des documents officiels accessibles (Admin uniquement).
  */
 export async function listOfficialDriveDocuments(branch?: 'PC' | 'SM', adminToken?: string): Promise<DriveDoc[]> {
