@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { DOCS_DIR, GOOGLE_DRIVE_FOLDER_PC, GOOGLE_DRIVE_FOLDER_SM, DRIVE_SYNC_INTERVAL_HOURS, GOOGLE_DRIVE_APPS_SCRIPT_URL } from './config';
-import { extractTextFromPdf } from './rag';
+import { extractTextFromPdf, discoverProgrammeFiles } from './rag';
 
 // État de planification de l'auto-synchronisation (2 fois par jour = toutes les 12 heures)
 let lastSyncTimestamp: number | null = null;
@@ -199,8 +199,9 @@ export async function syncGoogleDriveBranch(params: {
 
   const apiKey = resolveDriveApiKey(params.apiKey);
 
-  if (!fs.existsSync(DOCS_DIR)) {
-    fs.mkdirSync(DOCS_DIR, { recursive: true });
+  const branchDir = path.join(DOCS_DIR, branch);
+  if (!fs.existsSync(branchDir)) {
+    fs.mkdirSync(branchDir, { recursive: true });
   }
 
   console.log(`[DriveSync] Début de la synchronisation 2BAC ${branch} (Dossier ID: ${cleanFolderId})...`);
@@ -241,7 +242,7 @@ export async function syncGoogleDriveBranch(params: {
         targetName = `SM_${cleanName}`;
       }
 
-      const targetPath = path.join(DOCS_DIR, targetName);
+      const targetPath = path.join(branchDir, targetName);
       const fileBuffer = await downloadDriveFile(file.id, apiKey);
       fs.writeFileSync(targetPath, fileBuffer);
 
@@ -250,7 +251,7 @@ export async function syncGoogleDriveBranch(params: {
         try {
           const extractedText = await extractTextFromPdf(fileBuffer);
           if (extractedText && extractedText.trim().length > 20) {
-            fs.writeFileSync(path.join(DOCS_DIR, `${targetName}.extracted.txt`), extractedText, 'utf-8');
+            fs.writeFileSync(path.join(branchDir, `${targetName}.extracted.txt`), extractedText, 'utf-8');
           }
         } catch (extractErr) {
           console.warn(`[DriveSync] Avertissement extraction PDF (${targetName}):`, extractErr);
@@ -258,7 +259,7 @@ export async function syncGoogleDriveBranch(params: {
       }
 
       downloadedFiles.push(targetName);
-      console.log(`[DriveSync] Fichier indexé avec succès dans le RAG: ${targetName}`);
+      console.log(`[DriveSync] Fichier indexé avec succès dans le RAG (${branch}): ${targetName}`);
     } catch (err: any) {
       console.warn(`[DriveSync] Échec du téléchargement pour ${file.name}:`, err?.message || err);
     }
@@ -404,17 +405,11 @@ export function getOfficialRagSummary(): {
     };
   }
 
-  const allFiles = fs.readdirSync(DOCS_DIR).filter((f) => !f.endsWith('.extracted.txt'));
-  const pcFiles = allFiles.filter((f) => {
-    const l = f.toLowerCase();
-    return l.includes('pc') || l.startsWith('pc_');
-  });
-  const smFiles = allFiles.filter((f) => {
-    const l = f.toLowerCase();
-    return l.includes('sm') || l.startsWith('sm_');
-  });
+  const discovered = discoverProgrammeFiles(DOCS_DIR);
+  const pcFiles = discovered.filter((f) => f.branch === 'PC');
+  const smFiles = discovered.filter((f) => f.branch === 'SM');
 
-  const totalIndexedFiles = allFiles.length;
+  const totalIndexedFiles = discovered.length;
   const pcIndexed = pcFiles.length > 0;
   const smIndexed = smFiles.length > 0;
 
@@ -429,7 +424,7 @@ export function getOfficialRagSummary(): {
     nextSyncIso,
     message:
       totalIndexedFiles > 0
-        ? 'Base de connaissances officielle Si Driss active et enrichie (RAG).'
+        ? `Base de connaissances officielle Si Driss active et enrichie (${pcFiles.length} docs PC, ${smFiles.length} docs SM).`
         : 'Base de connaissances prête.',
   };
 }

@@ -84,7 +84,16 @@ export function formatMessagesForOpenAI(messages: ClientMessage[], systemInstruc
     result.push({ role: 'system', content: systemInstruction });
   }
 
-  for (const m of messages) {
+  // Drop leading assistant welcome messages so conversation starts with a user turn
+  const firstUserIdx = messages.findIndex((m) => m.role !== 'assistant' && m.role !== 'model');
+  const relevantMessages = firstUserIdx >= 0 ? messages.slice(firstUserIdx) : [];
+
+  if (relevantMessages.length === 0) {
+    result.push({ role: 'user', content: 'Bonjour Si Driss' });
+    return result;
+  }
+
+  for (const m of relevantMessages) {
     const isAssistant = m.role === 'assistant' || m.role === 'model';
     const role = isAssistant ? 'assistant' : 'user';
 
@@ -124,7 +133,7 @@ export function formatMessagesForOpenAI(messages: ClientMessage[], systemInstruc
           }
         }
       }
-      result.push({ role, content: text || 'Bonjour Si Driss' });
+      result.push({ role, content: text || (isAssistant ? '...' : 'Bonjour Si Driss') });
     }
   }
 
@@ -132,11 +141,11 @@ export function formatMessagesForOpenAI(messages: ClientMessage[], systemInstruc
 }
 
 export function formatMessagesForAnthropic(messages: ClientMessage[]) {
-  const result: any[] = [];
+  const rawTurns: { role: 'user' | 'assistant'; content: any }[] = [];
 
   for (const m of messages) {
     const isAssistant = m.role === 'assistant' || m.role === 'model';
-    const role = isAssistant ? 'assistant' : 'user';
+    const role: 'user' | 'assistant' = isAssistant ? 'assistant' : 'user';
 
     const hasImages = m.attachments?.some(
       (a) => a.mimeType?.startsWith('image/') && a.data
@@ -168,7 +177,7 @@ export function formatMessagesForAnthropic(messages: ClientMessage[]) {
         text: textContent || "Voici l'image pour analyse.",
       });
 
-      result.push({ role, content: contentParts });
+      rawTurns.push({ role, content: contentParts });
     } else {
       let text = (m.content || '').trim();
       if (m.attachments) {
@@ -178,9 +187,49 @@ export function formatMessagesForAnthropic(messages: ClientMessage[]) {
           }
         }
       }
-      result.push({ role, content: text || 'Bonjour Si Driss' });
+      rawTurns.push({ role, content: text || (isAssistant ? '...' : 'Bonjour Si Driss') });
     }
   }
 
-  return result;
+  // Anthropic API requirement: Conversation MUST start with a 'user' turn.
+  // Drop leading assistant messages (e.g. the initial welcome message).
+  const firstUserIdx = rawTurns.findIndex((t) => t.role === 'user');
+  const slicedTurns = firstUserIdx >= 0 ? rawTurns.slice(firstUserIdx) : [];
+
+  if (slicedTurns.length === 0) {
+    return [{ role: 'user', content: 'Bonjour Si Driss' }];
+  }
+
+  // Anthropic API requirement: Dialogue turns MUST strictly alternate between 'user' and 'assistant'.
+  // Coalesce consecutive turns with the same role.
+  const normalized: { role: 'user' | 'assistant'; content: any }[] = [];
+
+  for (const turn of slicedTurns) {
+    const prev = normalized[normalized.length - 1];
+    if (prev && prev.role === turn.role) {
+      if (typeof prev.content === 'string' && typeof turn.content === 'string') {
+        prev.content = `${prev.content}\n\n${turn.content}`;
+      } else {
+        const prevArray = Array.isArray(prev.content)
+          ? prev.content
+          : [{ type: 'text', text: String(prev.content) }];
+        const currArray = Array.isArray(turn.content)
+          ? turn.content
+          : [{ type: 'text', text: String(turn.content) }];
+        prev.content = [...prevArray, ...currArray];
+      }
+    } else {
+      normalized.push({
+        role: turn.role,
+        content: turn.content,
+      });
+    }
+  }
+
+  // Ensure first turn is user
+  if (normalized.length === 0 || normalized[0].role !== 'user') {
+    normalized.unshift({ role: 'user', content: 'Bonjour Si Driss' });
+  }
+
+  return normalized;
 }

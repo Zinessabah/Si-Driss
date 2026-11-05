@@ -217,6 +217,9 @@ export async function listOfficialDriveDocuments(branch?: 'PC' | 'SM', adminToke
 
     return files
       .filter((f: any) => {
+        if (f.branch && f.branch !== 'ALL') {
+          return f.branch === branchUpper;
+        }
         const nameLower = (f.name || '').toLowerCase();
         const isSm = nameLower.includes('_sm') || nameLower.includes('-sm') || nameLower.includes('sm.');
         const isPc = nameLower.includes('_pc') || nameLower.includes('-pc') || nameLower.includes('pc.');
@@ -225,14 +228,14 @@ export async function listOfficialDriveDocuments(branch?: 'PC' | 'SM', adminToke
         return true;
       })
       .map((f: any) => ({
-        id: f.name,
+        id: f.relativePath || f.name,
         name: f.name,
         mimeType: f.isPdf ? 'application/pdf' : 'text/plain',
         size: f.size,
         modifiedTime: f.modified,
-        branch: branchUpper as 'PC' | 'SM',
+        branch: (f.branch === 'SM' ? 'SM' : 'PC') as 'PC' | 'SM',
         preview: f.preview,
-        downloadUrl: `/api/documents/download?name=${encodeURIComponent(f.name)}`,
+        downloadUrl: `/api/documents/download?name=${encodeURIComponent(f.relativePath || f.name)}`,
       }));
   } catch (err) {
     console.warn('[GoogleDrive] Erreur chargement documents officiels:', err);

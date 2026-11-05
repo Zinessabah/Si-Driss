@@ -3,8 +3,63 @@ import fs from 'fs';
 import path from 'path';
 import { DOCS_DIR, GOOGLE_DRIVE_FOLDER_PC, GOOGLE_DRIVE_FOLDER_SM } from '../config';
 import { requireAdmin, documentMutationLimiter } from '../security';
-import { extractTextFromPdf, getFreshExtractedPdfText, getLocalRagStatus } from '../rag';
+import {
+  extractTextFromPdf,
+  getFreshExtractedPdfText,
+  getLocalRagStatus,
+  discoverProgrammeFiles,
+} from '../rag';
 import { syncGoogleDriveBranch, extractDriveFolderId } from '../driveSync';
+
+/**
+ * Résout le chemin absolu sécurisé d'un document dans DOCS_DIR.
+ * Empêche toute tentative de path traversal (..) et prend en charge
+ * les fichiers situés dans la racine ou dans les sous-dossiers PC/ et SM/.
+ */
+function resolveDocumentFilePath(nameOrRelativePath: string): string | null {
+  if (!nameOrRelativePath || typeof nameOrRelativePath !== 'string') return null;
+
+  const clean = nameOrRelativePath.trim();
+  if (!clean) return null;
+
+  const normalizedDocsDir = path.resolve(DOCS_DIR);
+  const resolved = path.resolve(DOCS_DIR, clean);
+
+  // Sécurité anti-traversal : le chemin résolu DOIT être à l'intérieur de DOCS_DIR
+  if (!resolved.startsWith(normalizedDocsDir + path.sep) && resolved !== normalizedDocsDir) {
+    return null;
+  }
+
+  // 1. Si le fichier direct existe
+  if (fs.existsSync(resolved) && fs.statSync(resolved).isFile()) {
+    return resolved;
+  }
+
+  // 2. Recherche par nom de base dans DOCS_DIR/PC, DOCS_DIR/SM, ou DOCS_DIR
+  const baseName = path.basename(clean);
+  const candidates = [
+    path.join(DOCS_DIR, 'PC', baseName),
+    path.join(DOCS_DIR, 'SM', baseName),
+    path.join(DOCS_DIR, baseName),
+  ];
+
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
+      return candidate;
+    }
+  }
+
+  // 3. Recherche parmi tous les fichiers découverts par le RAG
+  const allFiles = discoverProgrammeFiles(DOCS_DIR);
+  const matched = allFiles.find(
+    (f) => f.name === baseName || f.relativePath === clean || f.name === clean
+  );
+  if (matched && fs.existsSync(matched.absolutePath) && fs.statSync(matched.absolutePath).isFile()) {
+    return matched.absolutePath;
+  }
+
+  return null;
+}
 
 /**
  * Routes de gestion des documents du programme et du RAG.
@@ -35,17 +90,17 @@ export function createDocumentsRouter(): Router {
         return res.json({ directory: DOCS_DIR, files: [] });
       }
 
-      const fileNames = fs.readdirSync(DOCS_DIR).filter((f) => !f.endsWith('.extracted.txt'));
+      const discovered = discoverProgrammeFiles(DOCS_DIR);
       const files = await Promise.all(
-        fileNames.map(async (name) => {
-          const filePath = path.join(DOCS_DIR, name);
+        discovered.map(async (doc) => {
+          const filePath = doc.absolutePath;
           const stat = fs.statSync(filePath);
           let preview = '';
-          const isPdf = name.toLowerCase().endsWith('.pdf');
+          const isPdf = doc.name.toLowerCase().endsWith('.pdf');
 
           if (isPdf) {
             try {
-              const text = await getFreshExtractedPdfText(filePath, path.join(DOCS_DIR, `${name}.extracted.txt`));
+              const text = await getFreshExtractedPdfText(filePath, `${filePath}.extracted.txt`);
               preview = text.slice(0, 150).replace(/\n/g, ' ');
             } catch {
               preview = 'Document PDF prêt à être indexé';
@@ -60,7 +115,9 @@ export function createDocumentsRouter(): Router {
           }
 
           return {
-            name,
+            name: doc.name,
+            relativePath: doc.relativePath,
+            branch: doc.branch,
             size: stat.size,
             modified: stat.mtime,
             preview,
@@ -87,16 +144,16 @@ export function createDocumentsRouter(): Router {
       const name = String(req.query.name || '');
       if (!name) return res.status(400).json({ error: 'Nom requis.' });
 
-      const safeName = path.basename(name);
-      const filePath = path.join(DOCS_DIR, safeName);
-      const isPdf = safeName.toLowerCase().endsWith('.pdf');
-
-      if (!fs.existsSync(filePath)) {
+      const filePath = resolveDocumentFilePath(name);
+      if (!filePath) {
         return res.status(404).json({ error: 'Fichier non trouvé.' });
       }
 
+      const safeName = path.basename(filePath);
+      const isPdf = safeName.toLowerCase().endsWith('.pdf');
+
       if (isPdf) {
-        const content = await getFreshExtractedPdfText(filePath, path.join(DOCS_DIR, `${safeName}.extracted.txt`));
+        const content = await getFreshExtractedPdfText(filePath, `${filePath}.extracted.txt`);
         return res.json({ name: safeName, content, isPdf: true });
       } else {
         const content = fs.readFileSync(filePath, 'utf-8');
@@ -116,14 +173,12 @@ export function createDocumentsRouter(): Router {
       const name = String(req.query.name || '');
       if (!name) return res.status(400).json({ error: 'Nom requis.' });
 
-      const safeName = path.basename(name);
-      const filePath = path.join(DOCS_DIR, safeName);
-
-      if (!fs.existsSync(filePath)) {
+      const filePath = resolveDocumentFilePath(name);
+      if (!filePath) {
         return res.status(404).json({ error: 'Fichier non trouvé.' });
       }
 
-      return res.download(filePath, safeName);
+      return res.download(filePath, path.basename(filePath));
     } catch (err: any) {
       console.error('Erreur download document:', err);
       return res.status(500).json({ error: 'Erreur téléchargement document.' });
@@ -171,7 +226,7 @@ export function createDocumentsRouter(): Router {
    */
   router.post('/documents/upload', requireAdmin, documentMutationLimiter, async (req, res) => {
     try {
-      const { filename, content, base64 } = req.body;
+      const { filename, content, base64, branch: reqBranch } = req.body;
       if (!filename || (content === undefined && !base64)) {
         return res.status(400).json({ error: 'Nom de fichier et contenu (texte ou base64) requis.' });
       }
@@ -200,7 +255,23 @@ export function createDocumentsRouter(): Router {
         return res.status(413).json({ error: 'Document texte trop volumineux (max 2 millions de caractères).' });
       }
 
-      const filePath = path.join(DOCS_DIR, safeName);
+      // Détermination de la filière cible (PC ou SM) pour respecter l'étanchéité stricte
+      let branchFolder = '';
+      const bUpper = String(reqBranch || '').toUpperCase();
+      if (bUpper === 'PC' || bUpper === 'SM') {
+        branchFolder = bUpper;
+      } else {
+        const nameLower = safeName.toLowerCase();
+        if (nameLower.includes('pc') && !nameLower.includes('sm')) branchFolder = 'PC';
+        else if (nameLower.includes('sm') && !nameLower.includes('pc')) branchFolder = 'SM';
+      }
+
+      const targetDir = branchFolder ? path.join(DOCS_DIR, branchFolder) : DOCS_DIR;
+      if (!fs.existsSync(targetDir)) {
+        fs.mkdirSync(targetDir, { recursive: true });
+      }
+
+      const filePath = path.join(targetDir, safeName);
       const isPdf = ext === '.pdf';
 
       if (base64) {
@@ -210,7 +281,7 @@ export function createDocumentsRouter(): Router {
         if (isPdf) {
           try {
             const text = await extractTextFromPdf(buf);
-            const txtPath = path.join(DOCS_DIR, `${safeName}.extracted.txt`);
+            const txtPath = `${filePath}.extracted.txt`;
             fs.writeFileSync(txtPath, text, 'utf-8');
           } catch (pdfErr) {
             console.warn('Extraction PDF échouée:', pdfErr);
@@ -223,9 +294,13 @@ export function createDocumentsRouter(): Router {
       return res.json({
         success: true,
         message: isPdf
-          ? `Document PDF "${safeName}" indexé et texte extrait pour le RAG !`
-          : `Document "${safeName}" indexé avec succès dans /docs/programme/`,
-        file: { name: safeName },
+          ? `Document PDF "${safeName}" indexé et texte extrait pour le RAG (${branchFolder || 'Général'}) !`
+          : `Document "${safeName}" indexé avec succès dans /docs/programme/${branchFolder ? branchFolder + '/' : ''}`,
+        file: {
+          name: safeName,
+          relativePath: branchFolder ? `${branchFolder}/${safeName}` : safeName,
+          branch: branchFolder || 'ALL',
+        },
       });
     } catch (err: any) {
       console.error('Erreur upload document:', err);
@@ -239,18 +314,23 @@ export function createDocumentsRouter(): Router {
   router.delete('/documents/:filename', requireAdmin, documentMutationLimiter, async (req, res) => {
     try {
       const { filename } = req.params;
-      const safeName = path.basename(filename);
-      const filePath = path.join(DOCS_DIR, safeName);
-      const txtPath = path.join(DOCS_DIR, `${safeName}.extracted.txt`);
+      const filePath = resolveDocumentFilePath(filename);
 
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-        if (fs.existsSync(txtPath)) {
-          fs.unlinkSync(txtPath);
-        }
-        return res.json({ success: true, message: `Fichier ${safeName} supprimé.` });
+      if (!filePath || !fs.existsSync(filePath)) {
+        return res.status(404).json({ error: 'Fichier non trouvé.' });
       }
-      return res.status(404).json({ error: 'Fichier non trouvé.' });
+
+      const safeName = path.basename(filePath);
+      const txtPath = `${filePath}.extracted.txt`;
+
+      fs.unlinkSync(filePath);
+      if (fs.existsSync(txtPath)) {
+        try {
+          fs.unlinkSync(txtPath);
+        } catch {}
+      }
+
+      return res.json({ success: true, message: `Fichier ${safeName} supprimé.` });
     } catch (err: any) {
       console.error('Erreur suppression document:', err);
       return res.status(500).json({ error: 'Erreur lors de la suppression.' });

@@ -18,7 +18,7 @@ interface CachedDoc {
   sections: CachedDocSection[];
 }
 
-interface DiscoveredFile {
+export interface DiscoveredFile {
   absolutePath: string;
   relativePath: string;
   name: string;
@@ -54,7 +54,7 @@ function resolveDocumentBranch(relativePath: string, fileName: string): Document
 /**
  * Parcourt récursivement le dossier docs/programme pour découvrir les fichiers des 2 filières.
  */
-function discoverProgrammeFiles(dir: string, baseDir: string = dir): DiscoveredFile[] {
+export function discoverProgrammeFiles(dir: string, baseDir: string = dir): DiscoveredFile[] {
   if (!fs.existsSync(dir)) return [];
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   const results: DiscoveredFile[] = [];
