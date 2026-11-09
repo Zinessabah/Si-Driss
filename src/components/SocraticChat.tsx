@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { MathView } from './MathView';
 import { SavedSession, ChatMessage, ChatAttachment } from '../types/chat';
+import { compressImageFile, safeSaveSessions, safeLoadSessions } from '../utils/chatStorage';
 import { useModalA11y } from '../hooks/useModalA11y';
 import { ExercisePickerModal } from './ExercisePickerModal';
 import { DocumentPickerModal } from './DocumentPickerModal';
@@ -108,18 +109,8 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   const [socraticEnabled, setSocraticEnabled] = useState<boolean>(false);
   const [coachingMode, setCoachingMode] = useState<'socratic' | 'direct' | 'review' | 'trap'>('direct');
 
-  // Session identification and storage
-  const [currentSessionId, setCurrentSessionId] = useState<string>(() => {
-    try {
-      const active = localStorage.getItem('sidriss_active_session_v1');
-      if (active) {
-        const parsed = JSON.parse(active);
-        if (parsed.id) return parsed.id;
-      }
-    } catch {}
-    return `session_${Date.now()}`;
-  });
-
+  // Session identification — Démarrage propre à chaque lancement (style Google Gemini)
+  const [currentSessionId, setCurrentSessionId] = useState<string>(() => `session_${Date.now()}`);
   const [currentSessionTitle, setCurrentSessionTitle] = useState<string>('Nouvelle discussion');
   const [saveToast, setSaveToast] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -152,24 +143,12 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   const activeStreamControllerRef = useRef<AbortController | null>(null);
 
   // Saved sessions list
-  const [savedSessions, setSavedSessions] = useState<SavedSession[]>(() => {
-    try {
-      const raw = localStorage.getItem('sidriss_saved_sessions_v1');
-      if (raw) return JSON.parse(raw);
-    } catch {}
-    return [];
-  });
+  const [savedSessions, setSavedSessions] = useState<SavedSession[]>(() => safeLoadSessions());
 
+  // Messages du canvas de chat — Démarre toujours libre et accueillant comme Google Gemini
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     try {
       const currentStoredBranch = (localStorage.getItem('sidriss_student_branch_v1') as 'PC' | 'SM') || 'PC';
-      const active = localStorage.getItem('sidriss_active_session_v1');
-      if (active) {
-        const parsed = JSON.parse(active);
-        if (parsed.messages && parsed.messages.length > 0) {
-          return parsed.messages;
-        }
-      }
       return [getWelcomeMessage(currentStoredBranch)];
     } catch {
       return [getWelcomeMessage('PC')];
@@ -253,7 +232,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     }
   }, [input]);
 
-  // Auto-save active session to localStorage and sync history in savedSessions
+  // Auto-save active session to savedSessions history avec sécurité anti-saturation
   useEffect(() => {
     const userMessages = messages.filter((m) => m.role === 'user');
     if (userMessages.length === 0) return;
@@ -277,7 +256,6 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
           createdAt: now,
           updatedAt: now,
         };
-        localStorage.setItem('sidriss_active_session_v1', JSON.stringify(sessionPayload));
 
         setSavedSessions((prev) => {
           const idx = prev.findIndex((s) => s.id === currentSessionId);
@@ -295,18 +273,11 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
           } else {
             nextSessions = [sessionPayload, ...prev];
           }
-          try {
-            localStorage.setItem('sidriss_saved_sessions_v1', JSON.stringify(nextSessions));
-          } catch (storageErr) {
-            console.warn('Failed to save sessions list:', storageErr);
-          }
+          safeSaveSessions(nextSessions);
           return nextSessions;
         });
       } catch (e) {
-        console.error('Failed to auto-save active session:', e);
-        setSaveToast(
-          "Sauvegarde automatique impossible : la mémoire du navigateur est saturée. Exporte cette session ou supprime d'anciennes discussions."
-        );
+        console.warn('Auto-save active session:', e);
       }
     }, 600);
     return () => clearTimeout(t);
@@ -419,9 +390,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         } else {
           next = [archived, ...prev];
         }
-        try {
-          localStorage.setItem('sidriss_saved_sessions_v1', JSON.stringify(next));
-        } catch {}
+        safeSaveSessions(next);
         return next;
       });
     }
@@ -464,9 +433,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
           } else {
             next = [currentToSave, ...prev];
           }
-          try {
-            localStorage.setItem('sidriss_saved_sessions_v1', JSON.stringify(next));
-          } catch {}
+          safeSaveSessions(next);
           return next;
         });
       }
@@ -478,9 +445,6 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     setSocraticEnabled(session.socraticEnabled ?? true);
     setCoachingMode(session.coachingMode || 'socratic');
     setPendingAttachments([]);
-    try {
-      localStorage.setItem('sidriss_active_session_v1', JSON.stringify(session));
-    } catch {}
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -522,21 +486,36 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
       const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
 
       if (isImg) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const dataUrl = event.target?.result as string;
-          const newAtt: ChatAttachment = {
-            id: `att_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-            name: file.name,
-            type: 'image',
-            mimeType: file.type || 'image/png',
-            data: dataUrl,
-            previewUrl: dataUrl,
-            size: file.size,
-          };
-          setPendingAttachments((prev) => [...prev, newAtt]);
-        };
-        reader.readAsDataURL(file);
+        compressImageFile(file)
+          .then(({ dataUrl, size }) => {
+            const newAtt: ChatAttachment = {
+              id: `att_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+              name: file.name,
+              type: 'image',
+              mimeType: 'image/jpeg',
+              data: dataUrl,
+              previewUrl: dataUrl,
+              size,
+            };
+            setPendingAttachments((prev) => [...prev, newAtt]);
+          })
+          .catch(() => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              const dataUrl = event.target?.result as string;
+              const newAtt: ChatAttachment = {
+                id: `att_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+                name: file.name,
+                type: 'image',
+                mimeType: file.type || 'image/png',
+                data: dataUrl,
+                previewUrl: dataUrl,
+                size: file.size,
+              };
+              setPendingAttachments((prev) => [...prev, newAtt]);
+            };
+            reader.readAsDataURL(file);
+          });
       } else if (isPdf) {
         const reader = new FileReader();
         reader.onload = (event) => {

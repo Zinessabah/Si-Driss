@@ -12,6 +12,7 @@ import { BranchSelectorModal } from './components/BranchSelectorModal';
 import { GeminiSidebar } from './components/GeminiSidebar';
 import { SavedSession } from './types/chat';
 import { syncVaultWithServer } from './utils/documentVault';
+import { migrateAndClearActiveSessionOnStartup, safeSaveSessions } from './utils/chatStorage';
 import {
   Menu,
   Sparkles,
@@ -67,13 +68,9 @@ export default function App() {
     return true;
   });
 
-  // Saved sessions for the sidebar list
+  // Saved sessions for the sidebar list — démarrage vierge comme Google Gemini
   const [savedSessions, setSavedSessions] = useState<SavedSession[]>(() => {
-    try {
-      const raw = localStorage.getItem('sidriss_saved_sessions_v1');
-      if (raw) return JSON.parse(raw);
-    } catch {}
-    return [];
+    return migrateAndClearActiveSessionOnStartup();
   });
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [externalLoadSession, setExternalLoadSession] = useState<SavedSession | null>(null);
@@ -110,10 +107,8 @@ export default function App() {
   const handleDeleteSession = (id: string) => {
     const updated = savedSessions.filter((s) => s.id !== id);
     setSavedSessions(updated);
-    try {
-      localStorage.setItem('sidriss_saved_sessions_v1', JSON.stringify(updated));
-      window.dispatchEvent(new Event('sidriss_sessions_updated'));
-    } catch {}
+    safeSaveSessions(updated);
+    window.dispatchEvent(new Event('sidriss_sessions_updated'));
     if (currentSessionId === id) {
       handleNewChat();
     }
@@ -124,10 +119,8 @@ export default function App() {
     if (!trimmed) return;
     const updated = savedSessions.map((s) => (s.id === id ? { ...s, title: trimmed } : s));
     setSavedSessions(updated);
-    try {
-      localStorage.setItem('sidriss_saved_sessions_v1', JSON.stringify(updated));
-      window.dispatchEvent(new Event('sidriss_sessions_updated'));
-    } catch {}
+    safeSaveSessions(updated);
+    window.dispatchEvent(new Event('sidriss_sessions_updated'));
   };
 
   const handleSessionsUpdated = (sessions: SavedSession[], activeId: string) => {
