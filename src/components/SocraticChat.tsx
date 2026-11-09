@@ -13,10 +13,10 @@ import {
   Paperclip,
   Image as ImageIcon,
   FileText,
+  Camera,
   X,
   GraduationCap,
   Eye,
-  FileCheck,
   CheckCircle,
   HelpCircle,
   Key,
@@ -144,6 +144,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const pdfInputRef = useRef<HTMLInputElement | null>(null);
   const photoInputRef = useRef<HTMLInputElement | null>(null);
+  const cameraInputRef = useRef<HTMLInputElement | null>(null);
   const addMenuRef = useRef<HTMLDivElement | null>(null);
   const formulaMenuRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -395,6 +396,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
       if (fileInputRef.current) fileInputRef.current.value = '';
       if (pdfInputRef.current) pdfInputRef.current.value = '';
       if (photoInputRef.current) photoInputRef.current.value = '';
+      if (cameraInputRef.current) cameraInputRef.current.value = '';
       return;
     }
 
@@ -475,6 +477,9 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     }
     if (photoInputRef.current) {
       photoInputRef.current.value = '';
+    }
+    if (cameraInputRef.current) {
+      cameraInputRef.current.value = '';
     }
   };
 
@@ -815,12 +820,12 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         </div>
       )}
 
-      {/* Hidden File Inputs: Strictly separated so mobile OS opens files for PDF and camera/photos for images (no videos) */}
+      {/* Hidden File Inputs: Document, Album, and Appareil photo */}
       <input
         type="file"
         ref={pdfInputRef}
         onChange={handleFileUpload}
-        accept="application/pdf,.pdf"
+        accept="application/pdf,.pdf,.txt,.doc,.docx"
         multiple
         className="hidden"
       />
@@ -830,6 +835,14 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         onChange={handleFileUpload}
         accept="image/png,image/jpeg,image/webp,image/jpg"
         multiple
+        className="hidden"
+      />
+      <input
+        type="file"
+        ref={cameraInputRef}
+        onChange={handleFileUpload}
+        accept="image/*"
+        capture="environment"
         className="hidden"
       />
       <input
@@ -1169,8 +1182,8 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
                   {/* Add Popover Menu */}
                   {isAddMenuOpen && (
-                    <div className="absolute bottom-full left-0 mb-2 w-72 bg-[#1e1f20] border border-[#3c4043] rounded-2xl shadow-2xl p-1.5 z-50 space-y-0.5 backdrop-blur-md animate-in fade-in slide-in-from-bottom-2">
-                      {/* Option 1: PDF Document (.pdf only - opens Files on iOS/Android without camera or video prompt) */}
+                    <div className="absolute bottom-full left-0 mb-2 w-64 bg-[#1e1f20] border border-[#3c4043] rounded-2xl shadow-2xl p-1.5 z-50 space-y-0.5 backdrop-blur-md animate-in fade-in slide-in-from-bottom-2">
+                      {/* Option 1: Document */}
                       <button
                         type="button"
                         onClick={() => {
@@ -1179,19 +1192,19 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                         }}
                         className="w-full text-left p-2 rounded-xl hover:bg-[#282a2c] text-[#e3e3e3] transition flex items-center gap-2.5 group"
                       >
-                        <div className="w-7 h-7 rounded-lg bg-rose-500/15 flex items-center justify-center text-rose-400 group-hover:scale-105 transition-transform flex-shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-rose-500/15 flex items-center justify-center text-rose-400 group-hover:scale-105 transition-transform shrink-0">
                           <FileText className="w-4 h-4" />
                         </div>
                         <div className="text-xs">
-                          <div className="font-medium flex items-center gap-1.5">
-                            Document PDF
-                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-semibold tracking-wide">.PDF</span>
+                          <div className="font-medium text-white flex items-center gap-1.5">
+                            Document
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-semibold tracking-wide">PDF / TEXTE</span>
                           </div>
                           <div className="text-[10px] text-[#8e918f]">Sujet d'examen, devoir ou résumé</div>
                         </div>
                       </button>
 
-                      {/* Option 2: Exercise Photo (strict images only - no videos allowed) */}
+                      {/* Option 2: Album */}
                       <button
                         type="button"
                         onClick={() => {
@@ -1200,77 +1213,36 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                         }}
                         className="w-full text-left p-2 rounded-xl hover:bg-[#282a2c] text-[#e3e3e3] transition flex items-center gap-2.5 group"
                       >
-                        <div className="w-7 h-7 rounded-lg bg-[#8ab4f8]/15 flex items-center justify-center text-[#8ab4f8] group-hover:scale-105 transition-transform flex-shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-[#8ab4f8]/15 flex items-center justify-center text-[#8ab4f8] group-hover:scale-105 transition-transform shrink-0">
                           <ImageIcon className="w-4 h-4" />
                         </div>
                         <div className="text-xs">
-                          <div className="font-medium flex items-center gap-1.5">
-                            Photo d'énoncé
-                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#8ab4f8]/20 text-[#8ab4f8] font-semibold tracking-wide">IMAGE</span>
+                          <div className="font-medium text-white flex items-center gap-1.5">
+                            Album
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#8ab4f8]/20 text-[#8ab4f8] font-semibold tracking-wide">GALERIE</span>
                           </div>
-                          <div className="text-[10px] text-[#8e918f]">Photo ou scan d'exercice (.jpg, .png)</div>
+                          <div className="text-[10px] text-[#8e918f]">Photos et images de la galerie</div>
                         </div>
                       </button>
 
+                      {/* Option 3: Appareil photo */}
                       <button
                         type="button"
                         onClick={() => {
                           setIsAddMenuOpen(false);
-                          setIsExercisePickerOpen(true);
-                        }}
-                        className="w-full text-left p-2 rounded-xl hover:bg-[#282a2c] text-[#e3e3e3] transition flex items-center gap-2.5"
-                      >
-                        <GraduationCap className="w-4 h-4 text-amber-400" />
-                        <div className="text-xs">
-                          <div className="font-medium">Exercice type du Bac</div>
-                          <div className="text-[10px] text-[#8e918f]">RC, RLC, Newton, Titrage...</div>
-                        </div>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={handleInsertTemplate}
-                        className="w-full text-left p-2 rounded-xl hover:bg-[#282a2c] text-[#e3e3e3] transition flex items-center gap-2.5"
-                      >
-                        <FileCheck className="w-4 h-4 text-emerald-400" />
-                        <div className="text-xs">
-                          <div className="font-medium">Gabarit structuré</div>
-                          <div className="text-[10px] text-[#8e918f]">Énoncé, blocage, raisonnement</div>
-                        </div>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsAddMenuOpen(false);
-                          setIsDocPickerOpen(true);
-                        }}
-                        className="w-full text-left p-2 rounded-xl hover:bg-[#282a2c] text-[#e3e3e3] transition flex items-center gap-2.5"
-                      >
-                        <BookOpen className="w-4 h-4 text-purple-400" />
-                        <div className="text-xs">
-                          <div className="font-medium">Documents officiels</div>
-                          <div className="text-[10px] text-[#8e918f]">Cadres de référence /docs</div>
-                        </div>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsAddMenuOpen(false);
-                          setIsGraphicsModalOpen(true);
+                          cameraInputRef.current?.click();
                         }}
                         className="w-full text-left p-2 rounded-xl hover:bg-[#282a2c] text-[#e3e3e3] transition flex items-center gap-2.5 group"
                       >
-                        <div className="w-7 h-7 rounded-lg bg-sky-500/15 flex items-center justify-center text-sky-400 group-hover:scale-105 transition-transform flex-shrink-0">
-                          <TrendingUp className="w-4 h-4" />
+                        <div className="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform shrink-0">
+                          <Camera className="w-4 h-4" />
                         </div>
                         <div className="text-xs">
-                          <div className="font-medium flex items-center gap-1.5">
-                            Courbe / Graphique
-                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-semibold tracking-wide">GRAPHE</span>
+                          <div className="font-medium text-white flex items-center gap-1.5">
+                            Appareil photo
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold tracking-wide">PHOTO</span>
                           </div>
-                          <div className="text-[10px] text-[#8e918f]">RC, RL, RLC, Titrage, Chute...</div>
+                          <div className="text-[10px] text-[#8e918f]">Prendre une photo de l'énoncé</div>
                         </div>
                       </button>
                     </div>
