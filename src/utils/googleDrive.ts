@@ -21,6 +21,7 @@ export interface DriveDoc {
   downloadUrl?: string;
   branch: 'PC' | 'SM';
   preview?: string;
+  hasVisuals?: boolean;
 }
 
 export const FOLDER_NAMES: Record<'PC' | 'SM', string> = {
@@ -230,6 +231,7 @@ export async function fetchOfficialDocuments(branch?: 'PC' | 'SM'): Promise<Driv
         mimeType: f.isPdf ? 'application/pdf' : 'text/plain',
         size: f.size,
         branch: (f.branch === 'SM' ? 'SM' : 'PC') as 'PC' | 'SM',
+        hasVisuals: Boolean(f.hasVisuals),
         downloadUrl: `/api/documents/download?name=${encodeURIComponent(f.relativePath || f.name)}`,
       }));
   } catch (err) {
@@ -240,15 +242,19 @@ export async function fetchOfficialDocuments(branch?: 'PC' | 'SM'): Promise<Driv
 
 /**
  * Déclenche la synchronisation et la ré-indexation des documents officiels téléchargés sur le serveur.
+ * Transmet la clé API pour l'analyse visuelle des schémas & graphes si disponible.
  */
 export async function syncOfficialDocuments(
   branch: 'PC' | 'SM',
-  adminToken?: string
+  adminToken?: string,
+  apiKey?: string
 ): Promise<{
   success: boolean;
   totalIndexedFiles: number;
   pcCount: number;
   smCount: number;
+  visuallyDecodedCount?: number;
+  hasVisionKey?: boolean;
   message: string;
 }> {
   const headers: Record<string, string> = {
@@ -257,11 +263,14 @@ export async function syncOfficialDocuments(
   if (adminToken) {
     headers['x-admin-token'] = adminToken;
   }
+  if (apiKey) {
+    headers['x-ai-api-key'] = apiKey;
+  }
 
   const res = await fetch('/api/documents/sync', {
     method: 'POST',
     headers,
-    body: JSON.stringify({ branch }),
+    body: JSON.stringify({ branch, apiKey }),
   });
 
   if (!res.ok) {

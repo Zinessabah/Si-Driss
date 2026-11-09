@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { useModalA11y } from '../hooks/useModalA11y';
 import { useBranch, StudentBranch } from '../hooks/useBranch';
-import { getAdminToken, setAdminToken } from '../hooks/useApiKey';
+import { useApiKey, getAdminToken, setAdminToken } from '../hooks/useApiKey';
 import {
   saveDocumentToVault,
   removeDocumentFromVault,
@@ -51,6 +51,7 @@ interface DocumentManagerProps {
 
 export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionAboutDoc }) => {
   const { branch: globalBranch } = useBranch();
+  const { config: aiConfig } = useApiKey();
   const [selectedBranch, setSelectedBranch] = useState<StudentBranch>(globalBranch || 'PC');
 
   // Student local documents state (IndexedDB)
@@ -79,6 +80,7 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
     pcIndexed: boolean;
     smIndexed: boolean;
     totalIndexedFiles: number;
+    visuallyDecodedCount?: number;
     syncSchedule?: string;
     nextSyncIso?: string | null;
     lastSyncIso?: string | null;
@@ -88,6 +90,7 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
     pcIndexed: false,
     smIndexed: false,
     totalIndexedFiles: 0,
+    visuallyDecodedCount: 0,
     syncSchedule: 'twice_daily',
     nextSyncIso: null,
     lastSyncIso: null,
@@ -160,12 +163,12 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
     refreshOfficialDocs();
   }, [selectedBranch]);
 
-  // Synchronisation des documents officiels téléchargés et ré-indexation du RAG
+  // Synchronisation des documents officiels téléchargés et ré-indexation du RAG (avec décodage visuel IA)
   const handleSyncOfficialDocs = async () => {
     setIsSyncingOfficial(true);
     setStatusMsg(null);
     try {
-      const res = await syncOfficialDocuments(selectedBranch, adminTokenVal);
+      const res = await syncOfficialDocuments(selectedBranch, adminTokenVal, aiConfig.apiKey);
       setStatusMsg({
         text: `✅ ${res.message || 'Documents officiels synchronisés avec succès !'}`,
         type: 'success',
@@ -180,6 +183,30 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
       });
     } finally {
       setIsSyncingOfficial(false);
+    }
+  };
+
+  // Prévisualisation d'un document officiel (avec son décodage visuel de schémas & graphes)
+  const handlePreviewOfficialDoc = async (docName: string) => {
+    try {
+      const headers: Record<string, string> = {};
+      if (adminTokenVal) headers['x-admin-token'] = adminTokenVal;
+      const res = await fetch(`/api/documents/file?name=${encodeURIComponent(docName)}`, { headers });
+      if (res.ok) {
+        const data = await res.json();
+        setPreviewDoc({
+          name: data.name,
+          content: data.content || 'Contenu en cours de traitement.',
+        });
+      } else {
+        // En mode public, affiche la description extraite publique ou informe
+        setStatusMsg({
+          text: `Document "${docName}" indexé dans le RAG. Pour afficher l'intégralité du texte brut, activez le mode Enseignant.`,
+          type: 'info',
+        });
+      }
+    } catch {
+      setStatusMsg({ text: 'Erreur lors du chargement du document.', type: 'error' });
     }
   };
 
@@ -472,11 +499,17 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
         {/* Section documents officiels téléchargés */}
         <div className="pt-2 border-t border-[#282a2c]/60 flex flex-col gap-2 text-xs">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-[#9aa0a6]">
-              <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+            <div className="flex flex-wrap items-center gap-2 text-[#9aa0a6]">
+              <BookOpen className="w-3.5 h-3.5 text-sky-400 shrink-0" />
               <span>
                 <strong className="text-white">{officialDocs.length}</strong> document(s) officiel(s) téléchargé(s) pour 2BAC {selectedBranch}
               </span>
+              {ragStatus.visuallyDecodedCount ? (
+                <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-semibold flex items-center gap-1">
+                  <Sparkles className="w-2.5 h-2.5 text-purple-400" />
+                  {ragStatus.visuallyDecodedCount} avec graphes & schémas décodés
+                </span>
+              ) : null}
             </div>
             {officialDocs.length > 0 && (
               <button
@@ -501,6 +534,15 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
                     <span className="text-xs text-white font-medium truncate" title={doc.name}>
                       {doc.name}
                     </span>
+                    {doc.hasVisuals && (
+                      <span
+                        className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[9px] font-semibold flex items-center gap-1 shrink-0"
+                        title="Schémas de circuits et graphes expérimentaux transcrits et décodés par l'IA"
+                      >
+                        <Sparkles className="w-2.5 h-2.5 text-purple-400" />
+                        Graphes décodés
+                      </span>
+                    )}
                     {doc.size ? (
                       <span className="text-[10px] text-[#8e918f] shrink-0 font-mono">
                         ({(doc.size / (1024 * 1024)).toFixed(1) === '0.0'
@@ -509,17 +551,27 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
                       </span>
                     ) : null}
                   </div>
-                  {onAskQuestionAboutDoc && (
+                  <div className="flex items-center gap-1.5 shrink-0">
                     <button
                       type="button"
-                      onClick={() => onAskQuestionAboutDoc(doc.name)}
-                      className="text-[11px] text-sky-400 hover:text-sky-300 font-semibold shrink-0 flex items-center gap-1 transition"
-                      title="Poser une question à Si Driss sur ce document officiel"
+                      onClick={() => handlePreviewOfficialDoc(doc.name)}
+                      className="p-1 rounded-lg text-[#9aa0a6] hover:text-white hover:bg-[#202124] transition"
+                      title="Consulter le contenu et le décodage du document"
                     >
-                      <span>Interroger</span>
-                      <ArrowRight className="w-3 h-3" />
+                      <Eye className="w-3.5 h-3.5" />
                     </button>
-                  )}
+                    {onAskQuestionAboutDoc && (
+                      <button
+                        type="button"
+                        onClick={() => onAskQuestionAboutDoc(doc.name)}
+                        className="text-[11px] text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-1 transition px-1.5 py-0.5 rounded-lg hover:bg-sky-500/10"
+                        title="Poser une question à Si Driss sur ce document officiel"
+                      >
+                        <span>Interroger</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

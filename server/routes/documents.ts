@@ -9,6 +9,7 @@ import {
   getLocalRagStatus,
   discoverProgrammeFiles,
   refreshDocumentsCache,
+  hasVisualMarker,
 } from '../rag';
 import { syncGoogleDriveBranch, extractDriveFolderId } from '../driveSync';
 
@@ -99,12 +100,16 @@ export function createDocumentsRouter(): Router {
           size = fs.statSync(doc.absolutePath).size;
         } catch {}
 
+        const isPdf = doc.name.toLowerCase().endsWith('.pdf');
+        const hasVisuals = isPdf ? hasVisualMarker(doc.absolutePath) : false;
+
         return {
           name: doc.name,
           relativePath: doc.relativePath,
           branch: doc.branch,
           size,
-          isPdf: doc.name.toLowerCase().endsWith('.pdf'),
+          isPdf,
+          hasVisuals,
         };
       });
 
@@ -118,11 +123,13 @@ export function createDocumentsRouter(): Router {
   /**
    * Synchronisation des documents officiels téléchargés et ré-indexation du RAG local.
    * Re-scanne les sous-dossiers PC/ et SM/, extrait les textes des nouveaux PDFs et
-   * met à jour l'index en mémoire de Si Driss.
+   * décode les schémas/graphes si une clé API est fournie.
    */
   router.post('/documents/sync', async (req, res) => {
     try {
       const adminToken = req.headers['x-admin-token'] as string | undefined;
+      const clientApiKey = (req.headers['x-ai-api-key'] as string) || req.body?.apiKey;
+      const apiKey = clientApiKey || process.env.GEMINI_API_KEY || process.env.AI_API_KEY || '';
       const branch = (String(req.body.branch || 'PC').toUpperCase() === 'SM' ? 'SM' : 'PC') as 'PC' | 'SM';
       let driveSyncCount = 0;
 
@@ -138,14 +145,17 @@ export function createDocumentsRouter(): Router {
         }
       }
 
-      // Re-scan et ré-indexation complète du RAG local
-      const status = await refreshDocumentsCache(true);
+      // Re-scan et ré-indexation complète du RAG local avec transcription visuelle IA
+      const status = await refreshDocumentsCache(true, apiKey);
 
       return res.json({
         success: true,
         ...status,
         driveSyncCount,
-        message: `Base officielle synchronisée : ${status.totalIndexedFiles} document(s) indexé(s) (${status.pcCount} PC, ${status.smCount} SM).`,
+        hasVisionKey: Boolean(apiKey),
+        message: apiKey
+          ? `Base officielle synchronisée avec décodage des schémas & graphes : ${status.totalIndexedFiles} document(s) indexé(s) (${status.pcCount} PC, ${status.smCount} SM dont ${status.visuallyDecodedCount} avec graphes décodés).`
+          : `Base officielle synchronisée (texte) : ${status.totalIndexedFiles} document(s) indexé(s) (${status.pcCount} PC, ${status.smCount} SM).`,
       });
     } catch (err: any) {
       console.error('Erreur synchronisation documents officiels:', err);

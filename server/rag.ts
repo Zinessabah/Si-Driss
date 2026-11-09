@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { PDFParse } from 'pdf-parse';
 import { DOCS_DIR } from './config';
+import { SCIENTIFIC_VISION_MARKER, extractVisualDataFromPdf } from './visionExtractor';
 
 interface CachedDocSection {
   raw: string;
@@ -96,10 +97,24 @@ export function discoverProgrammeFiles(dir: string, baseDir: string = dir): Disc
 }
 
 /**
- * Rafraîchit l'index RAG en mémoire à partir du stockage local (docs/programme/PC et docs/programme/SM).
- * L'extraction des PDF ne se fait qu'une seule fois par document via le fichier cache .extracted.txt.
+ * Vérifie si le fichier texte extrait (.extracted.txt) contient déjà la transcription visuelle des graphes/schémas.
  */
-export async function refreshDocumentsCache(force: boolean = false) {
+export function hasVisualMarker(pdfPath: string): boolean {
+  const txtPath = `${pdfPath}.extracted.txt`;
+  if (!fs.existsSync(txtPath)) return false;
+  try {
+    const text = fs.readFileSync(txtPath, 'utf-8');
+    return text.includes(SCIENTIFIC_VISION_MARKER);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Rafraîchit l'index RAG en mémoire à partir du stockage local (docs/programme/PC et docs/programme/SM).
+ * L'extraction des PDF se fait avec mise en cache .extracted.txt et décodage visuel si apiKey est fournie.
+ */
+export async function refreshDocumentsCache(force: boolean = false, apiKey?: string) {
   const now = Date.now();
   if (!force && now - lastCacheRefreshTime < 4000) {
     return getLocalRagStatus();
@@ -113,19 +128,23 @@ export async function refreshDocumentsCache(force: boolean = false) {
     const updatedCache: CachedDoc[] = [];
 
     for (const file of discovered) {
+      const isPdf = file.name.toLowerCase().endsWith('.pdf');
+      const alreadyHasVisuals = isPdf ? hasVisualMarker(file.absolutePath) : true;
+
       const existing = documentsCache.find(
         (d) => d.relativePath === file.relativePath && d.mtime === file.mtime
       );
 
-      if (existing) {
+      // Si le document est déjà en cache mémoire et ne requiert pas de décodage visuel additionnel
+      if (existing && (!apiKey || !isPdf || alreadyHasVisuals)) {
         updatedCache.push(existing);
         continue;
       }
 
       let content = '';
-      if (file.name.toLowerCase().endsWith('.pdf')) {
+      if (isPdf) {
         const sidecarPath = `${file.absolutePath}.extracted.txt`;
-        content = await getFreshExtractedPdfText(file.absolutePath, sidecarPath);
+        content = await getFreshExtractedPdfText(file.absolutePath, sidecarPath, apiKey);
       } else {
         content = fs.readFileSync(file.absolutePath, 'utf-8');
       }
@@ -242,19 +261,49 @@ function isExtractedTextFresh(pdfPath: string, txtPath: string): boolean {
 }
 
 /**
- * Récupère le texte extrait d'un PDF depuis le cache ou extrait une seule fois si nouveau.
+ * Récupère le texte extrait d'un PDF depuis le cache ou extrait + enrichit visuellement si nouveau/clé fournie.
  */
-export async function getFreshExtractedPdfText(pdfPath: string, txtPath: string): Promise<string> {
-  if (fs.existsSync(txtPath) && isExtractedTextFresh(pdfPath, txtPath)) {
-    return fs.readFileSync(txtPath, 'utf-8');
+export async function getFreshExtractedPdfText(
+  pdfPath: string,
+  txtPath: string,
+  apiKey?: string
+): Promise<string> {
+  const isFresh = fs.existsSync(txtPath) && isExtractedTextFresh(pdfPath, txtPath);
+  let existingContent = isFresh ? fs.readFileSync(txtPath, 'utf-8') : '';
+
+  const alreadyHasVisuals = existingContent.includes(SCIENTIFIC_VISION_MARKER);
+
+  // Si le cache est à jour et possède déjà la transcription visuelle, ou si aucune clé vision n'est fournie
+  if (isFresh && (alreadyHasVisuals || !apiKey)) {
+    return existingContent;
   }
-  const text = await extractTextFromPdf(fs.readFileSync(pdfPath));
+
+  // 1. Extraction texte brut si manquant ou périmé
+  let rawText = existingContent;
+  if (!isFresh || !rawText) {
+    rawText = await extractTextFromPdf(fs.readFileSync(pdfPath));
+  }
+
+  // 2. Transcription visuelle IA des schémas, circuits et graphes si apiKey fournie
+  let fullContent = rawText;
+  if (apiKey && !alreadyHasVisuals) {
+    try {
+      const visualData = await extractVisualDataFromPdf(pdfPath, apiKey);
+      if (visualData && visualData.trim().length > 30) {
+        fullContent = `${rawText}\n\n================================================================================\n${SCIENTIFIC_VISION_MARKER}\n================================================================================\n\n${visualData}\n`;
+        console.log(`[RAG] Document "${path.basename(pdfPath)}" enrichi avec succès avec le décodage des schémas/graphes.`);
+      }
+    } catch (visErr) {
+      console.warn(`[RAG] Avertissement décodage visuel pour ${path.basename(pdfPath)}:`, visErr);
+    }
+  }
+
   try {
-    fs.writeFileSync(txtPath, text, 'utf-8');
+    fs.writeFileSync(txtPath, fullContent, 'utf-8');
   } catch (err) {
     console.warn('Impossible de mettre en cache le texte extrait:', err);
   }
-  return text;
+  return fullContent;
 }
 
 /**
@@ -265,6 +314,7 @@ export function getLocalRagStatus(): {
   pcCount: number;
   smCount: number;
   totalIndexedFiles: number;
+  visuallyDecodedCount: number;
   pcIndexed: boolean;
   smIndexed: boolean;
   message: string;
@@ -273,13 +323,23 @@ export function getLocalRagStatus(): {
   const pcFiles = discovered.filter((f) => f.branch === 'PC');
   const smFiles = discovered.filter((f) => f.branch === 'SM');
 
+  let visuallyDecodedCount = 0;
+  for (const doc of discovered) {
+    if (doc.name.toLowerCase().endsWith('.pdf') && hasVisualMarker(doc.absolutePath)) {
+      visuallyDecodedCount++;
+    }
+  }
+
   return {
     active: true,
     pcCount: pcFiles.length,
     smCount: smFiles.length,
     totalIndexedFiles: discovered.length,
+    visuallyDecodedCount,
     pcIndexed: pcFiles.length > 0,
     smIndexed: smFiles.length > 0,
-    message: `Base RAG officielle locale active (${pcFiles.length} docs PC, ${smFiles.length} docs SM).`,
+    message: visuallyDecodedCount > 0
+      ? `Base RAG active (${pcFiles.length} docs PC, ${smFiles.length} docs SM dont ${visuallyDecodedCount} avec graphes & schémas décodés).`
+      : `Base RAG officielle locale active (${pcFiles.length} docs PC, ${smFiles.length} docs SM).`,
   };
 }
