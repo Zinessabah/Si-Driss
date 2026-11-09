@@ -200,11 +200,34 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   }, [externalNewChatTrigger]);
 
   // Handle external session load from sidebar
+  const lastLoadedSessionIdRef = useRef<string | null>(null);
   useEffect(() => {
-    if (externalLoadSession && externalLoadSession.id !== currentSessionId) {
-      handleLoadSession(externalLoadSession);
+    if (externalLoadSession) {
+      if (externalLoadSession.id !== currentSessionId || externalLoadSession.id !== lastLoadedSessionIdRef.current) {
+        lastLoadedSessionIdRef.current = externalLoadSession.id;
+        handleLoadSession(externalLoadSession);
+      }
     }
   }, [externalLoadSession]);
+
+  // Synchronize when a session is renamed or deleted from sidebar
+  useEffect(() => {
+    const handleStorageChange = () => {
+      try {
+        const raw = localStorage.getItem('sidriss_saved_sessions_v1');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          setSavedSessions(parsed);
+          const current = parsed.find((s: SavedSession) => s.id === currentSessionId);
+          if (current && current.title) {
+            setCurrentSessionTitle(current.title);
+          }
+        }
+      } catch {}
+    };
+    window.addEventListener('sidriss_sessions_updated', handleStorageChange);
+    return () => window.removeEventListener('sidriss_sessions_updated', handleStorageChange);
+  }, [currentSessionId]);
 
   // Close menus when clicking outside
   useEffect(() => {
@@ -230,31 +253,62 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     }
   }, [input]);
 
-  // Auto-save current active session (H8 : debouncée ~1 s — plus d'écriture
-  // localStorage par chunk de streaming, images base64 comprises)
+  // Auto-save active session to localStorage and sync history in savedSessions
   useEffect(() => {
-    if (messages.length === 0) return;
+    const userMessages = messages.filter((m) => m.role === 'user');
+    if (userMessages.length === 0) return;
+
     const t = setTimeout(() => {
-      const now = new Date();
+      const now = new Date().toISOString();
 
       try {
-        const sessionPayload = {
+        let title = currentSessionTitle;
+        if (!title || title === 'Nouvelle discussion') {
+          title = userMessages[0].content.slice(0, 42).replace(/\n/g, ' ').trim() || 'Session d\'exercices';
+          setCurrentSessionTitle(title);
+        }
+
+        const sessionPayload: SavedSession = {
           id: currentSessionId,
-          title: currentSessionTitle,
+          title,
           messages,
           socraticEnabled,
           coachingMode,
-          updatedAt: now.toISOString(),
+          createdAt: now,
+          updatedAt: now,
         };
         localStorage.setItem('sidriss_active_session_v1', JSON.stringify(sessionPayload));
+
+        setSavedSessions((prev) => {
+          const idx = prev.findIndex((s) => s.id === currentSessionId);
+          let nextSessions: SavedSession[];
+          if (idx >= 0) {
+            nextSessions = [...prev];
+            nextSessions[idx] = {
+              ...prev[idx],
+              title,
+              messages,
+              socraticEnabled,
+              coachingMode,
+              updatedAt: now,
+            };
+          } else {
+            nextSessions = [sessionPayload, ...prev];
+          }
+          try {
+            localStorage.setItem('sidriss_saved_sessions_v1', JSON.stringify(nextSessions));
+          } catch (storageErr) {
+            console.warn('Failed to save sessions list:', storageErr);
+          }
+          return nextSessions;
+        });
       } catch (e) {
-        // (M15) Échec de persistance rendu visible : jamais de fausse promesse de sauvegarde.
         console.error('Failed to auto-save active session:', e);
         setSaveToast(
-          "Sauvegarde automatique impossible : la mémoire du navigateur est saturée (probablement à cause d'images jointes). Exporte cette session ou supprime d'anciennes discussions."
+          "Sauvegarde automatique impossible : la mémoire du navigateur est saturée. Exporte cette session ou supprime d'anciennes discussions."
         );
       }
-    }, 1000);
+    }, 600);
     return () => clearTimeout(t);
   }, [messages, socraticEnabled, coachingMode, currentSessionId, currentSessionTitle]);
 
@@ -342,24 +396,34 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   const handleNewSession = () => {
     const userMessages = messages.filter((m) => m.role === 'user');
     if (userMessages.length > 0) {
-      const autoTitle = userMessages[0].content.slice(0, 45).replace(/\n/g, ' ');
-      const existing = savedSessions.find((s) => s.id === currentSessionId);
-      if (!existing) {
-        const archived: SavedSession = {
-          id: currentSessionId,
-          title: autoTitle,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          messages,
-          socraticEnabled,
-          coachingMode,
-        };
-        const updated = [archived, ...savedSessions];
-        setSavedSessions(updated);
+      const autoTitle =
+        currentSessionTitle && currentSessionTitle !== 'Nouvelle discussion'
+          ? currentSessionTitle
+          : userMessages[0].content.slice(0, 42).replace(/\n/g, ' ').trim() || 'Session d\'exercices';
+      const now = new Date().toISOString();
+      const archived: SavedSession = {
+        id: currentSessionId,
+        title: autoTitle,
+        createdAt: now,
+        updatedAt: now,
+        messages,
+        socraticEnabled,
+        coachingMode,
+      };
+      setSavedSessions((prev) => {
+        const idx = prev.findIndex((s) => s.id === currentSessionId);
+        let next: SavedSession[];
+        if (idx >= 0) {
+          next = [...prev];
+          next[idx] = archived;
+        } else {
+          next = [archived, ...prev];
+        }
         try {
-          localStorage.setItem('sidriss_saved_sessions_v1', JSON.stringify(updated));
+          localStorage.setItem('sidriss_saved_sessions_v1', JSON.stringify(next));
         } catch {}
-      }
+        return next;
+      });
     }
 
     const newId = `session_${Date.now()}`;
@@ -373,12 +437,50 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   };
 
   const handleLoadSession = (session: SavedSession) => {
+    // If leaving a session that has user messages, flush it first
+    if (currentSessionId && currentSessionId !== session.id) {
+      const userMessages = messages.filter((m) => m.role === 'user');
+      if (userMessages.length > 0) {
+        const title =
+          currentSessionTitle && currentSessionTitle !== 'Nouvelle discussion'
+            ? currentSessionTitle
+            : userMessages[0].content.slice(0, 42).replace(/\n/g, ' ').trim() || 'Session d\'exercices';
+        const now = new Date().toISOString();
+        const currentToSave: SavedSession = {
+          id: currentSessionId,
+          title,
+          createdAt: now,
+          updatedAt: now,
+          messages,
+          socraticEnabled,
+          coachingMode,
+        };
+        setSavedSessions((prev) => {
+          const idx = prev.findIndex((s) => s.id === currentSessionId);
+          let next: SavedSession[];
+          if (idx >= 0) {
+            next = [...prev];
+            next[idx] = currentToSave;
+          } else {
+            next = [currentToSave, ...prev];
+          }
+          try {
+            localStorage.setItem('sidriss_saved_sessions_v1', JSON.stringify(next));
+          } catch {}
+          return next;
+        });
+      }
+    }
+
     setCurrentSessionId(session.id);
-    setCurrentSessionTitle(session.title);
-    setMessages(session.messages);
-    setSocraticEnabled(session.socraticEnabled);
-    setCoachingMode(session.coachingMode);
+    setCurrentSessionTitle(session.title || 'Discussion');
+    setMessages(session.messages && session.messages.length > 0 ? session.messages : [getWelcomeMessage(branch)]);
+    setSocraticEnabled(session.socraticEnabled ?? true);
+    setCoachingMode(session.coachingMode || 'socratic');
     setPendingAttachments([]);
+    try {
+      localStorage.setItem('sidriss_active_session_v1', JSON.stringify(session));
+    } catch {}
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

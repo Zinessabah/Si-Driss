@@ -102,7 +102,7 @@ export default function App() {
   };
 
   const handleLoadSession = (session: SavedSession) => {
-    setExternalLoadSession(session);
+    setExternalLoadSession({ ...session });
     setCurrentSessionId(session.id);
     setActiveTab('chat');
   };
@@ -112,10 +112,22 @@ export default function App() {
     setSavedSessions(updated);
     try {
       localStorage.setItem('sidriss_saved_sessions_v1', JSON.stringify(updated));
+      window.dispatchEvent(new Event('sidriss_sessions_updated'));
     } catch {}
     if (currentSessionId === id) {
       handleNewChat();
     }
+  };
+
+  const handleRenameSession = (id: string, newTitle: string) => {
+    const trimmed = newTitle.trim();
+    if (!trimmed) return;
+    const updated = savedSessions.map((s) => (s.id === id ? { ...s, title: trimmed } : s));
+    setSavedSessions(updated);
+    try {
+      localStorage.setItem('sidriss_saved_sessions_v1', JSON.stringify(updated));
+      window.dispatchEvent(new Event('sidriss_sessions_updated'));
+    } catch {}
   };
 
   const handleSessionsUpdated = (sessions: SavedSession[], activeId: string) => {
@@ -172,6 +184,7 @@ export default function App() {
         currentSessionId={currentSessionId}
         onLoadSession={handleLoadSession}
         onDeleteSession={handleDeleteSession}
+        onRenameSession={handleRenameSession}
         savedSessions={savedSessions}
         branch={branch}
         onOpenBranchModal={() => setIsBranchModalOpen(true)}
