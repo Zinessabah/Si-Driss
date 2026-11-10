@@ -448,3 +448,46 @@ A
 
 -- 7 of 7 --
 
+
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Exercice 2 - Ondes lumineuses dans une fibre optique (SN 2015 PC)] ---
+- Type : Dispositif expérimental et oscillogramme de propagation d'une impulsion lumineuse dans une fibre optique.
+- Schéma 1 (Dispositif expérimental) :
+  * Émetteur Laser envoyant une onde lumineuse monochromatique de longueur d'onde dans le vide \lambda = 530 nm dans le cœur d'une fibre optique de longueur L.
+  * Capteur R_1 placé à l'entrée de la fibre optique, branché sur la voie 1 de l'oscilloscope.
+  * Capteur R_2 placé à la sortie de la fibre optique (après parcours de la longueur L), branché sur la voie 2 de l'oscilloscope.
+- Figure 2 (Oscillogramme de l'écran de l'oscilloscope) :
+  * Sensibilité horizontale (balayage) : S_h = 0,2 \mu s / div.
+  * Signal 1 (issu de R_1) : pic ou impulsion nette située sur une graduation de référence.
+  * Signal 2 (issu de R_2) : pic ou impulsion identique mais retardée dans le temps.
+  * Décalage horizontal précis entre les deux signaux sur l'écran : exactement 5 divisions (5 div).
+  * Retard temporel officiel déduit : \Delta t = 5 \text{ div} \times 0,2\text{ }\mu\text{s/div} = 1,0\text{ }\mu\text{s}.
+  * Réponses officielles du QCM :
+    - Question 1 : \Delta t = 1,0 \mu s (la proposition exacte est \Delta t = 1,0 \mu s).
+    - Question 2 : Indice de réfraction du cœur : n = c / v = (3,00 \times 10^8 m/s) / (1,87 \times 10^8 m/s) \approx 1,60 (proposition exacte : n \approx 1,6).
+    - Question 3 : Énergie du photon : E = (h \cdot c) / \lambda = (6,63 \times 10^{-34} \times 3,00 \times 10^8) / (530 \times 10^{-9}) \approx 3,75 \times 10^{-19} J (proposition exacte : E \approx 3,75 \cdot 10^{-19} J).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Exercice 2 - Décroissance radioactive de l'Astate 211 (SN 2015 PC)] ---
+- Type : Courbe de décroissance radioactive ln(N) = f(t).
+- Axes & Unités : Axe horizontal t en heures (h), Axe vertical ln(N) sans unité.
+- Points remarquables sur la droite décroissante :
+  * À t = 0 : ln(N_0) = 37,94.
+  * À t = 30 h : ln(N) = 37,65.
+- Pente de la droite : coefficient directeur p = -\lambda = (37,65 - 37,94) / 30 = -0,29 / 30 \approx -9,67 \times 10^{-3} h^{-1}.
+- Constante radioactive : \lambda \approx 9,67 \times 10^{-3} h^{-1}.
+- Demi-vie officielle déduite : t_{1/2} = ln(2) / \lambda = 0,693 / (9,67 \times 10^{-3}) \approx 7,17 h (proposition exacte : t_{1/2} \approx 7,17 h).
+- Équation de désintégration alpha de l'Astate : ^{211}_{85}At -> ^{4}_{2}He + ^{207}_{83}Bi (noyau fils : Bismuth 207).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Exercice 3 - Électricité RC & Modulation d'amplitude (SN 2015 PC)] ---
+- Circuit RC : Générateur idéal de tension E, thermistance de résistance R(\theta) dépendant de la température, condensateur C = 1,5 \mu F.
+- Modulation d'amplitude AM :
+  * Figure 4 : Oscillogramme de la tension modulée u(t) montrant l'enveloppe supérieure et inférieure.
+  * Figure 5 : Méthode du trapèze sur l'oscilloscope en mode XY montrant la grande base B et la petite base b pour déterminer le taux de modulation m = (B - b)/(B + b).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Exercice 4 - Mécanique Balle de golf & Oscillateur horizontal (SN 2015 PC)] ---
+- Figure 1 (Golf) : Balle de golf lancée du point O avec vitesse v_0 sous un angle \alpha dans le champ de pesanteur uniforme g.
+- Figure 2 & 3 (Oscillateur horizontal amorti) :
+  * Solide (S) attaché à un ressort de raideur K = 20 N/m, muni d'une tige et plaque immergée dans un liquide visqueux.
+  * Courbe x(t) : Régime pseudo-périodique amorti d'amplitude initiale x_0 = 1 cm et de pseudo-période T = 0,4 s.

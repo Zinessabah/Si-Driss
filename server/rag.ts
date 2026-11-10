@@ -7,6 +7,7 @@ import { SCIENTIFIC_VISION_MARKER, extractVisualDataFromPdf } from './visionExtr
 interface CachedDocSection {
   raw: string;
   lower: string;
+  arabicNorm: string;
 }
 
 export type DocumentBranch = 'PC' | 'SM' | 'ALL';
@@ -17,6 +18,7 @@ interface CachedDoc {
   branch: DocumentBranch;
   mtime: number;
   sections: CachedDocSection[];
+  fullContent?: string;
 }
 
 export interface DiscoveredFile {
@@ -29,6 +31,201 @@ export interface DiscoveredFile {
 
 let documentsCache: CachedDoc[] = [];
 let lastCacheRefreshTime = 0;
+
+/**
+ * Normalise le texte arabe (NFKC, suppression tashkeel, tatweel, unification des variantes d'alef, yeh et kaf).
+ * Essentiel pour les PDF d'examens nationaux marocains extraits avec des formes de présentation arabes.
+ */
+export function normalizeArabic(text: string): string {
+  return text
+    .normalize('NFKC')
+    .replace(/[\u064B-\u065F\u0670]/g, '') // suppression des voyelles brèves / harakat
+    .replace(/\u0640/g, '') // suppression du tatweel
+    .replace(/[\u0622\u0623\u0625\u0671]/g, '\u0627') // variantes d'alef -> alef simple
+    .replace(/[\u0649\u06CC]/g, '\u064A') // alef maksura & farsi yeh -> yeh
+    .replace(/\u06A9/g, '\u0643') // farsi keheh -> kaf arabe
+    .replace(/\u0629/g, '\u0647'); // teh marbuta -> heh
+}
+
+export type ExamTopic = 'ondes' | 'nucleaire' | 'electricite' | 'mecanique' | 'chimie';
+
+export interface ParsedExamQuery {
+  isExamQuery: boolean;
+  year: number | null;
+  session: 'SN' | 'SR' | null;
+  topic: ExamTopic | null;
+}
+
+/**
+ * Analyse la requête utilisateur pour identifier les demandes d'examens nationaux (année, session, thème).
+ */
+export function parseExamQuery(query: string): ParsedExamQuery {
+  const q = query.toLowerCase();
+
+  // 1. Détection de l'année (2010 - 2029)
+  const yearMatch = q.match(/\b(20[12]\d)\b/);
+  const year = yearMatch ? parseInt(yearMatch[1], 10) : null;
+
+  // 2. Détection de la session (Normale vs Rattrapage)
+  let session: 'SN' | 'SR' | null = null;
+  if (/\b(normale|session\s*normale|principale|sn)\b/i.test(q)) {
+    session = 'SN';
+  } else if (/\b(rattrapage|session\s*de\s*rattrapage|sr)\b/i.test(q)) {
+    session = 'SR';
+  }
+
+  // 3. Détection du thème disciplinaire
+  let topic: ExamTopic | null = null;
+  if (/\b(onde|ondes|lumineus|sonor|optique|laser|diffraction|propagation|fibre)\b/i.test(q)) {
+    topic = 'ondes';
+  } else if (/\b(nucleaire|nucl[eé]aire|radioactiv|d[eé]croissance|astate|polonium|uranium|radium|noyau)\b/i.test(q)) {
+    topic = 'nucleaire';
+  } else if (/\b(electr|[eé]lectricit[eé]|rlc|circuit|condensateur|bobine|dipole|modulation)\b/i.test(q)) {
+    topic = 'electricite';
+  } else if (/\b(mecan|m[eé]canique|newton|chute|projectile|satellite|planete|oscillat|pendule)\b/i.test(q)) {
+    topic = 'mecanique';
+  } else if (/\b(chimie|acide|base|titrage|dosage|ester|pile|electrolyse)\b/i.test(q)) {
+    topic = 'chimie';
+  }
+
+  const isExamQuery = !!(year || session || /\b(examen|national|bac|baccalaureat|epreuve|sujet)\b/i.test(q));
+
+  return { isExamQuery, year, session, topic };
+}
+
+const NEXT_SECTION_FOR_TOPIC: Record<ExamTopic, RegExp[]> = {
+  chimie: [/التمرين\s*(الثاني|2)/i, /الموج/i, /EXERCICE\s*2/i],
+  ondes: [/النوو/i, /التمرين\s*(الثالث|3)/i, /الكهرب/i, /EXERCICE\s*3/i, /Nucl[eé]aire/i],
+  nucleaire: [/التمرين\s*(الثالث|3)/i, /الكهرب/i, /EXERCICE\s*3/i, /[EÉ]lectricit[eé]/i],
+  electricite: [/التمرين\s*(الرابع|4)/i, /الميكانيك/i, /EXERCICE\s*4/i, /M[eé]canique/i],
+  mecanique: [/===+\s*TRANSCRIPTION\s*VISUELLE/i, /FIN/i],
+};
+
+const TOPIC_VISION_PATTERNS: Record<ExamTopic, RegExp[]> = {
+  ondes: [/\bonde/i, /lumineus/i, /fibre/i, /diffraction/i, /laser/i],
+  nucleaire: [/nucl[eé]aire/i, /radioactiv/i, /d[eé]croissance/i, /astate/i, /noyau/i],
+  electricite: [/rc/i, /rl/i, /rlc/i, /[eé]lectricit[eé]/i, /modulation/i, /condensateur/i],
+  mecanique: [/m[eé]canique/i, /golf/i, /satellite/i, /oscillateur/i, /chute/i, /pendule/i],
+  chimie: [/chimie/i, /acide/i, /base/i, /ester/i, /titrage/i, /pile/i],
+};
+
+/**
+ * Extrait précisément l'énoncé d'un exercice et ses données visuelles (graphes/schémas décodés).
+ */
+export function extractExamExercise(
+  rawContent: string,
+  topic: ExamTopic | null
+): { exerciseText: string; visualText: string } {
+  let bodyContent = rawContent;
+  let visionContent = '';
+
+  const markerIdx = rawContent.indexOf(SCIENTIFIC_VISION_MARKER);
+  if (markerIdx !== -1) {
+    bodyContent = rawContent.slice(0, markerIdx);
+    visionContent = rawContent.slice(markerIdx);
+  }
+
+  // 1. Découpage et extraction de la transcription visuelle spécifique au thème
+  let visualText = '';
+  if (visionContent && topic) {
+    const blocks = visionContent.split(/(?=---\s*\[FIGURE\s*\/\s*SCHÉMA\s*DÉCODÉ)/g);
+    for (const block of blocks) {
+      const matchTopic = TOPIC_VISION_PATTERNS[topic].some((re) => re.test(block));
+      if (matchTopic) {
+        visualText += block.trim() + '\n\n';
+      }
+    }
+  }
+  if (!visualText && visionContent) {
+    visualText = visionContent.slice(0, 2500);
+  }
+
+  if (!topic) {
+    return {
+      exerciseText: bodyContent.slice(0, 3500),
+      visualText: visualText.trim(),
+    };
+  }
+
+  const normBody = normalizeArabic(bodyContent);
+
+  const topicArPats: Record<ExamTopic, RegExp[]> = {
+    ondes: [/الموجات/i, /موج/i],
+    nucleaire: [/النوو/i, /التحولات\s*النووية/i],
+    electricite: [/الكهرب/i, /ثنائي\s*القطب/i],
+    mecanique: [/الميكانيك/i, /نيوتن/i],
+    chimie: [/الكيمياء/i, /حمض/i],
+  };
+
+  const topicFrPats: Record<ExamTopic, RegExp[]> = {
+    ondes: [/exercice\s*\d?\s*[:\-]?\s*ondes/i, /propagation\s*d'une\s*onde/i, /ondes\s*lumineuses/i],
+    nucleaire: [/exercice\s*\d?\s*[:\-]?\s*physique\s*nucl/i, /d[eé]croissance\s*radioactive/i],
+    electricite: [/exercice\s*\d?\s*[:\-]?\s*[eé]lectricit/i, /r[eé]ponse\s*d'un\s*dip/i],
+    mecanique: [/exercice\s*\d?\s*[:\-]?\s*m[eé]canique/i, /mouvement\s*d'un/i],
+    chimie: [/exercice\s*\d?\s*[:\-]?\s*chimie/i, /[eé]tude\s*d'une\s*solution/i],
+  };
+
+  let bestStart = -1;
+  // Recherche en arabe d'abord
+  for (const re of topicArPats[topic]) {
+    const matches = [...normBody.matchAll(new RegExp(re, 'gi'))];
+    for (const m of matches) {
+      if (m.index !== undefined) {
+        // Préférer l'exercice situé après le sommaire (sommaire < 1000 chars)
+        if (m.index > 1000) {
+          bestStart = m.index;
+          break;
+        } else if (bestStart === -1) {
+          bestStart = m.index;
+        }
+      }
+    }
+    if (bestStart > 1000) break;
+  }
+
+  // Si non trouvé en arabe, recherche en français (sujets BIOF)
+  if (bestStart === -1) {
+    for (const re of topicFrPats[topic]) {
+      const match = bodyContent.search(re);
+      if (match !== -1) {
+        bestStart = match;
+        break;
+      }
+    }
+  }
+
+  if (bestStart === -1) {
+    return {
+      exerciseText: bodyContent.slice(0, 3500),
+      visualText: visualText.trim(),
+    };
+  }
+
+  // Reculer pour attraper l'en-tête de l'exercice (ex: "التمرين الثاني" ou "EXERCICE 2")
+  const lookbackStart = Math.max(0, bestStart - 350);
+  const lookbackChunk = normBody.slice(lookbackStart, bestStart);
+  const headerIdx = lookbackChunk.search(/(التمرين|EXERCICE)/i);
+  const actualStart = headerIdx !== -1 ? lookbackStart + headerIdx : bestStart;
+
+  // Détection de la fin de l'exercice
+  const after = normBody.slice(actualStart + 150);
+  const stopPatterns = NEXT_SECTION_FOR_TOPIC[topic];
+  let stopOffset = -1;
+  for (const re of stopPatterns) {
+    const m = after.search(re);
+    if (m !== -1 && (stopOffset === -1 || m < stopOffset)) {
+      stopOffset = m;
+    }
+  }
+
+  const actualEnd = stopOffset !== -1 ? actualStart + 150 + stopOffset : actualStart + 3500;
+  const exerciseText = bodyContent.slice(actualStart, actualEnd).trim();
+
+  return {
+    exerciseText,
+    visualText: visualText.trim(),
+  };
+}
 
 /**
  * Détermine la filière d'un document selon son sous-dossier ou son nom.
@@ -153,8 +350,9 @@ export async function refreshDocumentsCache(force: boolean = false, apiKey?: str
         // Découpage en sections thématiques pour le RAG
         const rawSections = content.split(/\n#{1,3}\s+|\n\n+/).filter((s) => s.trim().length > 20);
         const sections: CachedDocSection[] = rawSections.map((s) => ({
-          raw: s.trim().slice(0, 900),
+          raw: s.trim().slice(0, 2500),
           lower: s.toLowerCase(),
+          arabicNorm: normalizeArabic(s),
         }));
 
         updatedCache.push({
@@ -163,6 +361,7 @@ export async function refreshDocumentsCache(force: boolean = false, apiKey?: str
           branch: file.branch,
           mtime: file.mtime,
           sections,
+          fullContent: content,
         });
       }
     }
@@ -186,12 +385,95 @@ export async function searchLocalDocuments(query: string, branch: string = 'PC')
     if (!documentsCache.length) return '';
 
     const branchUpper = (branch || 'PC').toUpperCase() as 'PC' | 'SM';
+    const parsed = parseExamQuery(query);
+
+    // 1. ROUTE PRIORITAIRE : EXAMEN NATIONAL DU BACCALAURÉAT
+    // Si la requête concerne une épreuve nationale (année, session, ou mot-clé examen/national),
+    // on identifie le document officiel cible dans la filière de l'élève (PC ou SM)
+    if (parsed.isExamQuery) {
+      let bestDoc: CachedDoc | null = null;
+      let bestScore = 0;
+
+      for (const doc of documentsCache) {
+        // ÉTANCHÉITÉ STRICTE PC vs SM
+        if (doc.branch !== 'ALL' && doc.branch !== branchUpper) {
+          continue;
+        }
+
+        let docScore = 0;
+        const normName = doc.name.toLowerCase();
+
+        // Correspondance sur l'année (ex: 2015, 2014, etc.)
+        if (parsed.year && normName.includes(String(parsed.year))) {
+          docScore += 60;
+        }
+
+        // Correspondance sur la session (SN vs SR)
+        if (parsed.session === 'SN' && (normName.includes('sn') || normName.includes('normale'))) {
+          docScore += 30;
+        } else if (parsed.session === 'SR' && (normName.includes('sr') || normName.includes('rattrapage'))) {
+          docScore += 30;
+        }
+
+        // Bonus filière et type PDF
+        if (normName.includes(branchUpper.toLowerCase())) {
+          docScore += 10;
+        }
+        if (normName.endsWith('.pdf')) {
+          docScore += 5;
+        }
+
+        if (docScore > bestScore) {
+          bestScore = docScore;
+          bestDoc = doc;
+        }
+      }
+
+      // Si un document officiel national est identifié
+      if (bestDoc && bestScore >= 50 && bestDoc.fullContent) {
+        const { exerciseText, visualText } = extractExamExercise(bestDoc.fullContent, parsed.topic);
+        if (exerciseText || visualText) {
+          const sessionLabel = parsed.session === 'SN'
+            ? 'Session Normale'
+            : parsed.session === 'SR'
+            ? 'Session de Rattrapage'
+            : 'Épreuve Officielle';
+
+          const examHeader = `[Cadre Officiel 2BAC ${branchUpper} - Épreuve Nationale du Baccalauréat marocain]\n` +
+            `Document officiel : ${bestDoc.name} | ${sessionLabel} ${parsed.year || ''}\n` +
+            (parsed.topic ? `Discipline / Thème : ${parsed.topic.toUpperCase()}\n` : '');
+
+          return `${examHeader}\n--- ÉNONCÉ OFFICIEL EXTRAIT DU SUJET NATIONAL ---\n${exerciseText}\n\n` +
+            (visualText ? `--- DONNÉES VISUELLES & SCHÉMAS DÉCODÉS (TRANSCRIPTION OFFICIELLE SI DRISS) ---\n${visualText}\n` : '');
+        }
+      }
+    }
+
+    // 2. ROUTE GÉNÉRALE : RECHERCHE MULTI-SECTIONS CROISÉE FRANÇAIS / ARABE
     const keywords = query
       .toLowerCase()
       .split(/\s+/)
       .filter((w) => w.length > 2);
 
     if (keywords.length === 0) return '';
+
+    // Expansion bilingue des mots-clés physiques (pour chercher dans les épreuves arabes et les cours BIOF)
+    const expandedKeywords = [...keywords];
+    if (/\b(onde|ondes|fibre|optique)\b/i.test(query)) {
+      expandedKeywords.push('الموجات', 'موج');
+    }
+    if (/\b(nucleaire|nucl[eé]aire|radioactiv)\b/i.test(query)) {
+      expandedKeywords.push('النوو', 'النووية', 'اشعاع');
+    }
+    if (/\b(electr|[eé]lectricit[eé]|rc|rl|rlc|modulation)\b/i.test(query)) {
+      expandedKeywords.push('الكهرب', 'مكثف', 'تضمين');
+    }
+    if (/\b(mecan|m[eé]canique|newton|chute|oscillat)\b/i.test(query)) {
+      expandedKeywords.push('الميكانيك', 'نيوتن', 'حركة');
+    }
+    if (/\b(chimie|acide|base|titrage|dosage|ester)\b/i.test(query)) {
+      expandedKeywords.push('الكيمياء', 'حمض', 'استر');
+    }
 
     const matchedSnippets: { score: number; text: string }[] = [];
 
@@ -204,10 +486,18 @@ export async function searchLocalDocuments(query: string, branch: string = 'PC')
 
       for (const sec of doc.sections) {
         let score = 0;
-        for (const kw of keywords) {
+        for (const kw of expandedKeywords) {
           if (sec.lower.includes(kw)) {
             score++;
           }
+          if (sec.arabicNorm.includes(kw)) {
+            score += 2;
+          }
+        }
+
+        // Si la section contient des données visuelles décodées pertinentes
+        if (sec.raw.includes('FIGURE / SCHÉMA DÉCODÉ') && score > 0) {
+          score += 4;
         }
 
         if (score > 0) {
