@@ -11,7 +11,7 @@ import {
 } from '../ai/providers';
 import { generateUnifiedCompletion, streamUnifiedChat, trimUpstreamError } from '../ai/completion';
 import { sseWrite } from '../ai/sse';
-import { extractTextFromPdf, searchLocalDocuments } from '../rag';
+import { extractTextFromPdf, searchLocalDocumentsDetailed } from '../rag';
 import { getSiDrissBasePrompt, getInstruction, normalizeBranchParam } from '../prompts';
 import type { ClientAttachment, ClientMessage } from '../ai/adapters';
 
@@ -256,7 +256,7 @@ router.post('/chat/stream', async (req, res) => {
         if (att.text) searchTerms += ' ' + att.text.slice(0, 200);
       }
     }
-    const matchedDocs = await searchLocalDocuments(searchTerms, branch);
+    const { contextText: matchedDocs, officialSource } = await searchLocalDocumentsDetailed(searchTerms, branch);
     const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context);
 
     // Setup SSE headers
@@ -267,6 +267,9 @@ router.post('/chat/stream', async (req, res) => {
     res.flushHeaders?.();
 
     res.write(': ping\n\n');
+    if (officialSource?.isPdf) {
+      sseWrite(res, { officialSource });
+    }
 
     // Abort upstream provider requests the moment the client disconnects
     const disconnectController = new AbortController();
@@ -325,13 +328,18 @@ router.post('/chat', async (req, res) => {
         if (att.text) searchTerms += ' ' + att.text.slice(0, 200);
       }
     }
-    const matchedDocs = await searchLocalDocuments(searchTerms, branch);
+    const { contextText: matchedDocs, officialSource } = await searchLocalDocumentsDetailed(searchTerms, branch);
     const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context);
 
     const { text, model } = await generateUnifiedCompletion(aiConfig, enrichedMessages, fullInstruction, false);
 
     const reply = text || "Désolé mon élève, peux-tu reformuler ta question, lah yerdi 3lik ?";
-    return res.json({ reply, sourceDocs: Boolean(matchedDocs), modelUsed: model });
+    return res.json({
+      reply,
+      sourceDocs: Boolean(matchedDocs),
+      officialSource: officialSource?.isPdf ? officialSource : undefined,
+      modelUsed: model,
+    });
   } catch (err: any) {
     console.error('Erreur API Chat:', err);
     return sendAiRouteError(res, err, 'Erreur lors de la communication avec Si Driss.');

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef } from 'react';
-import { Download, RefreshCw, ZoomIn, ZoomOut, Info, Activity, GitFork, Copy, Check } from 'lucide-react';
+import { Download, RefreshCw, ZoomIn, ZoomOut, Info, Activity, GitFork, Copy, Check, Sun, Moon, Layers } from 'lucide-react';
 import katex from 'katex';
 import DOMPurify from 'dompurify';
 
@@ -1166,6 +1166,129 @@ export const ScientificMindMap: React.FC<{ spec: MindMapSpec }> = ({ spec }) => 
       </div>
 
       <div className="p-4 sm:p-5 overflow-x-auto">{renderTree(root)}</div>
+    </div>
+  );
+};
+
+/**
+ * Composant sécurisé de rendu pour schémas vectoriels SVG générés par l'IA (montages, forces, ondes).
+ * Sanitisation stricte par DOMPurify (profil SVG sans scripts ni objets externes).
+ */
+export const ScientificSvgCard: React.FC<{ svgCode: string; title?: string }> = ({
+  svgCode,
+  title,
+}) => {
+  const [copied, setCopied] = useState(false);
+
+  const { sanitizedSvg, detectedTitle, usesDarkInk } = useMemo(() => {
+    const match = svgCode.match(/<svg[\s\S]*?<\/svg>/i);
+    if (!match) return { sanitizedSvg: '', detectedTitle: '', usesDarkInk: false };
+
+    const titleMatch = match[0].match(/<title>([\s\S]*?)<\/title>/i);
+    const extractedTitle = titleMatch ? titleMatch[1].replace(/<[^>]+>/g, '').trim() : '';
+
+    const clean = DOMPurify.sanitize(match[0], {
+      USE_PROFILES: { svg: true, svgFilters: true },
+      ADD_TAGS: ['title', 'desc'],
+      ADD_ATTR: [
+        'viewBox',
+        'xmlns',
+        'markerWidth',
+        'markerHeight',
+        'refX',
+        'refY',
+        'orient',
+        'marker-end',
+        'marker-start',
+        'stroke-dasharray',
+        'stroke-linecap',
+        'stroke-linejoin',
+        'dominant-baseline',
+        'text-anchor',
+        'preserveAspectRatio',
+      ],
+      FORBID_TAGS: ['script', 'foreignObject', 'iframe', 'object', 'embed', 'a', 'animate', 'set'],
+      FORBID_ATTR: ['onload', 'onerror', 'onclick', 'onmouseover', 'onfocus', 'href', 'xlink:href'],
+    });
+
+    const darkInk = /(?:stroke|fill)\s*=\s*["'](?:#000|#000000|black|#111|#1e293b|#0f172a)["']/i.test(clean);
+    return { sanitizedSvg: clean, detectedTitle: extractedTitle, usesDarkInk: darkInk };
+  }, [svgCode]);
+
+  const [manualPaper, setManualPaper] = useState<boolean | null>(null);
+  const lightPaper = manualPaper ?? usesDarkInk;
+
+  if (!sanitizedSvg) return null;
+
+  const displayTitle = title || detectedTitle || 'Schéma scientifique';
+
+  const handleCopySvg = () => {
+    try {
+      navigator.clipboard.writeText(sanitizedSvg);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {}
+  };
+
+  const handleDownloadSvg = () => {
+    try {
+      const blob = new Blob([sanitizedSvg], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `schema-sidriss-${Date.now()}.svg`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {}
+  };
+
+  return (
+    <div className="my-3 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl overflow-hidden backdrop-blur-md">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-950/60 border-b border-slate-800">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="w-7 h-7 rounded-lg bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0">
+            <Layers className="w-4 h-4" />
+          </div>
+          <h4 className="text-xs sm:text-sm font-semibold text-slate-100 truncate">{displayTitle}</h4>
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          <button
+            type="button"
+            onClick={() => setManualPaper(!lightPaper)}
+            className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition"
+            title={lightPaper ? 'Passer sur fond sombre' : 'Passer sur fond clair'}
+          >
+            {lightPaper ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5" />}
+          </button>
+          <button
+            type="button"
+            onClick={handleCopySvg}
+            className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition"
+            title="Copier le code SVG"
+          >
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+          </button>
+          <button
+            type="button"
+            onClick={handleDownloadSvg}
+            className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition"
+            title="Télécharger le schéma (.svg)"
+          >
+            <Download className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+
+      <div
+        className={`p-4 flex justify-center overflow-x-auto transition-colors ${
+          lightPaper ? 'bg-[#fafaf9]' : 'bg-slate-950/85'
+        }`}
+      >
+        <div
+          className="w-full max-w-xl [&_svg]:w-full [&_svg]:h-auto [&_svg]:max-h-[420px]"
+          dangerouslySetInnerHTML={{ __html: sanitizedSvg }}
+        />
+      </div>
     </div>
   );
 };

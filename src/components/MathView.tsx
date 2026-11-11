@@ -1,7 +1,12 @@
 import React, { useMemo } from 'react';
 import katex from 'katex';
 import DOMPurify from 'dompurify';
-import { ScientificGraphicsRenderer, GraphicSpec, MindMapSpec } from './ScientificGraphicsRenderer';
+import {
+  ScientificGraphicsRenderer,
+  ScientificSvgCard,
+  GraphicSpec,
+  MindMapSpec,
+} from './ScientificGraphicsRenderer';
 
 interface MathViewProps {
   content: string;
@@ -455,12 +460,14 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
     );
   }
 
-  // Cas 3 : Contenu mixte (texte + graphiques scientifiques interactifs + formules LaTeX)
+  // Cas 3 : Contenu mixte (texte + schémas SVG + graphiques scientifiques interactifs + formules LaTeX)
   const graphicBlockRegex =
-    /```(?:curve|mindmap|graph|chart|mermaid)\s*([\s\S]*?)```|```json\s*(\{[\s\S]*?(?:"type"\s*:\s*"(?:curve|mindmap)"|"root"\s*:|"function"\s*:)[\s\S]*?\})\s*```/gi;
+    /```(svg|xml|curve|mindmap|graph|chart|mermaid)\s*([\s\S]*?)```|```(json)\s*(\{[\s\S]*?(?:"type"\s*:\s*"(?:curve|mindmap)"|"root"\s*:|"function"\s*:)[\s\S]*?\})\s*```/gi;
+  const openStreamingFenceRe = /```(?:svg|curve|mindmap)\b(?![\s\S]*```)/i;
+  const hasCompleteGraphic = graphicBlockRegex.test(content);
+  graphicBlockRegex.lastIndex = 0;
 
-  if (graphicBlockRegex.test(content)) {
-    graphicBlockRegex.lastIndex = 0;
+  if (hasCompleteGraphic || openStreamingFenceRe.test(content)) {
     const elements: React.ReactNode[] = [];
     let lastIndex = 0;
     let match: RegExpExecArray | null;
@@ -472,32 +479,64 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
         elements.push(...renderMathAndTextNodes(normalizedChunk, block, `mv-txt-${lastIndex}`));
       }
 
-      const rawBlock = (match[1] || match[2] || '').trim();
-      const spec = tryParseGraphicSpec(rawBlock);
-      if (spec) {
+      const fenceLang = (match[1] || match[3] || '').toLowerCase();
+      const rawBlock = (match[2] || match[4] || '').trim();
+      const isSvgBlock =
+        fenceLang === 'svg' ||
+        ((fenceLang === 'xml' || !fenceLang) && /<svg[\s>][\s\S]*<\/svg>/i.test(rawBlock));
+
+      if (isSvgBlock) {
         elements.push(
-          <div key={`mv-graphic-${match.index}`} className="my-3 w-full">
-            <ScientificGraphicsRenderer spec={spec} />
+          <div key={`mv-svg-${match.index}`} className="my-3 w-full">
+            <ScientificSvgCard svgCode={rawBlock} />
           </div>
         );
       } else {
-        elements.push(
-          <pre
-            key={`mv-raw-code-${match.index}`}
-            className="my-2 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-amber-300 overflow-x-auto"
-          >
-            <code>{match[0]}</code>
-          </pre>
-        );
+        const spec = tryParseGraphicSpec(rawBlock);
+        if (spec) {
+          elements.push(
+            <div key={`mv-graphic-${match.index}`} className="my-3 w-full">
+              <ScientificGraphicsRenderer spec={spec} />
+            </div>
+          );
+        } else {
+          elements.push(
+            <pre
+              key={`mv-raw-code-${match.index}`}
+              className="my-2 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-amber-300 overflow-x-auto"
+            >
+              <code>{match[0]}</code>
+            </pre>
+          );
+        }
       }
 
       lastIndex = graphicBlockRegex.lastIndex;
     }
 
     if (lastIndex < content.length) {
-      const textChunk = content.slice(lastIndex);
-      const normalizedChunk = normalizeAllMathDelimiters(textChunk);
-      elements.push(...renderMathAndTextNodes(normalizedChunk, block, `mv-txt-end-${lastIndex}`));
+      const tailChunk = content.slice(lastIndex);
+      const pendingFenceIdx = tailChunk.search(openStreamingFenceRe);
+      if (pendingFenceIdx !== -1) {
+        const visibleText = tailChunk.slice(0, pendingFenceIdx);
+        if (visibleText.trim()) {
+          elements.push(
+            ...renderMathAndTextNodes(normalizeAllMathDelimiters(visibleText), block, `mv-txt-tail-${lastIndex}`)
+          );
+        }
+        elements.push(
+          <div
+            key={`mv-pending-${lastIndex}`}
+            className="my-2 px-3 py-2 rounded-xl bg-slate-900/70 border border-slate-800 text-xs text-sky-300 inline-flex items-center gap-2"
+          >
+            <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
+            <span>Tracé du schéma scientifique en cours…</span>
+          </div>
+        );
+      } else {
+        const normalizedChunk = normalizeAllMathDelimiters(tailChunk);
+        elements.push(...renderMathAndTextNodes(normalizedChunk, block, `mv-txt-end-${lastIndex}`));
+      }
     }
 
     return (

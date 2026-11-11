@@ -17,6 +17,18 @@ export interface ChatAttachment {
   chapter?: string;
 }
 
+export interface OfficialSourceRef {
+  name: string;
+  relativePath: string;
+  branch: 'PC' | 'SM' | 'ALL';
+  year?: number | null;
+  session?: 'SN' | 'SR' | null;
+  topic?: string | null;
+  pages: number[];
+  totalPages: number;
+  isPdf: boolean;
+}
+
 export interface ChatMessage {
   id: string;
   role: 'user' | 'assistant';
@@ -24,6 +36,7 @@ export interface ChatMessage {
   mode?: 'socratic' | 'direct' | 'review' | 'trap';
   timestamp: string;
   attachments?: ChatAttachment[];
+  officialSource?: OfficialSourceRef;
 }
 
 export interface SavedSession {

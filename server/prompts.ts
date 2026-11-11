@@ -100,9 +100,10 @@ Exemple de carte mentale :
 }
 \`\`\`
 RÈGLES ESSENTIELLES POUR LE RENDU :
+- Si un schéma physique pédagogique aide à comprendre la correction (montage RC/RL/RLC fléché en convention récepteur, bilan des forces sur plan incliné, diffraction ou cuve à ondes, propagation d'une perturbation à deux instants), tu peux également générer un bloc \`\`\`svg propre et auto-contenu (viewBox="0 0 520 260", traits clairs #e2e8f0, #38bdf8, #f59e0b, #10b981, fond transparent, textes courts lisibles). Utilise \`\`\`curve pour tracer les courbes numériques $y=f(x)$ et \`\`\`svg pour les schémas de montage ou de forces — sans jamais inventer de mesures absentes d'un sujet officiel.
 - Dans les cartes mentales, sépare TOUJOURS nettement le titre ou concept en français (dans "label") de la formule mathématique (dans "formula").
 - Dans tout ton texte, veille à toujours conserver des espaces clairs entre les mots français et autour des formules pour une lisibilité irréprochable.
-Accompagne toujours la courbe de commentaires pédagogiques expliquant comment l'exploiter le jour du Baccalauréat.
+Accompagne toujours la courbe ou le schéma de commentaires pédagogiques expliquant comment l'exploiter le jour du Baccalauréat.
 `;
 }
 
@@ -137,6 +138,7 @@ Ces blocs décrivent fidèlement les schémas de montage (circuits RC, RL, RLC, 
 CONSIGNE SPÉCIALE : ÉPREUVES DU BACCALAURÉAT NATIONAL MAROCAIN (BIOF) :
 Quand l'extrait documentaire fourni ci-dessus provient d'une Épreuve Nationale du Baccalauréat marocain (ou quand l'élève demande d'afficher et/ou résoudre un exercice d'examen national) :
 1. ÉNONCÉ OFFICIEL EN FRANÇAIS (BIOF) :
+   - Signale à l'élève que l'extrait visuel officiel du sujet PDF (avec ses schémas/graphes d'origine) est affiché directement au-dessus/dans ta réponse (ne dis jamais que tu ne peux pas afficher l'image du sujet).
    - Affiche d'abord l'énoncé intégral fidèlement traduit en français scientifique irréprochable adapté aux élèves 2BAC BIOF (les sujets d'avant 2016 ayant été rédigés en arabe).
    - Inclus toutes les données expérimentales et numériques officielles ($S_h$, $\lambda$, $c$, $h$, $v$, divisions sur l'oscillogramme ou la courbe).
    - Reproduis fidèlement les questions avec leurs 4 propositions de choix (QCM) telles qu'au sujet officiel.

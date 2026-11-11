@@ -149,6 +149,39 @@ export function createDocumentsRouter(): Router {
   });
 
   /**
+   * Lecture publique en ligne (inline) d'un PDF officiel listé dans /documents/official
+   * pour permettre l'affichage direct des pages d'exercices dans le chat.
+   */
+  router.get('/documents/official/pdf', (req, res) => {
+    try {
+      const name = String(req.query.name || '').trim();
+      if (!name || !name.toLowerCase().endsWith('.pdf')) {
+        return res.status(400).json({ error: 'Nom de document PDF officiel requis.' });
+      }
+
+      const baseName = path.basename(name);
+      const allDocs = discoverProgrammeFiles(DOCS_DIR);
+      const matched = allDocs.find(
+        (doc) =>
+          doc.name.toLowerCase().endsWith('.pdf') &&
+          (doc.relativePath === name || doc.name === name || doc.name === baseName)
+      );
+
+      if (!matched || !fs.existsSync(matched.absolutePath)) {
+        return res.status(404).json({ error: 'Document PDF officiel introuvable.' });
+      }
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `inline; filename="${encodeURIComponent(path.basename(matched.name))}"`);
+      res.setHeader('Cache-Control', 'public, max-age=3600');
+      return res.sendFile(matched.absolutePath);
+    } catch (err: any) {
+      console.error('Erreur lecture PDF officiel:', err);
+      return res.status(500).json({ error: 'Impossible de servir le document PDF officiel.' });
+    }
+  });
+
+  /**
    * Synchronisation des documents officiels téléchargés et ré-indexation du RAG local.
    * Lance l'extraction et le décodage visuel en tâche de fond cadencée pour éviter les timeouts 502/503
    * et les dépassements de quota API (429).

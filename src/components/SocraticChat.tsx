@@ -27,7 +27,8 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { MathView } from './MathView';
-import { SavedSession, ChatMessage, ChatAttachment } from '../types/chat';
+import { OfficialExamPageViewer } from './OfficialExamPageViewer';
+import { SavedSession, ChatMessage, ChatAttachment, OfficialSourceRef } from '../types/chat';
 import { compressImageFile, safeSaveSessions, safeLoadSessions } from '../utils/chatStorage';
 import { useModalA11y } from '../hooks/useModalA11y';
 import { ExercisePickerModal } from './ExercisePickerModal';
@@ -635,6 +636,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
     resetInactivityTimeout();
     let accumulated = '';
+    let receivedOfficialSource: OfficialSourceRef | undefined = undefined;
 
     try {
       const streamRes = await fetch('/api/chat/stream', {
@@ -720,7 +722,14 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
               if (dataStr === '[DONE]') break;
               try {
                 const parsed = JSON.parse(dataStr);
-                if (parsed.text) {
+                if (parsed.officialSource) {
+                  receivedOfficialSource = parsed.officialSource;
+                  setMessages((prev) =>
+                    prev.map((m) =>
+                      m.id === assistantMsgId ? { ...m, officialSource: parsed.officialSource } : m
+                    )
+                  );
+                } else if (parsed.text) {
                   accumulated += parsed.text;
                   flushStreamedContent();
                 } else if (parsed.error) {
@@ -732,9 +741,17 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
           }
         }
 
-        // Flush final : garantit que le message contient l'intégralité du texte reçu
+        // Flush final : garantit que le message contient l'intégralité du texte reçu et sa source PDF
         setMessages((prev) =>
-          prev.map((m) => (m.id === assistantMsgId ? { ...m, content: accumulated } : m))
+          prev.map((m) =>
+            m.id === assistantMsgId
+              ? {
+                  ...m,
+                  content: accumulated,
+                  officialSource: receivedOfficialSource || m.officialSource,
+                }
+              : m
+          )
         );
 
         if (!accumulated.trim()) {
@@ -759,7 +776,11 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
             setMessages((prev) =>
               prev.map((m) =>
                 m.id === assistantMsgId
-                  ? { ...m, content: data.reply || 'Je suis à ton écoute mon élève !' }
+                  ? {
+                      ...m,
+                      content: data.reply || 'Je suis à ton écoute mon élève !',
+                      officialSource: data.officialSource || receivedOfficialSource || m.officialSource,
+                    }
                   : m
               )
             );
@@ -793,6 +814,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
             content: data.reply || 'Je suis à ton écoute !',
             mode: currentMode,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            officialSource: data.officialSource,
           },
         ]);
       }
@@ -1085,6 +1107,14 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                       ))}
                     </div>
                   </div>
+                )}
+
+                {/* Extrait officiel PDF de l'Examen National (Option 1) */}
+                {msg.role === 'assistant' && msg.officialSource?.isPdf && (
+                  <OfficialExamPageViewer
+                    source={msg.officialSource}
+                    onPreviewImage={(preview) => setPreviewImageModal(preview)}
+                  />
                 )}
 
                 {/* Markdown and KaTeX content */}

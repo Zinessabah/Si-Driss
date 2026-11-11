@@ -138,12 +138,15 @@ export function parseExamQuery(query: string): ParsedExamQuery {
   return { isExamQuery, year, session, topic };
 }
 
+const EXERCISE_HEADING_RE =
+  /^\s*(?:EXERCICE|EXERCISE)\s*(?:[1-5]|[I]{1,3}|IV|V)\b|^\s*التمرين\s*(?:الأول|الثاني|الثالث|الرابع|الخامس|[1-5])/im;
+
 const NEXT_SECTION_FOR_TOPIC: Record<ExamTopic, RegExp[]> = {
-  chimie: [/التمرين\s*(الثاني|2)/i, /الموج/i, /EXERCICE\s*2/i],
-  ondes: [/النوو/i, /التمرين\s*(الثالث|3)/i, /الكهرب/i, /EXERCICE\s*3/i, /Nucl[eé]aire/i],
-  nucleaire: [/التمرين\s*(الثالث|3)/i, /الكهرب/i, /EXERCICE\s*3/i, /[EÉ]lectricit[eé]/i],
-  electricite: [/التمرين\s*(الرابع|4)/i, /الميكانيك/i, /EXERCICE\s*4/i, /M[eé]canique/i],
-  mecanique: [/===+\s*TRANSCRIPTION\s*VISUELLE/i, /^\s*FIN\s*(?:DE\s*L['’]ÉPREUVE|DU\s*SUJET)?\s*$/im],
+  chimie: [/التمرين\s*(الثاني|2)/i, /الموج/i, /EXERCICE\s*(?:2|II)\b/i, /EXERCISE\s*(?:2|II|1)\b/i, /Physics\s*\(/i, /Physique\s*\(/i, EXERCISE_HEADING_RE],
+  ondes: [/النوو/i, /التمرين\s*(الثالث|3)/i, /الكهرب/i, /EXERCICE\s*(?:3|III)\b/i, /EXERCISE\s*(?:2|3|II|III)\b/i, /Nucl[eé]aire/i, /Nuclear/i, /[EÉ]lectricit[eé]/i, /Electricity/i, EXERCISE_HEADING_RE],
+  nucleaire: [/التمرين\s*(الثالث|3|الرابع|4)/i, /الكهرب/i, /EXERCICE\s*(?:3|4|III|IV)\b/i, /EXERCISE\s*(?:3|4|III|IV)\b/i, /[EÉ]lectricit[eé]/i, /Electricity/i, EXERCISE_HEADING_RE],
+  electricite: [/التمرين\s*(الرابع|4|الخامس|5)/i, /الميكانيك/i, /EXERCICE\s*(?:4|5|IV|V)\b/i, /EXERCISE\s*(?:3|4|5|III|IV|V)\b/i, /M[eé]canique/i, /Mechanics/i, EXERCISE_HEADING_RE],
+  mecanique: [/===+\s*TRANSCRIPTION\s*VISUELLE/i, /^\s*FIN\s*(?:DE\s*L['’]ÉPREUVE|DU\s*SUJET)?\s*$/im, EXERCISE_HEADING_RE],
 };
 
 const TOPIC_VISION_PATTERNS: Record<ExamTopic, RegExp[]> = {
@@ -154,13 +157,99 @@ const TOPIC_VISION_PATTERNS: Record<ExamTopic, RegExp[]> = {
   chimie: [/chimie/i, /acide/i, /base/i, /ester/i, /titrage/i, /pile/i],
 };
 
+export interface OfficialSourceRef {
+  name: string;
+  relativePath: string;
+  branch: DocumentBranch;
+  year: number | null;
+  session: 'SN' | 'SR' | null;
+  topic: ExamTopic | null;
+  pages: number[];
+  totalPages: number;
+  isPdf: boolean;
+}
+
+interface PageMarker {
+  page: number;
+  total: number;
+  index: number;
+}
+
+function extractPageMarkers(bodyContent: string): PageMarker[] {
+  const markers: PageMarker[] = [];
+  const re = /^--\s*(\d+)\s+of\s+(\d+)\s*--$/gm;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(bodyContent)) !== null) {
+    const page = parseInt(m[1], 10);
+    const total = parseInt(m[2], 10);
+    if (Number.isFinite(page) && page >= 1) {
+      markers.push({ page, total: Number.isFinite(total) ? total : page, index: m.index });
+    }
+  }
+  return markers;
+}
+
+function offsetToPage(offset: number, markers: PageMarker[]): number {
+  for (const marker of markers) {
+    if (offset <= marker.index) {
+      return marker.page;
+    }
+  }
+  return markers.length > 0 ? markers[markers.length - 1].page : 1;
+}
+
+function computeExamPageRange(
+  bodyContent: string,
+  rawStart: number,
+  rawEnd: number,
+  matchedSection: boolean,
+  topic: ExamTopic | null
+): { pages: number[]; totalPages: number } {
+  const markers = extractPageMarkers(bodyContent);
+  if (markers.length === 0) {
+    return { pages: [1], totalPages: 1 };
+  }
+
+  const totalPages = Math.max(markers.length, ...markers.map((m) => m.total));
+
+  if (!matchedSection) {
+    const cleanBodyLen = bodyContent.replace(/^--\s*\d+\s+of\s+\d+\s*--$/gm, '').trim().length;
+    if (cleanBodyLen < 150 && topic && totalPages >= 3) {
+      const heuristicByTopic: Record<ExamTopic, number> = {
+        chimie: 1,
+        ondes: Math.min(2, totalPages),
+        nucleaire: Math.min(3, totalPages),
+        electricite: Math.min(4, totalPages),
+        mecanique: Math.max(1, totalPages - 1),
+      };
+      return { pages: [heuristicByTopic[topic]], totalPages };
+    }
+    return { pages: [1], totalPages };
+  }
+
+  const startPage = Math.max(1, Math.min(totalPages, offsetToPage(rawStart, markers)));
+  const safeEndOffset = Math.max(rawStart, rawEnd - 1);
+  const endPage = Math.max(startPage, Math.min(totalPages, offsetToPage(safeEndOffset, markers)));
+  const pages: number[] = [];
+  for (let p = startPage; p <= Math.min(endPage, startPage + 3); p++) {
+    pages.push(p);
+  }
+  return { pages: pages.length > 0 ? pages : [1], totalPages };
+}
+
 /**
  * Extrait précisément l'énoncé d'un exercice et ses données visuelles (graphes/schémas décodés).
  */
 export function extractExamExercise(
   rawContent: string,
   topic: ExamTopic | null
-): { exerciseText: string; visualText: string } {
+): {
+  exerciseText: string;
+  visualText: string;
+  rawStart: number;
+  rawEnd: number;
+  matchedSection: boolean;
+} {
   let bodyContent = rawContent;
   let visionContent = '';
 
@@ -186,9 +275,13 @@ export function extractExamExercise(
   }
 
   if (!topic) {
+    const fallbackEnd = Math.min(bodyContent.length, 3500);
     return {
-      exerciseText: bodyContent.slice(0, 3500),
+      exerciseText: bodyContent.slice(0, fallbackEnd),
       visualText: visualText.trim(),
+      rawStart: 0,
+      rawEnd: fallbackEnd,
+      matchedSection: false,
     };
   }
 
@@ -203,11 +296,41 @@ export function extractExamExercise(
   };
 
   const topicFrPats: Record<ExamTopic, RegExp[]> = {
-    ondes: [/exercice\s*\d?\s*[:\-]?\s*ondes/i, /propagation\s*d'une\s*onde/i, /ondes\s*lumineuses/i],
-    nucleaire: [/exercice\s*\d?\s*[:\-]?\s*physique\s*nucl/i, /d[eé]croissance\s*radioactive/i],
-    electricite: [/exercice\s*\d?\s*[:\-]?\s*[eé]lectricit/i, /r[eé]ponse\s*d'un\s*dip/i],
-    mecanique: [/exercice\s*\d?\s*[:\-]?\s*m[eé]canique/i, /mouvement\s*d'un/i],
-    chimie: [/exercice\s*\d?\s*[:\-]?\s*chimie/i, /[eé]tude\s*d'une\s*solution/i],
+    ondes: [
+      /exercic?e\s*(?:[1-5]|[I]{1,3}|IV|V)?[^\n]{0,60}\b(?:ondes?|waves?|ultrason)/i,
+      /\bpropagation\s+d['’]une\s+onde/i,
+      /\bondes?\s+(?:lumineuses?|sonores?|ultrasonores?|m[eé]caniques?)/i,
+      /\bultrasonic\s+waves?\b/i,
+      /\blight\s+waves?\b/i,
+    ],
+    nucleaire: [
+      /exercic?e\s*(?:[1-5]|[I]{1,3}|IV|V)?[^\n]{0,60}\b(?:physique\s+nucl[eé]aire|nucl[eé]aires?|nuclear|radioactiv|d[eé]sint[eé]gration)/i,
+      /\bd[eé]croissance\s+radioactive\b/i,
+      /\bradioactive\s+decay\b/i,
+    ],
+    electricite: [
+      /exercic?e\s*(?:[1-5]|[I]{1,3}|IV|V)?[^\n]{0,60}\b(?:[eé]lectricit[eé]|electricity|electric\s+system|dip[oô]le|circuit)/i,
+      /\br[eé]ponse\s+d['’]un\s+dip/i,
+      /\bdischarge\s+of\s+a\s+capacitor\b/i,
+    ],
+    mecanique: [
+      /exercic?e\s*(?:[1-5]|[I]{1,3}|IV|V)?[^\n]{0,60}\b(?:m[eé]canique|mechanics|mouvement)/i,
+      /\bmouvement\s+d['’]un\b/i,
+      /\bmotion\s+of\s+a\b/i,
+    ],
+    chimie: [
+      /exercic?e\s*(?:[1-5]|[I]{1,3}|IV|V)?[^\n]{0,60}\b(?:chimie|chemistry)/i,
+      /\b[eé]tude\s+d['’]une\s+solution\b/i,
+      /^(?:chimie|chemistry)\s*\(\s*\d/im,
+    ],
+  };
+
+  const topicBodyKeywords: Record<ExamTopic, RegExp[]> = {
+    ondes: [/\bondes?\b/i, /\bwaves?\b/i, /ultrason/i, /diffraction/i, /c[eé]l[eé]rit[eé]/i, /longueur\s+d['’]onde/i, /wavelength/i],
+    nucleaire: [/nucl[eé]aire/i, /\bnuclear\b/i, /radioactiv/i, /d[eé]sint[eé]gration/i, /demi-vie/i, /half-life/i, /isotope/i, /fission|fusion/i, /\bnoyau\b/i],
+    electricite: [/[eé]lectric/i, /\belectric/i, /condensateur/i, /capacitor/i, /bobine/i, /inductor/i, /dip[oô]le/i, /\brlc\b/i, /modulation/i],
+    mecanique: [/m[eé]canique/i, /mechanics/i, /newton/i, /chute/i, /projectile/i, /pendule|pendulum/i, /satellite/i, /ressort|spring/i],
+    chimie: [/chimie/i, /chemistry/i, /acide|acid/i, /titrage|titration/i, /est[eé]rif/i, /pile|battery/i, /[eé]lectrolyse|electrolysis/i, /\bpH\b/],
   };
 
   let bestStart = -1;
@@ -228,29 +351,75 @@ export function extractExamExercise(
     if (bestStart > 1000) break;
   }
 
-  // Si non trouvé en arabe, recherche en français sur normBody également (sujets BIOF)
-  // pour rester dans le même repère d'indices que normBody / toRawIndex
-  if (bestStart === -1) {
+  // Si non trouvé en arabe, recherche en français/anglais sur normBody en sautant le sommaire
+  if (bestStart <= 1000) {
+    let frBest = -1;
     for (const re of topicFrPats[topic]) {
-      const match = normBody.search(re);
-      if (match !== -1) {
-        bestStart = match;
+      const flags = re.flags.includes('g') ? re.flags : `${re.flags}g`;
+      for (const m of normBody.matchAll(new RegExp(re.source, flags))) {
+        if (m.index === undefined) continue;
+        if (m.index > 950) {
+          frBest = m.index;
+          break;
+        } else if (frBest === -1) {
+          frBest = m.index;
+        }
+      }
+      if (frBest > 950) break;
+    }
+    if (frBest !== -1) {
+      bestStart = frBest;
+    }
+  }
+
+  // Repli sur le découpage par en-têtes d'exercices (ex: "EXERCICE 2 (2,5 points)" sans sous-titre)
+  if (bestStart === -1) {
+    const headingRe = /^\s*(?:EXERCICE|EXERCISE)\s*(?:[1-5]|[I]{1,3}|IV|V)\b/gim;
+    const headingIndices: number[] = [];
+    for (const m of normBody.matchAll(headingRe)) {
+      if (m.index !== undefined && m.index > 950) {
+        headingIndices.push(m.index);
+      }
+    }
+    let fallbackIdx = -1;
+    let fallbackScore = 0;
+    for (let i = 0; i < headingIndices.length; i++) {
+      const start = headingIndices[i];
+      const end = i + 1 < headingIndices.length ? headingIndices[i + 1] : Math.min(normBody.length, start + 2500);
+      const slice = normBody.slice(start, Math.min(end, start + 2500));
+      let score = 0;
+      for (const kw of topicBodyKeywords[topic]) {
+        if (kw.test(slice)) score++;
+      }
+      if (score >= 2) {
+        bestStart = start;
         break;
       }
+      if (score > fallbackScore) {
+        fallbackScore = score;
+        fallbackIdx = start;
+      }
+    }
+    if (bestStart === -1 && fallbackIdx !== -1) {
+      bestStart = fallbackIdx;
     }
   }
 
   if (bestStart === -1) {
+    const fallbackEnd = Math.min(bodyContent.length, 3500);
     return {
-      exerciseText: bodyContent.slice(0, 3500),
+      exerciseText: bodyContent.slice(0, fallbackEnd),
       visualText: visualText.trim(),
+      rawStart: 0,
+      rawEnd: fallbackEnd,
+      matchedSection: false,
     };
   }
 
-  // Reculer pour attraper l'en-tête de l'exercice (ex: "التمرين الثاني" ou "EXERCICE 2")
+  // Reculer pour attraper l'en-tête de l'exercice (ex: "التمرين الثاني", "EXERCICE 2", "Exercise 1")
   const lookbackStart = Math.max(0, bestStart - 350);
   const lookbackChunk = normBody.slice(lookbackStart, bestStart);
-  const headerIdx = lookbackChunk.search(/(التمرين|EXERCICE)/i);
+  const headerIdx = lookbackChunk.search(/(التمرين|EXERCICE|EXERCISE)/i);
   const normStart = headerIdx !== -1 ? lookbackStart + headerIdx : bestStart;
 
   // Détection de la fin de l'exercice
@@ -275,6 +444,9 @@ export function extractExamExercise(
   return {
     exerciseText,
     visualText: visualText.trim(),
+    rawStart,
+    rawEnd,
+    matchedSection: true,
   };
 }
 
@@ -531,9 +703,21 @@ export async function refreshDocumentsCache(force: boolean = false, _apiKey?: st
  * Aucune fuite de document PC vers SM (ex: modulation AM n'apparaît pas chez SM).
  */
 export async function searchLocalDocuments(query: string, branch: string = 'PC'): Promise<string> {
+  const { contextText } = await searchLocalDocumentsDetailed(query, branch);
+  return contextText;
+}
+
+/**
+ * Recherche contextuelle enrichie : retourne le texte RAG ET la référence PDF officielle
+ * (nom de fichier + numéros de pages exactes) pour affichage visuel direct dans le chat.
+ */
+export async function searchLocalDocumentsDetailed(
+  query: string,
+  branch: string = 'PC'
+): Promise<{ contextText: string; officialSource?: OfficialSourceRef }> {
   try {
     await refreshDocumentsCache();
-    if (!documentsCache.length) return '';
+    if (!documentsCache.length) return { contextText: '' };
 
     const branchUpper = (branch || 'PC').toUpperCase() as 'PC' | 'SM';
     const parsed = parseExamQuery(query);
@@ -583,20 +767,49 @@ export async function searchLocalDocuments(query: string, branch: string = 'PC')
       // Si un document officiel national est identifié
       if (bestDoc && bestScore >= 50) {
         const fullContent = readDocumentFullText(bestDoc);
-        const { exerciseText, visualText } = extractExamExercise(fullContent, parsed.topic);
-        if (exerciseText || visualText) {
+        const { exerciseText, visualText, rawStart, rawEnd, matchedSection } = extractExamExercise(
+          fullContent,
+          parsed.topic
+        );
+        const isPdf = bestDoc.name.toLowerCase().endsWith('.pdf');
+        const markerIdx = fullContent.indexOf(SCIENTIFIC_VISION_MARKER);
+        const bodyOnly = markerIdx !== -1 ? fullContent.slice(0, markerIdx) : fullContent;
+        const { pages, totalPages } = isPdf
+          ? computeExamPageRange(bodyOnly, rawStart, rawEnd, matchedSection, parsed.topic)
+          : { pages: [1], totalPages: 1 };
+
+        const officialSource: OfficialSourceRef = {
+          name: bestDoc.name,
+          relativePath: bestDoc.relativePath,
+          branch: bestDoc.branch,
+          year: parsed.year,
+          session: parsed.session,
+          topic: parsed.topic,
+          pages,
+          totalPages,
+          isPdf,
+        };
+
+        if (exerciseText || visualText || isPdf) {
           const sessionLabel = parsed.session === 'SN'
             ? 'Session Normale'
             : parsed.session === 'SR'
             ? 'Session de Rattrapage'
             : 'Épreuve Officielle';
 
+          const cleanTextLen = bodyOnly.replace(/^--\s*\d+\s+of\s+\d+\s*--$/gm, '').trim().length;
+          const scannedNotice = isPdf && cleanTextLen < 150
+            ? '\n[Note : Ce PDF officiel est un document scanné sans OCR ; ses pages officielles sont directement affichées visuellement à l’élève dans le chat. Ne jamais inventer de valeurs numériques non fournies.]\n'
+            : '';
+
           const examHeader = `[Cadre Officiel 2BAC ${branchUpper} - Épreuve Nationale du Baccalauréat marocain]\n` +
-            `Document officiel : ${bestDoc.name} | ${sessionLabel} ${parsed.year || ''}\n` +
+            `Document officiel : ${bestDoc.name} | ${sessionLabel} ${parsed.year || ''} | Page(s) PDF ciblée(s) : ${pages.join(', ')}/${totalPages}\n` +
             (parsed.topic ? `Discipline / Thème : ${parsed.topic.toUpperCase()}\n` : '');
 
-          return `${examHeader}\n--- ÉNONCÉ OFFICIEL EXTRAIT DU SUJET NATIONAL ---\n${exerciseText}\n\n` +
+          const contextText = `${examHeader}${scannedNotice}\n--- ÉNONCÉ OFFICIEL EXTRAIT DU SUJET NATIONAL ---\n${exerciseText}\n\n` +
             (visualText ? `--- DONNÉES VISUELLES & SCHÉMAS DÉCODÉS (TRANSCRIPTION OFFICIELLE SI DRISS) ---\n${visualText}\n` : '');
+
+          return { contextText, officialSource };
         }
       }
     }
@@ -607,7 +820,7 @@ export async function searchLocalDocuments(query: string, branch: string = 'PC')
       .split(/\s+/)
       .filter((w) => w.length > 2);
 
-    if (keywords.length === 0) return '';
+    if (keywords.length === 0) return { contextText: '' };
 
     // Expansion bilingue des mots-clés physiques (pour chercher dans les épreuves arabes et les cours BIOF)
     const expandedKeywords = [...keywords];
@@ -668,12 +881,12 @@ export async function searchLocalDocuments(query: string, branch: string = 'PC')
     if (matchedSnippets.length > 0) {
       matchedSnippets.sort((a, b) => b.score - a.score);
       // Retourne les 3 meilleurs extraits officiels
-      return matchedSnippets.slice(0, 3).map((s) => s.text).join('\n\n---\n\n');
+      return { contextText: matchedSnippets.slice(0, 3).map((s) => s.text).join('\n\n---\n\n') };
     }
   } catch (err) {
     console.warn('Erreur recherche documents RAG:', err);
   }
-  return '';
+  return { contextText: '' };
 }
 
 /**
