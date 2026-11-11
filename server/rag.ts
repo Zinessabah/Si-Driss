@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import { PDFParse } from 'pdf-parse';
 import { DOCS_DIR } from './config';
 import {
@@ -316,8 +317,11 @@ export function discoverProgrammeFiles(dir: string, baseDir: string = dir): Disc
         results.push(...discoverProgrammeFiles(fullPath, baseDir));
       }
     } else if (entry.isFile()) {
-      // Ignorer les sidecars d'extraction et les fichiers cachés
+      // Ignorer les sidecars d'extraction, les fichiers cachés et le README racine
       if (entry.name.startsWith('.') || entry.name.endsWith('.extracted.txt')) {
+        continue;
+      }
+      if (dir === baseDir && entry.name.toLowerCase() === 'readme.md') {
         continue;
       }
 
@@ -340,7 +344,73 @@ export function discoverProgrammeFiles(dir: string, baseDir: string = dir): Disc
     }
   }
 
-  return results;
+  return dir === baseDir ? deduplicateDiscoveredFiles(results) : results;
+}
+
+const fileHashCache = new Map<string, { mtime: number; size: number; sha256: string }>();
+
+function getFileSha256Cached(filePath: string, size: number, mtime: number): string {
+  const cached = fileHashCache.get(filePath);
+  if (cached && cached.size === size && cached.mtime === mtime) {
+    return cached.sha256;
+  }
+  const buf = fs.readFileSync(filePath);
+  const sha256 = crypto.createHash('sha256').update(buf).digest('hex');
+  fileHashCache.set(filePath, { mtime, size, sha256 });
+  return sha256;
+}
+
+function getCanonicalScore(doc: DiscoveredFile): number {
+  const inSubfolder = doc.relativePath.includes('/') || doc.relativePath.includes('\\') ? 0 : 10;
+  const hasAutoPrefix = /^(pc|sm)_/i.test(doc.name) ? 2 : 0;
+  return inSubfolder + hasAutoPrefix;
+}
+
+/**
+ * Déduplique les documents officiels découverts (priorité aux fichiers rangés dans PC/ ou SM/).
+ * Ne calcule le hash SHA-256 que lorsqu'au moins deux fichiers partagent la même taille en octets.
+ */
+function deduplicateDiscoveredFiles(files: DiscoveredFile[]): DiscoveredFile[] {
+  const withSizes = files.map((doc) => {
+    let size = -1;
+    try {
+      size = fs.statSync(doc.absolutePath).size;
+    } catch {}
+    return { doc, size };
+  });
+
+  const sizeCounts = new Map<number, number>();
+  for (const item of withSizes) {
+    if (item.size >= 0) {
+      sizeCounts.set(item.size, (sizeCounts.get(item.size) || 0) + 1);
+    }
+  }
+
+  // Trier par priorité canonique (sous-dossier PC/SM avant racine, nom original avant préfixe auto)
+  withSizes.sort(
+    (a, b) =>
+      getCanonicalScore(a.doc) - getCanonicalScore(b.doc) ||
+      a.doc.name.length - b.doc.name.length ||
+      a.doc.relativePath.localeCompare(b.doc.relativePath)
+  );
+
+  const seenHashes = new Set<string>();
+  const kept: DiscoveredFile[] = [];
+
+  for (const { doc, size } of withSizes) {
+    if (size >= 0 && (sizeCounts.get(size) || 0) > 1) {
+      try {
+        const hash = getFileSha256Cached(doc.absolutePath, size, doc.mtime);
+        if (seenHashes.has(hash)) {
+          continue;
+        }
+        seenHashes.add(hash);
+      } catch {}
+    }
+    kept.push(doc);
+  }
+
+  return kept;
 }
 
 /**
@@ -436,6 +506,8 @@ export async function refreshDocumentsCache(force: boolean = false, _apiKey?: st
       if (isPdf) {
         const sidecarPath = `${file.absolutePath}.extracted.txt`;
         content = await getFreshExtractedPdfText(file.absolutePath, sidecarPath);
+        // Libérer la boucle événementielle entre chaque PDF pour prévenir les timeouts HTTP 502/503
+        await sleep(5);
       } else {
         content = fs.readFileSync(file.absolutePath, 'utf-8');
       }
@@ -605,26 +677,35 @@ export async function searchLocalDocuments(query: string, branch: string = 'PC')
 }
 
 /**
- * Extrait le texte d'un PDF en mémoire.
+ * Extrait le texte d'un PDF en mémoire et libère systématiquement le parseur.
  */
 export async function extractTextFromPdf(buf: Buffer): Promise<string> {
+  let parser: PDFParse | null = null;
   try {
-    const parser = new PDFParse({ data: buf });
+    parser = new PDFParse({ data: buf });
     const result = await parser.getText();
-    await parser.destroy();
     return result.text || '';
   } catch (err) {
     console.warn('Erreur extraction PDF:', err);
     return '';
+  } finally {
+    if (parser) {
+      try {
+        await parser.destroy();
+      } catch {}
+    }
   }
 }
 
 /**
- * Vérifie si le fichier texte extrait (.extracted.txt) est aussi récent que le PDF.
+ * Vérifie si le fichier texte extrait (.extracted.txt) est aussi récent que le PDF
+ * (avec tolérance de 2 s pour l'ordre de décompression git checkout / Docker).
  */
 function isExtractedTextFresh(pdfPath: string, txtPath: string): boolean {
   try {
-    return fs.statSync(txtPath).mtimeMs >= fs.statSync(pdfPath).mtimeMs;
+    const txtStat = fs.statSync(txtPath);
+    if (txtStat.size === 0) return false;
+    return txtStat.mtimeMs + 2000 >= fs.statSync(pdfPath).mtimeMs;
   } catch {
     return false;
   }
@@ -870,12 +951,12 @@ export function startBackgroundOfficialSync(params: {
           syncJobState.processedPdfs++;
           consecutiveTransientErrors++;
           syncJobState.lastError = outcome.errorMessage;
-          if (consecutiveTransientErrors >= 3) {
-            stoppedEarlyReason = 'Serveurs IA temporairement surchargés (502/503). Progression sauvegardée, réessayez dans quelques minutes.';
+          if (consecutiveTransientErrors >= 5) {
+            stoppedEarlyReason = 'Indexation texte terminée ; transcription visuelle IA interrompue temporairement (surcharge 502/503). Progression sauvegardée.';
             syncJobState.lastError = stoppedEarlyReason;
             break;
           }
-          await sleep(6_000);
+          await sleep(8_000);
         }
 
         // Cadencement entre deux fichiers pour respecter les limites RPM/TPM Gemini
@@ -888,10 +969,8 @@ export function startBackgroundOfficialSync(params: {
       syncJobState.running = false;
       syncJobState.currentFile = '';
       syncJobState.finishedAt = new Date().toISOString();
-      syncJobState.phase = stoppedByRateLimit
+      syncJobState.phase = (stoppedByRateLimit || stoppedEarlyReason)
         ? 'partial_rate_limit'
-        : stoppedEarlyReason
-        ? 'error'
         : 'completed';
 
       if (stoppedEarlyReason) {

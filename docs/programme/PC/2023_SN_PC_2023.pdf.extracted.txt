@@ -1,0 +1,746 @@
+االمتحان الوطين املوحد للبكالوريا
+المسالك الدولية
+الدورة العادية	2023
+شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+ا	لصفحة
+الفيزياء والكيمياء المادة
+الشعبة	أو المسلك
+مدة اإلنجاز
+المعامل
+3h
+7
+
+1
+6
+*I
+SSSSSSSSSSSSSSSSSSSS-SSS الموضوع NS 28F
+L’usage de la calculatrice scientifique non programmable est autorisé.
+On donnera les expressions littérales avant de passer aux applications numériques.
+Le sujet comporte quatre exercices.
+Exercice 1 ( 7 points )
+- Etude de quelques réactions chimiques d’acide éthanoïque.
+Exercice 2 ( 2,5 points )
+- Etude de quelques transformations nucléaires du tritium.
+Exercice 3 ( 5 points )
+- Réponse d’un dipôle RL à un échelon de tension ;
+- Etude d’un circuit LC ;
+- Modulation d’amplitude d’un signal.
+Exercice 4 ( 5,5 points )
+- Etude de la chute d’une balle ;
+- Etude du mouvement d’une balançoire.
+
+-- 1 of 10 --
+
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة العادية	2023	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+NS 28F	2
+6
+الصفحة
+EXERCICE 1 (7 points)
+Dans cet exercice on se propose d’étudier la réaction d'acide éthanoïque avec :
+- l’eau ;
+- une solution aqueuse de méthanoate de sodium ;
+- le méthanol.
+1- Etude d’une solution aqueuse d’acide éthanoïque
+On prépare un volumeV	 d'une solution aqueuse	A	
+S	 d'acide éthanoïque	3	CH COOH	 de concentration
+molaire2 1
+A	C 5.10 mol.L 
+	 . Son pH estpH 3, 05		 .
+1.1- Écrire l'équation de la réaction de l’acide éthanoïque avec l’eau. (0,5 pt)
+1.2- On définit la proportion de l’espèce	3	CH COOH	 dans la solution	A	
+S	 à l’état d’équilibre par :
+ 	
+ 	
+3 éq
+3
+3 3	éq éq
+CH COOH
+(CH COOH) CH COOH CH COO
+   	  
+.
+En vous aidant du tableau d’avancement, montrer que	3	(CH COOH) 1	 	  	 avecτ	 étant le taux
+d’avancement final de la réaction de l’acide éthanoïque avec l’eau.
+Calculer alors la valeur de	3	(CH COOH)		 . (0,75pt)
+1.3- Montrer que la valeur du	A1 A 3 (aq) 3 (aq)	pK pK (CH COOH / CH COO )
+	 est :	A1	pK 4,79	 . (0,5 pt)
+2-Etude de la réaction de l’acide éthanoïque avec l’ion méthanoate
+On mélange un volume	1	V	 de la solution	A	
+S	 avec un volume	2 1	V V		 d’une solution aqueuse	B	
+S	 de
+méthanoate de sodium	(aq) (aq)	Na HCOO 
+	 de concentration molaire	B A	C C		 .
+2.1- Ecrire l’équation de la réaction qui se produit entre les ions méthanoate et l’acide éthanoïque. (0,75pt)
+2.2- Trouver l’expression du quotient de réaction à l’équilibre	r,éq	Q	 associée à cette réaction en fonction des
+constantes d’acidité	A1	K	 et	A2	K	 des couples intervenant. Calculer sa valeur sachant que
+A2 A (aq) (aq)	pK pK (HCOOH / HCOO ) 3,75
+ 	
+. (0,75pt)
+2.3- Trouver l’expression du pH du mélange réactionnel en fonction de pKA1 et pKA2.
+Calculer sa valeur. (0,5pt)
+3- Etude de la réaction de l’acide éthanoïque avec le méthanol
+On réalise deux mélanges équimolaires de l’acide
+éthanoïque avec du méthanol	3	CH OH	 :
+0 3 0 3	n (CH COOH) n (CH OH) 0,9 mol	 	
+.
+Le suivi temporel de la quantité de matière	a	
+n	 de l’acide
+éthanoïque dans chaque mélange, à une même température
+
+, a permis d’obtenir les courbes C1 et C2 de la figure ci-
+contre. L’une des deux courbes est obtenue en utilisant un
+catalyseur pour l’un des deux mélanges.
+3.1- Ecrire l’équation modélisant la réaction qui se produit
+en utilisant les formules semi-développées. (0,5 pt)
+3.2- Indiquer, en justifiant la réponse, la courbe
+correspondant à la réaction utilisant le catalyseur. (0,5pt)
+3.3- Déterminer la composition du mélange réactionnel à
+l’équilibre. (0,5pt)
+3.4- Trouver la valeur de	1/ 2	t	 , le temps de demi- réaction dans le cas de la transformation chimique
+correspondant à la courbe C2. (0,5 pt)
+3.5- Calculer le rendement de la transformation chimique étudiée. (0,75 pt)
+3.6- Quand l’état d’équilibre est atteint, on ajoute à l’un des deux mélanges réactionnels la quantité de
+matièren 0,1mol		 d’acide éthanoïque.
+t (h)
+na(mol)
+𝟎, 𝟐
+𝟎, 𝟒
+5 10
+𝟎
+C2
+C1
+
+-- 2 of 10 --
+
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة العادية	2023	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+NS 28F	3
+6
+الصفحة
+Sachant que la constante d’équilibre de la transformation chimique étudiée est K=4, trouver la nouvelle
+valeur du rendement de cette transformation. (0,5 pt)
+EXERCICE 2 (2,5 points)
+Dans cet exercice on se propose d’étudier la désintégration du tritium3
+1 H	 et sa réaction de fusion avec le
+deutérium2
+1 H	 .2
+1H	 et3
+1 H	 sont deux isotopes de l’élément hydrogène.
+Données : - On prend la masse molaire du tritium :3 -1
+1	M( H) =3g.mol	 ;
+- Nombre d’Avogadro :	23 1
+A	N 6,02.10 mol
+	 ;
+- Demi-vie du tritium3
+1 H	 :1/2	t 12,32an		 ;
+- Energies de liaison de quelques noyaux :
+- On prend :7
+1an 3,16.10 s		 .
+1- Désintégration du tritium
+Le tritium est un isotope radioactif émetteur
+	 . Le noyau formé est l’un des isotopes de l’hélium.
+1-1- Choisir parmi les affirmations suivantes l’affirmation juste : (0,5 pt)
+A Le noyau3
+2 He	 a un nombre de masse égal à 5.
+B La radioactivité
+	 est caractéristique des noyaux très lourds.
+C Au bout du temps t = 2t1/2 , à partir du début de désintégration, le nombre de noyaux
+désintégrés dans un échantillon radioactif représente 25% du nombre de noyaux initial.
+D La masse d’un noyau atomique est égale à la somme des masses de ses nucléons.
+E Lors d’une réaction de fission nucléaire, de la masse est convertie en énergie.
+1-2- Ecrire l'équation de la réaction de désintégration du noyau du tritium. (0,25pt)
+1-3- Etablir la relation entre la demi-vie	1/ 2	
+t	 et la constante radioactive	 . (0,25pt)
+1-4- A un instant	0	t 0		 on a un échantillon du tritium radioactif de masse	0	m 2 g	 	 .
+Calculer en unité Bq, l’activité a1 de l’échantillon à l’instant où 90% des noyaux du tritium sont
+désintégrés. (0,5pt)
+2- Réaction de fusion du tritium3
+1 H	 et de deutérium2
+1 H
+La réaction de fusion entre un noyau de deutérium et un noyau de tritium conduit à la formation d’un noyau
+d’hélium4
+2 He	 et s’accompagne de l’émission d’un neutron.
+2-1- Pour chaque affirmation suivante répondre par vrai ou faux en justifiant :
+a- L’énergie qu’il faut fournir à un noyau de tritium au repos pour le dissocier en ces nucléons au repos est de
+8,475 MeV. (0,25pt)
+b- Le tritium est plus stable que le deutérium. (0,25pt)
+2-2- Calculer, en unité MeV, l’énergie libérée	lib	E E	 	 par la réaction de fusion d’un noyau de tritium et
+d’un noyau de deutérium. (0,5pt)
+Noyau2
+1 H	3
+1 H	4
+2 He
+E (MeV)	
+2,366 8,475 28,296
+
+-- 3 of 10 --
+
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة العادية	2023	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+NS 28F	4
+6
+الصفحة
+EXERCICE 3 (5 points)
+Cet exercice se propose d’étudier :
+- la réponse d’un dipôle RL à un échelon de tension ;
+- un circuit oscillant LC ;
+- la modulation d’amplitude d’un signal.
+1- Réponse d’un dipôle RL à un échelon de tension
+On réalise le montage électrique, représenté sur le schéma de la figure 1,
+comportant :
+- un générateur de tension de force électromotriceE 24 V		 ;
+- un conducteur ohmique de résistanceR	 ;
+- une bobine(b)	 d’inductanceL	 et de résistance négligeable ;
+- un interrupteurK	 .
+On ferme l’interrupteurK	 à l’instant de date0	
+t 0		 . Un système d’acquisition
+informatisé adéquat permet d’obtenir la courbe représentant
+l’évolution temporelle de l’intensité du courant électrique i(t)
+dans le circuit (figure 2) .La droite (T) représente la tangente
+à la courbe au point d’abscisse0	t 0		 .
+1-1- Etablir l’équation différentielle vérifiée par i(t). (0,25 pt)
+1-2- L’expression de l’intensité du courant circulant dans le
+circuit est :
+t
+- τ	
+i(t) = A + B.e	 avec A et B deux constantes etτ
+la constante de temps du circuit.
+1-2-1- Déterminer les expressions de A et B en fonction de E
+et R. (0,5 pt)
+1-2-2- Montrer queL 1H		 . (0,5 pt)
+1-3- Déterminer, en unité SI, l’expression numérique de la tension	L	u (t)	 aux bornes de
+la bobine lors de l’établissement du courant. (0,5 pt)
+2- Circuit oscillant LC
+On réalise un circuit oscillant LC en associant la bobine (b) précédemment utilisée avec
+un condensateur de capacité C chargé totalement par un générateur de tension de force
+électromotrice	0	E	 (figure 3).
+2-1- Etablir l’équation différentielle vérifiée par la tensionu (t)	C	 entre les bornes du
+condensateur.(0,25 pt)
+2-2- La courbe de la figure 4 représente les variations de la
+tensionu (t)	C	 en fonction du temps.
+2-2-1- Trouver la valeur de la capacité C du condensateur.
+(On prend2 10	 	 ). (0,5 pt)
+2-2-2- Trouver l’énergie magnétique	m	E	 emmagasinée dans la
+bobine à l’instantt =1,8 ms	 . (0,75 pt)
+3- Modulation d’amplitude d’un signal
+La courbe de la figure 5 représente l’évolution temporelle de la
+tension u(t) associée à un signal modulé en amplitude.
+i(mA)
+𝟐 4
+t(ms)
+9,6
+19,2
+0
+(T)
+ 
+Figure 2
+i
+Figure 3
+(b)
+C
+i
+Figure 1
+ER
+K	(b)
+t(ms)
+C	u (V)
+0
+Figure 4
+0,5 ms
+5V
+
+-- 4 of 10 --
+
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة العادية	2023	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+NS 28F	5
+6
+الصفحة
+L'expression mathématique de u(t) est de la forme :	 		
+s p	u(t) A 1 m.cos(2 f .t) .cos(2 f .t)	   	 avec A est
+une constante, m est le taux de
+modulation,	s	f	 et	p	f	 sont
+respectivement les fréquences du
+signal modulant et de la
+porteuse.
+3-1- Choisir la bonne
+proposition : (0,5 pt)
+A La fréquence du signal
+modulant est de4 kHz	 .
+B La fréquence de la porteuse
+est de4 kHz	 .
+C La fréquence du signal
+modulant est de100 Hz
+D La fréquence de la porteuse
+est de200 Hz	 .
+3-2- Répondre par vrai ou faux en justifiant :
+a- Le taux de modulation estm 0, 4		 . (0,5 pt)
+b- La valeur de la composante continue de la tension est :	0	
+U 2 V		 . (0,25 pt)
+3-3- Représenter l’allure du spectre de fréquences du signal moduléu(t)	 sans respect d’échelle très
+précise. (0,5 pt)
+EXERCICE 4 (5,5 points)
+Les deux parties sont indépendantes
+Partie I : Etude de la chute d’une balle
+Dans le champ de pesanteur, on lance verticalement vers le haut à l’instantt 0		 , à partir d’un point O,
+une balle (S) de masse m et de centre d’inertie G , avec une vitesse initiale de valeur1
+0	
+V 12m.s
+	
+(figure1).
+On étudie le mouvement du centre d’inertie G de la balle dans un repère(O;k )	 lié à un
+référentiel terrestre supposé galiléen en deux phases:
+- mouvement de chute libre de la balle dans la première phase.
+- mouvement de chute de la balle avec frottement dans la deuxième phase.
+Données : - La masse :m 80 g		 ;
+- L’intensité de la pesanteur :2
+g 10 m.s
+	 .
+1- Mouvement de la balle en chute libre
+Pendant son mouvement le centre d’inertie G de la balle est considéré en chute libre.
+1-1- En appliquant la deuxième loi de Newton, déterminer les équations horaires
+numériques donnant la vitesse	z	
+v (t)	 et la positionz(t)	 du centre d'inertie G
+de la balle. (0,75 pt)
+1-2- En utilisant les équations	z	
+v (t)	 etz(t)	 déterminer :
+1-2-1- la hauteur maximale h atteinte par G.(0,5 pt)
+1-2-2- la valeur algébrique	OZ	v	 de la vitesse de G lors de son passage vers le bas par le point O. (0,5 pt)
+2- Mouvement de chute de la balle avec frottement
+A partir de l’instant du passage du centre d’inertie G par le point O vers le bas, qu’on prend comme
+nouvelle origine des dates	0	t 0		 , la balle est soumise, en plus de son poidsP	 , à une force de
+h
+
+Figure 1
+z
+Ok0	
+V
+(S)
+𝟎
+u (V)
+t(ms)
+2V
+1 ms
+Figure 5
+
+-- 5 of 10 --
+
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة العادية	2023	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+NS 28F	6
+6
+الصفحة
+frottement fluide modélisée parf v		 avec	z	
+v v k		 et	0,12 S.I.	 	 (On néglige la poussée
+d’Archimède devant ces deux forces).
+2-1- Montrer que l’équation différentielle vérifiée par la vitesse	Z	v	 du centre d’inertie G de la balle
+s’écrit :	z z
+dv 1 v g 0
+dt   
+ avec le temps caractéristique du mouvement. (0,5 pt)
+2-2- Déduire la norme de la vitesse limite du mouvement du centre d’inertie G de la balle. (0,25 pt)
+2-3- Déterminer, en utilisant la méthode d’Euler, la valeur algébrique	z i	
+v (t )	 de la vitesse à l’instant	i	t
+sachant que l’accélération du mouvement à l’instant	i 1	t 	 est2
+i 1	a 5m.s
+ 	 et on prend le pas de calcul
+t 66 ms	 	
+. (0,75 pt)
+Partie II : Etude du mouvement d’une balançoire
+Un enfant oscille à l’aide d’une balançoire (figure2).
+On modélise la balançoire avec l’enfant par un pendule formé par un corps solide (S) de
+masse m et de centre d’inertie G , suspendu en un point O par une tige rigide, de masse
+négligeable et de longueur pouvant effectuer un mouvement de rotation dans un plan
+vertical autour d’un axe horizontal( )		 passant parO	 (figure 3) . On étudie le mouvement
+du pendule dans un repère	0	(G ; k)	 lié à un référentiel terrestre supposé galiléen.
+On écarte le pendule de sa position d’équilibre stable d’un angle petit	0 9	  	 , dans le
+sens positif, puis on le lâche sans vitesse initiale à l’instant de date0	t 0		 .
+On repère la position du pendule à un instant de date t par l’abscisse angulaire	 .
+On néglige tous les frottements et on choisit le plan horizontal passant par	0	G	 (position
+de G à l’équilibre stable) comme état de référence de l’énergie potentielle de pesanteur
+pp	(E 0)		
+.
+Données :
+- Le moment d’inertie du pendule par rapport à l’axe de rotation( )		 est :2
+J m.	 	 ;
+- Accélération de la pesanteur :2
+g 10 m.s
+	 ;	2, 4 m		 ;
+- Pour les oscillations de faible amplitude, on prend2
+cos 1 2
+
+  	 ; en radian.
+1- Montrer que l’expression de l’énergie potentielle de pesanteur du pendule à un instant t pour les
+oscillations de faible amplitude est :2
+pp
+1
+E mg
+2
+ 	 . (0,5 pt)
+2- En exploitant la conservation de l’énergie mécanique du pendule :
+2-1- Déterminer la vitesse angulaire maximale	max	θ
+. du centre d’inertie G. (0,5 pt)
+2-2- Etablir l’équation différentielle du mouvement vérifiée par l’abscisse angulaireθ(t)	 . (0,75 pt)
+3- Calculer la période propre de ce pendule sachant qu’il est analogue à un pendule simple de
+longueur et de masse m. (0,5 pt)
+./.
+(S)
+Figure 3
+O ()
+G
+G0
+
+Figure 2
+k
+z
+
+-- 6 of 10 --
+
+االمتحان الوطين املوحد للبكالوريا
+المسالك الدولية
+الدورة العادية	2023
+شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+ا	لصفحة
+الفيزياء والكيمياء المادة
+الشعبة	أو المسلك
+مدة اإلنجاز
+المعامل
+3h
+7
+1
+4
+*I
+SSSSSSSSSSSSSSSSSSSS-SSS عناصر اإلجابة NR 28F
+EXERCICE 1 (7 points)
+Question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+1.1 Equation de la réaction 0,5 - Définir le taux d'avancement final d’une réaction et
+le déterminer à partir de données expérimentales.
+-Exploiter le diagramme de prédominance et de
+distribution des espèces acides et basiques présentes
+en solution aqueuse.
+- Calculer la valeur du quotient de réaction Qr d'un
+système chimique dans un état donné.
+- Connaître la relation	log	 	A A	
+pK K	 .
+- Ecrire et utiliser l’expression de la constante
+d'acidité KA associée à l’équation de la réaction d'un
+acide avec l'eau.
+- Ecrire l'équation de la réaction modélisant une
+transformation acido-basique et identifier les deux
+couples intervenants.
+- Déterminer la constante d'équilibre associée à
+l'équation d'une réaction acido-basique à l'aide des
+constantes d'acidité des couples en présence.
+1.2 Démonstration
+0,982	 	
+ou	98, 2%	 
+0,5
+0,25
+1.3 Démonstration. 0,5
+2.1 Equation de la réaction 0,75
+2.2
+A1
+r,éq
+A2
+K
+Q = K
+2
+r,éq	Q 9,1.10 0,5
+0,25
+2.3A1 A2
+1
+pH (pK pK )
+2
+ 
+pH= 4,27
+ 
+0,25
+0,25
+3.1 Equation de la réaction 0,5 - Dresser le tableau d’avancement d’une réaction et
+l’exploiter.
+- Écrire les équations des réactions d'estérification
+et d'hydrolyse.
+- Savoir que le catalyseur est une espèce qui
+augmente la vitesse d'une réaction chimique sans
+modifier l'état d'équilibre du système.
+- Déterminer le temps de demi-réaction
+graphiquement ou en exploitant des résultats
+expérimentaux.
+- Calculer le rendement d'une transformation
+chimique.
+- Savoir que la présence de l'un des réactifs en
+excès ou l'élimination de l'un des produits déplace
+l'état d'équilibre du système dans le sens direct.
+-Déterminer la composition du mélange réactionnel
+à un instant donné.
+3.2 La courbe est	1	C
+justification
+0,25
+0,25
+3.33 3	n (CH COOH) = n (CH OH) = 0,3mol	éq éq
+3 3 2	n (CH COOCH ) = n (H O) = 0,6mol	éq éq 0,25
+0,25
+3.4 méthode
+1/2	t =3,5h
+ 0,25
+0,25
+3.5 Méthode
+r 66,7%
+ 0,5
+0,25
+3.6 Méthode'
+r 70%
+ 0,25
+0,25
+
+-- 7 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	2023	–	عناصر اإلجابة
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+NR 28F	2
+4
+الصفحة
+EXERCICE 2 (2,5 points)
+Question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+1.1. L’affirmation juste est : E 0,5 - Définir les radioactivités	 , 	 , 	 et l'émission
+-Ecrire l'équation d'une réaction nucléaire en
+appliquant les deux lois de conservation.
+- Savoir que 1 Bq est égal à une désintégration par
+seconde.
+- Définir de la constante de temps	 et la demi-vie
+1/2	t
+.
+- Définir et calculer le défaut de masse et l’énergie
+de liaison
+- Définir et calculer l'énergie de liaison par nucléon
+et l'exploiter.
+- Exploiter les relations entre ,	 et1/2	t .
+- Connaître et exploiter la loi de décroissance
+radioactive et exploiter sa courbe correspondante.
+- Faire le bilan énergétique	E		 d'une réaction
+nucléaire en utilisant : les énergies de masse ; les
+énergies de liaisons ; le diagramme d’énergie.
+- Calculer l’énergie libérée (produite) par une
+réaction nucléaire :	libérée	E 	E	 	 .
+1.2.3 0 3
+1 1 2	H e He		 	 0,25
+1-3
+Etablissement de la relation
+1/2
+ln2
+t  
+0,25
+1-4 Méthode7
+1	a 7,15.10 Bq
+ 0,25
+0,25
+2-1-a Vrai + justification 0,25
+2-1-b Vrai + justification 0,25
+2-2 Méthode
+lib	E 17, 46MeV
+ 0,25
+0,25
+
+-- 8 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	2023	–	عناصر اإلجابة
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+NR 28F	3
+4
+الصفحة
+EXERCICE 3 ( 5 points)
+Question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+1-1di R E
+i
+dt L L
+ 	 0,25
+- Connaître et exploiter l’expression de la tension
+. . di
+u r i L dt
+ 	
+aux bornes d’une bobine en convention
+récepteur.
+- Déterminer les deux caractéristiques d’une bobine
+(l’inductance L, la résistance r) à partir des résultats
+expérimentaux.
+- Etablir l’équation différentielle et vérifier sa solution
+lorsque le dipôle RL est soumis à un échelon de tension.
+- Déterminer l’expression de l'intensité du courant	( )	i t
+lorsque le dipôle RL est soumis à un échelon de tension et en
+déduire l’expression de la tension aux bornes de la bobine et
+aux bornes du conducteur ohmique.
+- Reconnaître et représenter les courbes de variation, en
+fonction du temps, de l'intensité du courant( )	i t	 passant dans
+la bobine et les grandeurs qui lui sont liées et les exploiter.
+- Connaître qu'une bobine retarde l'établissement et la
+disparition du courant et que l'intensité( )	i t	 est une fonction
+du temps continue et que la tension entre ses bornes est une
+fonction discontinue à t=0.
+- Connaître et exploiter l'expression de la constante de
+temps.
+- Exploiter des documents expérimentaux pour :
+* déterminer la constante de temps.
+- Connaître et exploiter l'expression de l'énergie magnétique
+emmagasinée dans une bobine.
+1-2-1
+E
+A R
+
+E
+B R
+ 
+0,25
+0,25
+1-2-2 Démonstration. 0,5
+1-3500t
+L	u (t) 24.e
+	 0,5
+2-12
+c
+c	2
+d u 1 u 0
+dt LC
+ 	 0,25 - Reconnaître et représenter les courbes de variation de la
+tension aux bornes du condensateur en fonction du temps
+pour les trois régimes et les exploiter.
+- Etablir l’équation différentielle pour la tension aux bornes
+du condensateur … dans le cas d'un amortissement
+négligeable et vérifier sa solution.
+- Connaître et exploiter l'expression de la période propre.
+- Connaître et exploiter l’expression de l’énergie totale du
+circuit.
+2-2-1 Méthode
+C 0,1 F	 
+ 0,25
+0,25
+2.2.2
+2 2
+m cmax c
+1
+E C[u (u (t)) ]
+2
+ 
+m	E 1,8 J	 
+ 
+0,5
+0,25
+3-1 B 0,5
+- Exploiter les différentes courbes obtenues
+expérimentalement.
+- Connaître les conditions à remplir pour éviter la
+surmodulation.
+- Reconnaître les étapes de la modulation d'amplitude.
+- Connaître et exploiter le spectre de fréquences
+3-2-a Faux
+justification
+0,25
+0,25
+3-2-b Faux + justification 0,25
+3-3
+spectre de fréquences :
+0,5
+fréquence
+amplitude
+
+-- 9 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	2023	–	عناصر اإلجابة
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+NR 28F	4
+4
+الصفحة
+EXERCICE 4 ( 5,5 points)
+Question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+Partie
+ I
+1.1
+Méthode
+z	v 10 t 12	  
+2
+z 5t 12 t	  
+ 0,25
+0,25
+0,25
+- Appliquer la deuxième loi de Newton pour établir
+l'équation différentielle du mouvement du centre
+d’inertie d’un solide en chute libre verticale et la
+résoudre
+- Connaître et exploiter les caractéristiques du
+mouvement rectiligne uniformément varié et ses
+équations horaires.
+- Appliquer la deuxième loi de Newton pour établir
+l'équation différentielle du mouvement du centre
+d’inertie d’un solide en chute verticale avec frottement.
+- Connaître et exploiter les deux modèles de frottement
+fluide : 
+ 	F kv i	 et	2	
+ 
+ 	F kv i
+* la vitesse limitelv
+* le temps caractéristique
+- Connaître le référentiel galiléen.
+- Connaître et appliquer la méthode d'Euler pour la
+résolution approchée d'une équation différentielle.
+1-2-1 Méthode
+h 7, 2m	
+ 0,25
+0,25
+1-2-2 Méthode1
+oz	v 12m.s
+ 
+ 0,25
+0,25
+2-1 Démonstration 0,5
+2-21
+V 6,67 m.s 0,25
+2-3 Méthode1
+i	v 9,67 m.s
+ 
+ 0,5
+0,25
+Partie
+ II
+1 Démonstration 0,5
+-Exploiter l'expression de l'énergie potentielle de
+pesanteur et l'expression de l'énergie cinétique pour
+déterminer l'énergie mécanique du pendule pesant dans
+le cas de faibles oscillations.
+-Exploiter la conservation de l'énergie mécanique du
+pendule pesant dans le cas de faibles oscillations.
+-Connaître l'expression de la période propre d'un
+pendule simple.
+2-1max 0
+g
+.
+
+  
+1
+max	θ 0,32 rad.s
+. 0,25
+0,25
+2-2
+Méthode2
+2
+d g 0
+dt
+   
+ 
+0,5
+0,25
+30	T 2 g
+ 
+0	T 3,08s
+0,25
+0,25
+
+-- 10 of 10 --
+

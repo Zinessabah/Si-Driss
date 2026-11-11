@@ -1,0 +1,852 @@
+االمتحان الوطني الموحد	للبكالوريا
+المسالك	الدولية
+الدورة	العادية	0202 -	الموضوع	–
+شعبة	العلوم	الرياضية	(	أ	)	و	(	ب	( )	خيار	إنجليزية	)
+ا	لصفحة
+1
+8
+الفيزياء	والكيمياء المادة
+الشعبة	أو	ا	لمسلك
+مدة اإلنجاز
+المعامل
+4
+7
+*I
+SSSSSSSSSSSSSSSSSSSS NS 30E
+*The use of the non-programmable scientific calculator is allowed.
+* The literal formula must be given before the numerical application and the
+result must be accompanied by its unit.
+*The exercises can be treated separately according to choice of the candidate.
+The subject includes four exercises; one in Chemistry and three in Physics.
+Exercise 1 : Chemistry (6,5 points)
+First part : Titration of the lactic acid in milk
+Second part : Chromium-Silver electrochemical cell
+Exercise 2 : Waves (2,5 points) – Nuclear transformations (2,25 points)
+I- Diffraction of the light
+II- Decay of the oxygen 15
+Exercise 3 : Electricity (5,5 points)
+- Charge of a capacitor
+- Discharge of a capacitor through an inductor
+- Forced oscillations in RLC series circuit
+Exercise 4 : Mechanics (3,25 points)
+Part I : Motion of a skier
+Part II : Motion of a charged sphere in the gravitational field and in an electric field
+
+-- 1 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	0202	–	الموضوع
+-	مادة	:	الفيزياء	والكيمياء	-	شعبة	العلوم	الرياضية	(أ)	و	(	ب	( )	خيار	إنجليزية	)
+NS 30E
+الصفحة
+2
+8
+Exercise 1 : Chemistry (6,5 points)
+The two parts are independent
+First part : Titration of the lactic acid in milk
+The acidity of milk increases by fermentation of lactic in case of bad conservation. The titration of the
+lactic acid of formula	3	CH CHOH COOH	 	 allows, therefore, appreciating the state of conservation of
+milk.
+The lesser fresh the milk is, the more lactic acid it contains.
+We propose to titrate the lactic acid presents in a cow’s milk, which has not undergone any treatment, with
+an aqueous solution of sodium hydroxide. We will assume that the acidity of milk is due only to the lactic
+acid.
+The lactic acid will be simply denoted by HA.
+Given : - All measurements are performed at0
+25 C	 ;
+- The ionic product of water:14
+w	K 10
+	 ;
+- Molar mass of the lactic acid is:1
+90g.mol ;
+1- Preparation of the aqueous solution of sodium hydroxide:
+We prepare an aqueous solution	B	(S )	 of sodium hydroxide	(aq) (aq)	Na HO 
+	 of volumeV 1,0L		 and of
+molar concentration	B	C	 , by dissolving a mass of caustic soda in distilled water. The measurement of the pH
+of the solution	B	(S )	 givespH 12,70		 .
+1-1-Establish the expression of the pH of the solution	B	(S )	 in terms of	w	K	 and	B	C	 . (0,5pt)
+1-2-Verify that2 1
+B	C 5,0.10 mol.L  . (0,25pt)
+2-Control of the quality of a cow’s milk
+A laboratory technician titrates the acidity of a cow’s milk. He performs the pH-metric titration by using an
+aqueous solution	B	(S )	 of sodium hydroxide of molar concentration	B	C	 . For this he introduces, in a beaker a
+volume	A	V 25,0mL		 of milk, then he gradually pours a volume	B	V	 of the solution	B	(S )	 and notes for each
+volume poured the pH of the reaction mixture.
+We denote	BE	V	 the volume of the solution of sodium hydroxide poured in the equivalence and	A	K	 the
+acidity constant of the pair	(aq) (aq)	HA / A .
+2-1- Write the chemical equation of the titration reaction. (0,5pt)
+2-2- Establish the relationship used to determine the concentration	A	C	 of lactic acid of milk in terms of	A	V	 ,
+B	C	
+and	BE	V	 . (0,5pt)
+2-3- Establish the relationship:pH
+B A BE B	V .10 K .(V V )  	 with	B BE	0 V V	 	 . (0,75pt)
+2-4- The curve in figure 1 represents the variations ofpH
+B	10 .V in function of	B	V	 :pH
+B B	10 .V f (V ) 	 .
+With the help of the curve in figure1:
+2-4-1-Determine the volume	BE	V	 and deduce the concentration	A	C	 .(0,5pt)
+
+-- 2 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	0202	–	الموضوع
+-	مادة	:	الفيزياء	والكيمياء	-	شعبة	العلوم	الرياضية	(أ)	و	(	ب	( )	خيار	إنجليزية	)
+NS 30E
+الصفحة
+3
+8
+2-4-2-Determine the	A	pK	 of the pair-
+(aq) (aq)	HA /A	 .(0,5pt)
+2-5- In the food industry, the acidity of milk is
+expressed in Dornic degree, denoted	D		 . One
+Dornic degree(1 D)		 is equal to1
+1,0.10 g of
+lactic acid per liter of milk. Milk is considered
+fresh if it has an acidity between15 D		 and
+18 D		
+. Can the milk studied be considered
+fresh? Justify the answer. (0,75 pt)
+Second part: Chromium-Silver electrochemical cell
+The Chromium-Silver electrochemical cell consists of two half-cells connected with a salt bridge. The half-
+cell (1) consists of chromium electrode immersed in a volumeV=100 mL	 of an aqueous solution of
+chromium (III) nitrate3+
+(aq) 3(aq)	Cr +3NO of initial molar concentration3 1
+(aq) 1	i
+Cr C 0,100mol.L 
+     . The half
+cell (2) consists of a silver electrode immersed in the volumeV	 of an aqueous solution of silver nitrate
+(aq) 3(aq)	Ag NO 
+	
+of initial molar concentration	(aq) 1	i
+Ag = C
+   .
+Given:
+- The pairs involved in the reaction :3+
+(aq) (s)	Cr / Cr	 ;	(aq) (s)	Ag / Ag ;
+-The faraday constant:4 -1
+1F=9,65.10 C.mol	 ;
+- The molar mass:1
+M(Cr) 52g.mol
+	 .
+We mount in series with the electrochemical cell a conductor(D)	 , an ammeter(A)	 and a switch K.
+At an instant of date	0	t = 0	 we close the circuit, the ammeter indicates the flow of the electric current of
+positive constant intensity	0	I	 when the terminal COM is linked to the chromium electrode.
+During the operation of the electrochemical cell, the mass of one of the electrodes decreases by 52mg after a
+period of	1 0	t t t	  	 of operation.
+1- Write the overall equation during the operation of the electrochemical cell.(0,5pt)
+2- Determine the progress of the reaction of the operation of the electrochemical cell at the instant1t .(0,5 pt)
+3- Deduce at the instant1t the molar concentration of chromium ions3
+Cr  . (0,5 pt)
+4- Knowing that the current intensity is0	I =50mA	 , find out the value of the instant1t . (0,75 pt)
+B	V (mL)
+2
+4
+5.10
+3
+10
+pH
+B	10 .V (mL)
+0 4 Figure 1
+
+-- 3 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	0202	–	الموضوع
+-	مادة	:	الفيزياء	والكيمياء	-	شعبة	العلوم	الرياضية	(أ)	و	(	ب	( )	خيار	إنجليزية	)
+NS 30E
+الصفحة
+4
+8
+Exercise 2: Waves (2,5 points) – Nuclear Transformations (2,25 points)
+I- Diffraction of the light
+We take8 1
+c 3.10 m.s
+	 the speed of a light wave in the air.
+The diagram in the figure bellow represents the experimental mounting for the study of the diffraction of the
+light.
+A slit of width a is illuminated with laser light, red, of wavelength	1 632,8nm	 	 , then with a yellow light,
+by a mercury lamp, of unknown wavelength	2		 . On a screen
+located at the distance D from the slit, we visualize successively
+the patterns of obtained diffraction. With the red light, the width
+of the central spot is	1	X 6,0cm		 and with the yellow light the
+width is	2	X 5, 4cm		 .
+1- Give the number of the false statements from the
+following: (0,5 pt)
+a- the experience shown in the figure highlights the phenomenon of the dispersion of the light.
+b- If a wave of wavelength	 passes through a slit ofa 2
+
+	 in the same medium, then its speed changes.
+c- If a wave of wavelength	 passes through a slit ofa 2
+
+	 in the same medium, then its wavelength is
+divided by 2.
+d- In a dispersive medium, if the wavelength of the wave decreases, then the speed of the signal increases.
+2- We limit ourselves in the case of small angular deviations wheretan 	 with	 is expressed in radian.
+2-1- Give the expression used to determine the angle using exclusively the quantities shown in the
+figure. (0,25pt)
+2-2- Show that the ratioX
+ is constant for a given experimental device and deduce the wavelength	2		 . (0,75pt)
+3- If we perform the same experiment by using the white light, we observe a white central spot and
+iridescent lateral spots. Interpret the appearance of the observed figure. (0,5pt)
+4- Calculate the wavelength of the red light of the used laser when it propagates in a medium of refractive
+index	1,5		n	 as well as its speed of propagation in this medium. (0,5pt)
+II-Decay of the oxygen 15
+The positron emission tomography (PET), (In French TEP «tomographie par émission de positrons » ), is a
+medical scanning technique practiced in nuclear medicine which allows to obtain precise 3D images of
+some organs of the body which can be affected by diseases like cancer.
+Among the radioactive substances used we can cite the fluorine, the oxygen, the nitrogen…
+In this exercise we use the oxygen 15(15
+8 O	 ) which is one of the oxygen isotopes.
+In PET, we detect the water molecules (found in large quantities in the brain) using the radioactive water
+(the oxygen 15 (15
+8 O	 ) labeled water) which is injected into the subject intravenously.
+D
+ Central
+spot of
+width X
+Light
+a
+Screen
+
+-- 4 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	0202	–	الموضوع
+-	مادة	:	الفيزياء	والكيمياء	-	شعبة	العلوم	الرياضية	(أ)	و	(	ب	( )	خيار	إنجليزية	)
+NS 30E
+الصفحة
+5
+8
+Oxygen 15 decays to nucleusA
+Z X	 with the emission of a positron.
+Given: - Avogadro constant:23 1
+A	N 6,022.10 mol
+	 ;-2
+1u 931, 494MeV.c		 ;
+- Molar mass of water de :-1
+M =18g.mol	 ; Density of water :3
+1g.cm
+	 ;
+- The masses:A
+Z	m( X) 15,000109u		 ;15
+8	m( O) 15,003066u		 ;0 4
+1	m( e) 5, 486.10 u
+	 ;
+- The Half-life of the oxygen 15:	1/2	t 122s		 .
+1- Write the equation of the decay reaction of the nucleus of oxygen 15(15
+8 O	 )by determining A
+and Z.(0,5 pt)
+2- Determine, in MeV unit,	E		 the energy released by one nucleus of oxygen 15. (0,5 pt)
+3- Admitting that the volume of the injection of initial activity7
+0	a 3,7.10 Bq		 is3
+V 5cm		 , find out the
+proportion of molecules of labeled water in the injection. (0,75 pt)
+4- To continue the PET examination, we assume that a new injection is necessary when the activity	1	a(t )	 of
+the remaining nucleus of oxygen 15 at the instant of date t1 is of order of0,15%	 of initial activity	0	a	 of the
+injection att 0		 .
+Justify, by calculation, that we can make a new injection after a time close tot 20min		 . (0,5 pt)
+Exercise 3 : Electricity(5,5 points)
+The components such as resistors, capacitors, conductors, diodes … are used in different circuits of electric
+apparatus and electronics…
+In this exercise, we propose to study,
+ the response of the RC to an increasing step of voltage;
+ the free and the forced oscillations in RLC series circuit.
+We perform the mounting shown in figure 1 which consists
+of:
+- An ideal generator of voltage of e.m.fE	 ;
+- A resistor of variable resistanceR	 ;
+- A capacitor of capacitanceC	 , without initial charge;
+- A switch K;
+- An inductor(b)	 of inductanceL	 and of resistance
+r = 12 
+.
+1- Charge of the capacitor
+We adjust the value of the resistanceR	 to the value
+0	R R 40	  
+.
+At an instant t=0, we put the switch K at position (1).
+1-1- Establish the deferential equation verified by the charge
+q(t)
+of the capacitor. (0,5pt)
+1-2- The curve of figure 2 represents the variations of the
+intensityi(t)	 in function ofq(t)	 .
+K
+Figure 1
+(1)	(2)
+(b)
+C
+R
+i
+C	u	E
+q( C)	
+i(A)
+0,05
+0,1
+0 5 Figure 2	10
+
+-- 5 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	0202	–	الموضوع
+-	مادة	:	الفيزياء	والكيمياء	-	شعبة	العلوم	الرياضية	(أ)	و	(	ب	( )	خيار	إنجليزية	)
+NS 30E
+الصفحة
+6
+8
+With the help of the graph of figure 2, find out :
+1-2-1-The value of E. (0,25pt)
+1-2-2- The value of the time-constant. (0,5pt)
+1-3-Verify that	C 2,5 F	 	 . (0,25pt)
+2- Discharge of a capacitor through the inductor
+2-1- We adjust the value of the resistanceR	 to a value	1	R	 .
+When the steady state is reached; we switch the switch K in position (2), at an instant t chosen as a new
+origin of dates(t 0)		 . A suitable computing system allowed to draw the curve representing the chargeq(t)
+of the capacitor (figure 3).
+2-1-1- show that the deferential equation governing the evolution of the chargeq(t)	 of the capacitor is
+written as:
+2
+2
+d q(t) dq(t)
++ A. + B.q(t) = 0
+dt dt where A and
+B are two positive constants. (0,5pt)
+2-1-2- Determine the value of the voltage between
+the terminals of the inductor just after the switch of
+the switchK	 to position(2)	 . (0,25pt)
+2-1-3- Considering that the value of the pseudo-
+period of the oscillations is equal to the natural
+period of the LC circuit, verify thatL =1,0H	 . (We
+take2 10	 	 ).(0,25pt)
+2-1-4- Calculate the energy dissipated by joule effect
+in the circuit between the instantt 0		 and the instant	1t	 indicated in figure 3.(0,5pt)
+2-2- we vary the resistance R, and we observe that forA 2 B		 the state of the oscillation is overdumped.
+In this case the total resistance of the circuit is greater than a value	c	R	 .
+By using the dimensional equations, verify that the expression of	c	R
+has a dimension of a resistance and determine the minimum value of
+R
+. (0,75pt)
+3- The forced electric oscillations in RLC series circuit
+We supply the circuit, consisted of the dipoles previously used (the
+inductor (b), the resistor of variable resistance R and the capacitor of
+the capacitance C), by a generatorGBF	 delivering a sinusoidal
+alternating voltage	m	u(t) U cos(2. .N.t )	   	 of variable
+frequency N (figure 4).
+The intensity of the current flowing in the circuit is written
+as:	m	i(t) I cos(2. .N.t)	 	 .
+We adjust the value of the resistanceR	 to the value	2	R	 .
+We display, with the help of a suitable computing system,
+the voltage	R	u (t)	 between the terminals of the conductor on
+Figure 4
+R
+GBF
+C	(L, r)
+A
+Figure 5
+2ms
+1V
+1t
+10 C	
+0
+q( C)	
+t(ms)
+4ms
+Figure 3
+
+-- 6 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	0202	–	الموضوع
+-	مادة	:	الفيزياء	والكيمياء	-	شعبة	العلوم	الرياضية	(أ)	و	(	ب	( )	خيار	إنجليزية	)
+NS 30E
+الصفحة
+7
+8
+the channel	A	Y	 and the voltageu(t)	 between the terminals of the generator on the channel	B	Y	 .
+We obtain the oscillogram shown in figure 5.
+3-1- Determine the intensity indicated by the ammeter knowing that the measured impedance of the circuit
+isZ 390, 4	 .(0,5pt)
+3-2- Calculate the value of	2	R	 . (0,5pt)
+3-3- Write the numerical expression of the voltageu(t)	 .(0,75pt)
+Exercise 4: Mechanics (3,25 points)
+Parts I and II are independent.
+Part I: Study of the motion of a skier
+In this part, we study the motion of a skier on an inclined plane in two stages:
+- First stage: The frictional fluids force of the air is negligible,
+- Second stage: The frictional fluids force of the air is not negligible,
+A skier slides on the runway inclined at an angle	45
+ 	 to the horizontal plane (figure1).
+The skier and his accessories are modeled as solid (S) of massm = 75kg	 and of center of inertia G.
+We study the motion of the center of inertia G in the orthonormal frame
+of reference(O,i, j)	 linked to the earth assumed Galilean.
+At the instant t=0, the skier starts without initial velocity. At this instant,
+G coincides with the origin O of the frame of reference(O,i,j)	 (figure1).
+We take the gravitational field strength:-2
+g = 10 m.s	 and we neglect the
+action of the upthrust force.
+1- First stage: The motion of the skier without frictional fluids
+The contact between the inclined runway and the solid (S) occurs with
+solid friction. The runway acts on the skier by the forceR	 which has a
+tangential componentT	 and a normal componentN	 . During the
+motion of the skier the magnitude ofT	 and that ofN	 are linked by
+the relationT k.N		 wherek	 is a constant.
+1-1- By applying Newton’s second law, express the acceleration of
+G in terms ofg	 ,	 andk	 .(0,5pt)
+1-2- The curve shown in figure 2, represents the evolution of the
+velocityv	 of the center of inertia G in function of time. Determine
+graphically the acceleration.(0,25pt)
+1-3-Check thatk 0,9		 .(0,25pt)
+Figure 1
+G
+
+j
+i
+y
+x
+O
+t(s)
+1
+v(m.s )
+0 1 2
+0,7
+0,7
+1,4
+Figure 2
+
+-- 7 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	0202	–	الموضوع
+-	مادة	:	الفيزياء	والكيمياء	-	شعبة	العلوم	الرياضية	(أ)	و	(	ب	( )	خيار	إنجليزية	)
+NS 30E
+الصفحة
+8
+8
+2- Second stage: Study of the motion of the skier with frictional fluids
+In addition to the same forces acting on the solid (S) in the first stage, (S) obeys to a frictional fluids force
+due to the air, which is modeled by the forceF v	 	 , wherev	 is the velocity of the center of inertia G at an
+instantt	 and	 is a positive constant of value	=5 SI units.	
+2-1- Applying Newton’s second law, show that the differential equation for the velocity of G is:
+dv + A.v + B= 0
+dt
+withv vi		 , and A and B are two constants.(0,5pt)
+2-2- Determine the value of the terminal velocityv	 of the motion.(0,25pt)
+2-3- With the help of the table on the right, and using Euler’s method,
+determine the velocity	2	v	 of the motion of (S). (The step of the
+calculation is	2 1	t t t	  	 ).(0,5pt)
+Part II: Motion of a charged sphere in the gravitational field and in an electric field
+Two vertical metal plates (A) and (C) are placed in the vacuum at a distance d from each other and are
+supplied with a positive voltage	A C 0	V V U	 	 . The length of each plate is . Between the two plates there is
+a uniform electric fieldE	 (figure 3).
+A small sphere (S) of mass m, carrying a positive charge q, is abandoned without initial velocity at the
+instant t=0 at a point	0	M	 .
+We study the motion of the centre of inertia G of the sphere (S) in an orthonormal frame of reference
+R(O,i, j)
+linked to the earth assumed Galilean. The coordinates of the
+point	0	M	 in the frame of referenceR(O,i,j)	 are (	0 0
+d
+x ; y
+2
+ 	 ) (figure 3).
+Between the two plates in addition to its weight, the sphere obeys to the
+electrostatic forceF qE		 .
+Given:	-2
+g =10m.s	 ;	=1m	 ;	d = 4cm	 ;-6 -1	q
+α = =10 C.kg
+m .
+Remember that:	0	U
+E d
+	 .
+1- By applying Newton’s second law, establish the parametric equations of
+the motion x(t) and y(t) of the centre of inertia G in terms of	0	U	 and of t (in SI units). (0,5 pt)
+2- Deduce the equation of the path of the sphere. (0,25 pt)
+3- For a determined value of voltage	0	U	 , the path of the sphere passes through the point P of coordinates
+( d ,0)
+. Show that	0	U 8kV		 . (0,25 pt)
+./.
+t(s)1
+v(m.s )	2
+G	a (m.s )
+1t 14		1	v 6,30		1	a
+2	t 15, 4		2	v	2	a
+P
+Figure 3
+y
+O
+j
+x	i
+0	M
+(A)	(C)
+d
+2
+E
+
+-- 8 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا
+المسالك	الدولية
+الدورة	العادية	0202 -	عناصر	اإلجابة	–
+شعبة	العلوم	الرياضية	(	أ	)	و	(	ب	( )	خيار	إنجليزية	)
+ا	لصفحة
+1
+4
+الفيزياء	والكيمياء المادة
+الشعبة	أو	ا	لمسلك
+مدة اإلنجاز
+المعامل
+4
+7
+*I
+SSSSSSSSSSSSSSSSSSSS NR 30E
+Exercice1 : Chimie( 6,5 points)
+Référence de la question dans le cadre de référence	Barème	Eléments de réponse	Question
+-Determine the pH for an aqueous solution.
+-Write and use the expression of the acid dissociation constantKA
+associated with the reaction of an acid with water.
+-Draw the progress table ofa reaction and exploit it.
+-Know that the ionic product of water KW, is the equilibrium
+constant associated with the equation of the reaction of water
+autoprotolysis (self-ionization of water).
+-Know the relationship pKW= - logKW
+-Determine the pH value of aqueous solution based on the molar
+concentration of ions H3O+ or HO-.
+-Write the equation of titration reaction (useonly one arrow)
+-Exploit the curve or the results of thetitration.
+-Determine and exploit the point of equivalence.
+0,25+0,25	Method ;	e B	pH log K log C	  	Partie1
+1-1
+0,25	Verification.	1-2
+0,5	Equation of titration reaction.	2-1
+0,5	Establishing the requested relationship	2-2
+0,75	Establishing the requested relationship	2-3
+0,25
+0,25
+BE	V 12, 4mL		
+.
+Deduce that2 1
+A	C 2, 48.10 mol.L 
+
+2-4-1
+0,25+0,25	Method ;	A	pK 3,90		 .	2-4-2
+0,25+0,5	The milk is not fresh + justification (0
+22,3 D
+).
+2-5
+Référence de la question dans le cadre de référence	Barème	Eléments de réponse	Question
+-Draw the progress table ofa reaction and exploit it.
+-Determine the direction flow of the charge carriers in a cell
+using the criterion of spontaneous evolution.
+-Interpret the functioning of a battery based on:the direction of
+electric current flow, the electromotive force (emf), the electrode
+reactions, the polarity of electrodes or the movement of charge
+carriers.
+-Write the half-equationthat occurredin each electrode (use
+double arrows) and write the overall equation of the reaction
+during the battery functioning (use one arrow).
+-Establish the relationship between the amount of substance of
+chemical specieproduced or consumed, the current intensity
+andthe operating durationof a battery. Use this relationship to
+determine other quantities (quantity of charge, progressof the
+reaction, changeof the mass...).
+-
+0,5	3
+(s) (aq) (s) (aq)	Cr 3Ag 3Ag Cr 
+ 	 PartieII
+1
+0,5
+1
+m(Cr)
+x M(Cr)
+
+	
+;	1	x 1mmol		 .
+2
+0,25
+0,25
+3 1
+(aq) 1
+x
+Cr C V
+
+    
+;
+3 1
+(aq)	Cr 0,110mol.L 
+   
+.
+3
+0,5
+0,25
+1
+1
+0
+3F.x
+t I
+	
+;3
+1	t 5,79.10 s		 .
+4
+
+-- 9 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	0202	–	عناصر	اإلجابة
+-	مادة	:	الفيزياء	والكيمياء	-	شعبة	العلوم	الرياضية	(أ)	و	(	ب	( )	خيار	إنجليزية	)
+NR 30E
+الصفحة
+2
+4
+Exercice2 : Ondes (2,5 points) - Transformations nucléaires (2,25 points)
+Référence de la question dans le cadre de référence	Barème	Eléments de réponse	Questi
+on
+- Know that light has a wave aspect, based on the
+diffraction phenomenon.
+- Exploit a document or a diffraction pattern in the case
+of light waves.
+- Know(Recall) and exploit the relationship:c
+λ = v .
+- Define a monochromatic and a polychromatic light.
+- Know the boundaries of wavelengths and their colours
+for the visible spectrum in the vacuum.
+- Know the frequency of a monochromatic radiation does
+not change as it passes from one transparent medium to
+another.
+-Know that the transparent media are more or less
+dispersive.
+- Know (Recall) and exploitthe relationship:c
+n = v
+-Know (Recall) and exploitthe relationshipθ = λ/a	 ; and
+know the units and the meaningof	 and	 .
+- Exploit experimental measurements to verify the
+relationshipθ = λ/a	 .
+0,5	4.	I-1
+0,25	X
+2D
+ 	
+.
+2-1
+0,25
+0,5
+a cte
+X 2D
+  
+2
+2 1
+1
+X .
+X
+  	;	2 569,5nm	 	 .
+2-2
+0,5	Interpretation.	3
+0,5n 421,9nm	 	;8 1
+n	v 2.10 m.s
+	 .	4
+- Know the meaning (significance) of the symbolA
+Z X
+and give the corresponding composition of the
+nucleus.
+- Know and exploit the two laws of conservation.
+- Define the radioactivity:	 ,  &  and the
+radiation	
+ 	
+.
+- Write the equation of a nuclear reaction by
+applying the two conservation laws.
+- Recognise the type of radioactivity using the
+equation of a nuclear reaction.
+- Know that 1Bq is equalto one decay per second.
+- Define the time constant	 and the half-life1/2	t .
+- Exploit the relationships between ,1/2	t	 and
+(decay constant).
+- Calculate the energy released (produced) by a
+nuclear reaction:	pro	E E	 	 .
+0,5	The equation of the reaction.	II-1
+2x0,25	2
+E m .c ; E 2, 243MeV	    	2
+0,5+0,25	14	0 2 0 1/2 0
+A
+N M(H O).a .t N
+; 3,9.10
+N .V.N .ln 2 N
+
+ 
+3
+0,5	1t
+1 0 0	a(t ) a .e 0,15%.a
+ 	.
+1	t 19 min
+.
+4
+
+-- 10 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	0202	–	عناصر	اإلجابة
+-	مادة	:	الفيزياء	والكيمياء	-	شعبة	العلوم	الرياضية	(أ)	و	(	ب	( )	خيار	إنجليزية	)
+NR 30E
+الصفحة
+3
+4
+Exercice 3 : Electricité(5 ,5points)
+Référence de la question dans le cadre de référence	Barème	Eléments de réponse	Question
+- Know and exploit the relationshipdq
+i dt
+	 for a capacitor in
+receiver convention.
+- Know and exploit the relationship q = C.u.
+Find out the differential equation and verify its solution when the RC
+dipole is submitted to a step voltage.
+- Recognise and represent the variation curves of	( )	C	u t	 between
+the capacitorterminals and different physical quantities associated
+to it, and exploit them.
+- Know and exploit the time-constant expression.
+0,5	Differential equation	1-1
+0,25	E 10V		.	1-2-1
+0,5	0,1ms		.	1-2-2
+0,25	Verification of the value of
+C.
+1-3
+- Represent the voltages (Electric Potential Difference)	R	u	 and	L	u
+using the receiver convention.
+- Know and exploit the voltage expression	. . di
+u r i L dt
+ 
+between the inductor(coil) terminals using the receiver convention.
+- Know that the inductor delays the appearance and the disappearance
+of the current,and that the current intensity is a continuous function
+but the voltage between their terminals is a discontinuous function at
+t=0
+- Define and Recognisethe undamped (periodic), the underdamped
+(pseudo-periodic) and the overdamped (non-periodic)states.
+- Find out the differential equation for the voltage between the
+capacitor terminals or for its charge	( )	q t	 in the negligible
+damping case and verify its solution.
+- Know and exploit the natural period expression.
+- Know and exploit the expression of the total energy in the circuit.
+- Know and exploit the expression of the electric energy stored in a
+capacitor.
+- Use the dimensional analysis (dimensional equations).
+- Recognise that the voltage between capacitor terminals is a
+continuous function of time at t=0, and the current intensity is a
+discontinuous function at t=0.
+0,5	Demonstration.	2-1-1
+0,25b	u E 10V	   	2-1-2
+0,25	Verification.	2-1-3
+0,25
+0,252 2
+j 1
+1
+E (q (t ) q (0));
+2C
+  
+j	E 80 J	   
+.
+2-1-4
+0,25
+0,5
+Verification ;
+R 1253 
+.
+2-2
+- Know the role of the driver and the resonating system.
+- Know and exploit the expression2.π.τ
+= T
+	 of the phase of
+physical quantity relative to another.
+- Know and exploit the impedance expressionI
+U
+Z 	 of a circuit.
+- Know the unit of the impedance( )	
+- Know the mathematical expression of the sinusoidal voltage.
+0,25+0,25	m
+e
+U
+I Z 2
+	
+;	e	I 5, 43mA
+3-1
+0,52	R 260.	3-2
+3x0,25u(t) 3.cos(250 t ) (V)
+4
+
+  3-3
+
+-- 11 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة	العادية	0202	–	عناصر	اإلجابة
+-	مادة	:	الفيزياء	والكيمياء	-	شعبة	العلوم	الرياضية	(أ)	و	(	ب	( )	خيار	إنجليزية	)
+NR 30E
+الصفحة
+4
+4
+./.
+Référence de la question dans le cadre
+de référence
+Barèm
+e
+Eléments de réponse	Quest
+ion
+Exercice4
+-Apply Newton’s second law to determine
+the kineticquantities	G	v	 and	G	a
+anddynamicquantities and exploit them.
+- Apply Newton’s second law to find out
+the differential equation of a system’s
+centre of inertia motion in horizontal or
+inclined plane and determine the
+characteristics of kinetic and
+dynamicquantitiesof motion.
+-Exploit the velocity-time graph:
+( )	G	v f t		
+.
+0,5	a g(sin k cos )	   	1-1
+Partie I
+Mécanique (
+3,25
+ points)
+0,25	2
+a 0,7 ms
+	,	1-2
+0,25	Verify the value of k.	1-3
+-Know and exploit the two models of
+frictional fluids(viscous forces):	. .	F k v i	 
+and	2
+. .	F k v i	 
+-Know and apply the Euler’s method to
+solveapproximately differential equation
+- Apply Newton’s second law to find out
+the differential equation of a system’s
+centre of inertia motion in horizontal or
+inclined plane and determine the
+characteristics of kinetic and
+dynamicquantitiesof motion.
+0,5	Demonstration	2-1
+0,25	1
+v 10,6m.s
+	.	2-2
+0,25
+0,25
+Method ;1
+2	v 6,70m.s 
+.
+2-3
+-Know and exploit the relationships	E	q	F 	 
+andU
+E d
+
+-Apply Newton’s second law in the case of
+charged particleto:
+* find out the differential equation of
+motion;
+* establish the parametric equations of
+motion and exploit them.
+* find the equation of the path and exploit
+it to calculate the electric deflection.
+0,5	5 2 2
+0	x(t) 1, 25.10 U t 2.10 
+ 
+2
+y(t) 5t 1	  	
+.
+1
+Partie II
+0,25	5 3
+0 0
+4.10 8.10
+y x 1
+U U
+   2
+0,25	Demonstration.	3
+
+-- 12 of 12 --
+

@@ -16,6 +16,31 @@ import {
 import { isLikelyGeminiKey } from '../visionExtractor';
 import { syncGoogleDriveBranch, extractDriveFolderId } from '../driveSync';
 
+function resolveServerVisionKey(isAdminAuthorized: boolean): string {
+  if (!isAdminAuthorized) return '';
+  return (
+    process.env.GEMINI_API_KEY ||
+    (isLikelyGeminiKey(process.env.AI_API_KEY) ? process.env.AI_API_KEY : '') ||
+    ''
+  );
+}
+
+function readHeadPreview(filePath: string, maxChars = 150): string {
+  let fd: number | null = null;
+  try {
+    fd = fs.openSync(filePath, 'r');
+    const buf = Buffer.alloc(512);
+    const bytesRead = fs.readSync(fd, buf, 0, buf.length, 0);
+    return buf.toString('utf-8', 0, bytesRead).slice(0, maxChars).replace(/\s+/g, ' ').trim();
+  } catch {
+    return '';
+  } finally {
+    if (fd !== null) {
+      try { fs.closeSync(fd); } catch {}
+    }
+  }
+}
+
 /**
  * Résout le chemin absolu sécurisé d'un document dans DOCS_DIR.
  * Empêche toute tentative de path traversal (..) et prend en charge
@@ -155,11 +180,7 @@ export function createDocumentsRouter(): Router {
       // En production avec ADMIN_TOKEN défini (ou sans ADMIN_TOKEN configuré), seuls les admins
       // authentifiés utilisent la clé GEMINI_API_KEY serveur ou lancent la synchro Drive ; les
       // autres appels peuvent indexer localement ou utiliser leur propre clé Gemini fournie par le client.
-      const serverEnvGeminiKey = isAdminAuthorized
-        ? process.env.GEMINI_API_KEY ||
-          (isLikelyGeminiKey(process.env.AI_API_KEY) ? process.env.AI_API_KEY : '') ||
-          ''
-        : '';
+      const serverEnvGeminiKey = resolveServerVisionKey(isAdminAuthorized);
 
       const visionApiKey = validClientVisionKey || serverEnvGeminiKey;
       const branch = (String(req.body?.branch || 'PC').toUpperCase() === 'SM' ? 'SM' : 'PC') as 'PC' | 'SM';
@@ -210,40 +231,31 @@ export function createDocumentsRouter(): Router {
 
   /**
    * Liste des documents du programme (RÉSERVÉ ADMIN / ENSEIGNANT).
+   * Lecture légère sans extraction PDF synchrone pour éviter les timeouts 502/503.
    */
-  router.get('/documents', requireAdmin, async (_req, res) => {
+  router.get('/documents', requireAdmin, (_req, res) => {
     try {
       if (!fs.existsSync(DOCS_DIR)) {
         return res.json({ directory: DOCS_DIR, files: [] });
       }
 
       const discovered = discoverProgrammeFiles(DOCS_DIR);
-      const files = [];
-
-      // Traitement séquentiel (évite les pics mémoire 502/503 sur 40+ PDFs simultanés)
-      for (const doc of discovered) {
+      const files = discovered.map((doc) => {
         const filePath = doc.absolutePath;
         const stat = fs.statSync(filePath);
-        let preview = '';
         const isPdf = doc.name.toLowerCase().endsWith('.pdf');
+        const sidecarPath = `${filePath}.extracted.txt`;
 
+        let preview = '';
         if (isPdf) {
-          try {
-            const text = await getFreshExtractedPdfText(filePath, `${filePath}.extracted.txt`);
-            preview = text.slice(0, 150).replace(/\n/g, ' ');
-          } catch {
-            preview = 'Document PDF prêt à être indexé';
-          }
+          preview = fs.existsSync(sidecarPath)
+            ? readHeadPreview(sidecarPath) || 'Document PDF indexé'
+            : 'Document PDF prêt à être indexé';
         } else {
-          try {
-            const text = fs.readFileSync(filePath, 'utf-8');
-            preview = text.slice(0, 150).replace(/\n/g, ' ');
-          } catch {
-            preview = 'Document texte';
-          }
+          preview = readHeadPreview(filePath) || 'Document texte';
         }
 
-        files.push({
+        return {
           name: doc.name,
           relativePath: doc.relativePath,
           branch: doc.branch,
@@ -251,8 +263,8 @@ export function createDocumentsRouter(): Router {
           modified: stat.mtime,
           preview,
           isPdf,
-        });
-      }
+        };
+      });
 
       return res.json({
         directory: '/docs/programme',
@@ -324,32 +336,51 @@ export function createDocumentsRouter(): Router {
   });
 
   /**
-   * Synchronisation depuis Google Drive (RÉSERVÉ ADMIN / ENSEIGNANT).
+   * Synchronisation depuis Google Drive en tâche de fond (RÉSERVÉ ADMIN / ENSEIGNANT).
+   * Retourne HTTP 202 immédiatement pour prévenir tout timeout 502/503 proxy.
    */
-  router.post('/documents/sync-drive', requireAdmin, documentMutationLimiter, async (req, res) => {
+  router.post('/documents/sync-drive', requireAdmin, documentMutationLimiter, (req, res) => {
     try {
       const branch = (String(req.body.branch || 'PC').toUpperCase() === 'SM' ? 'SM' : 'PC') as 'PC' | 'SM';
       const folderInput = String(req.body.folderId || req.body.folderUrl || '');
       const apiKey = String(req.body.apiKey || '').trim();
 
-      const result = await syncGoogleDriveBranch({
-        branch,
-        folderIdOrUrl: folderInput,
-        apiKey: apiKey || undefined,
-      });
-
-      if (result.downloadedCount > 0) {
-        await refreshDocumentsCache(true);
+      const fallbackFolder = branch === 'SM' ? GOOGLE_DRIVE_FOLDER_SM : GOOGLE_DRIVE_FOLDER_PC;
+      if (!extractDriveFolderId(folderInput || fallbackFolder || '')) {
+        return res.status(400).json({
+          error: `Aucun identifiant ou lien de dossier Google Drive configuré pour 2BAC ${branch}.`,
+        });
       }
 
-      return res.json(result);
+      const visionApiKey = resolveServerVisionKey(true);
+
+      const { started, alreadyRunning, syncJob } = startBackgroundOfficialSync({
+        branch,
+        visionApiKey,
+        runDriveSync: async () => {
+          const driveResult = await syncGoogleDriveBranch({
+            branch,
+            folderIdOrUrl: folderInput,
+            apiKey: apiKey || undefined,
+          });
+          return driveResult.success ? driveResult.downloadedCount : 0;
+        },
+      });
+
+      return res.status(202).json({
+        success: true,
+        started,
+        alreadyRunning,
+        syncJob,
+        downloadedCount: syncJob.driveSyncCount,
+        downloadedFiles: [],
+        ...getLocalRagStatus(),
+        message: syncJob.message,
+      });
     } catch (err: any) {
       console.error('Erreur synchronisation Drive:', err);
       const msg = String(err?.message || 'Erreur inconnue');
-      const isRateLimit = msg.includes('429') || /quota|rate.?limit/i.test(msg);
-      const isUpstreamBusy = /\b(502|503|504)\b/.test(msg) || /timeout|aborted|temporarily/i.test(msg);
-      const status = isRateLimit ? 429 : isUpstreamBusy ? 503 : 500;
-      return res.status(status).json({ error: `Erreur synchronisation Drive : ${msg}` });
+      return res.status(500).json({ error: `Erreur synchronisation Drive : ${msg}` });
     }
   });
 

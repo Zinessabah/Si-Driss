@@ -1,0 +1,534 @@
+6 1 ا	لصفحة
+P a g e
+6
+المركز الوطني للتقويم	واالمتحانات
+والتوجيه
+االمتحان الوطني الموحد للبكالوريا
+المسالك الدولية	–	خيار أنجليزية
+الدورة العادية	2018
+-	املوضوع	-
+NS27E
+ا	لفيزياء والكيمياء
+شعبة العلوم التجريبية	:	مسلك	علوم الحياة واألرض	–	خيار أنجليزية
+المادة
+الشعبة	أو	ا	لمسلك
+مدة اإلنجاز
+المعامل
+5
+3
+ The use of the non-programmable scientific calculator is allowed.
+ Give the literal expressions before every numerical application.
+This exam paper consists of four exercises: one in chemistry and three in
+physics
+ Chemistry (7 points)
+o Acid-base transformations
+o Study of a battery
+ Physics: (13 points)
+o Exercise 1: Ultrasonic waves (2,5 points)
+o Exercise 2: Evolution of an electric system (5 points)
+o Exercise 3: Evolution of a mechanical system (5,5 points)
+
+-- 1 of 10 --
+
+6 2
+الصفحة
+6
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2018	–	الموضوع
+-	مادة	:	الفيزياء والكيمياء	–	شعبة العلوم التجريبية	مسل	ك	علوم الحياة واألرض	–	خيار أنجليزية
+NS27E
+scale Subject
+0,5
+0,75
+0,25
+Chemistry (7 points): Acid-base transformations; Study of a battery
+The two parts are independent.
+Part 1: study the ibuprofen like a carboxylic acid
+Ibuprofen is a molecule of brut-formula	13 18 2	C H O	 . It constitutes the active principle of many
+medicines of anti-inflammatory category.
+This part aims at:
+- Studying an aqueous solution of Ibuprofen;
+- Titration of an aqueous solution of Ibuprofen.
+Data:1
+13 18 2	( ) 206 .	M C H O g mol
+
+1. Studying an aqueous solution of Ibuprofen.
+ThepH	 of an aqueous solution of Ibuprofen, of molar concentration2 1
+5,0.10 .	C mol L 
+	 , is
+2,7	pH 	
+at25 C		 .
+The equation of reaction between the Ibuprofen and water is:
+13 18 2( ) 2 ( ) 13 17 2( ) 3 ( )	aq l aq aq	C H O H O C H O H O 
+ 
+1.1. Prove that this transformation is limited.
+1.2. Calculate the value of the quotient of reaction	,r éq	Q	 of this system in equilibrium.
+1.3. Deduce the value of	A	pK	 for the pair	13 18 2( ) 13 17 2( )	( / )	aq aq	C H O C H O .
+2. Titration of an aqueous solution of Ibuprofen
+A tag of a medicine provides this information “Ibuprofen … 400mg”.
+We dissolve a pill that contains the Ibuprofen in a precise protocol to prepare an aqueous solution( )	S
+of Ibuprofen of volume	100	S	V mL		 .
+To verify the mass of Ibuprofen contained in this pill, we make an acid-base titration of the volume	S	V
+with an aqueous solution of sodium hydroxide	( ) ( )	aq aq	Na HO 
+	 of molar concentration
+1 1
+1,94.10 .	B	C mol L 
+	
+. We use the experimental apparatus shown in figure (1).
+Figure (2) shows the curves of	( )	B	pH f V		 and	( )	B
+B
+dpH g V
+dV 	 obtained during the titration.
+Figure (1) Figure (2)
+
+-- 2 of 10 --
+
+6 3
+الصفحة
+6
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2018	–	الموضوع
+-	مادة	:	الفيزياء والكيمياء	–	شعبة العلوم التجريبية	مسل	ك	علوم الحياة واألرض	–	خيار أنجليزية
+NS27E
+2 2
+4
+ 
+	( ) ( )	aq aq	Cu SO2 2
+4
+ 
+	( ) ( )	aq aq	Zn SO
+R
+Cu 	Zn	Alkalin bridge
+I A
+1
+0,25
+0,5
+0,5
+0,5
+0,75
+0,5
+0,75
+0,75
+2.1. Give the names of the elements of the experimental apparatus 1,2,3 and 4 shown in figure(1).
+2.2. Among the curves (1) and (2) shown in figure (2), which one represents	( )	B	pH f V		 ?
+2.3. Determine, graphically, the value of the volume	,B E	V	 poured in equivalence.
+2.4. Write the equation of reaction of titration (it’s a total reaction).
+2.5. Calculate the value of the amount of matter	A	n	 of the Ibuprofen in the solution( )	S	 .
+2.6. Deduce the value of the mass	m	 of the Ibuprofen contained in the pill, and compare it with the
+value indicated in the tag.
+Part 2: Study of a battery
+Batteries are chemical systems that function with redox reactions. The study of these systems allows
+us to predict their sense of evolution and their functioning.
+This part aims at determining the duration of the functioning of a (Zinc/Cooper) battery (as shown on
+the figure below).
+Data:
+- Mass of the immerged part of zinc electrode:	6,54	m g		 ;
+- Volume of each solution:	50		V mL	 ;
+- Concentration of each solution:1
+1,0 . 
+	C mol L	 ;
+-4 1
+9,65.10 .	1F 
+ C mol	 ;
+- M(Zn)=65,4 g.mol-1.
+We use the battery for a very long time	t		 , until it stops
+working.
+The equation of functioning of this battery is:2 2
+( ) ( ) ( ) ( )	s aq aq s	Zn Cu Zn Cu 
+  
+1. Copy on your answer sheet the number of the
+question, and write the letter corresponding to the right
+option (A, B, C or D).
+The cell-diagram of this battery is :
+A Θ2 2
+( ) ( ) ( ) ( )	s aq aq s	Cu Cu Zn Zn  	 B2 2
+( ) ( ) ( ) ( )	s aq aq s	Zn Zn Cu Cu 
+	 Θ
+C Θ2 2
+( ) ( ) ( ) ( )	s aq aq s	Zn Zn Cu Cu  	 D2 2
+( ) ( ) ( ) ( )	aq s s aq	Cu Cu Zn Zn 
+	 Θ
+2. Show that the amount of matter of cooper produced is2
+( ) 5.10	n Cu mol
+	 .
+3. Determine the value of the duration ∆t of the functioning of the battery knowing that it releases a
+constant current	100	I mA		 .
+Physics (13 points)
+Exercise 1 (2,5 points): Ultrasonic waves
+Ultrasonic waves are mechanical waves that are able to propagate in different mediums. They
+generate, in specific conditions, some physical phenomena.
+To determine the speed of an ultrasonic wave of frequency N in two different mediums, we use an
+apparatus made of a transmitter E and a receiver R fixed at the ends of a tube.
+E and R are connected to an oscilloscope.
+Data: * The distance Transmitter-Receiver:	1 m	D ER	 	 .
+*	40 kHz	N 	 .
+
+-- 3 of 10 --
+
+6 4
+الصفحة
+6
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2018	–	الموضوع
+-	مادة	:	الفيزياء والكيمياء	–	شعبة العلوم التجريبية	مسل	ك	علوم الحياة واألرض	–	خيار أنجليزية
+NS27E
+0,5
+0,75
+0,5
+0,75
+1. Is the ultrasonic wave a longitudinal or transversal wave?
+2. We fill the tube with water. The oscillograme below represents the signal sent by E, and the signal
+received by R.
+Copy on your answer sheet the number of the question, and write the letter corresponding to the right
+option (A,B,C or D).
+2.1. The ultrasonic wave speed in water is:
+A	-1
+1520 m.s	c 	 B	-1
+620 m.s	c 	 C	-1
+1667 m.s	c 	 D	-1
+330 m.s	c 
+2.2. The wavelength of the ultrasonic wave is:
+A	25, 2 mm	
+ 	 B	30,5 mm	
+ 	 C	37, 2 mm	
+ 	 D	41,7 mm	
+ 
+3. We substitute water with another liquid, and we notice that the time delay between the transmitter
+signal and the receiver signal is	0,9	t s	 	 .
+Did the speed of the ultrasonic wave increase or decrease compared to the one in water? Justify.
+Exercise 2 (5 points): Evolution of an electric system
+The behavior of an electric system depends on its elements (Capacitor, Inductor…). According to
+the initial conditions, the evolution of a system may be described by some electric or energetic
+parameters.
+Part 1: Determination of the capacitance of a capacitor.
+We realize the charge of a capacitor of capacitanceC	 , using an ideal generator of current, which gives
+a constant intensity of current	0 0,5		I A	
+	 (figure 1).
+Figure (1) Figure (2)
+At	0 0	t 	 , we turn on the switchK	 . Figure (2) represents the evolution of the voltage	( )	C	u t	 between
+the terminals of the capacitor.
+
+-- 4 of 10 --
+
+6 5
+الصفحة
+6
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2018	–	الموضوع
+-	مادة	:	الفيزياء والكيمياء	–	شعبة العلوم التجريبية	مسل	ك	علوم الحياة واألرض	–	خيار أنجليزية
+NS27E
+Figure (3)
+Figure (1)
+0,5
+0,5
+0,75
+0,5
+0,75
+0,5
+1
+0,5
+1. Copy on your answer sheet the number of the question, and write the letter corresponding to the
+right option (A,B,C or D).
+The expression of	C	u	 is:
+A0
+.		C
+C
+u t
+I B0 .		C
+I
+u t
+C C	0. .		C	u I C t	 D	.		C	u C t
+2. Verify that	0,5	C F	
+		 .
+Part 2: Study the discharge of a capacitor through an inductor.
+At	0 0		t	 , we connect the previous capacitor (charged) to the terminals of an inductor of inductanceL
+and a neglected resistance.
+1. Find the differential equation verified by the charge	( )	q t	 of the capacitor.
+2. The curve in figure (3) represents the evolution of	( )	q t	 .
+2.1. Name the regime of oscillations that figure (3) shows.
+2.2. The solution of the differential equation
+is given by:0
+2
+( ) .cos .	m	q t Q t
+T
+ 
+ 
+ 	 
+  .
+2.2.1. Using the graph in figure (3),
+determine the value of	m	Q	 ,	0	T	 and	 .
+2.2.2. Calculate the value of	L	 .
+2.3. Explain qualitatively the conservation
+of the total energy of the circuit( )	LC	 , and
+calculate its value.
+2.4. Determine the maximal value of
+current intensity in the circuit.
+Exercise 3 (5,5 points): The evolution of a mechanical system.
+The motion of mechanical systems depends on the nature of the mechanical actions that are applied
+on them. The study of the temporal evolution of these systems allows us to determine some dynamic
+and kinetic quantities, and to explain some energetic aspects.
+The aim of this exercise is to study the rectilinear translational motion of a solid in an inclined plane,
+and to study the motion of an oscillating system {solid-spring}.
+In this exercise, all frictional forces are neglected.
+Part 1: Motion of a solid in an inclined plane
+Consider a solid (S) of mass m susceptible to drag along the
+line of the greatest slope of an inclined plan forming an angle
+α with the horizontal. The solid( )	S	 of mass m starts off at
+0 0	t 	
+without initial velocity from the positionO	 under the
+effect of a constant motor forceF	 . The solid( )	S	 passes by
+A with a speed	A	v	 .
+We study the motion of the center of inertiaG	 of the solid
+( )	S
+in a frame of reference( , )	O i	 linked to the Earth, that we
+consider Galilean (figure 1).
+The abscissa of G at t0=0 is	0 0	G	x x	 	 .
+Data:	100 g	m 	 ;2
+10 m.s	g 
+	 ;	30	
+  	 ;1
+2, 4 .	A	v m s
+
+
+-- 5 of 10 --
+
+6 6
+الصفحة
+6
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2018	–	الموضوع
+-	مادة	:	الفيزياء والكيمياء	–	شعبة العلوم التجريبية	مسل	ك	علوم الحياة واألرض	–	خيار أنجليزية
+NS27E
+Figure (2)
+Figure (3)
+Figure (4)
+0,75
+0,5
+0,5
+0,5
+0,75
+0,5
+0,5
+1,5
+1. Applying Newton’s second law, prove that the differential equation, verified by	G	x	 , is written as:
+2
+2 .sin	 	G	d x F g
+dt m
+
+.
+2. Figure (2) gives the evolution of the velocity	( )	v t	 .
+2.1. Determine graphically the value of the acceleration ofG	 ;
+2.2. Calculate the magnitude of the forceF	 .
+3. From the position A, the solid( )	S	 is no more subject to the motor
+forceF	 and it stops moving in a position B.
+We choose A like a new origin of the abscissa, and the instant when
+G
+passes by A like a new origin of time.
+3.1 Using the differential equation in question (1), show that the
+motion ofG	 between A and B is a uniformly variable rectilinear
+motion.
+3.2 Determine the distance AB.
+Part 2: Motion of a system {solid-spring}
+Consider the system {solid(S)	 - spring} represented in
+figure(3). The spring is of non-jointed spires, of horizontal axis,
+neglected mass and a constantK	 . We study the motion of the
+center of inertiaG	 of the solid( )	S	 of mass	100 g	m 	 in a frame
+of reference( , )	O i	 linked to Earth that we consider Galilean.
+At equilibrium	0 0	G	x x	 	 .
+We incline( )	S	 of its equilibrium position with a distance	m	X	 and we release it without initial speed at
+0 0	t 	
+. The solid( )	S	 makes 10 oscillations during
+3,14	t s	 	
+.
+1. Determine the value of the proper period	0	T	 .
+2. Deduce the value ofK	 .
+3. We choose the state where the spring isn’t deformed as a
+reference of the elastic energy	pe	E	 , and the horizontal plan
+containingG	 as a reference of the potential energy of gravity
+pp	E	
+. The curve in figure (4) represents the diagram of the
+elastic potential energy	pe	E = f(x)	 . Using the diagram,
+determine the values of:
+a. The amplitude	m	X	 .
+b. Mechanical energy	m	E	 of the oscillating system.
+c. The maximal speed of motion of( )	S	 .
+
+-- 6 of 10 --
+
+4 1 ا	لصفحة
+P a g e
+4
+المركز الوطني للتقويم واالمتحانات
+والتوجيه
+االمتحان الوطني الموحد للبكالوريا
+المسالك الدولية	–	خيار أنجليزية
+الدورة العادية	2018
+-	عناصر اإلجابة	-
+NR27E
+ا	لفيزياء والكيمياء
+شعبة العلوم التجريبية	:	مسلك	علوم الحياة واألرض	–	خيار أنجليزية
+المادة
+الشعبة	أو	ا	لمسلك
+مدة اإلنجاز
+المعامل
+5
+3
+Chemistry (7 points)
+Reference of the question in the Reference Framework	Scale	Answer elements	Question	Exercise
+- Define the final progress rate of a reaction, and determine it using
+experimental data.
+0,5	Reasoning	1.1.
+Part 1
+Chemistry (7 poi
+nts)
+- Give and exploit the expression of the reaction quotient Qr through
+the reaction equation.
+0,75	Get through:-5
+r,éq	Q 8,3.10	1.2.
+- Know that, the reaction quotient in equilibrium Qr,eq, associated
+with the reaction equation of a chemical system, takes a value
+independent of concentrations, called equilibrium constant K.
+- Know the relationship pKA= - logKA .
+0,25	pK 4,08		A	1.3.
+- Know the experimental set-up of an acid-base titration.	4 x 0,25
+1 : Aqueous solution of Sodium hydroxide
+2 : pH-meter
+3 : solution (S)
+4 : burette
+2.1.
+- Exploit the curve or the results of the titration.
+0,25	(1) :	B	pH f (V )		2.2.
+- Determine and exploit the point of equivalence.	0,5	B,E	V 10 mL		2.3
+- Write the equation of titration reaction (use only one arrow).
+0,5	13 18 2(aq) ( ) 13 17 2( ) 2 ( )	C H O + HO C H O + H O 
+	aq aq l	2.4.
+
+-- 7 of 10 --
+
+4 2
+الصفحة
+4
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2018	–	عناصر اإلجابة
+-	مادة	:	الفيزياء والكيمياء	–	شعبة العلوم التجريبية	مسل	ك	علوم الحياة واألرض	–	خيار أنجليزية
+NR27E
+Physics (13 points)
+-Determine and exploit the point of equivalence.
+0,5	Get through:-3
+A = 1,94.10 mol	n	2.5.
+0,5+0,25	m 399,6 mg		; comparison	2.6.
+-Draw a cell diagram / diagram of an electrochemical cell (battery).	0,5	C	1.
+Part 2	
+- Establish the relationship between the amount of substance of
+chemical species produced or consumed, the current intensity and the
+operating duration of a battery. Exploit this relationship to determine
+other quantities (quantity of charge, progress of the reaction, change
+of the mass...).
+0,75	Reasoning	2.
+0,75	Get through:4
+t 9,65.10 s	 	3.
+Reference of the question in the Reference Framework	Scale	Answer elements	Question	Exercise
+-Define a transversal wave and a longitudinal wave.	0,5	Longitudinal wave	1.
+Exercise 1
+(2,5 points)
+- Exploit the relationship between time delay, distance and wave
+speed.
+- Exploit experimental documents and data in order to determine:
+* distance or a wavelength;
+* time delay;
+* wave speed.
+0,75	C	2.1.
+0,5	D	2.2.
+0,25+0,5	Decrease of speed ; Justification	3.
+
+-- 8 of 10 --
+
+4 3
+الصفحة
+4
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2018	–	عناصر اإلجابة
+-	مادة	:	الفيزياء والكيمياء	–	شعبة العلوم التجريبية	مسل	ك	علوم الحياة واألرض	–	خيار أنجليزية
+NR27E
+Reference of the question in the Reference Framework	Scale	Answer elements	Question	Exercise
+-Know and exploit the relationshipdq
+i dt
+	 for a capacitor in
+receiver convention.
+-Know and exploit the relationship q = C.u.
+- Determine the capacitance of a capacitor graphically or by
+calculation.
+0,5	B	1.
+Part 1
+Exercise 2 (5 points)
+0,5	Verify the value of C	2.
+- Find out the differential equation for the voltage between the
+capacitor terminals or for its charge	( )	q t	 in the negligible
+damping case and verify its solution.
+0,75	Establish the differential equation	1.
+Part 2
+-Recognise the undamped (periodic), the underdamped (pseudo-
+periodic) and the overdamped (non-periodic) states.
+0,5	Periodic regime	2.1.
+-Know and exploit the expression of	( )	q t	 and deduce the current’s
+intensity expression	( )	i t	 flowing in the circuit and exploit it.
+3x0,25
+6
+m	Q 3.10 C
+	
+;	0	T 0,628 ms		 ;
+0	
+ 
+2.2.1.
+-Know and exploit the natural period expression.	0,5	Get through :L 20 mH	2.2.2.
+- Know and exploit the expression of the total energy in the
+circuit.
+- Explain energetically the three regimes.
+2x0,5	Explain ;-6
+9.10	E J		2.3.
+-Know and exploit the expression of	( )	q t	 and deduce the current’s
+intensity expression	( )	i t	 flowing in the circuit and exploit it.
+-Know and exploit the expression of the total energy in the circuit.
+0,5	Lead to :2
+max 3.10	I A
+	2.4.
+
+-- 9 of 10 --
+
+4 4
+الصفحة
+4
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2018	–	عناصر اإلجابة
+-	مادة	:	الفيزياء والكيمياء	–	شعبة العلوم التجريبية	مسل	ك	علوم الحياة واألرض	–	خيار أنجليزية
+NR27E
+Reference of the question in the Reference Framework	Scale	Answer elements	Question	Exercise
+-Apply Newton’s second law to find out the differential equation
+of a system’s centre of inertia motion in horizontal or inclined
+plane and determine the characteristics of kinetic and dynamic
+quantities of motion.
+0,75	Lead to differential equation	1.
+Part 1
+Exercise 3 (5,5 points)
+-Exploit the velocity-time graph:	( )	G	v f t		 .	0,5-2
+a = 1,5 m.s	2.1.
+-Apply Newton’s second law to find out the differential equation
+of a system’s centre of inertia motion in horizontal or inclined
+plane and determine the characteristics of kinetic and dynamic
+quantities of motion.
+0,5	F = 0,65 N	2.2.
+-Know and exploit the characteristics of the uniformly accelerated
+straight line motion and its parametric equations (t is the
+parameter).
+0,5	Reasoning	3.1.
+0,5+0,25	Method ;	AB = 0,576 m	3.2.
+-Know and exploit both the expression of the natural period and
+that of the natural frequency of the oscillating system (solid-
+spring).
+0,5	0	T = 0,314 s	1.
+Part 2
+0,5	1
+K = 40 N.m	2.
+- Exploit the conservation and the non-conservation of the
+mechanical energy of a solid-spring system.
+- Exploit the energy diagrams.
+0,25	X = 0,04 m	m	3.a.
+0,5	32	m	E mJ	3.b.
+0,751
+max	v 0,8 .	m s
+3.c.
+
+-- 10 of 10 --
+

@@ -19,6 +19,135 @@ export function trimUpstreamError(text: string, max = 300): string {
   return clean.length > max ? `${clean.slice(0, max)}…` : clean;
 }
 
+function isTransientUpstreamError(errOrStatus: any): boolean {
+  const status = typeof errOrStatus === 'number'
+    ? errOrStatus
+    : Number(errOrStatus?.status ?? errOrStatus?.statusCode ?? errOrStatus?.code ?? 0);
+  if (status === 429 || status === 502 || status === 503 || status === 504) return true;
+  const msg = String(errOrStatus?.message || errOrStatus || '').toLowerCase();
+  return (
+    msg.includes('502') ||
+    msg.includes('503') ||
+    msg.includes('504') ||
+    msg.includes('429') ||
+    msg.includes('unavailable') ||
+    msg.includes('overloaded') ||
+    msg.includes('service unavailable') ||
+    msg.includes('rate limit') ||
+    msg.includes('resource_exhausted') ||
+    msg.includes('timeout') ||
+    msg.includes('etimedout') ||
+    msg.includes('econnreset') ||
+    msg.includes('fetch failed')
+  );
+}
+
+function isFatalClientError(err: any): boolean {
+  const status = Number(err?.status ?? err?.statusCode ?? 0);
+  return (
+    Boolean(err?.message?.includes('API_KEY_INVALID')) ||
+    status === 400 ||
+    status === 401 ||
+    status === 403
+  );
+}
+
+function sleepWithSignal(ms: number, signal?: AbortSignal): Promise<void> {
+  if (signal?.aborted) return Promise.resolve();
+  return new Promise((resolve) => {
+    const onAbort = () => {
+      clearTimeout(timer);
+      resolve();
+    };
+    const timer = setTimeout(() => {
+      signal?.removeEventListener('abort', onAbort);
+      resolve();
+    }, ms);
+    signal?.addEventListener('abort', onAbort, { once: true });
+  });
+}
+
+async function runGeminiWithFailover<T>(
+  candidateModels: string[],
+  invoke: (model: string) => Promise<T>,
+  label: string,
+  signal?: AbortSignal
+): Promise<{ result: T; model: string }> {
+  let lastError: any = null;
+  let sawTransient = false;
+
+  for (let round = 0; round < 2; round++) {
+    const models = round === 0 ? candidateModels : candidateModels.slice(0, Math.min(2, candidateModels.length));
+    for (let i = 0; i < models.length; i++) {
+      if (signal?.aborted) {
+        throw lastError || new Error('Requête annulée par le client.');
+      }
+      const mod = models[i];
+      try {
+        const result = await invoke(mod);
+        return { result, model: mod };
+      } catch (err: any) {
+        console.warn(`[${label}] Failover from ${mod} (round ${round + 1}):`, trimUpstreamError(err?.message || ''));
+        lastError = err;
+        if (isFatalClientError(err) || signal?.aborted) {
+          throw err;
+        }
+        if (isTransientUpstreamError(err)) {
+          sawTransient = true;
+          if (i < models.length - 1) {
+            await sleepWithSignal(600 + Math.floor(Math.random() * 400), signal);
+          }
+        }
+      }
+    }
+
+    if (!sawTransient || signal?.aborted || round === 1) break;
+    await sleepWithSignal(1800 + Math.floor(Math.random() * 500), signal);
+  }
+
+  throw lastError || new Error('Erreur de connexion Gemini.');
+}
+
+async function fetchWithTransientRetry(
+  url: string,
+  init: RequestInit,
+  label: string,
+  signal?: AbortSignal,
+  maxAttempts: number = 2
+): Promise<globalThis.Response> {
+  let lastError: any = null;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const attemptSignal = signal
+      ? AbortSignal.any([signal, AbortSignal.timeout(90_000)])
+      : AbortSignal.timeout(90_000);
+
+    try {
+      const res = await fetch(url, { ...init, signal: attemptSignal });
+      if (attempt < maxAttempts && isTransientUpstreamError(res.status)) {
+        const retryAfter = Number(res.headers.get('retry-after') || 0);
+        const delayMs = retryAfter > 0
+          ? Math.min(8_000, retryAfter * 1000)
+          : 1000 * attempt + Math.floor(Math.random() * 400);
+        console.warn(`[${label}] HTTP ${res.status}, réessai dans ${delayMs}ms (${attempt}/${maxAttempts})`);
+        await sleepWithSignal(delayMs, signal);
+        continue;
+      }
+      return res;
+    } catch (err: any) {
+      lastError = err;
+      if (signal?.aborted || attempt >= maxAttempts || !isTransientUpstreamError(err)) {
+        throw err;
+      }
+      const delayMs = 1000 * attempt + Math.floor(Math.random() * 400);
+      console.warn(`[${label}] Erreur réseau (${trimUpstreamError(err?.message || '')}), réessai dans ${delayMs}ms`);
+      await sleepWithSignal(delayMs, signal);
+    }
+  }
+
+  throw lastError || new Error(`Erreur réseau (${label}).`);
+}
+
 /**
  * DeepSeek API specifics (api-docs.deepseek.com):
  * - temperature is clamped/ignored (thinking: 0.95–1.0; non-thinking: fixed 1.0) → don't send it
@@ -55,10 +184,6 @@ export async function streamUnifiedChat(
     const contents = formatMessagesForGemini(messages);
     const candidateModels = [model, ...GEMINI_FAST_MODELS.filter((m) => m !== model)];
 
-    let streamResult: any = null;
-    let usedModel = model;
-    let lastError: any = null;
-
     const ai = new GoogleGenAI({
       apiKey,
       httpOptions: {
@@ -66,9 +191,10 @@ export async function streamUnifiedChat(
       },
     });
 
-    for (const mod of candidateModels) {
-      try {
-        const stream = await ai.models.generateContentStream({
+    const { result: streamResult, model: usedModel } = await runGeminiWithFailover(
+      candidateModels,
+      (mod) =>
+        ai.models.generateContentStream({
           model: mod,
           contents,
           config: {
@@ -76,23 +202,10 @@ export async function streamUnifiedChat(
             temperature: 0.1,
             abortSignal: upstreamSignal,
           },
-        });
-        streamResult = stream;
-        usedModel = mod;
-        break;
-      } catch (err: any) {
-        console.warn(`[Gemini Stream] Failover from ${mod}:`, trimUpstreamError(err?.message || ''));
-        lastError = err;
-        // Invalid key: no point trying other models
-        if (err?.message?.includes('API_KEY_INVALID') || err?.status === 400 || err?.status === 403) {
-          break;
-        }
-      }
-    }
-
-    if (!streamResult) {
-      throw lastError || new Error('Erreur de connexion Gemini.');
-    }
+        }),
+      'Gemini Stream',
+      upstreamSignal
+    );
 
     console.log(`[Stream] Provider: gemini | Model: ${usedModel}`);
     for await (const chunk of streamResult) {
@@ -109,23 +222,27 @@ export async function streamUnifiedChat(
     const targetUrl = `${(baseUrl || 'https://api.anthropic.com/v1').replace(/\/+$/, '')}/messages`;
     const anthropicMessages = formatMessagesForAnthropic(messages);
 
-    const apiRes = await fetch(targetUrl, {
-      method: 'POST',
-      signal: upstreamSignal,
-      headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
+    const apiRes = await fetchWithTransientRetry(
+      targetUrl,
+      {
+        method: 'POST',
+        headers: {
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: 4096,
+          system: systemInstruction,
+          messages: anthropicMessages,
+          stream: true,
+          temperature: 0.1,
+        }),
       },
-      body: JSON.stringify({
-        model,
-        max_tokens: 4096,
-        system: systemInstruction,
-        messages: anthropicMessages,
-        stream: true,
-        temperature: 0.1,
-      }),
-    });
+      'Anthropic Stream',
+      upstreamSignal
+    );
 
     if (!apiRes.ok) {
       const errText = await apiRes.text();
@@ -173,12 +290,16 @@ export async function streamUnifiedChat(
   };
   applyDeepSeekParams(streamBody, config);
 
-  const apiRes = await fetch(targetUrl, {
-    method: 'POST',
-    signal: upstreamSignal,
-    headers: reqHeaders,
-    body: JSON.stringify(streamBody),
-  });
+  const apiRes = await fetchWithTransientRetry(
+    targetUrl,
+    {
+      method: 'POST',
+      headers: reqHeaders,
+      body: JSON.stringify(streamBody),
+    },
+    `${provider} Stream`,
+    upstreamSignal
+  );
 
   if (!apiRes.ok) {
     const errText = await apiRes.text();
@@ -218,10 +339,10 @@ export async function generateUnifiedCompletion(
       },
     });
 
-    let lastError: any = null;
-    for (const mod of candidateModels) {
-      try {
-        const response = await ai.models.generateContent({
+    const { result: response, model: usedModel } = await runGeminiWithFailover(
+      candidateModels,
+      (mod) =>
+        ai.models.generateContent({
           model: mod,
           contents,
           config: {
@@ -229,38 +350,35 @@ export async function generateUnifiedCompletion(
             temperature: 0.1,
             responseMimeType: jsonMode ? 'application/json' : undefined,
           },
-        });
-        return { text: response.text || '', model: mod };
-      } catch (err: any) {
-        console.warn(`[Gemini Complete] Failover from ${mod}:`, trimUpstreamError(err?.message || ''));
-        lastError = err;
-        if (err?.message?.includes('API_KEY_INVALID') || err?.status === 400 || err?.status === 403) {
-          break;
-        }
-      }
-    }
-    throw lastError || new Error('Erreur de génération Gemini.');
+        }),
+      'Gemini Complete'
+    );
+    return { text: response.text || '', model: usedModel };
   }
 
   if (provider === 'anthropic') {
     const targetUrl = `${(baseUrl || 'https://api.anthropic.com/v1').replace(/\/+$/, '')}/messages`;
     const anthropicMessages = formatMessagesForAnthropic(messages);
 
-    const apiRes = await fetch(targetUrl, {
-      method: 'POST',
-      headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
+    const apiRes = await fetchWithTransientRetry(
+      targetUrl,
+      {
+        method: 'POST',
+        headers: {
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: 4096,
+          system: systemInstruction + (jsonMode ? '\n\nIMPORTANT: Réponds EXCLUSIVEMENT au format JSON valide.' : ''),
+          messages: anthropicMessages,
+          temperature: 0.1,
+        }),
       },
-      body: JSON.stringify({
-        model,
-        max_tokens: 4096,
-        system: systemInstruction + (jsonMode ? '\n\nIMPORTANT: Réponds EXCLUSIVEMENT au format JSON valide.' : ''),
-        messages: anthropicMessages,
-        temperature: 0.1,
-      }),
-    });
+      'Anthropic Complete'
+    );
 
     if (!apiRes.ok) {
       const errText = await apiRes.text();
@@ -303,11 +421,15 @@ export async function generateUnifiedCompletion(
 
   console.log(`[Complete] Provider: ${provider} | Model: ${model} | Endpoint: ${targetUrl}`);
 
-  const apiRes = await fetch(targetUrl, {
-    method: 'POST',
-    headers: reqHeaders,
-    body: JSON.stringify(reqBody),
-  });
+  const apiRes = await fetchWithTransientRetry(
+    targetUrl,
+    {
+      method: 'POST',
+      headers: reqHeaders,
+      body: JSON.stringify(reqBody),
+    },
+    `${provider} Complete`
+  );
 
   if (!apiRes.ok) {
     // If json_object was rejected, retry without it — appending a separate instruction

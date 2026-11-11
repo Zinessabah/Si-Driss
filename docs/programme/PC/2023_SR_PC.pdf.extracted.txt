@@ -1,0 +1,658 @@
+االمتحان الوطين املوحد للبكالوريا
+المسالك الدولية
+الدورة االستدراكية	2023
+شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+ا	لصفحة
+الفيزياء والكيمياء المادة
+الشعبة	أو المسلك
+مدة اإلنجاز
+المعامل
+3h
+7
+
+1
+6
+*I
+SSSSSSSSSSSSSSSSSSSS-SSS الموضوع RS 28F
+L’usage de la calculatrice scientifique non programmable est autorisé.
+On donnera les expressions littérales avant de passer aux applications numériques.
+Le sujet comporte quatre exercices.
+Exercice 1 ( 7 points ):
+- Electrolyse d’une solution aqueuse de bromure de zinc.
+- Dosage d’une solution aqueuse de triméthylamine.
+Exercice 2 ( 3 points ):
+- Ondes lumineuses.
+Exercice 3 ( 4,75 points ):
+- Charge d’un condensateur et sa décharge dans un dipôle RL.
+- Détection d’un signal modulé en amplitude.
+Exercice 4 ( 5,25 points ):
+- Mouvement d’un ballon dans un champ de pesanteur uniforme.
+- Mouvement d’un pendule élastique.
+
+-- 1 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة ا	الستدراكية	2023	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+RS 28F	2
+6
+الصفحة
+EXERCICE 1 (7 points)
+Cet exercice propose d’étudier une réaction d’oxydo-réduction forcée dans une première partie et une
+réaction acido-basique dans une deuxième partie.
+Partie I : Electrolyse d’une solution aqueuse de bromure de zinc
+On réalise l’électrolyse d’une solution aqueuse(S)	 de
+bromure de zinc2
+(aq) (aq)	Zn + 2 Br  de volumeV	 en
+utilisant un générateur fournissant un courant d’intensité
+constante I et des électrodes en graphite (figure ci-contre).
+Au cours de cette électrolyse, le métal zinc se dépose sur
+l’une des électrodes.
+Données : - Couples (Ox / Red) intervenant dans cette
+électrolyse :	2(aq) (aq)	Br / Br ;2
+(aq) (s)	Zn / Zn ;
+- Le faraday :4 -1
+1F = 9,65.10 C.mol	 ;
+- Masse molaire :1
+M(Zn) 65, 4g.mol
+	 ;
+-	I = 82 mA	 .
+1- Parmi les propositions suivantes, choisir la proposition juste. (0,5pt)
+A L’électrode (A) est l’anode.
+B L’électrode (B) est le siège d’une oxydation.
+C Au cours de l’électrolyse le système est en équilibre.
+D	(aq)	Br
+  	 augmente au cours du temps.
+2- Ecrire l’équation de la réaction qui se produit au niveau de la cathode et celle qui se produit au niveau de
+l’anode. (1pt)
+3- Ecrire l’équation bilan de la réaction de cette électrolyse. (0,25pt)
+4- Au bout d’une heure( t 1h)	 	 d’électrolyse, il se dépose une massem(Zn)	 de zinc sur l’une des électrodes.
+Etablir la relation :I.Δt.M(Zn)
+m(Zn) = 2F . Calculer la valeur dem(Zn)	 . (1pt)
+Partie II : Dosage d’une solution aqueuse de triméthylamine
+La triméthylamine, de formule brute	3 3	(CH ) N	 , est une molécule présente dans quelques aliments. Elle a
+une odeur caractéristique de poisson pourri. Elle est également associée à une maladie génétique appelée
+syndrome de l’odeur de poisson pourri. La triméthylamine est éliminée par les urines, les sueurs …
+On admet qu’un patient est atteint de syndrome de l’odeur de poisson pourri si la concentration en
+triméthylamine dans son urine est supérieure à10 1
+2, 2.10 mol.L  .
+Données : - Toutes les mesures sont effectuées à25 C		 ;
+- Couple acide-base lié à la triméthylamine:	3 3 (aq) 3 3 (aq)	(CH ) NH / (CH ) N .
+Pour doser une solution	0	S	 d’urine d’un patient dont la concentration en triméthylamine est C0, on la dilue
+10 fois pour obtenir une solution	B	S	 de concentration CB.
+On prend le volume	B	V 20 mL		 de la solution	B	S	 auquel on ajoute progressivement un volume	A	V	 d’une
+solution aqueuse	A	S	 d’acide chlorhydrique	3 (aq) (aq)	H O Cl 
+	 de concentration2 1
+A	C 4.10 mol.L 
+	 . On
+suppose que l’acide chlorhydrique réagit seulement avec la triméthylamine.
++ -
+Electrode (B)
+en graphite
+Solution
+aqueuse de
+bromure de
+zinc
+Electrode (A)
+en graphite
+G
+
+-- 2 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة ا	الستدراكية	2023	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+RS 28F	3
+6
+الصفحة
+La courbe représentant la variation du pH du mélange réactionnel en fonction du volume	A	V	 de la
+solution acide	A	S	 ajoutée présente deux points remarquables :
+- le point Q de coordonnées (	A	V 10 mL		 ,pH 9,9		 );
+- le point d'équivalence E de coordonnées (	AE	V 20 mL		 ,	E	pH 5,8		 ).
+1- Définir une base selon Bronsted. (0,5pt)
+2- Ecrire l’équation modélisant la réaction qui a lieu lors du dosage. (0,5pt)
+3- Déterminer la valeur de	B	C	 . (0,5pt)
+4- Déduire que le patient est atteint du syndrome de l’odeur de poisson pourri. (0,5pt)
+5- Justifier la nature acide	E	(pH 7)		 du mélange réactionnel à l’équivalence. (0,5pt)
+6- Parmi les indicateurs colorés cités dans le tableau ci-dessous, indiquer en justifiant celui qui convient le
+mieux pour ce dosage. (0,5pt)
+Indicateur coloré Hélianthine Rouge de méthyle phénolphtaléine
+Zone de virage 3,1- 4,4 4,2- 6,2 8,2- 10,0
+7- En se basant sur le tableau d’avancement de la réaction de dosage, trouver la valeur du rapport
+3 3 (aq)
+3 3 (aq)
+(CH ) NH
+(CH ) N
+
+  
+  
+pour	A	V 10 mL		 . (0,75pt)
+8- Déduire que la valeur du	A	pK	 du couple	3 3 (aq) 3 3 (aq)	(CH ) NH / (CH ) N est	A	pK 9,9		 . (0,5pt)
+EXERCICE 2 (3 points)
+La diffraction est l’un des phénomènes physiques qui met en évidence la nature ondulatoire de la lumière.
+On se propose dans cet exercice d’étudier ce phénomène de diffraction pour déterminer la largeur d’une
+fente et les caractéristiques de certaines radiations lumineuses.
+Une source lumineuse émet, dans l’air, une
+radiation jaune, de longueur d’onde	0j	λ =580nm	 ,
+vers une fente horizontale de largeura	 . On
+observe, sur un écran situé à la distanceD =1, 4 m
+de la fente, des taches lumineuses réparties sur une
+ligne verticale.
+La tache centrale a la largeur	j	L = 2,7cm	 (figure
+ci-contre).
+Donnée : On prend la célérité d’une onde lumineuse dans le vide et dans l’air8 1
+c = 3.10 m.s .
+1- Choisir, parmi les propositions suivantes, celle qui est juste : (0,5pt)
+A La longueur d’onde d’une radiation monochromatique ne dépend pas du milieu de propagation.
+B Dans un milieu dispersif, la célérité d’une onde lumineuse ne varie pas avec la fréquence.
+C Une onde lumineuse monochromatique est caractérisée par sa fréquence.
+D Les limites des longueurs d’onde dans le vide du spectre visible sont 400μm et 800μm.
+2- Sachant que l’écart angulaire	 est petit pour prendretan   	 , trouver l’expression de la largeur a de la
+fente en fonction de Lj, D et	0j	λ	 . Calculer la valeur de a. (0,75pt)
+Ecran
+D
+Lj
+Source
+lumineuse
+Fente
+
+-- 3 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة ا	الستدراكية	2023	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+RS 28F	4
+6
+الصفحة
+3- Dans l’expérience de diffraction décrite précédemment, la source de radiation jaune est remplacée par
+une source de radiation rouge ayant une longueur d’onde	0R	λ	 . Montrer que l’expression de	0R	λ	 s’écrit:
+R 0 j
+0R
+j
+L .
+L
+
+ 	
+avec LR la largeur de la tache centrale obtenue dans ce cas.
+Calculer	0R	λ	 sachant que	R	L =3,4cm	 . (0,75pt)
+4- On considère que la radiation jaune se propage dans un milieu d’indice de réfraction	1	n 1,5		 . Calculer
+dans ce milieu :
+4-1- La vitesse	1j	V	 de propagation de la radiation jaune . (0,5pt)
+4-2- La longueur d’onde	1j	λ	 de cette radiation. (0,5pt)
+EXERCICE 3 ( 4,75 points)
+On se propose dans cet exercice d’étudier :
+- la charge d’un condensateur et sa décharge dans un dipôle RL ;
+- la détection d’un signal modulé en amplitude.
+Le montage électrique représenté par le schéma de la figure 1
+comporte :
+- un générateur de tension de force électromotriceE	 ;
+- un condensateur de capacité C ajustable, initialement déchargé ;
+- un conducteur ohmique de résistanceR 35	 	 ;
+- un interrupteur K à double position ;
+- une bobine d’inductanceL	 et de résistance négligeable.
+1- Réponse d’un dipôle RC à un échelon de tension
+A un instant choisi comme origine des dates	0	t = 0	 on met
+l’interrupteur K en position (1).
+Un système d’acquisition informatisé adéquat permet d’obtenir la
+courbe d’évolution temporelle de la charge q(t) du condensateur
+lors de sa charge. (T) représente la tangente à la courbe au point
+d’abscisse0	t = 0	 (figure 2).
+1-1- Etablir l’équation différentielle vérifiée par
+la chargeq(t)	 . (0,5pt)
+1-2- En vous aidant du graphe de la figure 2, vérifier que la valeur à
+laquelle est ajustée la capacité C du condensateur
+est	0	C 10 F	 	 . (0,5pt)
+1-3- Déterminer la valeur de	e	E	 l’énergie électrique emmagasinée dans le condensateur en régime
+permanent. (0,5pt)
+2- Oscillations libres dans un circuit RLC série
+Lorsque le régime permanent est atteint, on bascule l’interrupteur K en position (2) à un instant pris comme
+nouvelle origine des dates0	t = 0	 .
+Figure 1
+0,5 1
+0
+20
+40
+Figure 2
+(T)
+
+-- 4 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة ا	الستدراكية	2023	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+RS 28F	5
+6
+الصفحة
+Le même système d’acquisition informatisé, utilisé dans la charge du condensateur, a permis d’obtenir la
+courbe d’évolution temporelle de la chargeq(t)	 du condensateur (figure 3).
+2-1- Montrer que l’équation différentielle vérifiée par la charge q(t) s’écrit :2
+2
+0
+d q(t) R dq(t) 1 q(t) 0
+dt L dt LC
+  	
+. (0,5pt)
+2-2- Expliquer la diminution de l’amplitude des oscillations
+au cours du temps. (0,5pt)
+2-3- Calculer	E		 l’énergie dissipée par effet Joule dans le
+circuit entre l’instant	0	t = 0	 et l’instant	1t	 indiqué sur la
+courbe de la figure 3. (0,75pt)
+2-4- Pour entretenir les oscillations amorties obtenues, on
+introduit en série dans le circuit un générateur délivrant une
+tension	g	u k.i(t)		 avec	g	
+u	 exprimée en volt (V) et i(t)
+exprimée en ampère ( A) et k une constante positive.
+Déterminer la valeur de k. (0,5pt)
+3- Détection d’un signal modulé en amplitude
+On réalise un circuit d’accord (circuit bouchon) par le condensateur de capacité C
+ajustable et par la bobine d’inductanceL 0,1H		 précédemment utilisés. Ce circuit est
+schématisé avec une antenne réceptrice d’ondes électromagnétiques (figure 4).
+3-1- Donner le rôle de ce circuit bouchon LC. (0,25pt)
+3-2- Trouver les valeurs limites C1 et C2 de la capacité C du condensateur pour balayer la
+plage de fréquences qui va en modulation d’amplitude de	1	f 150 kHz		 à	2	f 280 kHz	
+(on prend2 10	 	 ). (0,75pt)
+EXERCICE 4 (5,25 points)
+Les parties I et II sont indépendantes
+Partie I : Etude du mouvement d’un ballon dans un champ de pesanteur uniforme
+Lors d’un service, un joueur de volley-ball, se trouvant à une distance D du
+filet, frappe le ballon à une hauteur h du sol et lui communique une vitesse
+0	V	
+faisant un angle	 par rapport à l’horizontale.
+A cet instant choisi comme origine des dates0	t = 0	 , le centre d’inertie G du
+ballon est au point A (figure 1).
+Données :
+1
+0	V 16m.s
+	 ;0
+18	 	 ;
+ Hauteur du filet :	f	H 2, 4 m		 ;
+ Distance entre le filet et la ligne de
+fond :d 9 m		 ;
+D 11m		 ;
+h OA 3m	 	 ;
+ Intensité de la pesanteur :2
+g 10 m.s
+	 .
+On étudie le mouvement du centre d’inertie G du ballon dans le repère(O,i , j )	 lié à un référentiel terrestre
+considéré galiléen. L’origine O est situé au niveau du sol (figure 1).
+Ligne de fond
+t
+40
+𝟎
+-40
+Figure 3
+A
+O
+h
+Hf
+D
+d
+C
+y
+x
+E
+Ligne de fond
+Ligne de fond Figure 1
+filet
+Figure 4
+C
+antenne
+
+-- 5 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة ا	الستدراكية	2023	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+RS 28F	6
+6
+الصفحة
+On considère que le ballon est en chute libre.
+1- En appliquant la deuxième loi de Newton, établir les équations horairesx(t)	 ety(t)	 du mouvement de
+G. (1pt)
+2-Déduire que l’équation de la trajectoire du mouvement de G s’écrit :	2
+2
+0
+1 g
+y 	x (tan ).x h
+2 (V cos )
+    
+ .(0,5pt)
+3- Montrer que le ballon passe au-dessus du filet (on néglige le rayon du ballon devant	f	H	 ). (0,75pt)
+4- Le ballon atteindra le sol à l’instant	st 1, 41s		 .
+Le ballon tombe-t-il entre le filet et la ligne du fond du camp adverse? Justifier. (0,75pt)
+Partie II : Etude du mouvement d’un pendule élastique
+On étudie dans cette partie le mouvement oscillatoire d’un système mécanique (solide –ressort).
+Ce système est constitué d’un solide(S)	 de centre d’inertieG	 et de
+massem = 200 g	 , et d’un ressort à spires non jointives, de masse
+négligeable et de raideurk	 . L’une des extrémités du ressort est fixée à
+un support fixe et l’autre extrémité est liée au solide(S)	 .
+Ce solide peut osciller sans frottement sur le plan horizontal.
+On étudie le mouvement deG	 dans le repère(O,i)	 lié à un référentiel
+terrestre considéré galiléen.
+On repère la position deG	 à un instant t par l’abscisse x sur l’axe(O,i)	 .
+A l'équilibre, l’abscisse de G est x = 0 (figure 2).
+On écarte(S)	 de sa position d’équilibre dans le sens
+positif et on l’envoie à l’instant0	t = 0	 avec une
+vitesse initiale dans le sens négatif.
+La courbe de la figure 3 représente l’évolution
+temporelle de l’abscissex(t)	 deG	 .
+1- En appliquant la deuxième loi de Newton, établir
+l’équation différentielle vérifiée par
+l’abscisse x(t). (0,5pt)
+2- La solution de cette équation différentielle s’écrit
+m
+0
+2
+x(t) X cos t
+T
+ 	
+  	 
+ 
+avec	0	T	 la période propre de l’oscillateur.
+En vous aidant du graphe de la figure3, déterminer les valeurs de :	m	X	 ,	0	T	 et	 . (0,75pt)
+3- Vérifier que la constante de raideurk	 a pour valeur1
+k 50 N.m
+	 (on prend2 10	 	 ). (0,5pt)
+4- Déterminer la valeur de la variation	pe	E		 de l’énergie potentielle élastique entre l’instant	0	t = 0	 et
+l’instant	1	t	 indiqué sur la courbe de la figure 3. (0,5pt)
+(S)
+Figure 2
+O x
+G
+0,1 0,2
+-1
+0
+1
+Figure 3
+
+-- 6 of 10 --
+
+االمتحان الوطين املوحد للبكالوريا
+المسالك الدولية
+الدورة	االستدراكية	2023
+شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+ا	لصفحة
+الفيزياء والكيمياء المادة
+الشعبة	أو المسلك
+مدة اإلنجاز
+المعامل
+3h
+7
+
+1
+4
+*I
+SSSSSSSSSSSSSSSSSSSS-SSS عناصر اإلجابة RR 28F
+EXERCICE 1 (7 points)
+Question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+Partie I
+1 B 0,5
+- Savoir qu'une électrolyse est une transformation forcée.
+- Reconnaitre l'électrode à laquelle se produit la réaction
+d'oxydation (anode) ou l'électrode à laquelle se produit la
+réaction de réduction (cathode), connaissant le sens du
+courant imposé par le générateur.
+2 Equation de la réaction à la cathode
+Equation de la réaction à l’anode
+0,5
+0,5 - Ecrire les équations des réactions aux électrodes (avec
+double flèche) et l’équation bilan (simple flèche) lors d’une
+électrolyse.
+32
+( ) ( ) ( ) 2( )	Zn + 2Br Zn + Br  	aq aq s aq	 0,25
+4 Démarche
+m(Zn) 100 mg
+ 
+0,75
+0,25
+- Etablir la relation entre les quantités de matière des
+espèces formées ou consommées, l'intensité du courant et la
+durée de l’électrolyse. Utiliser cette relation pour
+déterminer d’autres grandeurs (l’avancement de réaction,
+variation de masse, volume d’un gaz…).
+Partie II
+1 Définition 0,5 - Définir un acide et une base selon Bronsted.
+2	3 3 ( ) 3 ( ) 	3 3 ( ) 2 ( )	(CH ) N + H O 	(CH ) NH + H O	 		
+	aq 	aq 	aq 	l	 0,5 - Ecrire l’équation de réaction de dosage (en utilisant une
+seule flèche).
+3 Méthode
+2 1
+B	C 4.10 .	mol L 
+
+ 0,25
+0,25 - Exploiter la courbe ou les résultats du dosage.
+- Repérer et exploiter le point d’équivalence.
+4 Déduction 0,5
+5 Justification 0,5
+- Repérer et exploiter le point d’équivalence.
+- Exploiter la courbe ou les résultats du dosage.
+- Ecrire l’équation de réaction de dosage (en utilisant une
+seule flèche).
+6 Rouge de méthyle
+Justification
+0,25
+0,25
+- Justifier le choix de l’indicateur coloré adéquat pour
+repérer l'équivalence.
+7
+Démarche
+3 3 (aq)
+3 3 (aq)
+(CH ) NH 1
+(CH ) N
+
+   
+  
+ 0,5
+0,25
+- Dresser le tableau d’avancement d’une réaction et
+l’exploiter.
+- Ecrire et utiliser l’expression de la constante d'acidité KA
+associée à l’équation de la réaction d'un acide avec l'eau.
+- Connaître la relation	log	A 	A	pK 	K	 	 .
+8 Déduction 0,5
+
+-- 7 of 10 --
+
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة االستدراكية	2023	–	عناصر اإلجابة
+-	مادة:	الفيزياء	والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+RR 28F	2
+4
+الصفحة
+Exercice 2 (3 points )
+Question Eléments de réponses Barème Référence de la question dans le
+cadre de référence
+1 C 0,5
+- Définir un milieu dispersif.
+- Définir une lumière monochromatique et une
+lumière polychromatique.
+- Savoir que la fréquence d'une radiation
+monochromatique ne change pas lorsqu'elle passe
+d'un milieu transparent à un autre.
+- Savoir que les milieux transparents sont plus ou
+moins dispersifs.
+- Connaître les limites des longueurs d'onde dans
+le vide du spectre visible et les couleurs
+correspondantes.
+2
+0j
+j
+2λ D
+a = L
+a 60 μm
+0,5
+0,25
+- Exploiter un document ou une figure de
+diffraction dans le cas des ondes lumineuses.
+- Connaître et exploiter la relationθ = λ/a	 et
+connaître l'unité et la signification deθ	 etλ	 .
+3 Démarche
+0R	λ 730 nm
+ 0,5
+0,25
+4-1 Démarche8 1
+1j	V 2.10 m.s
+
+ 0,25
+0,25
+- Connaître et exploiter la relationc
+n = v .
+- Déterminer l'indice de réfraction d'un milieu
+transparent pour une fréquence donnée.
+- Connaître et exploiter la relationλ = c /
+	 .4-2 Démarche
+1j	λ 386,7 nm
+ 0,25
+0,25
+
+-- 8 of 10 --
+
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة االستدراكية	2023	–	عناصر اإلجابة
+-	مادة:	الفيزياء	والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+RR 28F	3
+4
+الصفحة
+EXERCICE 3 ( 4,75 points)
+Question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+1-1 Equation différentielle 0,5
+- Etablir l’équation différentielle et vérifier sa solution lorsque
+le dipôle RC est soumis à un échelon de tension.
+- Connaître et exploiter la relation	dq
+i dt
+	 pour un
+condensateur en convention récepteur.
+- Connaître et exploiter la relation q = C.u.
+1-2 Vérification 0,5
+- Connaître la capacité d’un condensateur, son unité F et ses
+sous multiples	,	F nF et pF	
+	 .
+- Déterminer la capacité d’un condensateur graphiquement et
+par calcul.
+- Reconnaître et représenter les courbes de variation en fonction
+du temps, de la tension	( )	C	u t	 aux bornes du condensateur et
+les différentes grandeurs qui lui sont liées, et les exploiter.
+- Connaître et exploiter l'expression de la constante de temps.
+- Exploiter des documents expérimentaux pour :
+déterminer la constante de temps et la durée de charge.
+1-3 Méthode
+e	E 0, 72 mJ	
+ 0,25
+0,25
+- Connaître et exploiter l'expression de l'énergie électrique
+emmagasinée dans un condensateur.
+2-1 Equation différentielle 0,5 - Etablir l’équation différentielle vérifiée par la tension aux
+bornes du condensateur ou par sa charge dans le cas
+d’amortissement.
+2-2 Explication 0,5 - Expliquer, du point de vue énergétique, les trois régimes.
+2-3 Démarche
+E 0,64 mJ	 
+ 0,5
+0,25
+- Connaître et exploiter l’expression de l’énergie totale du
+circuit.
+2-4 Aboutir àk 35	 	 0,5
+- Etablir l’équation différentielle vérifiée par la tension aux
+bornes du condensateur ou par sa chargeq(t)	 dans le cas d’un
+circuit RLC entretenu par l'utilisation d'un générateur délivrant
+une tension proportionnelle à l’intensité :	( ) . ( )	G	u t k i t		 .
+- Connaître le rôle du dispositif d’entretien d’oscillations, qui
+consiste à compenser l’énergie dissipée par effet Joule dans le
+circuit.
+3-1 Rôle du circuit bouchon : rôle
+sélectif 0,25
+- Connaître le rôle sélectif du circuit bouchon LC pour la
+tension modulée.
+- Connaître et exploiter l'expression de la période propre.	3-2
+Démarche
+Les limites :	1	C 11,1pF	 et
+2	C 3, 2 pF
+0,25
+2x0,25
+
+-- 9 of 10 --
+
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة االستدراكية	2023	–	عناصر اإلجابة
+-	مادة:	الفيزياء	والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+RR 28F	4
+4
+الصفحة
+EXERCICE 4 ( 5,25 points)
+Question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+Partie I
+1
+0	x(t) (V cos ).t	 
+2
+0
+1
+y(t) g t (V sin ).t h
+2
+    
+0,5
+0,5 - Appliquer la deuxième loi de Newton dans le cas d'un
+projectile pour :
+*établir les équations différentielles du mouvement ;
+*en déduire les équations horaires du mouvement et les
+exploiter ;
+* trouver l’équation de la trajectoire ;
+* établir et exploiter les expressions de la portée et la
+flèche.
+2 Déduction 0,5
+3
+D	y 3,96 m
+ Le ballon passe au-dessus du
+filet :	D f	y H	
+0,5
+0,25
+4
+s	x 21, 46 m
+s	x D d	  La balle tombe à l’extérieur du
+camp adverse
+0,5
+0,25
+Partie II
+1 Equation différentielle 0,5
+- Appliquer la deuxième loi de Newton à un système
+oscillant (corps solide-ressort) pour établir l’équation
+différentielle du mouvement et vérifier sa solution dans
+les cas où le système oscillant est en position horizontale
+ou inclinée ou verticale.
+2
+m	X 2cm	
+0	T 0, 4s	
+rad
+3
+
+ 
+0,25
+0,25
+0,25
+- Exploiter les courbes :	( )	G	x t	 ,	( )	G	v t	 et	( )	G	a t	 .
+- Connaître la signification des grandeurs physiques
+intervenant dans l’expression de l’équation horaire
+( )	G	x t
+du système oscillant (corps solide-ressort) et les
+déterminer à partir des conditions initiales.
+- Déterminer la nature du mouvement du système
+oscillant (corps solide-ressort) et écrire les équations
+( )	G	x t
+,	( )	G
+dx
+v t dt
+	 et	( )	G	x t	 et les exploiter.
+3 Vérification 0,5
+- Connaître et exploiter l’expression de la période propre
+et la fréquence propre du système oscillant (corps solide-
+ressort).
+4 Démarche
+pe	E 7,5mJ	 
+ 0,25
+0,25
+- Connaître et exploiter l'expression de l'énergie
+potentielle élastique.
+- Connaître et exploiter la relation entre le travail d’une
+force appliquée par un ressort et la variation de l'énergie
+potentielle élastique.
+
+-- 10 of 10 --
+

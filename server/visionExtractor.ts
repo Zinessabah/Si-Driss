@@ -6,8 +6,8 @@ import { GEMINI_FAST_MODELS } from './ai/providers';
 export const SCIENTIFIC_VISION_MARKER = '=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===';
 
 /** Capacité max brute pour rester sous la limite ~20 Mo d'inlineData JSON base64 de Gemini. */
-const MAX_INLINE_PDF_BYTES = 14 * 1024 * 1024;
-const VISION_REQUEST_TIMEOUT_MS = 45_000;
+const MAX_INLINE_PDF_BYTES = 11 * 1024 * 1024;
+const VISION_REQUEST_TIMEOUT_MS = 75_000;
 
 export interface VisionExtractionOutcome {
   text: string;

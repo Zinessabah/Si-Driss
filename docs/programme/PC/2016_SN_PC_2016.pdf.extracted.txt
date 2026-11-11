@@ -1,0 +1,328 @@
+4 1 ا	لصفحة
+P a g e
+4
+املركز الوطين للتقويم
+واالمتحانات والتوجيه
+االمتحان الوطني الموحد للبكالوريا
+املسالك الدولية	–	خيار فرنسية
+ا	لدورة اال	ستدراكية	2O16
+-	عناصر اإلجابة	- RR28F
+المادة
+الشعبة	أو	ا	لمسلك
+مدة اإلنجاز
+المعامل
+3
+7
+EXERCICE I (7 points)
+question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+Partie I
+1
+cathode 0,25 - Reconnaitre l'électrode à laquelle se
+produit la réaction d'oxydation (anode) ou
+l'électrode à laquelle se produit la réaction
+de réduction (cathode), connaissant le sens
+du courant imposé par le générateur.
+2
+2 2 
+ 	Mg e Mg
+2( )	2 2 
+	 g	Cl Cl e
+2
+2( )	2 
+   g	Mg Cl Mg Cl
+0,25
+0,25
+0,25
+- Ecrire les équations des réactions aux
+électrodes (avec double flèche) et l’équation
+bilan (simple flèche) lors d’une électrolyse.
+3 expression littérale
+27, 2	m g	
+ 0,25
+0,25
+- Etablir la relation entre les quantités de
+matière des espèces formées ou
+consommées, l'intensité du courant et la
+durée de l’électrolyse. Utiliser cette relation
+pour déterminer d’autres grandeurs
+(l’avancement de réaction, variation de
+masse, volume d’un gaz…).
+4
+expression littérale
+76,8	v L	
+ 0,25
+0,25
+Partie II
+1.1 catalyseur 0,25
+Savoir que le catalyseur est une espèce qui
+augmente la vitesse d'une réaction chimique
+sans modifier l'état d'équilibre du système.
+1.2 Lente et limitée 0,25x2
+- Connaitre les caractéristiques des réactions
+d'estérification et d'hydrolyse (lentes et
+limitées).
+1.3 L’équation de réaction 0,5 - Écrire les équations des réactions
+d'estérification et d'hydrolyse.
+1.4
+K 0, 24		
+0,5
+- Savoir que le quotient de réaction	,r éq	Q	 ,
+associée à l’équation de la réaction, à l'état
+d'équilibre d'un système, prend une valeur,
+indépendante des concentrations, nommée
+constante d'équilibre K .
+2.13	CH COO
+ 
+; ion éthanoate 0,25x2 -Écrire l'équation de la réaction d'un
+anhydride d'acide avec un alcool et celle de
+l'hydrolyse basique d'un ester.
+2.2 Le tableau d’avancement 0,5 - Dresser le tableau d’avancement d’une
+réaction et l’exploiter.
+2.3.1
+méthode1
+1/2 0,17 .	S m	
+ 
+
+ 0,5
+0,25
+- Exploiter les différentes courbes
+d’évolution de la quantité de matière d’une
+espèce chimique, sa concentration,
+
+-- 1 of 4 --
+
+4 2
+الصفحة
+4
+االمتحان الوطني الموحد للبكالوريا	-	الدورة اال	ستدراكية	2016	–	عناصر اإلجابة
+-	مادة	:	الفيزياء والكيمياء	–	مسلك	ال	علوم الفيزيائية	–	المسالك الدولية	(	خيار فرنسية	)
+RR28F
+l’avancement de réaction, sa conductivité
+électrique, sa conductance, la pression ou le
+volume d'un réactif ou d'un produit.
+2.3.2
+méthode
+1/2	17 min 18	 	t min
+ 0,5
+0,25
+- Définir le temps de demi-réaction
+- Exploiter des documents expérimentaux
+pour déterminer la constante de temps.
+2.3.3
+expression de la vitesse3 1
+0,52 .m .min 
+	v mol
+ 0,5
+0,25
+- Connaître l’expression de la vitesse
+volumique de réaction.
+- Déterminer graphiquement la valeur de la
+vitesse volumique de réaction.
+EXERCICE II (2,5 points)
+question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+1.
+la particule X est un électron
+désintégration		
+
+0,25
+0,25
+- Ecrire l'équation d'une réaction
+nucléaire en appliquant les deux lois de
+conservation.
+- Reconnaître le type de radioactivité à
+partir de l'équation d'une réaction
+nucléaire.
+2. méthode
+	lib	E 5,51MeV
+ 0,5
+0,25
+- Calculer l’énergie libérée (produite) par
+une réaction nucléaire :	libérée	
+E E	 	 .
+3. méthode	
+ 12	
+1,32.10 J / nucléon	E
+ 0,5
+0,25
+Définir et calculer l'énergie de liaison par
+nucléon et l'exploiter.
+4.20	
+ν = 3,31.10 Hz 0,5 - Connaître et exploiter la relation
+.	E h
+	 	
+.
+
+-- 2 of 4 --
+
+4 3
+الصفحة
+4
+االمتحان الوطني الموحد للبكالوريا	-	الدورة اال	ستدراكية	2016	–	عناصر اإلجابة
+-	مادة	:	الفيزياء والكيمياء	–	مسلك	ال	علوم الفيزيائية	–	المسالك الدولية	(	خيار فرنسية	)
+RR28F
+EXERCICE III ( 5 points)
+question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+Partie I
+1.1	(C ) Représente	PN	u (t)
+2	(C )
+Représente	R	u (t)
+0,25
+0,25
+- Exploiter des documents expérimentaux
+pour reconnaître les tensions observées.
+2.
+Expression littérale
+p	I 0 25 A	,	
+ 0,25
+0,25
+- Reconnaître et représenter les courbes de
+variation, en fonction du temps, de
+l'intensité du courant	( )	i t	 passant dans la
+bobine et les grandeurs qui lui sont liées et
+les exploiter.
+- Exploiter les données expérimentales, les
+analyser et en tirer des conclusions.
+3. Vérification de la valeur de r 0,25
+4.
+Equation différentielle :
+di (R+r) E
++ i =
+dt L L
+ 0,5 - Etablir l’équation différentielle et vérifier
+sa solution lorsque le dipôle RL est soumis à
+un échelon de tension.
+5.
+E
+A R r
+ 
+L
+(R r)
+  
+ 2 x 0,25
+- Déterminer l’expression de l'intensité du
+courant	( )	i t	 lorsque le dipôle RL est soumis
+à un échelon de tension…
+6.3ms	  0,25 - Exploiter des documents expérimentaux
+pour déterminer la constante de temps.
+7.L .(R r)	  
+L 0,144H	 0,25
+0,25
+- Connaître et exploiter l'expression de la
+constante de temps
+8.
+2	1 L i
+2
+	E
+0 7 mJ	,		E
+0,25
+0,25
+- Connaître et exploiter l'expression de
+l'énergie magnétique emmagasinée dans une
+bobine
+Partie II
+1.1. Recevoir et sélectionner l’onde 0,25 - Connaître le rôle sélectif du circuit
+bouchon LC pour la tension modulée.
+- Reconnaître les constituants essentiels qui
+constituent le montage d'un récepteur radio
+AM, et leurs rôles dans la démodulation.
+1.2.49 9pF	, 0,5
+2.1.	 	  	2 2	R C T		.	 0,25 - Utiliser les équations aux dimensions.
+2.2.5k 0,5 - Connaître les conditions permettant
+d’obtenir …et une détection d’enveloppe de
+bonne qualité.
+
+-- 3 of 4 --
+
+4 4
+الصفحة
+4
+االمتحان الوطني الموحد للبكالوريا	-	الدورة اال	ستدراكية	2016	–	عناصر اإلجابة
+-	مادة	:	الفيزياء والكيمياء	–	مسلك	ال	علوم الفيزيائية	–	المسالك الدولية	(	خيار فرنسية	)
+RR28F
+EXERCICE IV ( 5,5 points)
+question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+1.1
+méthode
+l’équation différentielle
+0,5
+0,25
+- Connaître et appliquer la relation
+fondamentale de la dynamique dans le cas
+de la rotation autour d’un axe fixe pour
+établir l’équation différentielle du
+mouvement et la résoudre.
+1.2 La dimension cherchée :2
+T 0,5 - Utiliser les équations aux dimensions.
+1.3
+méthode
+min	C mgL	
+ 0,5
+0,25
+- Déterminer la nature du mouvement du
+pendule de torsion, écrire et utiliser les
+équations du mouvement .
+- Connaître la signification des termes
+intervenant dans l’expression de l’équation
+horaire du pendule de torsion; les déterminer
+à partir des conditions initiales.
+1.4.1
+T 1s	
+0 15rad	 	max ,
+0	 
+0,25
+0,25
+0,25
+- Connaître la signification des termes
+intervenant dans l’expression de l’équation
+horaire	( )	t	
+	 du pendule de torsion; les
+déterminer à partir des conditions initiales.
+- exploiter les diagrammes	( )	t	
+	 pour
+déterminer les grandeurs qui caractérisent le
+mouvement du pendule dans le cas de
+faibles oscillations
+1.4.2
+méthode2
+2
+C 4 L
+g m L T
+.	
+ 
+app.num :2
+g 9 82ms	, 
+
+0,5
+0,25
+0,25
+- Connaître et exploiter l’expression de la
+période propre et la fréquence propre du
+pendule dans le cas des petites oscillations.
+2.1	m	E =10,8mJ	 0,5 - Exploiter les diagrammes d’énergie.
+- Connaître et exploiter l'expression de
+l'énergie mécanique du pendule .
+- Connaître et exploiter l'expression de
+l'énergie potentielle de torsion et de
+pesanteur.
+- Exploiter la conservation de l'énergie
+mécanique du pendule dans le cas de
+faibles oscillations.
+2	2.	p	E = 4,8mJ	 0,5
+2.3
+m
+2
+2.E
+= m.L
+θ
+ 	
+ 1 1	
+9,4.10 rad.s		
+0,5
+0,25
+
+-- 4 of 4 --
+

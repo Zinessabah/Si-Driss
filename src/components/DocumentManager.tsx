@@ -190,7 +190,11 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
     return base;
   };
 
-  const applySyncCompletion = async (job?: OfficialSyncJobStatus, fallbackMessage?: string) => {
+  const applySyncCompletion = async (
+    job?: OfficialSyncJobStatus,
+    fallbackMessage?: string,
+    prefix?: string
+  ) => {
     stopSyncPolling();
     if (!isMountedRef.current) return;
 
@@ -198,29 +202,85 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
       const updatedRag = await fetchRagStatus();
       if (isMountedRef.current) setRagStatus(updatedRag);
       await refreshOfficialDocs();
+      if (isAdminMode && adminTokenVal) {
+        const updatedDocs = await listOfficialDriveDocuments(selectedBranch, adminTokenVal);
+        if (isMountedRef.current) setAdminOfficialDocs(updatedDocs);
+      }
     } catch (refreshErr) {
       console.warn('[OfficialDocs] Rafraîchissement post-sync incomplet:', refreshErr);
     }
 
     if (!isMountedRef.current) return;
 
+    const tag = prefix ? `${prefix} ` : '';
     if (job?.phase === 'error') {
       setStatusMsg({
-        text: job.message || job.lastError || 'Erreur lors de la synchronisation des documents officiels.',
+        text: `${tag}${job.message || job.lastError || 'Erreur lors de la synchronisation des documents officiels.'}`,
         type: 'error',
       });
     } else if (job?.phase === 'partial_rate_limit') {
       setStatusMsg({
-        text: job.message || fallbackMessage || 'Synchronisation partielle (limite de requêtes atteinte).',
+        text: `${tag}${job.message || fallbackMessage || 'Synchronisation partielle (serveurs IA temporairement chargés).'}`,
         type: 'info',
       });
     } else {
       setStatusMsg({
-        text: `✅ ${job?.message || fallbackMessage || 'Documents officiels synchronisés avec succès !'}`,
+        text: `✅ ${tag}${job?.message || fallbackMessage || 'Documents officiels synchronisés avec succès !'}`,
         type: 'success',
       });
     }
     setIsSyncingOfficial(false);
+    setIsSyncingDrive(false);
+  };
+
+  const pollBackgroundSync = (
+    job: OfficialSyncJobStatus | undefined,
+    fallbackMessage: string,
+    prefix?: string
+  ) => {
+    stopSyncPolling();
+    setStatusMsg({
+      text: `${prefix ? `${prefix} ` : ''}${job ? formatSyncProgressText(job) : fallbackMessage}`,
+      type: 'info',
+    });
+
+    let consecutivePollErrors = 0;
+    let pollInFlight = false;
+
+    syncPollTimerRef.current = setInterval(async () => {
+      if (pollInFlight || !isMountedRef.current) return;
+      pollInFlight = true;
+      try {
+        const statusRes = await fetchOfficialSyncStatus();
+        consecutivePollErrors = 0;
+        if (!isMountedRef.current) return;
+
+        const currentJob = statusRes.syncJob;
+        if (currentJob?.running) {
+          setStatusMsg({
+            text: `${prefix ? `${prefix} ` : ''}${formatSyncProgressText(currentJob)}`,
+            type: 'info',
+          });
+        } else {
+          await applySyncCompletion(currentJob, fallbackMessage, prefix);
+        }
+      } catch (pollErr: any) {
+        consecutivePollErrors += 1;
+        if (consecutivePollErrors >= 6) {
+          stopSyncPolling();
+          if (isMountedRef.current) {
+            setIsSyncingOfficial(false);
+            setIsSyncingDrive(false);
+            setStatusMsg({
+              text: `${prefix ? `${prefix} ` : ''}Erreur suivi de synchronisation : ${pollErr?.message || 'Connexion interrompue'}`,
+              type: 'error',
+            });
+          }
+        }
+      } finally {
+        pollInFlight = false;
+      }
+    }, 3000);
   };
 
   // Synchronisation des documents officiels téléchargés et ré-indexation du RAG (tâche de fond cadencée)
@@ -237,47 +297,7 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
       );
 
       if (res.syncJob?.running) {
-        setStatusMsg({
-          text: formatSyncProgressText(res.syncJob),
-          type: 'info',
-        });
-
-        let consecutivePollErrors = 0;
-        let pollInFlight = false;
-
-        syncPollTimerRef.current = setInterval(async () => {
-          if (pollInFlight || !isMountedRef.current) return;
-          pollInFlight = true;
-          try {
-            const statusRes = await fetchOfficialSyncStatus();
-            consecutivePollErrors = 0;
-            if (!isMountedRef.current) return;
-
-            const job = statusRes.syncJob;
-            if (job?.running) {
-              setStatusMsg({
-                text: formatSyncProgressText(job),
-                type: 'info',
-              });
-            } else {
-              await applySyncCompletion(job, res.message);
-            }
-          } catch (pollErr: any) {
-            consecutivePollErrors += 1;
-            if (consecutivePollErrors >= 3) {
-              stopSyncPolling();
-              if (isMountedRef.current) {
-                setIsSyncingOfficial(false);
-                setStatusMsg({
-                  text: `Erreur suivi de synchronisation : ${pollErr?.message || 'Connexion interrompue'}`,
-                  type: 'error',
-                });
-              }
-            }
-          } finally {
-            pollInFlight = false;
-          }
-        }, 3000);
+        pollBackgroundSync(res.syncJob, res.message);
         return;
       }
 
@@ -486,7 +506,7 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
     }
   };
 
-  // Admin Drive sync action
+  // Admin Drive sync action (asynchrone avec suivi en direct pour éviter les 502/503 proxy)
   const handleAdminSyncBranch = async (branchToSync: 'PC' | 'SM') => {
     const folder = branchToSync === 'PC' ? driveFolderPC : driveFolderSM;
     if (!folder.trim()) {
@@ -494,20 +514,23 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
       return;
     }
 
+    stopSyncPolling();
     setIsSyncingDrive(true);
     setStatusMsg(null);
 
     try {
       const res = await syncDriveFolderWithServer(folder, branchToSync, adminTokenVal);
-      setStatusMsg({ text: `[Admin ${branchToSync}] ${res.message}`, type: res.success ? 'success' : 'info' });
-      const updatedDocs = await listOfficialDriveDocuments(selectedBranch, adminTokenVal);
-      setAdminOfficialDocs(updatedDocs);
-      const updatedRag = await fetchRagStatus();
-      setRagStatus(updatedRag);
+      if (res.syncJob?.running) {
+        pollBackgroundSync(res.syncJob, res.message, `[Admin ${branchToSync}]`);
+        return;
+      }
+      await applySyncCompletion(res.syncJob, res.message, `[Admin ${branchToSync}]`);
     } catch (err: any) {
-      setStatusMsg({ text: `Erreur synchro admin : ${err?.message || 'Erreur'}`, type: 'error' });
-    } finally {
-      setIsSyncingDrive(false);
+      stopSyncPolling();
+      if (isMountedRef.current) {
+        setStatusMsg({ text: `Erreur synchro admin : ${err?.message || 'Erreur'}`, type: 'error' });
+        setIsSyncingDrive(false);
+      }
     }
   };
 

@@ -1,0 +1,643 @@
+الصفحة االمتحان الوطني الموحد للبكالوريا
+الدورة االستدراكية	2024
+-	الموضوع	-
+المركز الوطني للتقويم واالمتحانات
+1
+6
+*I
+SSSSSSSSSSSSSSSSSSSS-SSSS RS 28F
+مدة
+اإل	نجاز الفيزياء والكيمياء
+ا	لمعامل شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+3h
+7
+المادة
+الشعبة	المسلك
+ L’usage de la calculatrice scientifique non programmable est autorisé.
+ On donnera les expressions littérales avant de passer aux applications
+numériques.
+ Les exercices peuvent être traités selon l’ordre choisi par le candidat.
+Le sujet comporte cinq exercices : un exercice de chimie et quatre exercices de physique.
+Exercice 1 : ( 7 points )
+- Etude de la pile fer - zinc
+- Etude d’une solution aqueuse d’une base
+Exercice 2 : ( 2,5 points )
+- Propagation d’une onde mécanique
+Exercice 3 : ( 2 points )
+- Désintégration en chaine
+Exercice 4 : ( 3,5 points )
+- Réponse d’un dipôle RC à un échelon de tension
+- Oscillations libres dans un circuit RLC série
+Exercice 5 : ( 5 points )
+- Mouvement d’un corps solide
+
+-- 1 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة االستدراكية	2024	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-
+شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+RS 28F	2
+6
+الصفحة
+EXERCICE 1 ( 7 points ) : Chimie
+Les deux parties 1 et 2 sont indépendantes
+Partie 1 : Etude de la pile fer - zinc
+Parmi les applications des réactions d’oxydoréduction on trouve les piles électrochimiques. Au cours du
+fonctionnement de ces piles, une partie de l’énergie chimique produite par ces réactions est transformée en
+énergie électrique.
+La pile fer-zinc étudiée dans cette partie est composée de deux compartiments (1) et (2) liés par un pont
+salin.
+Le compartiment(1) contient un volume	1	V	 de solution de sulfate de fer II :	2 2
+(aq) 4(aq)	Fe SO 
+	 de concentration
+initiale en ion Fer II :2
+1 (aq) i
+C Fe 
+ 	  	 dans laquelle est plongée une plaque de fer.
+Le compartiment (2) contient un volume	2 1	V V		 de solution de sulfate de zinc	2 2
+(aq) 4(aq)	Zn SO 
+	 de
+concentration initiale en ion zinc :2
+2 1 (aq) i
+C C Zn 
+ 	   	 dans laquelle est plongée une plaque de zinc.
+Un circuit électrique est réalisé en branchant un conducteur ohmique, un ampèremètre et un interrupteur
+en série avec la pile fer–zinc étudiée.
+L’ampèremètre est branché de façon que sa borne COM (pôle négatif) soit reliée à l’électrode de zinc.
+A un instant de date	0	t = 0	 on ferme le circuit et l’ampèremètre affiche la valeur constante positive
+I 500 mA		
+de l’intensité du courant électrique durant	1 0	t t t 10 min	   	 .
+Données :
+- Couples ox/red intervenant dans la réaction :2+
+(aq) (s)	Zn / Zn	 et2
+(aq) (s)	Fe / Fe ;
+- Constante de Faraday :4 1
+1F 9, 65.10 C.mol
+	 ;
+- Masse molaire :1
+M(Fe) 56 g.mol
+	 .
+On souligne que la réaction modélisant la transformation qui a eu lieu est totale.
+1- Indiquer, en justifiant, l’électrode positive de la pile. (0,5 pt)
+2- Ecrire l’équation de la réaction au niveau de chaque électrode, et déduire l’équation bilan lors du
+fonctionnement de la pile. (0,75 pt)
+3- La pile fonctionne pendant la durée	t 10 min	 	 . Montrer que la variation de la masse de la plaque de fer
+a pour expressionI. t.M(Fe)
+m 2.F
+
+ 	 . Calculer sa valeur. (1 pt)
+Partie 2 : Etude d’une solution aqueuse d’une base
+Dans cette partie de l’exercice on se propose d’étudier une solution aqueuse d’une amine	2	R - NH	 où R
+est une chaine carbonée. Cette amine a un caractère basique, elle se transforme en son acide conjugué+
+3	R - NH	
+.
+On prépare une solution aqueuse	B	S	 de cette amine de volume V et de concentration2 1
+B	C 9,0.10 mol.L 
+	 .
+La mesure de son pH donnepH 11,88		 .
+On note que toutes les mesures sont effectuées à 25°C.
+1-Etude de la solution	B	S	 :
+1-1- Ecrire l’équation de la réaction de	2	R-NH	 avec l’eau. (0,5pt)
+1-2- Les courbes de la figure 1 représentent le diagramme de distribution de la forme acide et de la forme
+basique du couple	3(aq) 2(aq)	R-NH / R-NH .
+
+-- 2 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة االستدراكية	2024	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-
+شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+RS 28F	3
+6
+الصفحة
+Vers la voie B de l’oscilloscope	Vers la voie A de l’oscilloscope
+M2	M1
+Figure 1
+Emetteur
+div
+Figure 2
+(A)
+(B)
+En exploitant les courbes de la figure 1:
+1-2-1- Vérifier en justifiant que la valeur du	A	pK	 du
+couple	3(aq) 2(aq)	R-NH / R-NH est	A	pK 10,8		 . (0,5pt)
+1-2-2- Indiquer en justifiant l’espèce prédominante
+(	3	R-NH ou	2	R-NH	 ) dans la solution	B	S	 . (0,5pt)
+1-2-3- Déterminer la valeur du pH pour que le
+pourcentage de l’acide soit égal à quatre (4) fois
+celui de la base. (0,75pt)
+2- Dosage de la solution aqueuse	B	S
+On a réalisé le dosage d’un volume	B	V 10,0 mL		 de
+la solution	B	S	 de concentration2 1
+B	C 9,0.10 mol.L 
+	 ,
+par une solution	A	S	 d’acide chlorhydrique	3 (aq) (aq)	H O Cl 
+	 de concentration molaire2 1
+A	C 4,5.10 mol.L 
+	 .
+2-1- Ecrire l’équation de la réaction du dosage. (0,5pt)
+2-2- Déterminer	AE	V	 le volume d’acide chlorhydrique qui a été versé pour atteindre l’équivalence. (0,5pt)
+2-3- Le pH du mélange réactionnel estpH 10, 2		 lorsque le volume versé de la solution	A	S	 est	A	V 16, 0 mL		 .
+En vous aidant du tableau d’avancement de la réaction de dosage, exprimer	f	x	 l’avancement de la réaction à
+cet état final en fonction de	A A B	C , V , V et pH	 . Vérifier que sa valeur est4
+f	x 7, 2.10 mol
+	 . (0,75pt)
+2-4- Déduire, en calculant	 le taux d’avancement final de la réaction pour	A	V 16, 0 mL		 , que la
+transformation associée à la réaction de dosage est totale. (0,75pt)
+EXERCICE 2( 2,5 points ) : Propagation d’une onde mécanique
+Dans cet exercice, on se propose d’étudier la propagation d’une onde mécanique dans l’air.
+On réalise l’expérience suivante avec deux microphones M1 et M2 distants ded = 2,85 m	 et reliés aux voies
+A et B d’un oscilloscope à mémoire. Entre ces deux microphones, un émetteur produit des salves de son.
+L’émetteur est à la distance du microphone M1 . L’émetteur, M1 et M2 sont alignés. (Figure 1).
+Les oscillogrammes obtenus sur les deux voies A et B de l’oscilloscope sont représentés sur la figure 2.
+La sensibilité horizontale de l’oscilloscope est réglée à0,5 ms	 par division.
+Donnée : - La célérité du son dans l’air est1
+v 340 m.s
+	 .
+1- Définir une onde mécanique longitudinale. (0,25pt)
+2- Répondre par vrai ou faux (sans justification) aux propositions suivantes : (1pt)
+a- Les ondes lumineuses sont des ondes mécaniques.
+b- Dans un même milieu, la diffraction modifie la longueur d’onde.
+Figure 1
+2 4 6 8 10 12 14
+𝐩𝐇
+0
+20
+40
+60
+80
+100
+%
+Forme acide
+Forme basique
+
+-- 3 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة االستدراكية	2024	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-
+شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+RS 28F	4
+6
+الصفحة
+c- La célérité du son dépend du milieu de propagation.
+d- Une onde longitudinale se propage avec transport de la matière.
+3- Déterminer le retard temporel τ avec lequel le son arrive en M2 par rapport à M1. (0,5pt)
+4- Déterminer la valeur de . (0,75pt)
+EXERCICE 3 ( 2 points ) : Désintégration en chaine
+Suite à des désintégrations en chaine, un nucléide peut se transformer en d’autres jusqu’à obtention d’un
+nucléide stable, formant ainsi une famille radioactive.
+Le diagramme ci-dessous donne quelques nucléides appartenant à une famille radioactive.
+Données :* masse des noyaux :212
+83	m( Bi) 211,991286u		 ;208
+81	m( Tl) 207,982019u		 ;	 	
+m 4,002603u	 	 ;
+*2
+1u 931,5 MeV.c
+	 .
+1- En exploitant le diagramme ci-contre :
+1-1- Identifier, en justifiant le type de la désintégration (1). (0,25pt)
+1-2- Reconnaitre le nucléideA
+Z X	 . (0,25pt)
+2- On considère la désintégration d’un noyau de bismuth212
+83 Bi	 en
+noyau de thallium208
+81Tl	 . (Désintégration (2)).
+2-1- Ecrire l’équation de cette désintégration. (0,25pt)
+2-2- Déterminer, en unité (MeV),	libérée | |	E E	 	 la valeur de l’énergie
+libérée par cette désintégration. (0,5pt)
+2-3- Soit une source radioactive contenant à l’instant t = 0,20
+0	N 2,84.10		
+noyaux radioactifs de bismuth212
+83 Bi	 . A l’instant
+1t 15min		
+, le nombre de noyaux de thallium formés est :
+1
+1
+9
+4, 484.10	N 	
+.
+Montrer que l’expression de la demi-vie t1/2 du bismuth212
+83 Bi	 est :1
+1/2
+0
+0 1
+t .ln 2
+t N
+ln N N
+  
+ 
+	 
+ .
+Calculer sa valeur en minute. (0,75pt)
+EXERCICE 4 ( 3,5 points) : Electricité
+Les circuitsRC	 ,RLC	 ,… sont utilisés dans les montages électroniques de plusieurs appareils électriques
+et électroniques.
+On se propose, dans cet exercice d’étudier :
+- la réponse d’un dipôle RC à un échelon de tension ;
+- les oscillations libres dans un circuit RLC série.
+Le montage électrique schématisé sur la figure 1 comporte :
+- un générateur idéal de tension de force électromotriceE	 ;
+- un condensateur de capacitéC	 initialement déchargé ;
+- un conducteur ohmique de résistanceR 50	 	 ;
+- une bobine d’inductanceL 20 mH		 et de résistance r ;
+- un interrupteurK	 à double position.
+Figure 1
+(L,r)
+(	1	) (2)
+81 82 83 84 Z
+208
+209
+210
+211
+212
+A
+(1)
+(2)
+(3)
+
+-- 4 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة االستدراكية	2024	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-
+شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+RS 28F	5
+6
+الصفحة
+Figure 4
+0
+5
+-5
+𝟐
+𝟏
+20	10	0
+Figure 2
+0
+2
+Figure 3
+-2
+1-Réponse d’un dipôle RC à un échelon de tension
+A un instant choisi comme origine des dates	0	t = 0	 on met
+l’interrupteur K en position (1).
+Un système d’acquisition informatisé adéquat permet de
+suivre l’évolution temporelle de la tension	R	u (t)	 aux bornes
+du conducteur ohmique (figure 2). Dans cette figure, (T)
+représente la tangente à la courbe au point d’abscisse0	t = 0	 et
+τ
+la constante de temps du circuit.
+1-1- En utilisant la loi d’additivité des tensions, montrer que
+l’équation différentielle vérifiée par la tension	R	u (t)	 s’écrit
+sous la forme :R
+R
+du (t) 1 u (t) 0
+dt RC
+ 	 . (0,5pt)
+1-2- En s’aidant du graphe de la figure 2 :
+1-2-1-Déterminer la valeur de E. (0,25pt)
+1-2-2-Vérifier queC 0,10 F	 	 . (0,75pt)
+2-Oscillations libres dans un circuit RLC série
+Le condensateur précèdent étant chargé totalement, on bascule l’interrupteur K en position (2) à un instant
+pris comme nouvelle origine des dates0	t = 0	 . Le même système d’acquisition utilisé a permis de suivre
+l’évolution temporelle de la tension	C	u (t)	 aux bornes du condensateur (figure 3) et de la tension	R	u (t)
+aux bornes du conducteur ohmique (figure 4).
+2-1- En s’aidant de la loi d’additivité des tensions :
+2-1-1- Déterminer la valeur de la tension aux bornes de la bobine juste après le basculement de
+l’interrupteur K en position (2). (0,25pt)
+2-1-2- Etablir l’équation différentielle vérifiée par la tension	C	u (t)	 aux bornes du condensateur. (0,75pt)
+2-2- Exprimer l’énergie totale	t	E	 du circuit en fonction de L, C,	C	u (t)	 , R et	R	u (t)	 . (0,5pt)
+2-3- En s’aidant des courbes de la figure 3 et de la figure 4, vérifier que l’énergie dissipée par effet Joule
+dans le circuit entre l’instant	0	t = 0	 et l’instant	1	t	 est :	j t	E E 1,1 J	   	 . (0,5pt)
+EXERCICE 5 (5 points) : Mouvement d’un corps solide
+On étudie dans cet exercice le mouvement d’une bille le long d’un parcours AB rectiligne puis son
+mouvement en chute libre après le point B.
+
+-- 5 of 10 --
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة االستدراكية	2024	–	الموضوع
+-	مادة:	الفيزياء والكيمياء	-
+شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+RS 28F	6
+6
+الصفحة
+Figure 1
+A
+x
+y
+(S)
+B
+A
+N
+’
+Le parcours AB est incliné d’un angle	 par rapport à l’horizontale. La trajectoire du mouvement de la
+bille est située dans un plan vertical (Figure 1).
+On modélise la bille par un solide (S) de masse m et de
+centre d’inertie G. Durant le mouvement de (S) sur le
+parcours AB, les forces qui s’opposent à son avancement
+sont équivalentes à une force de même direction, de sens
+opposé au mouvement et d’intensité constantef .
+Données : Intensité de la pesanteur :2
+g 10 m.s
+	 ;
+0
+20	 	
+;	m 100 g		 .
+On étudie le mouvement de G sur le parcours AB dans un
+repère orthonormé	1	1 1	R (A,i , j )	 , et son mouvement de
+chute libre dans un repère orthonorméR(B,i, j)	 . Les deux
+repères sont liés à un référentiel terrestre supposé galiléen.
+1-Mouvement de (S) le long du parcours AB
+On envoie le solide(S)	 du point A à l’instant	0	t 0		 choisi
+comme origine des dates.
+1-1- En appliquant la deuxième loi de Newton, montrer que
+l’expression de l’accélération	x1	a	 du mouvement de G s’écrit :
+x1
+f
+a g.sin m
+  	
+. (0,5pt)
+1-2- La courbe de la figure 2 représente l’évolution temporelle de
+la vitesse de G le long du trajet AB.
+1-2-1- Déterminer graphiquement la valeur de l’accélération	x1	a
+de G. (0,5pt)
+1-2-2- Déduire l’intensité f. (0,5pt)
+1-3- Vérifier que la vitesse de G à son arrivé au point B est1
+B	V 0,8m.s
+	 sachant que la durée mise par le
+solide(S)	 pour parcourir le trajet AB est	AB	t 1,1s		 .(0,75pt)
+2-Mouvement de chute libre de (S)
+Le solide(S)	 quitte le point B avec la vitesse	B	V	 faisant l’angle	 avec l’horizontale et continue son
+mouvement mais en chute libre (Figure1). On choisit l’instant de passage de la bille par le point B comme
+nouvelle origine des dates (t=0).
+2-1- Etablir, dans le repère orthonorméR(B,i, j)	 , les équations horaires paramétriques x(t) et y(t) du
+mouvement du centre d’inertie G. (1pt)
+2-2- Montrer que l’équation de la trajectoire du centre d’inertie G s’écrit :2
+y 8,85x 0,36x	 	 . (0,5 pt)
+2-3- Soit N un point de coordonnées	N	x 20cm		 et	N	y 42,6cm		 .
+2-3-1- Vérifier que G passe par le point N . (0,5 pt)
+2-3-2- Calculer la vitesse de G à son arrivé au point N en se basant sur les équations horaires de la vitesse
+de G. (0,75 pt)
+0,1 0,2 t (s)
+0
+0,1
+0,2
+Vx (m.s-1)
+Figure 2
+
+-- 6 of 10 --
+
+االمتحان الوطين املوحد للبكالوريا
+المسالك الدولية
+الدورة االستدراكية	2024
+شعبة العلوم التجريبية مسلك العلوم الفيزيائية (خيار فرنسية)
+ا	لصفحة
+الفيزياء والكيمياء المادة
+الشعبة	أو المسلك
+مدة اإلنجاز
+المعامل
+3h
+7
+
+1
+4
+*I
+SSSSSSSSSSSSSSSSSSSS-SSSS عناصر اإلجابة RR 28F
+EXERCICE 1 (7 points)
+Question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+Partie 1
+1 Electrode positive = fer
+Justification
+0,25
+0,25
+- Interpréter le fonctionnement d'une pile en disposant
+d'une information parmi les suivantes : le sens de du
+courant électrique, la f.é.m , les réactions aux électrodes, la
+polarité des électrodes ou le mouvement des porteurs de
+charges.
+2 Equations aux électrodes +
+équation bilan 3x0,25
+- Ecrire les équations des réactions aux électrodes (avec
+double flèche) et l’équation bilan lors du fonctionnement de
+la pile (avec une seule flèche).
+3 Démonstration2
+m 8, 7.10 g
+
+ 0,75
+0,25
+- Etablir la relation entre les quantités de matière des
+espèces formées ou consommées, l'intensité du courant et la
+durée de fonctionnement de la pile. Utiliser cette relation
+pour déterminer d’autres grandeurs (quantité d’électricité,
+l’avancement de la réaction, variation de masse…).
+Partie 2
+1-1 Equation de la réaction 0,5
+- Ecrire l'équation de la réaction modélisant une
+transformation acido-basique et identifier les deux couples
+intervenants.
+1-2-1 Vérification 0,5 - Ecrire et utiliser l’expression de la constante d'acidité KA
+associée à l’équation de la réaction d'un acide avec l'eau.
+- Connaître la relation pKA= - log KA .
+- Exploiter le diagramme de prédominance et de
+distribution des espèces acides et basiques présentes en
+solution aqueuse.
+1-2-2 Espèce prédominante :	2	R NH	
+Justification
+0,25
+0,25
+1-2-3pH 10, 2	 Justification
+0,25
+0,5
+2-1 Equation de la réaction 0,5 Ecrire l’équation de réaction de dosage (en utilisant une
+seule flèche).
+2-2 Méthode
+AE	V 20 mL	
+ 0,25
+0,25 - Repérer et exploiter le point d’équivalence
+2-3
+pH
+f A A A B	x C V (V V ).10
+   Vérification
+0,5
+0,25
+- Dresser le tableau d’avancement d’une réaction et
+l’exploiter.
+- Calculer l'avancement final de la réaction d’un acide avec
+l'eau, connaissant la valeur de la concentration et du pH de
+la solution de cet acide, et le comparer à l'avancement
+maximal.
+- Définir le taux d'avancement final d’une réaction et le
+déterminer à partir de données expérimentales.
+2-4	100 %	 	 donc réaction totale 0,75
+
+-- 7 of 10 --
+
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة االستدراكية	2024	–	عناصر اإلجابة
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+RR 28F	2
+4
+الصفحة
+Exercice 2 (2,5 points )
+Question Eléments de réponses Barème Référence de la question dans le cadre
+de référence
+1 Définition 0,25 -Définir une onde progressive.
+2 a-faux ; b-faux
+c-vrai ; d-faux 4x0,25
+-Savoir que la lumière a un aspect ondulatoire,
+- Connaître les caractéristiques de l’onde diffractée.
+-Définir une onde transversale et une onde
+longitudinale.
+-Définir une onde progressive.
+3	2 ms	 	 0,5
+Exploiter des documents expérimentaux et des
+données pour déterminer :
+* un retard temporel.
+4
+d .v
+= 2
+ 
+= 1, 085 m
+0,5
+0,25
+- Exploiter la relation entre le retard temporel, la
+distance et la célérité.
+Exercice 3 (2 points )
+Question Eléments de réponses Barème Référence de la question dans le cadre
+de référence
+1-1 Type β− + Justification 0,25 - Reconnaître le type de radioactivité à partir de l'équation
+d'une réaction nucléaire.
+- Connaître et exploiter les deux lois de conservation
+-Ecrire l'équation d'une réaction nucléaire en appliquant les
+deux lois de conservation.
+- Exploiter le diagramme (N,Z).
+- Connaître la signification du symboleA
+Z X	 et donner la
+composition du noyau correspondant.
+- Reconnaître les isotopes d’un élément chimique.
+1-2208
+82 Pb	 0,25
+2-1 Equation de la désintégration 0,25 .- Ecrire l'équation d'une réaction nucléaire en appliquant
+les deux lois de conservation.
+2-2 Méthode
+Elibérée = |∆E| ≈ 6,21 MeV
+0,25
+0,25
+- Calculer l’énergie libérée (produite) par une réaction
+nucléaire :	libérée	E E	 	 .
+2-3 Démonstration
+1/2	t 60,5 min
+ 0,5
+0,25
+- Connaître et exploiter la loi de décroissance radioactive
+et exploiter sa courbe correspondante.
+- Définir de la constante de temps	 et la demi-vie1/2	t .
+- Exploiter les relations entre ,	 et1/2	t .
+
+-- 8 of 10 --
+
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة االستدراكية	2024	–	عناصر اإلجابة
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+RR 28F	3
+4
+الصفحة
+EXERCICE 4 ( 3,5 points)
+Question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+1-1 Démonstration 0,5
+- Etablir l’équation différentielle et vérifier sa solution
+lorsque le dipôle RC est soumis à un échelon de tension.
+- Connaître et exploiter la relation	dq
+i dt
+	 pour un
+condensateur en convention récepteur.
+- Connaître et exploiter la relation q = C.u.
+1-2-1	E 5 V		 . 0,25
+- Connaitre que la tension aux bornes d'un condensateur
+est une fonction du temps continue, et que l'intensité est
+une fonction discontinue à t=0.
+-Reconnaître et représenter les courbes de variation en
+fonction du temps, de la tension	( )	C	u t	 aux bornes du
+condensateur et les différentes grandeurs qui lui sont
+liées, et les exploiter.
+- Exploiter des documents expérimentaux pour
+reconnaître les tensions observées.
+1-2-2 Vérification 0,75
+- Connaître et exploiter l'expression de la constante de
+temps.
+- Exploiter des documents expérimentaux pour
+déterminer la constante de temps.
+2-1-1	b	u (0 ) 5V  	 0,25
+- Connaître qu'une bobine retarde l'établissement et la
+disparition du courant et que l'intensité	( )	i t	 est une
+fonction du temps continue et que la tension entre ses
+bornes est une fonction discontinue à t=0.
+- Connaitre que la tension aux bornes d'un condensateur
+est une fonction du temps continue, et que l'intensité est
+une fonction discontinue à t=0.
+2-1-2 Méthode
+Equation différentielle.
+0,5
+0,25
+- Représenter les tensions	R	u	 et	L	u	 en convention
+récepteur.
+- Connaître et exploiter l’expression de la tension
+. . di
+u r i L dt
+ 	
+aux bornes d’une bobine en
+convention récepteur.
+-Etablir l’équation différentielle vérifiée par la tension
+aux bornes du condensateur ou par sa charge dans le cas
+d’amortissement.
+2-22 2
+t C R	2
+1 L
+E (Cu (t) u (t))
+2 R
+ 	 0,5 -Connaître et exploiter l'expression de l'énergie
+électrique emmagasinée dans un condensateur.
+- Connaître et exploiter l'expression de l'énergie
+magnétique emmagasinée dans une bobine.
+-Connaître et exploiter l’expression de l’énergie totale
+du circuit.
+2-3 vérification 0,5
+
+-- 9 of 10 --
+
+
+االمتحان الوطني الموحد للبكالوريا	-	ا	لدورة االستدراكية	2024	–	عناصر اإلجابة
+-	مادة:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية مسلك العلوم الف	يزيائية (خيار فرنسية)
+RR 28F	4
+4
+الصفحة
+EXERCICE 5 ( 5 points)
+Question Eléments de réponse Barème Référence de la question
+dans le cadre de référence
+1-1 Démonstration 0,5
+- Appliquer la deuxième loi de Newton pour établir
+l’équation différentielle du mouvement du centre
+d’inertie d’un système sur un plan horizontal ou
+incliné et déterminer les grandeurs cinématiques et
+dynamiques caractéristiques du mouvement.
+-Connaître et exploiter les caractéristiques du
+mouvement rectiligne uniformément varié et ses
+équations horaires.
+- Exploiter le diagramme de la vitesse	( )	G	v f t		 .
+1-2-12
+x1	a 0,64m.s 0,5
+1-2-2	f 0, 28 N	 0,5
+1-3 Vérification 0,75
+2-1 Equations horaires 2x0,5
+- Appliquer la deuxième loi de Newton dans le cas d'un
+projectile pour :
+*établir les équations différentielles du mouvement.
+*en déduire les équations horaires du mouvement et
+les exploiter.
+* trouver l’équation de la trajectoire.
+2-2 Démonstration 0,5
+2-3-1 Vérification 0,5
+2-3-2 Méthode1
+N	v 3,03m.s 0,5
+0,25
+
+-- 10 of 10 --
+

@@ -189,7 +189,15 @@ export async function syncDriveFolderWithServer(
   folderIdOrUrl: string,
   branch: 'PC' | 'SM',
   adminToken?: string
-): Promise<{ success: boolean; count: number; message: string; files?: string[] }> {
+): Promise<{
+  success: boolean;
+  count: number;
+  message: string;
+  files?: string[];
+  started?: boolean;
+  alreadyRunning?: boolean;
+  syncJob?: OfficialSyncJobStatus;
+}> {
   const cleanId = extractDriveFolderId(folderIdOrUrl);
   if (!cleanId) {
     throw new Error('Veuillez fournir un lien ou un identifiant de dossier Google Drive valide.');
@@ -218,6 +226,9 @@ export async function syncDriveFolderWithServer(
     count: Number(data.downloadedCount || 0),
     message: data.message || 'Synchronisation terminée avec succès.',
     files: data.downloadedFiles || [],
+    started: data.started,
+    alreadyRunning: data.alreadyRunning,
+    syncJob: data.syncJob,
   };
 }
 

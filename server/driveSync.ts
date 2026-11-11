@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import { DOCS_DIR, GOOGLE_DRIVE_FOLDER_PC, GOOGLE_DRIVE_FOLDER_SM, DRIVE_SYNC_INTERVAL_HOURS, GOOGLE_DRIVE_APPS_SCRIPT_URL } from './config';
 import { extractTextFromPdf, discoverProgrammeFiles } from './rag';
 
@@ -228,6 +229,7 @@ export async function syncGoogleDriveBranch(params: {
   folderIdOrUrl?: string;
   apiKey?: string;
   force?: boolean;
+  docsDir?: string;
 }): Promise<DriveSyncResult> {
   const branch = params.branch.toUpperCase() as 'PC' | 'SM';
   const envFolder = branch === 'SM' ? GOOGLE_DRIVE_FOLDER_SM : GOOGLE_DRIVE_FOLDER_PC;
@@ -248,7 +250,7 @@ export async function syncGoogleDriveBranch(params: {
 
   const apiKey = resolveDriveApiKey(params.apiKey);
 
-  const branchDir = path.join(DOCS_DIR, branch);
+  const branchDir = path.join(params.docsDir || DOCS_DIR, branch);
   if (!fs.existsSync(branchDir)) {
     fs.mkdirSync(branchDir, { recursive: true });
   }
@@ -272,6 +274,54 @@ export async function syncGoogleDriveBranch(params: {
   const downloadedFiles: string[] = [];
   let skippedExisting = 0;
 
+  const normalizeDocStem = (name: string): string =>
+    path
+      .basename(name, path.extname(name))
+      .toLowerCase()
+      .replace(/^(pc|sm)[_\-\s]+/, '')
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+
+  const ensurePdfSidecar = async (pdfPath: string, pdfBuffer?: Buffer) => {
+    if (!pdfPath.toLowerCase().endsWith('.pdf') || fs.existsSync(`${pdfPath}.extracted.txt`)) return;
+    try {
+      const extractedText = await extractTextFromPdf(pdfBuffer ?? fs.readFileSync(pdfPath));
+      if (extractedText && extractedText.trim().length > 20) {
+        fs.writeFileSync(`${pdfPath}.extracted.txt`, extractedText, 'utf-8');
+      }
+    } catch {}
+  };
+
+  // Index local pour déduplication par nom normalisé, taille et empreinte SHA-256
+  const existingByStem = new Map<string, { filePath: string; size: number }[]>();
+  const existingHashes = new Map<string, string>();
+  let hashesLoaded = false;
+
+  const loadExistingHashes = () => {
+    if (hashesLoaded) return;
+    hashesLoaded = true;
+    for (const entries of existingByStem.values()) {
+      for (const entry of entries) {
+        try {
+          const hash = crypto.createHash('sha256').update(fs.readFileSync(entry.filePath)).digest('hex');
+          if (!existingHashes.has(hash)) existingHashes.set(hash, entry.filePath);
+        } catch {}
+      }
+    }
+  };
+
+  try {
+    for (const entry of fs.readdirSync(branchDir, { withFileTypes: true })) {
+      if (!entry.isFile() || entry.name.startsWith('.') || entry.name.endsWith('.extracted.txt')) continue;
+      const fullPath = path.join(branchDir, entry.name);
+      const size = fs.statSync(fullPath).size;
+      const stem = normalizeDocStem(entry.name);
+      const list = existingByStem.get(stem) || [];
+      list.push({ filePath: fullPath, size });
+      existingByStem.set(stem, list);
+    }
+  } catch {}
+
   for (const file of files) {
     try {
       let cleanName = path.basename(file.name).replace(/[^a-zA-Z0-9_\-\.]/g, '_');
@@ -294,26 +344,40 @@ export async function syncGoogleDriveBranch(params: {
 
       const targetPath = path.join(branchDir, targetName);
       const isPdf = targetName.toLowerCase().endsWith('.pdf');
+      const incomingStem = normalizeDocStem(cleanName);
 
-      // Éviter de re-télécharger inutilement (prévient les 429 Google Drive et 502 timeout)
-      if (!params.force && fs.existsSync(targetPath)) {
-        const localStat = fs.statSync(targetPath);
-        const sameSize = file.size ? localStat.size === file.size : localStat.size > 512;
-        if (sameSize) {
-          skippedExisting++;
-          if (isPdf && !fs.existsSync(`${targetPath}.extracted.txt`)) {
-            try {
-              const extractedText = await extractTextFromPdf(fs.readFileSync(targetPath));
-              if (extractedText && extractedText.trim().length > 20) {
-                fs.writeFileSync(`${targetPath}.extracted.txt`, extractedText, 'utf-8');
-              }
-            } catch {}
+      // Éviter de re-télécharger ou dupliquer un document déjà présent (exact ou nom normalisé équivalent)
+      if (!params.force) {
+        const stemMatches = existingByStem.get(incomingStem) || [];
+        const matchedExisting =
+          (fs.existsSync(targetPath) ? { filePath: targetPath, size: fs.statSync(targetPath).size } : null) ||
+          stemMatches.find((m) => (file.size ? m.size === file.size : m.size > 512));
+
+        if (matchedExisting) {
+          const sameSize = file.size ? matchedExisting.size === file.size : matchedExisting.size > 512;
+          if (sameSize) {
+            skippedExisting++;
+            await ensurePdfSidecar(matchedExisting.filePath);
+            continue;
           }
-          continue;
         }
       }
 
       const fileBuffer = await downloadDriveFile(file.id, apiKey, isPdf);
+
+      // Déduplication par empreinte SHA-256 (empêche tout doublon même si le nom diffère)
+      if (!params.force) {
+        loadExistingHashes();
+        const incomingHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+        const duplicatePath = existingHashes.get(incomingHash);
+        if (duplicatePath && duplicatePath !== targetPath) {
+          skippedExisting++;
+          await ensurePdfSidecar(duplicatePath, fileBuffer);
+          continue;
+        }
+        existingHashes.set(incomingHash, targetPath);
+      }
+
       fs.writeFileSync(targetPath, fileBuffer);
 
       // Extraction immédiate du texte pour le RAG
@@ -327,6 +391,10 @@ export async function syncGoogleDriveBranch(params: {
           console.warn(`[DriveSync] Avertissement extraction PDF (${targetName}):`, extractErr);
         }
       }
+
+      const updatedList = existingByStem.get(incomingStem) || [];
+      updatedList.push({ filePath: targetPath, size: fileBuffer.length });
+      existingByStem.set(incomingStem, updatedList);
 
       downloadedFiles.push(targetName);
       console.log(`[DriveSync] Fichier indexé avec succès dans le RAG (${branch}): ${targetName}`);

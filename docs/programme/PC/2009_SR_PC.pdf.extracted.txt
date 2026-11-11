@@ -1,0 +1,273 @@
+1
+L’usage des calculatrices programmables ou d’ordinateurs n’est pas autorisé
+Chimie : (07 points)
+Etude d’une solution d’eau de Javel.
+Physique : (13 points)
+ Exercice 1 (03 points) : Les ondes
+Etude des ondes à la surface de l’eau.
+ Exercice 2 (04,5 points) : Electricité
+Etude d’un circuit RLC
+ Exercice 3 (05,5 points) : Mécanique
+Etude d’un oscillateur mécanique
+Donner les expressions littérales avant les applications numériques
+Les parties de tous les exercices sont indépendantes
+
+-- 1 of 6 --
+
+2
+Barème
+0,5
+0,5
+0,75
+0,75
+Chimie : (07 points)
+Le dichlore (Cℓ2) est l’un des gaz essentiel entrant dans la synthèse de plusieurs
+composés chimiques, en particulier l’eau de Javel.
+L’eau de Javel est caractérisée par son degré chlorométrique (D° Chl) qui
+représente le volume du dichlore (en Litres) se trouvant dans 1L d’eau de Javel. Ce
+volume est donné dans les conditions normales de température et de pression où le
+volume molaire est : Vm = 22,4 L.mol-1.
+Le but de cet exercice est d’étudier :
+ La préparation du dichlore par électrolyse ;
+ La détermination du degré chlorométrique (D° Chl) de la solution d’eau de
+Javel préparée;
+ Les propriétés acido-basiques d’eau de Javel.
+Données :
+ La masse molaire du chlorure de sodium est M(NaCℓ) = 58,5 g.mol-1 ;
+ La constante de Faraday : 1 F = 96500 C.mol-1 ;
+ Le degré chlorométrique d’eau de Javel est donné par : (D°Chl) = [CℓO-]0.Vm ,
+où [CℓO-]0 représente la concentration molaire initiale des ions hypochlorites
+(CℓO-) dans la solution d’eau de Javel étudiée ;
+ Le produit ionique de l’eau à 25°C est : Ke = 10-14 ;
+ La constante d’équilibre de la réaction de CℓO- avec l’eau est : K = 3,16.10-7.
+1- Etude de la préparation du gaz dichlore :
+On effectue l’électrolyse d’une solution concentrée de chlorure de sodium+ -
+aq aq	(Na + C )
+pendant 30 min, à l’aide d’un courant continu d’intensité I = 57,9 A.
+L’expérience a montré le dégagement :
+ Du gaz dichlore (Cℓ2) au voisinage de l’un des électrodes ;
+ Du gaz dihydrogène (H2) et formation des ions hydroxydes HO- au voisinage de
+l’autre électrodes.
+Cette électrolyse est modélisée par l’équation de réaction suivante :
+2 H2O(ℓ) + 2 Cℓ-(aq) ⇄ H2(g) + Cℓ2(g) + 2 HO-(aq) 
+1-1- Préciser les couples (oxydant/réducteur) intervenant dans cette réaction.
+1-2- Ecrire l’équation modélisant la réaction chimique ayant lieu au voisinage
+de la cathode.
+1-3- Construire le tableau d’avancement de la réaction chimique se produisant
+au voisinage de l’anode.
+1-4- Trouver l’expression de la quantité de matière n du corps formé à l’anode
+en fonction de : I, Δt et F . Calculer sa valeur.
+
+-- 2 of 6 --
+
+3
+1
+0,5
+0,75
+0,75
+0,5
+1
+2- Détermination du degré chlorométrique (D° Chl) d’eau de Javel :
+On prépare une solution (S0) d’eau de Javel de concentration molaire C0 en faisant
+réagir le gaz dichlore (Cℓ2) avec les ions (HO-) selon une transformation chimique
+supposée totale et rapide et modélisée par l’équation de réaction suivante :
+Cℓ2(g) + 2 HO-(aq) + → CℓO-(aq) + Cℓ-(aq) + H2O(ℓ) 
+On ajoute de l’eau distillée à un volume de la solution (S0) pour préparer une solution
+(S) de concentration molaire :	0	C
+C = 10 . On prélève un volume V = 10 mL de la
+solution (S), et in lui ajoute une quantité en excès d’une solution acidifiée d’iodure de
+potassium (K+(aq) + I-(aq)), et quelques gouttes d’une solution d’amidon.
+Les ions hypochlorites CℓO- oxydent, en milieu acide, les ions I- selon la réaction
+modélisée par l’équation : CℓO-(aq) + 2 I-(aq) + 2 H+(aq) → I2(aq) + Cℓ-(aq) + H2O(ℓ) 
+On neutralise le diiode formé par une solution de thiosulfate de sodium
+(2Na+(aq) + S2O32-(aq)) de concentration molaire C2 = 0,1 mol.L-1. L’équivalence est
+atteinte lorsque le volume versé est VE = 10,8 mL.
+On modélise la réaction du dosage par l’équation suivante :
+I2(g) + 2 S2O32-(aq) → 2 I-(aq) + S4O62-(aq) 
+2-1- A l’aide du tableau d’avancement traduisant l’évolution du dosage,
+déterminer la quantité de matière n(I2) du diiode existant dans le mélange.
+2-2- Sachant que n(I2) représente la quantité de diiode résultant de la réaction ,
+déduire la quantité de matière n(CℓO-) d’ions hypochlorites se trouvant
+dans le volume V.
+2-3- Calculer la valeur de la concentration molaire C et en déduire celle de C0.
+2-4- Trouver la valeur du degré chlorométrique (D° Chl) de la solution (S0).
+3- Propriétés acido-basiques d’eau de Javel :
+L’ion hypochlorite CℓO-, l’ion actif de l’eau de Javel, est la base conjuguée de l’acide
+hypochloreux HCℓO, et peut réagir avec l’eau.
+3-1- Ecrire l’équation modélisant cette réaction, sachant qu’elle est limitée.
+3-2- Déterminer la valeur de la constante d’acidité KA du couple (HCℓO/CℓO-).
+Physique : ( 13 points)
+Exercice 1 : Les ondes (03 points)
+Les vents créent aux larges des océans des vagues qui se propagent vers les côtes.
+Le but de cet exercice est d’étudier le mouvement de ces vagues.
+On considère que les ondes se propageant à la surface des eaux des mers sont
+progressives et sinusoïdales de période T = 7 s.
+1- L’onde étudiée est-elle longitudinale ou transversale ? Justifier.
+2- Calculer V, la vitesse de propagation de ces ondes, sachant que la distance
+séparant deux crêtes consécutives est d = 70 m.
+0,5
+1
+
+-- 3 of 6 --
+
+4
+0,5
+0,5
+1
+0,25
+0,25
+0,5
+0,5
+3- La figure 1 modélise une coupe verticale de
+l’aspect de la surface de l’eau à un instant t.
+On néglige le phénomène de dispersion, et on
+considère S comme source de l’onde et M son front
+loin de S de la distance SM.
+3-1- A l’aide de la figure 1, écrire l’expression
+du retard temporel τ du mouvement de M
+par rapport à S en fonction de la longueur
+d’onde λ. Calculer la valeur de τ.
+3-2- Préciser, en justifiant, le sens du
+mouvement de M à l’instant où l’onde
+l’atteint.
+4- Les ondes arrivent à un portail de largueur a = 60 m situé entre deux quais d’un
+port (Figure 2). Recopier le schéma de la figure 2, et représenter dessus les
+ondes après la traversée du portail, et donner le nom du phénomène observé.
+Exercice 2 : Electricité (04,5 points)
+Les condensateurs sont utilisés pour stocker de l’énergie, afin de la récupérer pour
+l’utiliser dans les circuits électroniques.
+Le but de cet exercice est d’étudier la charge d’un condensateur et sa décharge à
+travers une bobine.
+1- Partie I : Charge d’un condensateur par un générateur idéal de courant
+On réalise le circuit représenté sur la figure 1 où G est un
+générateur qui débite dans le circuit un courant d’intensité
+constante.
+On ferme l’interrupteur à l’instant t = 0, le circuit est alors
+traversé par un courant d’intensité I = 0,3 A. Figure 1
+l’étude des variations de la tension uC aux bornes du condensateur permet de tracer le
+graphe de la figure 2
+1-1- Préciser l’armature portant les charges
+électriques négatives.
+1-2- Par exploitation du graphe de la figure 2,
+déduire si le condensateur était chargé ou
+non à l’instant t = 0 ?
+1-3- Montrer que l’expression de uC peut s’écrire
+sous la forme :	C
+I.t
+u = C pour uC < uC max. Figure 2
+1-4- Donner, en exploitant le graphe, l’expression de uC = f(t) pour uC < uC max.
+vérifier que la valeur de la capacité du condensateur est C = 0,1 F.
+
+-- 4 of 6 --
+
+5
+0,5
+0,5
+0,25
+0,75
+0,5
+0,5
+1-5- Montrer que l’expression de l’énergie électrique emmagasinée dans le
+condensateur, à un instant t peut s’écrire :2
+e C
+1
+E = C u
+2 , et calculer sa valeur
+maximale. On rappelle l’expression de la puissance instantanée :dW
+dt
+=	P	 .
+2- Partie II : Détermination du coefficient d’inductance d’une bobine
+On réalise le circuit représenté sur la figure 3, et
+constitué de :
+ Générateur de f.é.m : E = 6 V et de résistance
+interne négligeable;
+ Résistor D1 de résistance R1 = 48 Ω ;
+ Résistor D2 de résistance R2 ; Figure 3
+ Une bobine (b) de coefficient d’inductance L, et de résistance interne r = R2.
+ Deux interrupteurs K1 et K2.
+Dans une première phase, on maintient K2 ouvert, et on ferme K1 ;
+Dans une deuxième phase, on maintient K1 ouvert, et on ferme K2 .
+Sur la figure 4 sont représentées les courbes (a) et (b) traduisant les variations de
+l’intensité du courant traversant le circuit au cours de chacune des deux phases.
+2-1- Associer, en justifiant, chaque
+courbe à la phase correspondante.
+2-2- Etablir l’équation différentielle
+vérifiée par l’intensité du courant
+i(t) traversant le circuit au cours de
+la phase permettant d’obtenir la
+courbe (b). Figure 4
+2-3- La solution de cette équation s’écrit sous la forme :-λ.t
+i(t) + B	= Ae	 , où A, B
+et λ sont des constantes
+2-3-1- Exprimer λ, B et A en fonction des données nécessaires.
+2-3-2- Déduire la valeur de L.
+3- On charge complétement le condensateur précédent et on le décharge à travers la
+bobine (b). La visualisation des variations de la tension uC en fonction du temps,
+permet d’obtenir l’un des graphes (c) et (d) représentés ci-dessous.
+(c) (d)
+Déterminer le graphe correspondant à cette expérience, sachant que la valeur de la
+pseudo-période est voisine de celle la période propre de l’oscillateur.
+
+-- 5 of 6 --
+
+6
+0,75
+0,5
+0,75
+1,5
+1
+1
+Exercice 3 : Mécanique (05,5 points)
+Les oscillateurs sont utilisés dans plusieurs domaines d’industrie, et quelques
+appareils de sport, de jeux et autres. Parmi ces oscillateurs, la balançoire considérée
+comme pendule.
+Un enfant se balance à l’aide d’une balançoire constituée d’une barre utilisé comme
+siège, suspendue à l’aide de deux câbles fixés à un support fixe.
+On modélise le système {Enfant + Balançoire} par un pendule simple constitué d’un :
+ Câble inextensible, de masse négligeable, et de longueur ℓ ;
+ Solide (S) de masse m.
+Le pendule est susceptible de tourner autour d’un axe horizontal fixe (Δ)
+perpendiculaire au plan vertical.
+Le moment d’inertie du pendule par rapport à l’axe (Δ) est : JΔ = mℓ2.
+Données :
+ ℓ = 3 m , m = 18 kg , g = 9,8 m.s-2 (Intensité de pesanteur)
+ On prendra dans le cas de petites oscillations : sin θ ≈ θ et cos θ ≈2
+θ
+2
+1-	 (θ en rad)
+ On néglige les dimensions de (S) par rapport à la longueur du fil, ainsi que tous les
+frottements.
+1- Etude dynamique du pendule :
+On écarte le pendule de sa position d’équilibre d’un angle	m
+π
+θ = 20 dans le sens
+positif, et on l’abandonne sans vitesse initiale à l’instant t = 0.
+On repère la position du pendule à un instant t par son abscisse
+angulaire θ entre le pendule et la verticale passant par O, tel que
+0	θ = (OM ,OM)
+(voir figure).
+1-1- Par application de relation fondamentale de la
+dynamique de rotation autour d’un axe fixe, montrer
+que l’équation différentielle du mouvement du
+pendule dans un repère galiléen lié à la terre s’écrit
+sous la forme :g
+θ + θ = 0	 .
+1-2- Calculer la valeur de la période propre T0 du pendule.
+1-3- Ecrire l’équation horaire du mouvement du pendule.
+1-4- Par application de la deuxième loi de Newton, et sa projection sur les axes
+du repère de Freinet, exprimer l’intensité T de la tension du câble à
+l’instant t en fonction de : m, g, θ, ℓ et v (Vitesse linéaire du solide (S)).
+Calculer la valeur de T à l’instant	0	T
+t = 4 .
+2- Etude énergétique :
+On communique au pendule précédent initialement au repos à t = 0, une énergie
+cinétique de valeur EC = 264,6 J, qui le fait tourner dans le sens positif.
+2-1- Ecrire l’expression de l’énergie potentielle de pesanteur Epp du pendule à un
+instant t en fonction de θ, m, ℓ et g.
+Le plan horizontal passant par M0 et choisi comme état de référence de l’énergie
+potentielle de pesanteur.
+2-2- A l’aide d’une étude énergétique, déduire la valeur maximale θm de
+l’abscisse angulaire.
+
+-- 6 of 6 --
+

@@ -1,0 +1,1016 @@
+االمتحان الوطني الموحد للبكالوريا
+المسالك الدولية
+ةالدورة العادية	2022
+-	اموضوع	–
+شعبة العلوم التجريبية	:	مسلك العلوم الفيزيائية	-	خيار إنجليزية
+ا	لصفحة
+الفيزياء والكيمياء امعار
+اشلبيةأدة امسلك	ة
+ملرة إلنجعز
+املعمل
+3h
+7
+*I
+SSSSSSSSSSSSSSSSSSSS-SS NS 28E
+1
+8
+The use of the non-programmable scientific calculator is allowed.
+Literal expressions should be given before doing numerical calculations.
+This exam paper consists of four exercises
+Exercise 1 (7 points):
+- Chromium-electroplating a steel plate by electrolysis
+- Study of some properties of an aqueous solution of the propanoic acid
+Exercise 2 (3,5 points):
+- Sound waves
+- Disintegration of the iodine-131
+Exercise 3 (4,5points):
+- Response of the RC dipole to a step voltage
+- Free oscillations in a RLC series circuit
+Exercise 4 (5 points):
+- Study of the fall of a ball in a viscous liquid
+- Study of the motion of an artificial satellite
+
+-- 1 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2022	–	الموضوع
+-	مادة	:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية	:	مسلك العلوم الفيزيائية	-	خيار إنجليزية
+NS 28E	2
+8
+الصفحة
+EXERCISE 1 (7 points)
+Part 1 and part 2 are independent
+Part 1 : Chromium-electroplating a steel plate by electrolysis
+The electrolysis is the process of converting electric energy into chemical energy.
+Electroplating objects with a thin layer of a metal and protecting them against the corrosion are
+some uses of the electrolysis.
+In this part, we suggest the study of the chromium-electroplating a steel plate by electrolysis.
+Given :
+ Redox pairs involved are :3
+(aq) (s)	Cr / Cr and	2(g) 2 ( )	O / H O 
+1
+1F 96500C.mol
+
+ Molar mass of the chromium :1
+M(Cr) 52g.mol
+
+To perform this electrolysis, we immerse totally a steel
+plate in an aqueous solution of the chromium (III)
+chloride3
+(aq) (aq)	Cr 3Cl 
+	 and we connect it to one pole of a
+generator G. the other pole of the generator is connected
+to a graphite electrode (figure1). We switch on the
+circuit, an electric current of constant intensityI 2 A	
+flows in the circuit. We observe that the oxygen	2(g)	O	 is
+released at the graphite electrode and a uniform layer of
+the chromium is deposited on the steel plate.
+1. Identify which electrode is the cathode. Justify your answer.
+2. Copy the number of the question and choose the correct answer from the proposals.
+2.1.The equation for the reaction occurring at the graphite electrode is written as :
+2.2. The equation for the reaction occurring at the steel plate is written as :
+3. The duration of this electrolysis is	t 2h	 	 . Determine the mass m(Cr) of chromium deposited
+on the steel plate.
+Part 2 : Study of some properties of an aqueous solution of the propanoic acid
+The propanoic acid of formula	2 5	C H COOH		 can be used as a food conservator and in the
+manufacture of the anti-inflammatory drugs. The propanoic acid is also involved in many
+organic synthesises.
+The objective of this part is to study some properties of an aqueous solution of the propanoic
+acid.
+A	2 ( ) 2(g) (aq)	2H O O 4H 4e 
+ 	 	 B3
+(aq) (s)	Cr 3e Cr 
+ 
+C2
+(aq) 2(g)	2O O 4e 
+		 D	2 ( ) 2(g) 2(g)	2H O O 2H		 
+A	2 ( ) 2(g) (aq)	2H O O 4H 4e 
+ 	 	 B3
+(aq) (s)	Cr 3e Cr 
+ 
+C2
+(aq) (s)	Cr 2e Cr 
+ 	 D	2 ( ) 2(g) 2(g)	2H O O 2H		 
+Marking
+scale
+Figure1
+K
+Graphite
+electrode
+Steel plate
+3
+(aq) (aq)	Cr 3Cl 
+
+G
+0,5
+0,5
+0,5
+0,75
+
+-- 2 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2022	–	الموضوع
+-	مادة	:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية	:	مسلك العلوم الفيزيائية	-	خيار إنجليزية
+NS 28E	3
+8
+الصفحة
+1. Aqueous solution of the propanoic acid
+We prepare an aqueous solution Sa of the propanoic acid of concentration	2 1
+a	C 5.10 mol.L 
+	 .
+The measurement of the pH of the solution	a	S	 givespH 3,1		 .
+1.1. Write the equation for the reaction between the propanoic acid and water.
+1.2. Calculate the final progress rate	 of this reaction. What can you deduce?
+1.3. Express the reaction quotient at equilibrium Qr,eq associated to the equation of the previous
+reaction in terms of	a	C	 and	3 (aq) eq
+H O
+ 
+  . Calculate its value.
+1.4. Deduce the value of pKA of the pair	2 5 (aq) 2 5 (aq)	C H COOH / C H COO .
+2- Titration of the solution of the propanoic acid
+To verify the value of the concentration	a	C	 of the
+solution Sa, we perform the pH-metric titration of a
+volume Va= 20mL of the solution Sa by an aqueous
+solution Sb of the sodium hydroxide	( )
+–
+aq (a )q	Na HO 	 of
+molar concentration	2 1
+b	C 5.10 mol.L 
+	 .
+In figure 2, we represent the curve of the pH variations of
+the reaction mixture as a function of the volume Vb added
+from the solution Sb and the curve	b
+b
+dpH f (V )
+dV 	 .
+2.1. Write the equation for the reaction of titration.
+2.2. Determine graphically the volume	bE	V	 of the solution
+Sb added at the equivalence.
+2.3. Verify the value of the concentration Ca.
+2.4. We prepare the solution Sa by diluting 10 times an
+aqueous solution S0 of the propanoic acid. Determine the mass m of the propanoic acid dissolved
+in one litre of the solution S0.
+Given : The molar mass of the propanoic acid is1
+M 74g.mol
+	 .
+2.5. For a volume	b	V 5mL		 of the solution added, determine the percentage of the acid of the
+pair	2 5 (aq) 2 5 (aq)	C H COOH / C H COO in the reaction mixture.
+EXERCISE 2 (3,5 points)
+Part 1 and part 2 are independent
+Part 1: Propagation of sound waves in the air
+To determine the wave speed of sound waves in the
+air, we perform the experimental set-up in figure 1.
+This set-up is consisted of a transmitter E and of a
+receiver R of sound waves distanceL 85cm		 from
+each other. E emits a sound wave, it propagates in
+the air, and then R receives it.
+b	S
+0,75
+0,5
+0,75
+0,5
+0,5
+0,25
+0,5
+0,5
+Propagation
+sense
+Transmitter Receiver
+Figure 1
+L
+E R
+0,5
+Figure 2
+5 10 15 20 25
+0
+2
+4
+6
+8
+10
+12
+pH
+Vb(mL)
+b
+dpH
+dV
+
+-- 3 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2022	–	الموضوع
+-	مادة	:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية	:	مسلك العلوم الفيزيائية	-	خيار إنجليزية
+NS 28E	4
+8
+الصفحة
+A datalogger is used to visualise both the emitted signal (a) and the received signal (b) (figure 2).
+1. Copy the number of the question and answer by
+true or false.
+1.1. The sound wave is a transverse wave.
+1.2. The sound wave does not propagate in vacuum.
+2. Determine the duration	t		 taken to reach the
+receiver R.
+3.Calculate the wave speed v of the sound waves in
+the air.
+Part 2 : Disintegration of the iodine-131
+The iodine-131	131
+53	( I)	 is radioactive of
+	 type.
+The iodine can be used in small doses for medical purposes such as the diagnostic of the thyroid
+gland dysfunction and the treatment of some diseases relating to this gland.
+The disintegration of the iodine-131 gives a nucleus .
+In this part, we suggest studying the disintegration of the iodine-131.
+Given :
+Element Tellurium Xenon Cesium
+Some isotopes of
+the element
+131
+52Te132
+52Te130
+54 Xe131
+54 Xe127
+55 Cs132
+55 Cs
+- Mass of the iodine-131 nucleus:	131
+53 130,9061 u	m( I) 25		 ;
+- Mass of the nucleusA
+Z X	 :	A
+Z	m( X) 130,905082u		 ;
+- Mass of the particle
+	 :4
+m( ) 5, 48580.10 u 
+ 	 ;
+- Atomic mass unit :2
+1u 931,5MeV.c
+	 .
+1. Write the equation for the disintegration of the iodine-131
+by identifyingA
+Z X	 the produced nucleus.
+2. Calculate, inMeV	 , the released energy	pro	E	 produced by
+the disintegration of the iodine-131 nucleus.
+3. At an instant taken as origin of time t = 0, a patient gets a
+dose of the iodine-131 solution of activity	0	a .
+The curve in figure 3 represents the variations of the activity
+a(t) of this dose as a function of time.
+3.1. Determine graphically the half-life1/2	t of the iodine-131.
+3.2. Calculate N0 the number of the iodine-131 nuclei present in the dose at t = 0.
+3.3. By using the radioactive decay law, determine, in days, the instant1t when 95% of the iodine-131
+nuclei are disintegrated.
+EXERCISE 3 (4,5 points)
+This exercise aims at :
+- determining the capacitance of a capacitor ;
+- determining the inductance of an inductor ;
+- doing the energetic study of the RLC series circuit.
+A
+Z X
+0,5
+0,5
+0,25
+0,5
+(a)
+(b)
+Figure 2
+0,5ms
+0,25
+0,25
+0,25
+0,5
+8 16 24 t (day)
+0
+106
+2.106
+3.106
+4.106
+a (Bq)
+Figure 3
+0,5
+
+-- 4 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2022	–	الموضوع
+-	مادة	:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية	:	مسلك العلوم الفيزيائية	-	خيار إنجليزية
+NS 28E	5
+8
+الصفحة
+We perform the electric set-up in figure 1. This set-up is consisted of the following components:
+- an ideal power supply of voltage of electromotive force E;
+- a capacitor of capacitance C initially discharged;
+- an inductor of inductance L and of resistance r;
+- a resistor of resistance R;
+- a double switch K.
+1. Response of the RC dipole to a step of voltage
+At an instant taken as origin of timet 0		 , we put the switch K at
+position (1).The curves (C1) and (C2) in figure 2 represent the
+evolution of the voltage uC(t) between terminals of the capacitor
+and the evolution of the intensity i(t) of the electric current which flows in the circuit.
+(T) is the tangent of the curve (C1) at the point of timet 0		 .
+1.1. Show that the differential equation of the voltage	C	u (t)	 is written as :C
+C
+du 1 E
+u
+dt R.C R.C
+ 
+1.2. The solution of this differential equation is :t
+RC
+C	u (t) E (1 e )
+
+ 	 .
+1.2.1. Find out the expression of the electric current intensity i(t) in terms of E, R, C and t.
+1.2.2. By exploiting the curves in figure 2, determine the value of R.
+1.2.3. Show that the capacitance C of the capacitor is :C 50 F	 	 .
+2. Free oscillations in a RLC series circuit
+When the capacitor of capacitanceC 50 F	 	 is fully charged, we placed the switch K at position (2)
+at an instant taken as a new origin of timet = 0	 . This capacitor discharges through the inductor of
+inductance L and of resistance r (figure 1).
+2.1. First case :
+In this case, we suppose that the resistance of the inductor is negligible.
+2.1.1. Show that the differential equation of the voltage	C	u (t)	 is written as :
+2
+C
+C	2
+d u 1 .u 0
+dt LC
+ 	 .
+2.1.2. Choose from the following curves (C1) and (C2) and (C3) in figure 3 (page 6/8), which one
+represents the evolution of the voltage uC(t). Justify your answer.
+0,25
+0,5
+0,5
+0,25
+0,25
+0,5
+Figure 2
+50 100 150 200 t (ms)
+0
+3
+6
+9
+12
+i (mA)
+(C2)
+(T)
+50 100 150 200
+0
+3
+6
+9
+12
+t (ms)
+uC(V)
+Nature d	smme deb	reste
+scane	1135	-185
+car	1395	55
+deplacmt	1895	-145
+medc	1919	231
+dents	1979	471
+espèce pou	2179	471
+halima me	2279	771
+halima cons	3429	-279
+veteme	3919	-669
+masro	4185	-635
+consultation	4507	-757
+masrouf	4747	-497
+jbira hal	4947	-297
+acha abde	6147	-1297
+analyses h	6297	-1247
+medicament	6343,5	-1093,5
+consultation+med	6579,5	-1129,5
+medic rh	6781,5	-1131,5
+medic fatn	7431,5	-1581,5
+medic fatn	7901,5	-1751,5
+analyses h	8961,5	-2611,5	halima
+analyses h	9311,5	-2861,5	1060
+medic ha	9351,5	-2601,5	350
+medic ha	9391,5	-2366,5	40
+analyses h	9841,5	-2616,5	40
+medic ha	9889,5	5335,5	450
+halima (	10229,5	5395,5	48
+analyses h	10349,5	5375,5	340
+medic ha	10429,5	5670,5	120
+analyses h	10469,5	6630,5	80
+medic ha	10576,5	6603,5	40
+analyses h	11276,5	6403,5	107
+medic ha	11295,5	6634,5	700
+medic ha	11555,5	6874,5	19
+analyses h	12355,5	6274,5	260
+medic ha	12422,5	6557,5	800
+abderra	12622,5	7157,5	67
+masro	13032,5	6787,5
+(C1)
+Figure 1
+K
+R
+(L,r)
+(1) (2)
+E C	uC
+
+-- 5 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2022	–	الموضوع
+-	مادة	:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية	:	مسلك العلوم الفيزيائية	-	خيار إنجليزية
+NS 28E	6
+8
+الصفحة
+2.1.3. The solution of the previous differential equation is :	c 0
+0
+2π
+u = U co	(t s ( t )
+T
+)	 where U0 is the
+maximum value of the voltage and T0 is the natural period of the oscillations.
+a- Find out the expression of T0 in terms of L and C.
+b- Show that the value of the inductance is :L = 0,05H	 . (take2 10	 	 ).
+2.2. Second case :
+In fact, the resistance of the inductor is not negligible. In this case and by using a datalogger, we
+visualise the curves of the evolution of the voltage	C	u (t)	 between terminals of the capacitor and the
+evolution of the intensity of the electric currenti(t)	 which flows through the circuit (figure 4).
+2.2.1. Write the expression of the total energy Et of the circuit in terms of C, uC(t), L and i(t).
+2.2.2. By exploiting the curves in figure 4, calculate the dissipated energy	E		 in the circuit
+between the instants	0	t 0		 and1t = 9 ms	 .
+0,5
+0,5
+0,5
+0,75
+Figure 4
+2,5 5 7,5 10 12,5 t(ms)
+-200
+-100
+0
+100
+200
+i(mA)
+-10
+-5
+5
+10
+uC (V)
+0
+t(ms)	2,5 5 7,5 10 12,5
+(C1) (C3)	(C2)
+Figure 3
+uc(V)
+التاريخ	المصاريف نوع	المبلغ	التاريخ	المصاريف نوع	المبلغ	التاريخ
+19/09/2017	eau	9,74	01/04/2019	eau	9,74	10/06/2021
+05/10/2017	eau	9,74	30/04/2019	eau	9,74	07/07/2021
+19/10/2017	eau	9,74	04/06/2019	eau	9,74	11/08/2021
+19/10/2017	eau	9,74	04/07/2019	eau	9,74	14/09/2021
+19/10/2017	eau	9,74	02/08/2019	eau	9,74	11/10/2021
+20/10/2017	eau	9,74	05/09/2019	eau	9,74	11/11/2021
+03/11/2017	EAU	9,74	03/10/2019	naima/okache	1000	23/11/2021
+18/11/2017	eau	9,74	02/11/2019	yop rayane	70,4	28/11/2021
+05/12/2017	eau	9,74	03/12/2019	espèce	2000	05/12/2021
+12/12/2017	eau	14,16	06/01/2020	eau	9,74	13/12/2021
+03/01/2018	eau	9,74	03/02/2020	secretaire ntaire	50	20/12/2021
+17/01/2018	envoie l'huile	300	06/02/2020	excès massarif adoul	50	27/12/2021
+31/01/2018	taxe des 3 lots	1022	07/02/2020	taxes Lots 60 et 52	1266	04/01/2022
+01/02/2018	eau	9,74	05/03/2020	mohafada ard	1950	10/01/2022
+19/02/2018	eau	23,9	15/04/2020	eau	9,74	10/01/2022
+02/03/2018	eau	9,74	13/05/2020	certeficat milkiya	100	19/01/2022
+17/03/2018	eau	9,74	12/06/2020	envoi 30L huile	750	20/01/2022
+29/03/2018	eau	9,74	20/07/2020
+05/04/2018	eau	9,74	10/08/2020
+13/04/2018	eau	9,74	14/09/2020
+18/04/2018	envoie l'huile kénitra	50	15/09/2000
+02/05/2018	envoie l'huile	480	30/09/2020
+03/05/2018	eau	14,16	14/10/2020
+eau	9,74	19/11/2020
+06/06/2018	eau	9,74	16/12/2020
+30/06/2018	ZENGUEL	21	20/12/2020
+31/07/2018	dattes	90	25/12/2020
+03/09/2018	huile d'olive	930	03/01/2021
+05/10/2018	envoie l'huile	600	05/01/2021
+29/10/2018	EAU	9,74	13/01/2021
+01/12/2018	envoie l'huile kénitra	50	14/01/2021
+04/02/2019	Taxe de 1 lots	662	09/02/2021
+10/02/2019	eau	14,16	16/02/2021
+18/02/2019	eau	9,74	15/03/2021
+25/02/2019	eau	9,74	13/04/2021
+01/03/2019	certeficat milkiya	100	03/05/2021
+02/03/2019	eau	9,74	12/05/2021
+n	frais sboua
+m	27/09/2017	4760	moutons
+c	27/09/2017	120	100 PAINS
+a	02/10/2017	202	legumes
+V	Payé par hlima	2227	80 poulets	2227
+p	06/10/2017	130	melon
+payé par F.zahra	960	tables	960
+550	MASROUF
+603	BOISSONS
+28	citron
+102	raisin
+120	100 painS
+300	tolba
+288	DESSERT
+300	SERVITEURS
+payé par khadra	1400	tayaba	1400
+700	gateau
+200	benamer
+12990	total
+t (ms)	5 10 15
+-12
+-6
+0
+6
+12 uc(V)
+المصاريف وع	المبلغ	التاريخ
+eau	9,74	10/06/2021
+eau	9,74	07/07/2021
+eau	9,74	11/08/2021
+eau	9,74	14/09/2021
+eau	9,74	11/10/2021
+eau	9,74	11/11/2021
+naima/okache	1000	23/11/2021
+yop rayane	70,4	28/11/2021
+espèce	2000	05/12/2021
+eau	9,74	13/12/2021
+secretaire nta	50	20/12/2021
+excès massari	50	27/12/2021
+taxes Lots 60	1266	04/01/2022
+mohafada ard	1950	10/01/2022
+eau	9,74	10/01/2022
+certeficat milk	100	19/01/2022
+envoi 30L huil	750	20/01/2022
+t (ms)	5 10 15
+-10
+-5
+0
+5
+10
+uc(V)
+2,5 7,5 12,5 t (ms)
+-12
+-6
+0
+6
+12
+
+-- 6 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2022	–	الموضوع
+-	مادة	:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية	:	مسلك العلوم الفيزيائية	-	خيار إنجليزية
+NS 28E	7
+8
+الصفحة
+EXERCISE 4 (5 points)
+Part 1 and part 2 are independent
+Part 1: Study of the fall of a ball in a viscous liquid
+In this part, we suggest determining the density	r		 of the ricin oil.
+We get off without initial velocity a homogenous steel ball in a cylinder filled with the ricin oil.
+This ball is of mass m and of density	a		 .
+We study the motion of the center of inertia G of the ball in the coordinate
+system(O, k)
+
+ linked to an Earth frame of reference assumed Galilean (figure 1).
+Over this vertical falling in the liquid, the ball obeys three forces:
+- its weightP
+
+ .
+- the upthrust (Archimedes’ force)	a	F
+
+ is of vertical direction, of upward sense
+and of magnitude	a r	F .V.g	 	 where V is the volume of the ball and g is the
+gravitational acceleration.
+- the viscous frictional force which is modeled with the vectorF k. v
+ 
+ 	 where k
+is a positive constant andv
+
+ is the velocity of G at an instant t.
+A datalogger permits plotting the curve in figure 2 which represents the
+evolution of the speed v(t).
+(T) is the tangent of the curve at the point of time t=0.
+Given :m 10 g		 ;	3
+a 7,8g.cm
+ 	 ; g =10 m.s-2 .
+1. The curve in figure 2 includes two areas. Determine for each area, the corresponding state.
+2. By applying Newton’s 2nd law, show that the differential equation of the motion of G is
+written as :	r
+a
+dv 1 .v g(1 )
+dt
+
+  
+  where is the characteristic time of the motion that to be
+expressed in terms of m and k.
+3. Determine graphically,
+3.1. the value of	 then deduce, in SI units, the value of k.
+3.2. the value of the terminal speedV	 .
+4. Find the expression of the density	r		 of the ricin oil in terms of	 ,g	 ,	a		 andV	 . Calculate its value.
+Figure 2
+0,1 0,2 0,3
+v (m.s-1)
+t (s)
+0
+0,2
+0,4
+0,6
+area 1 area 2
+(T)	0,8
+0,25
+0,5
+0,5
+0,75
+k
+
+O
+z
+G
+Figure1
+0,75
+
+-- 7 of 12 --
+
+االمتحان الوطني الموحد للبكالوريا	-	الدورة العادية	2022	–	الموضوع
+-	مادة	:	الفيزياء والكيمياء	-	شعبة العلوم التجريبية	:	مسلك العلوم الفيزيائية	-	خيار إنجليزية
+NS 28E	8
+8
+الصفحة
+Part 2: Study of the motion of an artificial satellite
+Many artificial satellites orbit the Earth for a variety of purposes such as weather forecasting,
+telecommunication, scientific researches and borders observation…
+The objective of this part is to study some physical quantities characterising the motion of an
+artificial satellite around the Earth.
+We study the motion of an artificial satellite S of mass ms in a geocentric frame of reference
+assumed Galilean.
+We assume that the Earth presents a uniform spherical mass.
+All other forces are negligible to the universal attraction force
+exerted by the Earth on this satellite and its dimensions are
+negligible to the distance of the center of the Earth.
+Given :
+ Masse of the Earth: ME = 5,97.1024kg;
+ Radius of the Earth : RE = 6380 km ;
+ Gravitational constant : .
+1. This satellite is placed at a circular orbit of center O and of
+radius	E 1	r R h	 	 where h1 = 1000 km (figure 3).
+1.1. Choose the correct answer from the proposals.
+The expression of the magnitude of the universal attraction force exerted by the Earth on the
+satellite is :
+AE S
+E/S 2
+1
+M .m
+F G h
+	 BE S
+E/S 2
+E 1
+M .m
+F G (R h )
+  CE S
+E/S 2
+E
+M .m
+F G R
+	 D
+2
+E S
+E/S 2
+E 1
+(M .m )
+F G (R h )
+ 
+1.2. By applying the Newton’s 2nd law, show that the expression of the speed v of the satellite
+is :E
+E 1
+G.M
+v R h
+  .
+1.3. Verify that the orbital period of the motion of the satellite around the Earth is	1	T 1,75h		 .
+2. The satellite S is placed at another circular orbit at an altitude of the surface of the Earth.
+The motion of the satellite is circular uniform of the orbital period .
+By using the Kepler’s 3rd law, determine the altitude of this satellite.
+./.
+11 2
+G 6,67.10 N.m².kg 
+
+2	h
+2	T 24 h	
+2	h
+0,5
+0,5
+0,5
+0,75
+h1
+Figure 3
+S
+Earth
+O
+RE
+
+-- 8 of 12 --
+
+الصفحت	:	1	على	4
+االمتحان الوطني الموحد للبكالوريا
+المسالك الدولية
+ةالدورة العادية	2022	ة
+SSSSSSSSSSSSSSSSSSSS-SS *I -ة	عنعصرة إلجعبي	ة- NR 28E
+7 المعامل 3h مدة
+اإلنجاز
+الفيسياء والكيمياء
+شعبت العلوم التجريبيت	:	مسلك العلوم الفيسيائيت	-	خيار إنجليسيت
+المادة
+الشعبت والمسلك
+EXERCISE 1 (7 points)
+Question Answers Marking
+scale Question reference in the framework
+Part
+ 1
+1.
+Cathode = steel plate
+Justification
+0,25
+0,25 - Recognise the anode electrode (oxidation) and
+the cathode electrode (reduction) using the flow
+of electric current imposed by an external
+voltage supply.
+- Write the half-equation that occurred in each
+electrode (use double arrows) and write the
+overall equation of the reaction during
+electrolysis (use one arrow).
+Establish the relationship between the amount of
+substance of chemical specie produced or
+consumed, the current intensity and the
+operating duration of electrolysis. Use this
+relationship to determine other quantities
+(quantity of charge, progress of the reaction,
+change of the mass, volume of a gas, etc.).
+2.1. A 0,5
+2.2. B 0,5
+3.
+I. t. M(Cr)
+m(Cr) 3. F
+
+
+m(Cr) 2,59g	
+0,5
+0,25
+Part
+ 2
+1.1.2 5 (aq) 2 ( ) 2 5 (aq) 3 (aq)	C H COOH H O C H COO H O	 		
+ 		  0,5
+- Write the equation of the acid-base reaction and
+identify the two pairs involved.
+Calculate the final progress of the reaction that
+occurs between an acid and water taking into
+consideration the value of both the concentration
+and this acid’s pH aqueous solution; then,
+compare it with the maximum progress.
+- Define the final progress rate of a reaction, and
+determine it using experimental data.
+- Give and use the expression of the reaction
+quotient Qr through the reaction equation.
+- Know that, the reaction quotient in equilibrium
+Qr,eq, associated to the reaction equation of a
+chemical system, takes a value independent of
+concentrations, called equilibrium constant K.
+- Know the relationship pKA= -logKA.
+- Write the equation of titration reaction (use only
+one arrow)
+- Exploit the curve or the results of the titration.
+- Determine and exploit the point of equivalence.
+1.2.1,6%	  Limited reaction
+0,5
+0,25
+1.3.
+2
+3 eq
+r,eq
+a 3 eq
+H O
+Q C H O
+
+
+  
+  	  
+5
+r,eq	Q 1, 28.10
+
+0,5
+0,25
+1.4.	A	pK 4,89		 0,5
+2.1.	2 5 (aq) (aq) 2 5 (aq) 2 ( )	C H COOH HO C H COO H O	 		
+  	 	 0,5
+2.2.	bE	V 20mL		 0,25
+2.3.
+b bE
+a
+a
+C .V
+C V
+
+2 1
+a	C 5.10 mol. L 
+
+0,25
+0,25
+2.4.a	m 10.C .V. M	
+m 37g	 0,25
+0,25
+2.5. Method
+2 5	%(C H COOH) 75%	
+ 0,25
+0,25
+
+-- 9 of 12 --
+
+الصفحت	:	2	على	4 NR 28E االمتحان الوطني الموحد للبكالوريا	-	الدورة العاديت	2022	–	عناصر اإلجابت مادة	:	الفيسياء والكيمياء	-	شعبت العلوم التجريبيت	:	مسلك العلوم الفيسيائيت	-	خيار إنجليسيت
+EXERCISE 2 (3,5 points)
+Question Answers Marking
+scale Question reference in the framework
+Part 1
+1.1. False 0,25 - Define a mechanical wave and its wave speed.
+- Define a transverse wave and a longitudinal wave.
+- Exploit the relationship between time delay, distance
+and wave speed.
+- Exploit experimental documents and data in order to
+determine:
+* time delay;
+* wave speed.
+1.2. True 0,25
+2.	t 2,5ms	 	 0,25
+3. Method1
+v 340 m.s
+
+ 0,25
+0,25
+Part 2
+1.
+131 A 0
+53 Z 1	I X e		  The produced nucleus is :131
+54 Xe
+0,25
+0,25
+- Define the radioactivity		 ,  ,  and the	
+radiation
+- Write the equation of a nuclear reaction by applying
+the two conservation laws.
+- Calculate the energy released (produced) by a nuclear
+reaction:	pro	E E	  .
+- Recognize the type of radioactivity using the equation
+of a nuclear reaction.
+- Know and exploit the law of the radioactive decay, and
+exploit its curve.
+- Define the time constant	 and the half-life1/2	t .
+- Exploit the relationships between ,	 and1/2	t .
+2. Method
+E 0, 46MeV	 
+ 0,25
+0,25
+3.1.	1/2	t 8days		 0,25
+3.2. Method12
+0	N 4.10	
+ 0,25
+0,25
+3.3. Method
+1	t 34,58days	
+ 0,25
+0,25
+
+-- 10 of 12 --
+
+الصفحت	:	3	على	4 NR 28E االمتحان الوطني الموحد للبكالوريا	-	الدورة العاديت	2022	–	عناصر اإلجابت مادة	:	الفيسياء والكيمياء	-	شعبت العلوم التجريبيت	:	مسلك العلوم الفيسيائيت	-	خيار إنجليسيت
+EXERCISE 3 ( 4,5 points)
+Question Answers Marking
+scale
+Question reference in the framework
+1.1. Method 0,25
+- Know and exploit the relationship	dq
+i= dt
+ for a capacitor in
+receiver convention.
+- Know and exploit the relationship q = C.u.
+- Know the capacitance of a capacitor, its unit F and their
+submultiples	,	F nF and pF	
+	 .
+- Determine the capacitance of a capacitor graphically or by
+calculation.
+- Find out the differential equation and verify its solution
+when the RC dipole is submitted to a step voltage.
+- Determine the voltage expression	( )	C	u t	 between capacitor
+terminals when the RC dipole is submitted to a step
+voltage, and deduce both the expression of the intensity
+current in the circuit and the capacitor charge.
+- Recognize and represent the variation curves of	( )	C	u t
+between the capacitor terminals and different physical
+quantities associated to it, and exploit them.
+- Know and exploit the time-constant expression.
+- Exploit experimental documents in order to:
+* recognize the observed voltages.
+*determine the time-constant and charge duration.
+1.2.1
+Methodt
+RC	
+E
+i(t) .e
+R
+
+
+ 0,25
+0,25
+1.2.2 Method
+R 1k	 
+ 0,25
+0,25
+1.2.3 Method 0,25
+2.1.1 Method 0,25
+- Recognize and represent the variation curves of the voltage
+between capacitor terminals in terms of time for the three
+states mentioned above; and exploit them.
+- Find out the differential equation for the voltage between
+the capacitor terminals or for its charge	( )	q t	 in the
+negligible damping case and verify its solution.
+- Know and exploit the natural period expression.
+- Know and exploit the energetic diagrams.
+- Know and exploit the expression of the total energy in the
+circuit.
+2.1.2 The curve is (C1)
+Justification
+0,25
+0,25
+2.1.3-a Method
+0	T 2 LC	 
+ 0,25
+0,25
+2.1.3-b Method 0,5
+2.2.12 2
+t C
+1 1
+E C.u L.i
+2 2
+ 	 0,5
+2.2.2. Method3
+E 2, 21.10 J
+  
+ 0,5
+0,25
+
+-- 11 of 12 --
+
+الصفحت	:	4	على	4 NR 28E االمتحان الوطني الموحد للبكالوريا	-	الدورة العاديت	2022	–	عناصر اإلجابت مادة	:	الفيسياء والكيمياء	-	شعبت العلوم التجريبيت	:	مسلك العلوم الفيسيائيت	-	خيار إنجليسيت
+EXERCISE 4 ( 5 points)
+Question Answers Marking
+scale Question reference in the framework
+Part
+ 1
+1. Area 1 : initial state
+Area 2 : Steady state
+0,25
+0,25 - Know and exploit the two models of frictional fluids
+(viscous forces):	. .	F k v i	 
+  and	2
+. .	F k v i	 
+ 
+- Exploit the curve	( )	G	v f t		 to determine:
+* the terminal speed;
+* the characteristic time	 ;
+* the initial state and the steady state.
+- Apply Newton’s second law to find out the
+differential equation of a solid’s centre of inertia
+motion in frictional vertical fall.
+2.
+Method
+m
+k
+ 
+ 0,5
+0,25
+3.1.0,1s	 
+k 0,1 (SI)	 0,25
+0,25
+3.2.1
+v 0,88m.s
+		 0,25
+4.r a
+V
+(1 )
+g.
+   
+
+3
+r 0,94g.cm
+ 
+ 
+0,5
+0,25
+Part
+ 2
+1.1. B 0,5 - Know the heliocentric and geocentric frames of
+reference.
+- Apply Kepler’s three laws in the case of a
+circular trajectory.
+- Know the universal gravitation law in its
+vectorial form.
+- Know that the gravitational force applied on the
+centre of mass of a satellite or of a planet is
+centripetal.
+- Apply the Newton’s second law to the centre of
+mass of a satellite or of a planet to determine
+the type of
+motion or one of parameters that characterizes the
+motion.
+1.2. Method 0,5
+1.3. Method 0,5
+2. Method
+2	h 35903,6km	
+ 0,5
+0,25
+
+-- 12 of 12 --
+

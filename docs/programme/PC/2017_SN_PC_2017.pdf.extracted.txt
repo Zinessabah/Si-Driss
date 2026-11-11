@@ -1,0 +1,863 @@
+7 1 ا	ﻟﺻﻔﺣﺔ
+واﻟﺘﻮﺟﻴﻪ واﻻﻣﺘﺤﺎﻧﺎت ﻟﻠﺘﻘﻮﻳﻢ اﻟﻮﻃﻨﻲ اﻟﻤﺮﻛﺰ
+
+				 
+ﺍ	ﺍﻟﻌﺎﺩﻳﺔ ﻟﺪﻭﺭﺓ		2017
+-	ﺍملﻮﺿﻮﻉ	- NS 28E
+	 
+		–			
+اﻟﻣﺎدة
+اﻟﺷﻌﺑﺔ	أو	ا	ﻟﻣﺳﻠك
+اﻹﻧﺟﺎز ﻣدة
+اﻟﻣﻌﺎﻣل
+3
+7
+The use of non-programmable scientific calculator is allowed
+This exam paper consists of four exercises
+EXERCISE I ( 7 points ):
+- Electrochemical cell: aluminium-copper
+- Butanoic acid reactions
+EXERCISE II ( 2,5 points ):
+- Propagation of a mechanical wave on water surface
+EXERCISE III ( 5 points ):
+- Response of RL dipole to a step voltage
+- Amplitude modulation
+EXERCISE IV ( 5,5 points ):
+- Study of the motion of a skier with frictional force
+- Energetic study of the torsion pendulum
+
+-- 1 of 11 --
+
+7 2
+اﻟﺻﻔﺣﺔ
+7
+ﻟﻠﺒﻜﺎﻟﻮﺭﻳﺎ ﺍملﻮﺣﺪ ﺍﻟﻮﻃين ﺍﻻﻣﺘﺤﺎﻥ	-	ﺍﻟﻌﺎﺩﻳﺔ ﺍﻟﺪﻭﺭﺓ	2017	–	ﺍملﻮﺿﻮﻉ
+-	ﻣﺎﺩﺓ	:	ﻭﺍﻟﻜﻴﻤﻴﺎﺀ ﺍﻟﻔﻴﺰﻳﺎﺀ	–	ﻣﺴﻠﻚ	ﺍﻟﻔﻴﺰﻳﺎﺋﻴﺔ ﺍﻟﻌﻠﻮﻡ	–	ﺧﻴﺎﺭ	ﺇجنﻠﻴﺰﻳﺔ
+NS28E
+Marking
+scale
+0,5
+0,5
+0,5
+0,75
+0,75
+0,75
+0,5
+EXERCISE I (7 points)
+Part one and part two are independent
+Part one: Electrochemical cell; aluminium-copper
+The functioning of the electrochemical cells is based on the principle of the conversion of a part
+of the chemical energy, produced by spontaneous chemical reactions, into a useful electric energy.
+In this part, we suggest a simple study of the electrochemical cell : aluminium-copper.
+To study an aluminum-copper electrochemical cell, we perform the following experiment:
+-An electrode of copper metal is placed into a beaker which contains an aqueous solution of
+2 2
+( ) 4( )	aq aq	Cu SO+ -
++ of volume V 65 mL	= . The initial molar concentration of 2
+( )
++
+aq	Cu is
+2 1 1
+( ) 6,5.10 .+ - -
+È ˘ =Î ˚	aq i
+Cu mol L .
+-An electrode of aluminum metal is placed into another beaker which contains the aqueous solution
+of 3 2
+( ) 4( )	2 3	aq aq	Al SO+ -
++ of the same volume V 65 mL	= . The initial molar concentration of 3
+( )
++
+aq	Al is
+3 1 1
+( ) 6,5.10 .+ - -
+=	È ˘	Î ˚	aq i
+Al mol L .
+-A salt bridge to connect solutions.
+In series, an ammeter, a resistor and a switch are connected between the electrochemical cell poles.
+When we switch on the circuit, a steady electric current flows.
+Given:
+-The two redox pairs involved in the reaction are 2
+( ) ( )	/	aq s	Cu Cu+ and 3
+( ) ( )	/	aq s	Al Al+ ;
+- Faraday constant : 4 1
+1 9,65.10 .	F C mol-
+= ;
+-The equilibrium constant associated to the reaction (1)
+(2)
+2 3
+3 2 3 2( ) ( ) ( ) ( )
++ +
++ +	ææ	Æ¨æ	æ	Cu Al Cu Alaq s s aq is 200
+10	=	K .
+1- Write, at the initial state, the expression of the reaction quotient r ,i	Q , and calculate its value.
+2- Determine the spontaneous direction of the chemical system during the cell functioning (Justify
+your answer).
+3- Give the cell diagram (cell notation) of the studied cell.
+4- Find out the value of the amount of charge q flowing in the circuit when the value of the molar
+effective concentration of copper (II) ions is 2 1 1
+(aq)	Cu 1, 6.10 mol.L+ - -
+È ˘ =Î ˚ .
+Part two: butanoic acid reactions
+The butanoic acid 3 7	C H COOH is used to synthesise perfumes, food flavours, etc.
+This part of the exercise aims at studying the reaction between butanoic acid and water, and
+comparing the impact of this acid and its anhydride on the ethanol 2 5	C H OH .
+1- The reaction between butanoic acid and water:
+In the chemistry lab, we prepare an aqueous solution of butanoic acid of volume V and of molar
+concentration 2 1
+1,0.10 .- -
+=	C mol L . The pH value of this solution is 3, 41	pH = .
+The occurring transformation is represented by the following chemical equation:
+3 7 (aq) 2 ( l ) 3 7 ( aq ) 3 ( aq )	C H COOH H O C H C OO H O- +
++ +	
+1.1- Determine the final progress rate. What would you conclude?
+1.2- Find out, at the equilibrium state, the expression of the reaction quotient ,r eq	Q of the chemical
+system in terms of C and pH , then calculate its value.
+1.3- Deduce the value of A	pK of the pair 3 7 (aq) 3 7 (aq)	C H COOH / C H COO- .
+
+-- 2 of 11 --
+
+7 3
+اﻟﺻﻔﺣﺔ
+7
+ﻟﻠﺒﻜﺎﻟﻮﺭﻳﺎ ﺍملﻮﺣﺪ ﺍﻟﻮﻃين ﺍﻻﻣﺘﺤﺎﻥ	-	ﺍﻟﻌﺎﺩﻳﺔ ﺍﻟﺪﻭﺭﺓ	2017	–	ﺍملﻮﺿﻮﻉ
+-	ﻣﺎﺩﺓ	:	ﻭﺍﻟﻜﻴﻤﻴﺎﺀ ﺍﻟﻔﻴﺰﻳﺎﺀ	–	ﻣﺴﻠﻚ	ﺍﻟﻔﻴﺰﻳﺎﺋﻴﺔ ﺍﻟﻌﻠﻮﻡ	–	ﺧﻴﺎﺭ	ﺇجنﻠﻴﺰﻳﺔ
+NS28E
+0,5
+0,75
+0,75
+0,75
+2- The reactions of butanoic acid and butanoic anhydride with ethanol
+To compare the impact of both butanoic acid and butanoic anhydride on the ethanol, we perform
+two separate experiments at the same temperature.
+-The first experiment: In a flask, we prepare a mixture of the butanoic acid and the ethanol with the
+same amount of substance 0 0,3	=	n mol of each one, then we add some drops of concentrated
+sulphuric acid. Then we heat the reaction mixture under reflux. An esterification reaction occurs.
+-The second experiment: In another flask, we prepare a mixture of the butanoic anhydride and the
+ethanol with the same amount of substance 0 0,3	=	n mol of each one, then we heat the reaction
+mixture under reflux. A chemical reaction occurs.
+Curve 1 shows the evolution of the reaction progress x during the first experiment.
+Curve 2 shows the evolution of the reaction progress x during the second experiment.
+(See figure).
+2.1- What is the purpose of heating by reflux?
+2.2- Determine for each experiment the value of the half-life 1/2	t of the chemical reaction, and then
+deduce which reaction is faster.
+2.3- Determine for each experiment the final progress rate, and then deduce which reaction is
+complete.
+2.4- Using the structural formulae, write the equation of reaction occurring in the second
+experiment.
+EXERCISE II (2,5 points)
+Choose the right answer from list and copy it on your answer sheet next to the corresponding
+number of the question. (No justification or explanation is needed).
+-Propagation of a mechanical wave on water surface
+We produce, at the origin of time 0	t = , in the point S on the water surface, a sinusoidal
+progressive mechanical wave of frequency 50	N Hz	= . The figure below represents the wave shape
+on the surface of water at one instant t of time. The ruler shows the scale used.
+1 cm	S
+Surface of water
+0
+x (mol)
+t(min)	20 40
+0,1
+0,2
+0,3
+(1)
+(2)
+
+-- 3 of 11 --
+
+7 4
+اﻟﺻﻔﺣﺔ
+7
+ﻟﻠﺒﻜﺎﻟﻮﺭﻳﺎ ﺍملﻮﺣﺪ ﺍﻟﻮﻃين ﺍﻻﻣﺘﺤﺎﻥ	-	ﺍﻟﻌﺎﺩﻳﺔ ﺍﻟﺪﻭﺭﺓ	2017	–	ﺍملﻮﺿﻮﻉ
+-	ﻣﺎﺩﺓ	:	ﻭﺍﻟﻜﻴﻤﻴﺎﺀ ﺍﻟﻔﻴﺰﻳﺎﺀ	–	ﻣﺴﻠﻚ	ﺍﻟﻔﻴﺰﻳﺎﺋﻴﺔ ﺍﻟﻌﻠﻮﻡ	–	ﺧﻴﺎﺭ	ﺇجنﻠﻴﺰﻳﺔ
+NS28E
+)	1	(
+)	2	(
+i
+N
+P
+Figure 1
+E
+R
+L,r
+R
+K
+2 4 6 8 t(ms)
+0
+2
+4
+6
+UR(V)
+( T )
+Figure 2
+0,5
+0,5
+0,75
+0,75
+0,25
+0,5
+1- The wavelength is:
+■ 0, 2cm	
+l = ■ 4cm	
+l = ■ 5cm	
+l = ■ 6cm	
+l =
+2- The speed of the wave is :
+■ -1
+v =2m.s ■ -1
+v=200m.s ■ -1
+v =3m.s ■ 4 1
+8.10 .	v m s- -
+=
+3- the instant t , at which the aspect of the surface of the water is represented, is:
+■ 8	t s	= ■ 0, 03	t s	= ■ 0,3	t s	= ■ 3	t s	=
+4- We consider a point M, on the surface of water, far from S by SM = 6 cm. The point M repeats
+the same vibration as that of S with a time delay τ.
+In this case, the relationship between the displacements of M and S is:
+■ ( ) ( 0,3)	M S	y t y t	= - ■ ( ) ( 0, 03)	= +	M S	y t y t
+■ ( ) ( 0, 03)	= -	M S	y t y t ■ ( ) ( 0,3)	= +	M S	y t y t
+EXERCISE III (5 points)
+In our everyday life we use a number of electric and electronic devices. The circuits of these
+devices contain resistors, inductors, capacitors and integrated circuits that perform different
+mathematical or logical operations.
+The first part of this exercise aims at studying appearance and disappearance of the current in
+an inductor. The second part aims at studying the amplitude modulation.
+Part one and part two are independent
+Part one: Response of RL dipole to a step voltage
+To study the RL dipole response to a step voltage, a
+teacher of physics performs with his students the electric
+circuit shown in figure1.
+This circuit consists of:
+-An ideal power supply of electromotive force E=6,5V;
+- An inductor (coil) of inductance L and resistance r;
+- A resistor of resistance R 60	= W ;
+- A double switch K.
+1- In the first step, the teacher studied the appearance of the
+electric current in the inductor by putting K at
+position (1).
+1.1- Copy the circuit on your answer sheet and
+represent the voltage R	u between the resistor
+terminals using the receiver convention.
+1.2- Find out, in the steady state, the expression
+of the electric current intensity p	I in terms of the
+circuit parameters.
+2- In the second step, the teacher studied the
+disappearance of the electric current in the
+inductor. After obtaining the steady state and
+taking safety measures, the teacher puts at an
+instant t = 0 , the switch K at position (2).
+
+-- 4 of 11 --
+
+7 5
+اﻟﺻﻔﺣﺔ
+7
+ﻟﻠﺒﻜﺎﻟﻮﺭﻳﺎ ﺍملﻮﺣﺪ ﺍﻟﻮﻃين ﺍﻻﻣﺘﺤﺎﻥ	-	ﺍﻟﻌﺎﺩﻳﺔ ﺍﻟﺪﻭﺭﺓ	2017	–	ﺍملﻮﺿﻮﻉ
+-	ﻣﺎﺩﺓ	:	ﻭﺍﻟﻜﻴﻤﻴﺎﺀ ﺍﻟﻔﻴﺰﻳﺎﺀ	–	ﻣﺴﻠﻚ	ﺍﻟﻔﻴﺰﻳﺎﺋﻴﺔ ﺍﻟﻌﻠﻮﻡ	–	ﺧﻴﺎﺭ	ﺇجنﻠﻴﺰﻳﺔ
+NS28E
+Figure 3
+1	E
+S	u (t)
+E2
+1	u (t) 2	u (t)
+S
+-1
+-3
+-2
+0
+1
+2
+3
+uS(V)
+t(ms)
+5 15
+Figure 4
+0,5
+0,5
+0,5
+0,5
+0,5
+0,75
+0,5
+0,5
+Using a datalogger, the teacher obtained the curve of voltage R	u (t) variation between resistor
+terminals (figure2 page4).
+The straight (T) represents the tangent of the curve at t = 0
+2.1- Find out the differential equation for the voltage R	u (t) .
+2.2- The solution of this differential equation is
+t
+- τ
+R p	u (t) = R.I .e . Find out the expression of the
+time-constant
+t .
+2.3- Exploiting the curve in figure 2:
+a- Show that the resistance of the inductor is 5	r = W .
+b- Verify that the approximate value of the inductance is 182	=	L mH .
+2.4- Find out the value of the energy stored m	E in the inductor at the instant 1t	
+t	= .
+Part two: Amplitude modulation
+To study the amplitude modulation and to check its quality during a practical work lesson, the
+teacher performs with his students the electric circuit shown in figure 3, using an integrated circuit
+(X) that makes the product. He applies a sinusoidal voltage 1 m	u (t) = P .cos(2π.F .t)	c at 1	E and a
+voltage 2 0	u (t ) = U + s(t ) at 2	E , where 0	U is the direct current component (DC component) of
+the voltage 2	u (t ) and m	s(t) = S .cos(2π.f .t)	m is the modulating voltage (figure 3).
+The curve in figure 4 shows the output voltage s 1 2	u (t ) = k.u (t).u (t) which students observe on the
+oscilloscope screen. The positive constant k characterises the integrated circuit (X).
+1- Show that the voltage s	u (t ) is written as: ( 	)	s = A 1+ m.cos 2πf t cos(2πF t)	u (t ) È ˘Î ˚	m c , highlighting
+both expressions of A and m.
+2- Exploiting the curve shown in figure 4:
+2.1- Find out the values of Fc the frequency of the carrier voltage, and fm the frequency of the
+modulating voltage.
+2.2- Determine the value of the modulation index m. What would you conclude about the quality
+of the modulation?
+
+-- 5 of 11 --
+
+7 6
+اﻟﺻﻔﺣﺔ
+7
+ﻟﻠﺒﻜﺎﻟﻮﺭﻳﺎ ﺍملﻮﺣﺪ ﺍﻟﻮﻃين ﺍﻻﻣﺘﺤﺎﻥ	-	ﺍﻟﻌﺎﺩﻳﺔ ﺍﻟﺪﻭﺭﺓ	2017	–	ﺍملﻮﺿﻮﻉ
+-	ﻣﺎﺩﺓ	:	ﻭﺍﻟﻜﻴﻤﻴﺎﺀ ﺍﻟﻔﻴﺰﻳﺎﺀ	–	ﻣﺴﻠﻚ	ﺍﻟﻔﻴﺰﻳﺎﺋﻴﺔ ﺍﻟﻌﻠﻮﻡ	–	ﺧﻴﺎﺭ	ﺇجنﻠﻴﺰﻳﺔ
+NS28E
+0,5
+0,5
+0,5
+0,5
+EXERCISE IV (5,5 points)
+Part one and part two are independent
+Part one: Study of the motion of a skier
+In the winter, sliding down mountains is the best sport. It combines both adventure and fitness.
+This part aims at studying the motion of the centre of inertia of the skier and his accessories on a
+ski-jump ramp.
+The skier slides on the ramp, which consists of two parts:
+- The incline A'B' at angle a to the horizontal;
+- The horizontal part B'C' (see figure).
+Given:
+- 2
+g 9,8m.s-
+= ;
+- Mass of the skier and his accessories: m 65kg	= ;
+- The angle of the incline: 23	a = ∞ ;
+- The air resistance is negligible.
+1. Study of the motion on the incline
+We study the motion of the centre of inertia G of a system (S) consisting of the skier and his
+accessories in the frame of reference (A, i', j')
+  linked to the earth. This frame is Galilean.
+At the origin of time (t=0), the system (S) starts without initial velocity from position A (where A
+coincides with G).
+The motion of G is on the plane AB according to the greater slope where AB = A'B'.
+The system (S) slides down the incline with a steady frictional force; its magnitude is f=15N .
+1.1- By applying the Newton second law, show that the differential equation of the velocity G	v of
+G is written as G	dv f
+g.sin
+dt m
+= a - .
+1.2- The solution of this differential equation is G	v (t) .t	= +	b c . Determine the values of b and c.
+1.3- Deduce the value of B	t , the instant when the centre G passes by position B with a velocity of
+1
+90 km.h- .
+1.4- Find out the magnitude R of the force applied by the incline on the system (S).
+2. Study of the motion on the horizontal plane
+The system (S) keeps moving on the horizontal plane B'C' and it stops at position C’.
+The system (S) moves on the horizontal plane with a steady frictional force; its magnitude is f '.
+We study the motion of G on the horizontal frame 
+(B,i) linked to the earth frame which is Galilean.
+The centre G passes by position B with a velocity of 1
+90 km.h- at an instant that we assume as a
+new origin of time (t=0).
+A'
+B' C'
+i'
+
+j'
+
+C
+B
+A
+X
+x'
+y'
+α
+G
+i
+
+
+-- 6 of 11 --
+
+7 7
+اﻟﺻﻔﺣﺔ
+7
+ﻟﻠﺒﻜﺎﻟﻮﺭﻳﺎ ﺍملﻮﺣﺪ ﺍﻟﻮﻃين ﺍﻻﻣﺘﺤﺎﻥ	-	ﺍﻟﻌﺎﺩﻳﺔ ﺍﻟﺪﻭﺭﺓ	2017	–	ﺍملﻮﺿﻮﻉ
+-	ﻣﺎﺩﺓ	:	ﻭﺍﻟﻜﻴﻤﻴﺎﺀ ﺍﻟﻔﻴﺰﻳﺎﺀ	–	ﻣﺴﻠﻚ	ﺍﻟﻔﻴﺰﻳﺎﺋﻴﺔ ﺍﻟﻌﻠﻮﻡ	–	ﺧﻴﺎﺭ	ﺇجنﻠﻴﺰﻳﺔ
+NS28E
+steel
+wire
+G
++
+( )	D
+θ
+A
+B
+0,5
+0,5
+0,5
+0,5
+0,75
+0,75
+2.1- By applying the Newton second law, find out the magnitude f ' of the frictional force applied
+by the horizontal plane on the system (S), knowing that the x-component of acceleration of G
+is 2
+x	a 3 m.s-
+= - .
+2.2- Determine C	t the instant when the system (S) stops moving.
+2.3- Deduce the value of the distance BC travelled.
+Part two: Energetic study of a torsion pendulum
+Historically, the torsion pendulum was used by Cavendish to determine the universal gravitation
+constant. The torsion pendulum can be used to determine the torsion constant of some deformable
+solids.
+This part of exercise aims at determining both the torsion constant of a steel wire and the moment
+of inertia of a rod by exploiting the energy diagrams.
+A torsion pendulum consists of a vertical steel wire of torsion constant C and a homogeneous rod
+AB of a moment of inertia Δ	J about a vertical axis ( )	D . The axis
+( )	D has the same direction as the steel wire. One end of the steel
+wire is attached to G the centre of inertia of the rod.
+We turn the rod AB horizontally in the positive sense around the
+axis ( )	D at the angle m	θ = 0,8 rad to the equilibrium position,
+then we release it without initial velocity at t=0 the origin of time.
+We locate the position of the rod at one instant of time at the
+angular displacement q to its equilibrium position (see figure).
+We study the motion of the pendulum in a frame of reference
+assumed Galilean.
+We assume the torsional potential energy to be zero at the
+position of equilibrium and the gravitational potential energy to be zero on the horizontal plane
+passes by G.
+All frictions are negligible.
+The curve of the figure on the right represents the
+variation of the kinetic energy K	E of the pendulum
+with q .
+1- Write the expression of the mechanical energy m	E
+of the pendulum in terms of C, Δ	J , q and ∑
+q
+the angular velocity.
+2- Determine the value of the torsion constant C
+of the steel wire.
+3- Find out the value of Δ	J , knowing that the value
+of the maximum angular velocity of the pendulum is
+1
+max 2,31rad.s
+∑ -
+q = .
+θ(rad)
+0,8
+2
+4
+6
+8
+10
+12
+14
+0,2 0,4 0,6	- 0,8 - 0,6 - 0,4 - 0,2 0
+EK (mJ)
+
+-- 7 of 11 --
+
+4 1 ا	ﻟﺻﻔﺣﺔ
+ﻟﻠﺘﻘﻮﻳﻢ اﻟﻮﻃﻨﻲ اﻟﻤﺮﻛﺰ	واﻟﺘﻮﺟﻴﻪ واﻻﻣﺘﺤﺎﻧﺎت
+
+				 
+ﺍ	ﺍﻟﻌﺎﺩﻳﺔ ﻟﺪﻭﺭﺓ		2017
+-	ﺍﻹﺟﺎﺑﺔ ﻋﻨﺎﺻﺮ	- NR 28E
+	 
+		–			
+اﻟﻣﺎدة
+اﻟﺷﻌﺑﺔ	أو	ا	ﻟﻣﺳﻠك
+اﻹﻧﺟﺎز ﻣدة
+اﻟﻣﻌﺎﻣل
+3
+7
+EXERCISE I (7 points )
+Question reference
+In the framework
+Marking
+scale
+Answers	Questions
+Calculate the value of the quotient of
+reaction Qr of a chemical system in
+given state.
+0,25
+0,25
+The expression :
+2	3
+( )
+3	2
+( )
++
++
+È ˘Î ˚
+=
+È ˘Î ˚
+aq i
+ri
+aq i
+Al
+Q
+Cu
+1,54	ri	Q ª
+1
+Part I
+Determine the direction of spontaneous
+evolution of a chemical system.
+0,25
+0,25
+-Comparaison between ri	Q and K
+-The forward direction (sense 1)
+2
+Draw a cell diagram / diagram of an
+electrochemical cell (battery)
+0,5	3 2
+( ) ( ) ( ) ( )	/ // /+ + ≈	S aq aq S	Al Al Cu Cu	!	3
+Establish the relationship between the
+amount of substance of chemical
+specie produced or consumed, the
+current intensity and the operating
+duration of a battery. Use this
+relationship to determine other
+quantities (quantity of charge, progress
+of the reaction, change of the mass...).
+0,5
+0,25
+- The method used
+- The amount of charge is :
+3
+6,15.10	ª	q C
+4
+-Calculate the final progress of the
+reaction that occurs between an acid
+and water taking into consideration the
+value of both the concentration and this
+acid’s pH aqueous solution; then,
+compare it with the maximum
+progress.
+-Define the final progress rate of a
+reaction, and determine it using
+experimental data.
+0,25
+0,25
+0,25
+-The progress table
+-The final progress rate 0, 04	t ª
+or 4%
+-The reaction is non-complete
+1.1
+Part II
+Calculate the value of the quotient of
+reaction Qr of a chemical system in
+given state.
+0,5
+0,25
+2
+,
+10
+10
+-
+-	
+= -
+pH
+r éq pH	
+Q C
+5
+, 1,57.10-
+ª	r éq	Q
+1.2
+Know the relationship
+log	A A	pK K	= -
+0,5	4,8	ª	A	pK
+1.3
+Justify the choice of experimental
+equipment to be used: reflux apparatus,
+fractional distillation, crystallisation
+and vacuum filtration.
+0,5	Increasing the rate of reaction and
+avoiding the lost of the substance
+2.1
+
+-- 8 of 11 --
+
+4 2
+اﻟﺻﻔﺣﺔ
+4
+ﻟﻠﺒﻜﺎﻟﻮﺭﻳﺎ ﺍملﻮﺣﺪ ﺍﻟﻮﻃين ﺍﻻﻣﺘﺤﺎﻥ	-	ﺍﻟﻌﺎﺩﻳﺔ ﺍﻟﺪﻭﺭﺓ	2017	–	ﺍﻹﺟﺎﺑﺔ ﻋﻨﺎﺻﺮ
+-	ﻣﺎﺩﺓ	:	ﻭﺍﻟﻜﻴﻤﻴﺎﺀ ﺍﻟﻔﻴﺰﻳﺎﺀ	–	ﻣﺴﻠﻚ	ﺍﻟﻔﻴﺰﻳﺎﺋﻴﺔ ﺍﻟﻌﻠﻮﻡ	–	ﺧﻴﺎﺭ	ﺇجنﻠﻴﺰﻳﺔ
+NR28E
+Determine the half-life t1/2 of the
+chemical reaction graphically or
+through exploiting the experimental
+results.
+0,25
+0,25
+0,25
+-Experiment 1: 1/2 8min	t ª
+-Experiment 2: 1/2 2min	ª	t
+-The reaction of the Experiment 2 is the
+fastest.
+2.2
+-Define the final progress rate of a
+reaction, and determine it using
+experimental data.
+-Know the characteristics of
+esterification and hydrolysis: non-
+complete and slow transformations.
+- Know the characteristics of the
+reaction of an anhydrous acid with an
+alcohol: fast and complete.
+0,25
+0,25
+0,25
+-Experiment1: 0,67 or 67%
+-Experiment 2: 1 or 100%
+-The reaction of the Experiment 2 is
+complete.
+2.3
+Write the equation of the reaction of an
+anhydride acid with an alcohol
+0,25
+0,5
+-The structural formula of the butanoic
+anhydride.
+- the equation of the reaction .
+2.4
+EXERCISE II (2,5 points )
+Questions Answers Marking
+scale
+Question reference
+in the framework
+1 4	= cm	
+l 0,5 - Exploit experimental documents
+and data in order to determine:
+* distance;
+* time delay;
+* wave speed.
+-Know (Recall) and use the
+relationship λ=v.T
+- Know the relationship between
+displacement of a point from the
+propagation medium and the source
+displacement: )	t	(	y	)	t	(	y S	M t	-	= .
+2 1
+v 2 m.s-
+= 0,5
+3 t 0, 03s	= 0,75
+4 0 03	-	M S	y (t)= y ( t , ) 0,75
+
+-- 9 of 11 --
+
+4 3
+اﻟﺻﻔﺣﺔ
+4
+ﻟﻠﺒﻜﺎﻟﻮﺭﻳﺎ ﺍملﻮﺣﺪ ﺍﻟﻮﻃين ﺍﻻﻣﺘﺤﺎﻥ	-	ﺍﻟﻌﺎﺩﻳﺔ ﺍﻟﺪﻭﺭﺓ	2017	–	ﺍﻹﺟﺎﺑﺔ ﻋﻨﺎﺻﺮ
+-	ﻣﺎﺩﺓ	:	ﻭﺍﻟﻜﻴﻤﻴﺎﺀ ﺍﻟﻔﻴﺰﻳﺎﺀ	–	ﻣﺴﻠﻚ	ﺍﻟﻔﻴﺰﻳﺎﺋﻴﺔ ﺍﻟﻌﻠﻮﻡ	–	ﺧﻴﺎﺭ	ﺇجنﻠﻴﺰﻳﺔ
+NR28E
+EXERCISE III (5 points)
+Questions Answers Marking
+scale
+Question reference
+in the framework
+Part I
+1.1 Representation of uR 0,25 -Represent the voltages (Electric Potential
+Difference) R	u and L	u using the receiver
+convention.
+- Find out the differential equation and
+verify its solution when the RL dipole is
+submitted to a step voltage.
+- Determine the current’s intensity
+expression ( )	i t when the RL dipole is
+submitted to a step voltage, and deduce
+the voltage expressions between the
+inductor’s terminals and the resistor
+terminals.
+-Know and exploit the time-constant
+expression.
+- Determine the two characteristics of the
+inductor (the inductance L, the
+resistance r) exploiting experimental
+results.
+1.2 p
+E
+I = R + r 0,5
+2.1 the differential equation 0,5
+2.2 L
+τ = R +r 0,5
+2.3
+a- Finding the value of r
+b-checking the value of L
+0,5
+0,5
+2.4 The method
+4
+m 1 2 10 J-
+ , .	E
+0,25
+0,25
+- Know and exploit the expression of the
+magnetic energy stored in a inductor.
+Part II
+1
+*Finding the expression of
+us(t)
+m 0
+m
+0
+* A k.P .U
+S
+* m U
+=
+=
+0,25
+0,25
+0,25
+-Know that the amplitude modulation
+process is to transform the modulated
+amplitude voltage to affine function of
+the modulating voltage.
+-Recognise the stages of the amplitude
+modulation.
+-know the required conditions to avoid
+over modulation.
+-Exploit the different experimental
+obtained curves.
+2.1 f =100 Hz	m
+F =1kHz	c
+0,25
+0,25
+2.2 m 0, 5	=
+Good amplitude modulation
+0,25
+0,25
+
+-- 10 of 11 --
+
+4 4
+اﻟﺻﻔﺣﺔ
+4
+ﻟﻠﺒﻜﺎﻟﻮﺭﻳﺎ ﺍملﻮﺣﺪ ﺍﻟﻮﻃين ﺍﻻﻣﺘﺤﺎﻥ	-	ﺍﻟﻌﺎﺩﻳﺔ ﺍﻟﺪﻭﺭﺓ	2017	–	ﺍﻹﺟﺎﺑﺔ ﻋﻨﺎﺻﺮ
+-	ﻣﺎﺩﺓ	:	ﻭﺍﻟﻜﻴﻤﻴﺎﺀ ﺍﻟﻔﻴﺰﻳﺎﺀ	–	ﻣﺴﻠﻚ	ﺍﻟﻔﻴﺰﻳﺎﺋﻴﺔ ﺍﻟﻌﻠﻮﻡ	–	ﺧﻴﺎﺭ	ﺇجنﻠﻴﺰﻳﺔ
+NR28E
+EXERCISE IV ( 5,5 points)
+Questions Answers Marking
+scale Question reference
+in the framework
+Part I
+1.1
+Finding the differential
+equation
+0,5
+-Know Newton’s second law
+. G
+ext
+V
+F m t
+D
+S = D
+
+ and . a	ext G	F m	S =
+  and
+its range of validity.
+- Apply Newton’s second law to find out
+the differential equation of a system’s
+centre of inertia motion in horizontal or
+inclined plane and determine the
+characteristics of kinetic and dynamic
+quantities of motion.
+- Know and apply the Euler’s method to
+solve approximately differential equation.
+1.2
+2
+b 3, 6 m.s
+c 0
+-
+ª
+=
+0,25
+0,25
+1.3 = G
+B
+v
+t b
+6,9	ª	B	t s
+0,25
+0,25
+1.4
+2 2
+R = f + (m.g.cosα)
+R 586, 6N	ª
+0,25
+0,25
+2.1
+x	f ' m.a	= -
+f ' 195 N	=
+0,25
+0,25
+2.2
+B
+c
+x
+v
+t a
+= -
+c	t 8,33s	=
+0,25
+0,25
+2,3
+2
+x c B c
+1
+BC a .t v .t
+2
+= +
+BC 104, 2 m	ª
+0,25
+0,25
+Part II
+1
+2	•
+2
+m Δ
+1 1
+E = C.θ + J .θ
+2 2
+0,5 - Know and exploit the expression of the
+mechanical energy of a torsion pendulum.
+- Exploit the energy diagrams..
+-Know and exploit the expression of the
+torsional potential energy.
+- Exploit the conservation and the non-
+conservation of the mechanical energy of
+the torsion pendulum.
+2
+p
+2
+2.E
+C = q2 1
+C 5.10 N.m.rad- -
+=
+0,5
+0,25
+3
+Kmax
+•
+ma
+Δ 2
+x
+2.E
+=
+θ
+J
+-
+=	Δ
+3 2
+J 6.10 kg.m
+0,5
+0,25
+
+-- 11 of 11 --
+
