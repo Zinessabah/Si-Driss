@@ -1,0 +1,47 @@
+name: Scrape bac physics exams
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scrape-bac-examens
+  cancel-in-progress: false
+
+jobs:
+  scrape-exam-documents:
+    name: Collecter les examens PC
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Scrape exam PDFs
+        id: scrape
+        continue-on-error: true
+        run: node scripts/scrape-bac-physics-exams.js --start-year 2008 --end-year 2025
+
+      - name: Commit newly collected PDFs
+        run: |
+          git add docs/programme/PC
+          if git diff --cached --quiet; then
+            echo "No new exam PDFs to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "docs: collect bac physics exam PDFs"
+          git push
+
+      - name: Report scraping failure
+        if: steps.scrape.outcome == 'failure'
+        run: exit 1
