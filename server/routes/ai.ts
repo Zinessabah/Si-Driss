@@ -11,9 +11,100 @@ import {
 } from '../ai/providers';
 import { generateUnifiedCompletion, streamUnifiedChat, trimUpstreamError } from '../ai/completion';
 import { sseWrite } from '../ai/sse';
-import { searchLocalDocuments } from '../rag';
-import { getSiDrissBasePrompt, getInstruction } from '../prompts';
-import type { ClientMessage } from '../ai/adapters';
+import { extractTextFromPdf, searchLocalDocuments } from '../rag';
+import { getSiDrissBasePrompt, getInstruction, normalizeBranchParam } from '../prompts';
+import type { ClientAttachment, ClientMessage } from '../ai/adapters';
+
+const MAX_ATTACHED_PDF_TEXT_CHARS = 24_000;
+
+/**
+ * Extrait le texte des pièces jointes PDF (si absent) afin que le RAG et TOUS
+ * les fournisseurs OpenAI/Anthropic/Groq/Ollama (pas seulement Gemini) puissent lire le PDF.
+ */
+async function enrichPdfAttachments(messages: ClientMessage[]): Promise<ClientMessage[]> {
+  if (!Array.isArray(messages)) return [];
+  const enriched: ClientMessage[] = [];
+
+  for (const msg of messages) {
+    if (!msg || typeof msg !== 'object') continue;
+    if (!Array.isArray(msg.attachments) || msg.attachments.length === 0) {
+      enriched.push(msg);
+      continue;
+    }
+
+    const updatedAtts: ClientAttachment[] = [];
+    for (const att of msg.attachments) {
+      if (!att || typeof att !== 'object') continue;
+      if (att.mimeType === 'application/pdf' && typeof att.data === 'string' && !att.text) {
+        try {
+          const compact = att.data.replace(/\s+/g, '');
+          const commaIdx = compact.indexOf(',');
+          const rawBase64 = commaIdx >= 0 ? compact.slice(commaIdx + 1) : compact;
+          if (rawBase64) {
+            const pdfText = (await extractTextFromPdf(Buffer.from(rawBase64, 'base64'))).trim();
+            if (pdfText) {
+              updatedAtts.push({ ...att, text: pdfText.slice(0, MAX_ATTACHED_PDF_TEXT_CHARS) });
+              continue;
+            }
+          }
+        } catch (pdfErr: any) {
+          console.warn('[Chat] Extraction PDF pièce jointe échouée:', pdfErr?.message || pdfErr);
+        }
+      }
+      updatedAtts.push(att);
+    }
+
+    enriched.push({ ...msg, attachments: updatedAtts });
+  }
+
+  return enriched;
+}
+
+/**
+ * Extrait le JSON même si le fournisseur ajoute du texte ou des balises markdown autour.
+ */
+function parseLlmJsonObject(raw: string): any {
+  const cleaned = String(raw || '')
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/```\s*$/i, '')
+    .trim();
+  try {
+    return JSON.parse(cleaned);
+  } catch {
+    const start = cleaned.indexOf('{');
+    const end = cleaned.lastIndexOf('}');
+    if (start !== -1 && end > start) {
+      return JSON.parse(cleaned.slice(start, end + 1));
+    }
+    throw new Error('JSON_PARSE_FAILED');
+  }
+}
+
+/**
+ * Propage les codes HTTP significatifs des fournisseurs IA (401/403/429/502/503)
+ * au lieu de tout masquer en erreur 500.
+ */
+function sendAiRouteError(res: any, err: any, fallbackMessage: string) {
+  const explicitStatus = Number(err?.statusCode || err?.status || 0);
+  const msg = String(err?.message || '');
+  let status = 500;
+  if (explicitStatus >= 400 && explicitStatus < 600) {
+    status = explicitStatus;
+  } else if (/\b401\b|unauthorized|invalid.?api.?key|api.?key.?invalid/i.test(msg)) {
+    status = 401;
+  } else if (/\b403\b|forbidden|permission_denied/i.test(msg)) {
+    status = 403;
+  } else if (/\b429\b|rate.?limit|quota|resource_exhausted/i.test(msg)) {
+    status = 429;
+  } else if (/\b(502|503|504)\b|timeout|aborted/i.test(msg)) {
+    status = 503;
+  }
+
+  return res.status(status).json({
+    error: status === 401 ? 'API_KEY_REQUIRED' : fallbackMessage,
+    message: trimUpstreamError(msg) || fallbackMessage,
+  });
+}
 
 /** Routes IA : statut, validation de clé, chat (stream + fallback), audit, générateur. */
 export function createAiRouter(): Router {
@@ -149,13 +240,15 @@ router.post('/chat/stream', async (req, res) => {
   }
 
   try {
-    const { messages, context, mode, socraticEnabled = true, branch = 'PC' } = req.body;
+    const { messages, context, mode, socraticEnabled = true } = req.body;
+    const branch = normalizeBranchParam(req.body?.branch);
 
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: 'Format invalide.' });
     }
 
-    const lastUser = [...messages].reverse().find((m) => m.role === 'user');
+    const enrichedMessages = await enrichPdfAttachments(messages);
+    const lastUser = [...enrichedMessages].reverse().find((m) => m.role === 'user');
     let searchTerms = lastUser?.content || '';
     if (lastUser?.attachments && Array.isArray(lastUser.attachments)) {
       for (const att of lastUser.attachments) {
@@ -188,7 +281,7 @@ router.post('/chat/stream', async (req, res) => {
     }, 10000);
 
     try {
-      await streamUnifiedChat(aiConfig, messages, fullInstruction, res, disconnectController.signal);
+      await streamUnifiedChat(aiConfig, enrichedMessages, fullInstruction, res, disconnectController.signal);
     } finally {
       clearInterval(heartbeat);
     }
@@ -217,12 +310,14 @@ router.post('/chat', async (req, res) => {
   }
 
   try {
-    const { messages, context, mode, socraticEnabled = true, branch = 'PC' } = req.body;
+    const { messages, context, mode, socraticEnabled = true } = req.body;
+    const branch = normalizeBranchParam(req.body?.branch);
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: 'Format invalide.' });
     }
 
-    const lastUser = [...messages].reverse().find((m) => m.role === 'user');
+    const enrichedMessages = await enrichPdfAttachments(messages);
+    const lastUser = [...enrichedMessages].reverse().find((m) => m.role === 'user');
     let searchTerms = lastUser?.content || '';
     if (lastUser?.attachments && Array.isArray(lastUser.attachments)) {
       for (const att of lastUser.attachments) {
@@ -233,16 +328,13 @@ router.post('/chat', async (req, res) => {
     const matchedDocs = await searchLocalDocuments(searchTerms, branch);
     const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context);
 
-    const { text, model } = await generateUnifiedCompletion(aiConfig, messages, fullInstruction, false);
+    const { text, model } = await generateUnifiedCompletion(aiConfig, enrichedMessages, fullInstruction, false);
 
     const reply = text || "Désolé mon élève, peux-tu reformuler ta question, lah yerdi 3lik ?";
     return res.json({ reply, sourceDocs: Boolean(matchedDocs), modelUsed: model });
   } catch (err: any) {
     console.error('Erreur API Chat:', err);
-    return res.status(500).json({
-      error: 'Erreur lors de la communication avec Si Driss.',
-      details: trimUpstreamError(err?.message || String(err)),
-    });
+    return sendAiRouteError(res, err, 'Erreur lors de la communication avec Si Driss.');
   }
 });
 
@@ -259,16 +351,21 @@ router.post('/evaluate', async (req, res) => {
   }
 
   try {
-    const { exerciseTitle, questionText, studentAnswer, branch = 'PC' } = req.body;
+    const { exerciseTitle, questionText, studentAnswer } = req.body;
+    const cleanAnswer = typeof studentAnswer === 'string' ? studentAnswer.trim() : '';
+    if (!cleanAnswer) {
+      return res.status(400).json({ error: 'Veuillez rédiger votre réponse avant de demander un audit.' });
+    }
+    const branch = normalizeBranchParam(req.body?.branch);
     const branchLabel = branch === 'SM' ? 'Sciences Mathématiques (SM)' : 'Sciences Physiques (PC)';
 
     const prompt = `
 En tant que Si Driss, correcteur officiel de l'Examen National 2ème Bac ${branchLabel} (BIOF Maroc), évalue rigoureusement la réponse suivante d'un élève.
 
-EXERCICE : ${exerciseTitle || `Exercice National 2ème Bac ${branch}`}
-QUESTION : ${questionText || 'Résolution du problème'}
+EXERCICE : ${String(exerciseTitle || `Exercice National 2ème Bac ${branch}`).slice(0, 300)}
+QUESTION : ${String(questionText || 'Résolution du problème').slice(0, 2000)}
 RÉPONSE RÉDIGÉE PAR L'ÉLÈVE (Filière ${branch}) :
-${studentAnswer}
+${cleanAnswer}
 
 Fournis une évaluation structurée au format JSON suivant :
 {
@@ -296,8 +393,7 @@ Fournis une évaluation structurée au format JSON suivant :
 
     let data;
     try {
-      const cleanJson = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
-      data = JSON.parse(cleanJson);
+      data = parseLlmJsonObject(text);
     } catch {
       // Règle « Zéro Invention » (H4 côté serveur) : jamais de note fabriquée si le
       // fournisseur renvoie un format illisible — on renvoie une erreur honnête.
@@ -311,7 +407,7 @@ Fournis une évaluation structurée au format JSON suivant :
     return res.json(data);
   } catch (err: any) {
     console.error('Erreur API Evaluation:', err);
-    return res.status(500).json({ error: "Erreur lors de l'évaluation." });
+    return sendAiRouteError(res, err, "Erreur lors de l'évaluation.");
   }
 });
 
@@ -328,17 +424,24 @@ router.post('/generate-exercise', async (req, res) => {
   }
 
   try {
-    const { subject, chapter, difficulty, topicStyle, branch = 'PC' } = req.body;
+    const { subject, chapter, difficulty, topicStyle } = req.body;
+    const branch = normalizeBranchParam(req.body?.branch);
     const branchLabel = branch === 'SM' ? 'Sciences Mathématiques (SM)' : 'Sciences Physiques (PC)';
+    const safeSubject = String(subject || 'Physique').slice(0, 80);
+    const safeChapter = String(
+      chapter || (branch === 'SM' ? "Rotation d'un solide autour d'un axe fixe" : 'Ondes mécaniques progressives')
+    ).slice(0, 150);
+    const safeDifficulty = String(difficulty || 'Standard National').slice(0, 80);
+    const safeTopicStyle = String(topicStyle || 'Problème avec données expérimentales et analyse graphique').slice(0, 150);
 
     const prompt = `
 Génère un exercice inédit de type Examen National Marocain pour la 2ème Année Bac ${branchLabel} (BIOF).
 
-Matière : ${subject || 'Physique'}
-Chapitre : ${chapter || (branch === 'SM' ? "Rotation d'un solide autour d'un axe fixe" : 'Ondes mécaniques progressives')}
+Matière : ${safeSubject}
+Chapitre : ${safeChapter}
 Filière cible : 2ème Bac ${branch} (respecter strictement le Cadre de Référence officiel du Ministère pour ${branch})
-Difficulté : ${difficulty || 'Standard National'}
-Style : ${topicStyle || 'Problème avec données expérimentales et analyse graphique'}
+Difficulté : ${safeDifficulty}
+Style : ${safeTopicStyle}
 
 L'exercice doit comporter :
 - Un énoncé réaliste avec contexte expérimental adapté au niveau ${branch}.
@@ -350,7 +453,7 @@ Réponds UNIQUEMENT au format JSON :
 {
   "title": "Titre officiel",
   "domain": "Physique" | "Chimie",
-  "chapter": "${chapter || 'Chapitre'}",
+  "chapter": "${safeChapter.replace(/"/g, "'")}",
   "duration": "30 min",
   "context": "Texte d'introduction...",
   "parameters": [
@@ -377,10 +480,9 @@ Réponds UNIQUEMENT au format JSON :
       true
     );
 
-    const cleanJson = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
     let exercise;
     try {
-      exercise = JSON.parse(cleanJson);
+      exercise = parseLlmJsonObject(text);
     } catch {
       console.warn('Réponse IA non parsable en JSON (generate-exercise):', text.slice(0, 200));
       return res.status(502).json({
@@ -391,7 +493,7 @@ Réponds UNIQUEMENT au format JSON :
     return res.json(exercise);
   } catch (err: any) {
     console.error('Erreur API Generate Exercise:', err);
-    return res.status(500).json({ error: "Erreur lors de la génération d'exercice." });
+    return sendAiRouteError(res, err, "Erreur lors de la génération d'exercice.");
   }
 });
 

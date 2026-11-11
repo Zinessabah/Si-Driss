@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { useModalA11y } from '../hooks/useModalA11y';
 import { useBranch, StudentBranch } from '../hooks/useBranch';
-import { useApiKey, getAdminToken, setAdminToken } from '../hooks/useApiKey';
+import { useApiKey, getAccessToken, getAdminToken, setAdminToken } from '../hooks/useApiKey';
 import {
   saveDocumentToVault,
   removeDocumentFromVault,
@@ -298,6 +298,8 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
   const handlePreviewOfficialDoc = async (docName: string) => {
     try {
       const headers: Record<string, string> = {};
+      const accessTokenVal = getAccessToken();
+      if (accessTokenVal) headers['x-access-token'] = accessTokenVal;
       if (adminTokenVal) headers['x-admin-token'] = adminTokenVal;
       const res = await fetch(`/api/documents/file?name=${encodeURIComponent(docName)}`, { headers });
       if (res.ok) {

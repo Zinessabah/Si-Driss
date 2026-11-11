@@ -1,6 +1,18 @@
+import crypto from 'crypto';
 import type { Request, Response, NextFunction } from 'express';
 import { rateLimit } from 'express-rate-limit';
 import { ACCESS_TOKEN, ADMIN_TOKEN } from './config';
+
+/**
+ * Comparaison en temps constant via empreintes SHA-256 pour éviter
+ * toute fuite temporelle sur la longueur ou les caractères des jetons.
+ */
+export function safeTokenEqual(provided: string, expected: string): boolean {
+  if (!provided || !expected) return false;
+  const a = crypto.createHash('sha256').update(provided, 'utf8').digest();
+  const b = crypto.createHash('sha256').update(expected, 'utf8').digest();
+  return crypto.timingSafeEqual(a, b);
+}
 
 export const RATE_LIMIT_MSG = { error: 'Trop de requêtes. Réessaie dans quelques minutes, lah yerdi 3lik.' };
 
@@ -35,7 +47,7 @@ export function accessGate(req: Request, res: Response, next: NextFunction) {
   if (!ACCESS_TOKEN) return next();
   if (req.path === '/ai-status') return next();
   const provided = String(req.headers['x-access-token'] || '');
-  if (provided && provided === ACCESS_TOKEN) return next();
+  if (safeTokenEqual(provided, ACCESS_TOKEN)) return next();
   return res.status(401).json({
     error: 'ACCESS_TOKEN_REQUIRED',
     message: 'Mot de passe de classe requis. Ajoute ?token=... à l’URL ou contacte ton professeur.',
@@ -55,6 +67,6 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction) {
     return next();
   }
   const provided = String(req.headers['x-admin-token'] || '');
-  if (provided && provided === ADMIN_TOKEN) return next();
+  if (safeTokenEqual(provided, ADMIN_TOKEN)) return next();
   return res.status(401).json({ error: 'Jeton administrateur requis (en-tête x-admin-token).' });
 }

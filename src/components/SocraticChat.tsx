@@ -31,7 +31,6 @@ import { SavedSession, ChatMessage, ChatAttachment } from '../types/chat';
 import { compressImageFile, safeSaveSessions, safeLoadSessions } from '../utils/chatStorage';
 import { useModalA11y } from '../hooks/useModalA11y';
 import { ExercisePickerModal } from './ExercisePickerModal';
-import { DocumentPickerModal } from './DocumentPickerModal';
 import { GraphicsGalleryModal } from './GraphicsGalleryModal';
 import { ExportResponseButtons } from './ExportResponseButtons';
 import { useApiKey } from '../hooks/useApiKey';
@@ -124,7 +123,6 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   const [isAddMenuOpen, setIsAddMenuOpen] = useState<boolean>(false);
   const [isFormulaMenuOpen, setIsFormulaMenuOpen] = useState<boolean>(false);
   const [isExercisePickerOpen, setIsExercisePickerOpen] = useState<boolean>(false);
-  const [isDocPickerOpen, setIsDocPickerOpen] = useState<boolean>(false);
   const [isGraphicsModalOpen, setIsGraphicsModalOpen] = useState<boolean>(false);
   const [pendingAttachments, setPendingAttachments] = useState<ChatAttachment[]>([]);
   const [previewImageModal, setPreviewImageModal] = useState<{ url: string; name: string } | null>(null);
@@ -132,7 +130,6 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   // (M14) Accessibilité de la visionneuse d'image
   const lightboxRef = useModalA11y(Boolean(previewImageModal), () => setPreviewImageModal(null));
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const pdfInputRef = useRef<HTMLInputElement | null>(null);
   const photoInputRef = useRef<HTMLInputElement | null>(null);
   const cameraInputRef = useRef<HTMLInputElement | null>(null);
@@ -144,6 +141,8 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
   // Saved sessions list
   const [savedSessions, setSavedSessions] = useState<SavedSession[]>(() => safeLoadSessions());
+  const savedSessionsRef = useRef<SavedSession[]>(savedSessions);
+  savedSessionsRef.current = savedSessions;
 
   // Messages du canvas de chat — Démarre toujours libre et accueillant comme Google Gemini
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
@@ -189,24 +188,64 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     }
   }, [externalLoadSession]);
 
+  const deriveSessionTitle = (msgs: ChatMessage[], existingTitle: string) => {
+    if (existingTitle && existingTitle !== 'Nouvelle discussion') return existingTitle;
+    const firstUser = msgs.find((m) => m.role === 'user');
+    return firstUser?.content.slice(0, 42).replace(/\n/g, ' ').trim() || "Session d'exercices";
+  };
+
+  const commitSessionSnapshot = useCallback((snapshot: SavedSession) => {
+    const current = savedSessionsRef.current;
+    const idx = current.findIndex((s) => s.id === snapshot.id);
+    let nextSessions: SavedSession[];
+    if (idx >= 0) {
+      nextSessions = [...current];
+      nextSessions[idx] = {
+        ...current[idx],
+        ...snapshot,
+        createdAt: current[idx].createdAt,
+      };
+    } else {
+      nextSessions = [snapshot, ...current];
+    }
+    savedSessionsRef.current = nextSessions;
+    setSavedSessions(nextSessions);
+    safeSaveSessions(nextSessions);
+  }, []);
+
+  const resetToFreshSession = useCallback(() => {
+    activeStreamControllerRef.current?.abort();
+    setLoading(false);
+    setCurrentSessionId(`session_${Date.now()}`);
+    setCurrentSessionTitle('Nouvelle discussion');
+    setMessages([getWelcomeMessage(branch)]);
+    setPendingAttachments([]);
+    try {
+      localStorage.removeItem('sidriss_active_session_v1');
+    } catch {}
+  }, [branch]);
+
   // Synchronize when a session is renamed or deleted from sidebar
   useEffect(() => {
-    const handleStorageChange = () => {
+    const handleStorageChange = (event: Event) => {
       try {
-        const raw = localStorage.getItem('sidriss_saved_sessions_v1');
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          setSavedSessions(parsed);
-          const current = parsed.find((s: SavedSession) => s.id === currentSessionId);
-          if (current && current.title) {
-            setCurrentSessionTitle(current.title);
-          }
+        const parsed = safeLoadSessions();
+        savedSessionsRef.current = parsed;
+        setSavedSessions(parsed);
+        const deletedId = (event as CustomEvent<{ deletedId?: string }> | undefined)?.detail?.deletedId;
+        if (deletedId && deletedId === currentSessionId) {
+          resetToFreshSession();
+          return;
+        }
+        const current = parsed.find((s: SavedSession) => s.id === currentSessionId);
+        if (current && current.title) {
+          setCurrentSessionTitle(current.title);
         }
       } catch {}
     };
     window.addEventListener('sidriss_sessions_updated', handleStorageChange);
     return () => window.removeEventListener('sidriss_sessions_updated', handleStorageChange);
-  }, [currentSessionId]);
+  }, [currentSessionId, resetToFreshSession]);
 
   // Close menus when clicking outside
   useEffect(() => {
@@ -241,13 +280,12 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
       const now = new Date().toISOString();
 
       try {
-        let title = currentSessionTitle;
-        if (!title || title === 'Nouvelle discussion') {
-          title = userMessages[0].content.slice(0, 42).replace(/\n/g, ' ').trim() || 'Session d\'exercices';
+        const title = deriveSessionTitle(messages, currentSessionTitle);
+        if (title !== currentSessionTitle) {
           setCurrentSessionTitle(title);
         }
 
-        const sessionPayload: SavedSession = {
+        commitSessionSnapshot({
           id: currentSessionId,
           title,
           messages,
@@ -255,33 +293,13 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
           coachingMode,
           createdAt: now,
           updatedAt: now,
-        };
-
-        setSavedSessions((prev) => {
-          const idx = prev.findIndex((s) => s.id === currentSessionId);
-          let nextSessions: SavedSession[];
-          if (idx >= 0) {
-            nextSessions = [...prev];
-            nextSessions[idx] = {
-              ...prev[idx],
-              title,
-              messages,
-              socraticEnabled,
-              coachingMode,
-              updatedAt: now,
-            };
-          } else {
-            nextSessions = [sessionPayload, ...prev];
-          }
-          safeSaveSessions(nextSessions);
-          return nextSessions;
         });
       } catch (e) {
         console.warn('Auto-save active session:', e);
       }
     }, 600);
     return () => clearTimeout(t);
-  }, [messages, socraticEnabled, coachingMode, currentSessionId, currentSessionTitle]);
+  }, [messages, socraticEnabled, coachingMode, currentSessionId, currentSessionTitle, commitSessionSnapshot]);
 
   // Auto-dismiss du toast d'échec de sauvegarde (M15)
   useEffect(() => {
@@ -367,42 +385,19 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   const handleNewSession = () => {
     const userMessages = messages.filter((m) => m.role === 'user');
     if (userMessages.length > 0) {
-      const autoTitle =
-        currentSessionTitle && currentSessionTitle !== 'Nouvelle discussion'
-          ? currentSessionTitle
-          : userMessages[0].content.slice(0, 42).replace(/\n/g, ' ').trim() || 'Session d\'exercices';
       const now = new Date().toISOString();
-      const archived: SavedSession = {
+      commitSessionSnapshot({
         id: currentSessionId,
-        title: autoTitle,
+        title: deriveSessionTitle(messages, currentSessionTitle),
         createdAt: now,
         updatedAt: now,
         messages,
         socraticEnabled,
         coachingMode,
-      };
-      setSavedSessions((prev) => {
-        const idx = prev.findIndex((s) => s.id === currentSessionId);
-        let next: SavedSession[];
-        if (idx >= 0) {
-          next = [...prev];
-          next[idx] = archived;
-        } else {
-          next = [archived, ...prev];
-        }
-        safeSaveSessions(next);
-        return next;
       });
     }
 
-    const newId = `session_${Date.now()}`;
-    setCurrentSessionId(newId);
-    setCurrentSessionTitle('Nouvelle discussion');
-    setMessages([getWelcomeMessage(branch)]);
-    setPendingAttachments([]);
-    try {
-      localStorage.removeItem('sidriss_active_session_v1');
-    } catch {}
+    resetToFreshSession();
   };
 
   const handleLoadSession = (session: SavedSession) => {
@@ -410,31 +405,15 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     if (currentSessionId && currentSessionId !== session.id) {
       const userMessages = messages.filter((m) => m.role === 'user');
       if (userMessages.length > 0) {
-        const title =
-          currentSessionTitle && currentSessionTitle !== 'Nouvelle discussion'
-            ? currentSessionTitle
-            : userMessages[0].content.slice(0, 42).replace(/\n/g, ' ').trim() || 'Session d\'exercices';
         const now = new Date().toISOString();
-        const currentToSave: SavedSession = {
+        commitSessionSnapshot({
           id: currentSessionId,
-          title,
+          title: deriveSessionTitle(messages, currentSessionTitle),
           createdAt: now,
           updatedAt: now,
           messages,
           socraticEnabled,
           coachingMode,
-        };
-        setSavedSessions((prev) => {
-          const idx = prev.findIndex((s) => s.id === currentSessionId);
-          let next: SavedSession[];
-          if (idx >= 0) {
-            next = [...prev];
-            next[idx] = currentToSave;
-          } else {
-            next = [currentToSave, ...prev];
-          }
-          safeSaveSessions(next);
-          return next;
         });
       }
     }
@@ -459,7 +438,6 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         `Maximum ${MAX_ATTACHMENTS_PER_MESSAGE} pièces jointes par message. Envoie d'abord celles-ci !`
       );
       setIsAddMenuOpen(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
       if (pdfInputRef.current) pdfInputRef.current.value = '';
       if (photoInputRef.current) photoInputRef.current.value = '';
       if (cameraInputRef.current) cameraInputRef.current.value = '';
@@ -483,7 +461,21 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
       }
 
       const isImg = file.type.startsWith('image/');
-      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+      const lowerName = file.name.toLowerCase();
+      const isPdf = file.type === 'application/pdf' || lowerName.endsWith('.pdf');
+      const isSupportedText =
+        file.type.startsWith('text/') ||
+        lowerName.endsWith('.txt') ||
+        lowerName.endsWith('.md') ||
+        lowerName.endsWith('.csv') ||
+        lowerName.endsWith('.tex');
+
+      if (!isImg && !isPdf && !isSupportedText) {
+        setSaveToast(
+          `Format non supporté pour "${file.name}" : importe un fichier PDF, TXT, Markdown ou une image (PNG/JPG).`
+        );
+        return;
+      }
 
       if (isImg) {
         compressImageFile(file)
@@ -550,9 +542,6 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     });
 
     setIsAddMenuOpen(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
     if (pdfInputRef.current) {
       pdfInputRef.current.value = '';
     }
@@ -573,23 +562,6 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         setInput(`Si Driss, voici l'exercice "${attachment.name}". Peux-tu m'aider à le résoudre méthodiquement ?`);
       }
     }
-    setIsAddMenuOpen(false);
-  };
-
-  const handleSelectDoc = (attachment: ChatAttachment) => {
-    setPendingAttachments((prev) => [...prev, attachment]);
-    if (!input.trim()) {
-      setInput(`Si Driss, j'ai joint le document officiel "${attachment.name}". Peux-tu m'expliquer les points clés pour le National ?`);
-    }
-    setIsAddMenuOpen(false);
-  };
-
-  const handleInsertTemplate = () => {
-    const template = `📚 **Exercice :** [Précise le chapitre : RC, RLC, Newton, Titrage...]
-📋 **Énoncé / Données numériques :** 
-❓ **Question où je bloque :** 
-💡 **Mon début de raisonnement :** `;
-    setInput(template);
     setIsAddMenuOpen(false);
   };
 
@@ -773,6 +745,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
               'Content-Type': 'application/json',
               ...getAuthHeaders(),
             },
+            signal: controller.signal,
             body: JSON.stringify({
               messages: messagesForApi,
               context: currentContext,
@@ -800,6 +773,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
             'Content-Type': 'application/json',
             ...getAuthHeaders(),
           },
+          signal: controller.signal,
           body: JSON.stringify({
             messages: messagesForApi,
             context: currentContext,
@@ -906,7 +880,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         type="file"
         ref={pdfInputRef}
         onChange={handleFileUpload}
-        accept="application/pdf,.pdf,.txt,.doc,.docx"
+        accept="application/pdf,.pdf,.txt,.md,.csv,.tex"
         multiple
         className="hidden"
       />
@@ -924,14 +898,6 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         onChange={handleFileUpload}
         accept="image/*"
         capture="environment"
-        className="hidden"
-      />
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileUpload}
-        accept="application/pdf,.pdf,image/png,image/jpeg,image/webp"
-        multiple
         className="hidden"
       />
 
@@ -1436,12 +1402,6 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
         isOpen={isExercisePickerOpen}
         onClose={() => setIsExercisePickerOpen(false)}
         onSelectExercise={handleSelectExercise}
-      />
-
-      <DocumentPickerModal
-        isOpen={isDocPickerOpen}
-        onClose={() => setIsDocPickerOpen(false)}
-        onSelectDoc={handleSelectDoc}
       />
 
       <GraphicsGalleryModal

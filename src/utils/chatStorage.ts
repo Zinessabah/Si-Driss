@@ -64,15 +64,37 @@ export async function compressImageFile(
   });
 }
 
+const MAX_IMAGE_STORAGE_CHARS = 150000;
+const MAX_TEXT_STORAGE_CHARS = 12000;
+
 /**
  * Allège une pièce jointe pour le stockage persistant dans localStorage (5 Mo max par domaine).
  */
 function sanitizeAttachmentForStorage(att: ChatAttachment): ChatAttachment {
-  if (att.type === 'image' && att.data && att.data.length > 150000) {
+  if (att.type === 'pdf') {
     return {
       ...att,
-      data: att.previewUrl || att.data.slice(0, 50000),
-      previewUrl: att.previewUrl,
+      data: undefined,
+      previewUrl: undefined,
+      text: att.text ? att.text.slice(0, MAX_TEXT_STORAGE_CHARS) : undefined,
+    };
+  }
+  if (att.type === 'image') {
+    const safePreview =
+      att.previewUrl && att.previewUrl.length <= MAX_IMAGE_STORAGE_CHARS ? att.previewUrl : undefined;
+    if (att.data && att.data.length > MAX_IMAGE_STORAGE_CHARS) {
+      return {
+        ...att,
+        data: safePreview,
+        previewUrl: safePreview,
+      };
+    }
+    return safePreview !== att.previewUrl ? { ...att, previewUrl: safePreview } : att;
+  }
+  if (att.text && att.text.length > MAX_TEXT_STORAGE_CHARS) {
+    return {
+      ...att,
+      text: att.text.slice(0, MAX_TEXT_STORAGE_CHARS),
     };
   }
   return att;

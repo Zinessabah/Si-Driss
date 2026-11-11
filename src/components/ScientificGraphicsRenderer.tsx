@@ -270,25 +270,222 @@ export interface MindMapSpec {
 
 export type GraphicSpec = CurveChartSpec | MindMapSpec;
 
+const MATH_CONSTANTS: Record<string, number> = {
+  pi: Math.PI,
+  e: Math.E,
+};
+
+const MATH_FUNCTIONS: Record<string, (...args: number[]) => number> = {
+  exp: Math.exp,
+  sin: Math.sin,
+  cos: Math.cos,
+  tan: Math.tan,
+  asin: Math.asin,
+  acos: Math.acos,
+  atan: Math.atan,
+  sqrt: Math.sqrt,
+  log: Math.log,
+  ln: Math.log,
+  log10: Math.log10,
+  abs: Math.abs,
+  pow: Math.pow,
+  min: Math.min,
+  max: Math.max,
+  ceil: Math.ceil,
+  floor: Math.floor,
+  round: Math.round,
+};
+
+type MathToken =
+  | { type: 'number'; value: number }
+  | { type: 'ident'; value: string }
+  | { type: 'op'; value: string }
+  | { type: 'paren'; value: '(' | ')' }
+  | { type: 'comma' };
+
+function tokenizeMathExpression(rawExpr: string): MathToken[] {
+  const expr = rawExpr.replace(/\bMath\./g, '');
+  const tokens: MathToken[] = [];
+  let i = 0;
+
+  while (i < expr.length) {
+    const ch = expr[i];
+
+    if (/\s/.test(ch)) {
+      i++;
+      continue;
+    }
+
+    if ((ch >= '0' && ch <= '9') || (ch === '.' && i + 1 < expr.length && expr[i + 1] >= '0' && expr[i + 1] <= '9')) {
+      const slice = expr.slice(i);
+      const numMatch = slice.match(/^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?/);
+      if (!numMatch) throw new Error(`Nombre invalide près de "${slice.slice(0, 12)}"`);
+      const value = Number(numMatch[0]);
+      if (!Number.isFinite(value)) throw new Error(`Nombre hors limites: ${numMatch[0]}`);
+      tokens.push({ type: 'number', value });
+      i += numMatch[0].length;
+      continue;
+    }
+
+    if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch === '_') {
+      const slice = expr.slice(i);
+      const idMatch = slice.match(/^[a-zA-Z_][a-zA-Z0-9_]*/);
+      if (!idMatch) throw new Error(`Identifiant invalide près de "${slice.slice(0, 12)}"`);
+      tokens.push({ type: 'ident', value: idMatch[0].toLowerCase() });
+      i += idMatch[0].length;
+      continue;
+    }
+
+    if (ch === '*' && expr[i + 1] === '*') {
+      tokens.push({ type: 'op', value: '^' });
+      i += 2;
+      continue;
+    }
+
+    if (ch === '+' || ch === '-' || ch === '*' || ch === '/' || ch === '^') {
+      tokens.push({ type: 'op', value: ch });
+      i++;
+      continue;
+    }
+
+    if (ch === '(' || ch === ')') {
+      tokens.push({ type: 'paren', value: ch });
+      i++;
+      continue;
+    }
+
+    if (ch === ',') {
+      tokens.push({ type: 'comma' });
+      i++;
+      continue;
+    }
+
+    throw new Error(`Caractère non autorisé dans l'expression mathématique: "${ch}"`);
+  }
+
+  return tokens;
+}
+
 /**
- * Évalue en toute sécurité une expression mathématique simple f(x)
+ * Évalue en toute sécurité une expression mathématique f(x) via un parseur récursif (sans eval/Function)
  */
-function evaluateMathFunction(fnStr: string, x: number): number {
+export function evaluateMathFunction(fnStr: string, x: number): number {
   try {
-    // 1. Éliminer d'abord tout préfixe 'Math.' déjà présent pour repartir d'une base saine
-    let sanitized = fnStr.replace(/Math\./g, '');
+    if (!fnStr || fnStr.length > 500) return 0;
+    const tokens = tokenizeMathExpression(fnStr);
+    if (tokens.length === 0) return 0;
 
-    // 2. Préfixer rigoureusement toutes les fonctions et constantes mathématiques par Math.
-    sanitized = sanitized
-      .replace(/\b(exp|sin|cos|tan|sqrt|log10|log|abs|pow|asin|acos|atan|min|max|ceil|floor|round)\b/g, 'Math.$1')
-      .replace(/\bln\b/g, 'Math.log')
-      .replace(/\bpi\b/gi, 'Math.PI')
-      .replace(/\be\b/g, 'Math.E')
-      .replace(/\^/g, '**');
+    let pos = 0;
+    const peek = () => tokens[pos];
+    const consume = () => tokens[pos++];
 
-    // 3. Évaluation sécurisée
-    const fn = new Function('x', 'Math', `return (${sanitized});`);
-    const val = fn(x, Math);
+    const parseAddSub = (): number => {
+      let left = parseMulDiv();
+      while (peek()?.type === 'op' && (peek() as { type: 'op'; value: string }).value.match(/^[+-]$/)) {
+        const op = (consume() as { type: 'op'; value: string }).value;
+        const right = parseMulDiv();
+        left = op === '+' ? left + right : left - right;
+      }
+      return left;
+    };
+
+    const parseMulDiv = (): number => {
+      let left = parseUnary();
+      while (peek()?.type === 'op' && (peek() as { type: 'op'; value: string }).value.match(/^[*/]$/)) {
+        const op = (consume() as { type: 'op'; value: string }).value;
+        const right = parseUnary();
+        left = op === '*' ? left * right : left / right;
+      }
+      return left;
+    };
+
+    const parseUnary = (): number => {
+      const t = peek();
+      if (t?.type === 'op' && (t.value === '+' || t.value === '-')) {
+        consume();
+        const val = parseUnary();
+        return t.value === '-' ? -val : val;
+      }
+      return parsePower();
+    };
+
+    const parsePower = (): number => {
+      const base = parsePrimary();
+      const t = peek();
+      if (t?.type === 'op' && t.value === '^') {
+        consume();
+        const exp = parseUnary();
+        return Math.pow(base, exp);
+      }
+      return base;
+    };
+
+    const parsePrimary = (): number => {
+      const t = peek();
+      if (!t) throw new Error('Fin inattendue de expression');
+
+      if (t.type === 'number') {
+        consume();
+        return t.value;
+      }
+
+      if (t.type === 'paren' && t.value === '(') {
+        consume();
+        const val = parseAddSub();
+        const closing = consume();
+        if (!closing || closing.type !== 'paren' || closing.value !== ')') {
+          throw new Error('Parenthèse fermante manquante');
+        }
+        return val;
+      }
+
+      if (t.type === 'ident') {
+        consume();
+        const next = peek();
+        if (next?.type === 'paren' && next.value === '(') {
+          const fn = MATH_FUNCTIONS[t.value];
+          if (!fn) throw new Error(`Fonction mathématique non autorisée: ${t.value}`);
+          consume();
+          const args: number[] = [];
+          const maybeClose = peek();
+          if (maybeClose?.type === 'paren' && maybeClose.value === ')') {
+            throw new Error(`Argument manquant pour ${t.value}()`);
+          }
+          while (true) {
+            args.push(parseAddSub());
+            if (args.length > 16) throw new Error('Trop arguments');
+            const sep = peek();
+            if (sep?.type === 'comma') {
+              consume();
+              continue;
+            }
+            if (sep?.type === 'paren' && sep.value === ')') {
+              consume();
+              break;
+            }
+            throw new Error(`Parenthèse ou virgule attendue dans ${t.value}(...)`);
+          }
+          if (t.value === 'pow' && args.length !== 2) {
+            throw new Error('pow() requiert exactement 2 arguments');
+          }
+          if (t.value !== 'pow' && t.value !== 'min' && t.value !== 'max' && args.length !== 1) {
+            throw new Error(`${t.value}() requiert exactement 1 argument`);
+          }
+          return fn(...args);
+        }
+
+        if (t.value === 'x') return x;
+        if (t.value in MATH_CONSTANTS) return MATH_CONSTANTS[t.value];
+        throw new Error(`Symbole non autorisé: ${t.value}`);
+      }
+
+      throw new Error('Jeton inattendu dans expression mathématique');
+    };
+
+    const val = parseAddSub();
+    if (pos !== tokens.length) {
+      throw new Error('Jetons superflus après évaluation');
+    }
     return typeof val === 'number' && !isNaN(val) && isFinite(val) ? val : 0;
   } catch (err) {
     console.warn('[ScientificCurve] Erreur calcul f(x):', fnStr, err);
@@ -887,11 +1084,11 @@ export const ScientificCurveChart: React.FC<{ spec: CurveChartSpec }> = ({ spec 
  * Composant de rendu pour une carte mentale (MindMap) scientifique
  */
 export const ScientificMindMap: React.FC<{ spec: MindMapSpec }> = ({ spec }) => {
+  const [copied, setCopied] = useState<boolean>(false);
   if (!spec || !spec.root) return null;
   const title = spec.title || spec.root.label || 'Carte Mentale';
   const subtitle = spec.subtitle;
   const root = spec.root;
-  const [copied, setCopied] = useState<boolean>(false);
 
   const handleCopySpec = () => {
     navigator.clipboard.writeText(JSON.stringify(spec, null, 2));

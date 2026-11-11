@@ -1218,7 +1218,6 @@ export async function exportToPdf(options: ExportOptions): Promise<void> {
       <html lang="fr">
       <head>
         <meta charset="UTF-8" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" crossorigin="anonymous" />
         <style>
           ${extractedKatexCss}
           * {

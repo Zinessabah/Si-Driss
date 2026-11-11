@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
 import { SocraticChat } from './components/SocraticChat';
 import { ApiKeyStatusBadge } from './components/ApiKeyStatusBadge';
 import { PWAInstallButton } from './components/PWAInstallButton';
@@ -108,9 +108,9 @@ export default function App() {
     const updated = savedSessions.filter((s) => s.id !== id);
     setSavedSessions(updated);
     safeSaveSessions(updated);
-    window.dispatchEvent(new Event('sidriss_sessions_updated'));
+    window.dispatchEvent(new CustomEvent('sidriss_sessions_updated', { detail: { deletedId: id } }));
     if (currentSessionId === id) {
-      handleNewChat();
+      setActiveTab('chat');
     }
   };
 
@@ -123,10 +123,10 @@ export default function App() {
     window.dispatchEvent(new Event('sidriss_sessions_updated'));
   };
 
-  const handleSessionsUpdated = (sessions: SavedSession[], activeId: string) => {
+  const handleSessionsUpdated = useCallback((sessions: SavedSession[], activeId: string) => {
     setSavedSessions(sessions);
     setCurrentSessionId(activeId);
-  };
+  }, []);
 
   // Prevent iOS / iPadOS Safari window scroll displacement
   useEffect(() => {

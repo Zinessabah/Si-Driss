@@ -12,23 +12,46 @@ export interface ClientMessage {
   attachments?: ClientAttachment[];
 }
 
+function extractRawBase64(data: unknown): string {
+  if (typeof data !== 'string') return '';
+  const compact = data.replace(/\s+/g, '');
+  if (!compact) return '';
+  const commaIdx = compact.indexOf(',');
+  return commaIdx >= 0 ? compact.slice(commaIdx + 1) : compact;
+}
+
+function buildDataUrl(data: unknown, mimeType: string): string {
+  if (typeof data !== 'string') return '';
+  const compact = data.trim();
+  if (!compact) return '';
+  if (compact.startsWith('data:')) return compact.replace(/\s+/g, '');
+  return `data:${mimeType};base64,${compact.replace(/\s+/g, '')}`;
+}
+
 export function formatMessagesForGemini(messages: ClientMessage[]) {
-  const rawTurns = messages.map((m) => {
+  const safeMessages = Array.isArray(messages)
+    ? messages.filter((m): m is ClientMessage => Boolean(m && typeof m === 'object'))
+    : [];
+
+  const rawTurns = safeMessages.map((m) => {
     const parts: any[] = [];
-    const textContent = (m.content || '').trim();
+    const textContent = (typeof m.content === 'string' ? m.content : String(m.content || '')).trim();
 
     if (m.attachments && Array.isArray(m.attachments) && m.attachments.length > 0) {
       let attachmentTextSummary = '';
 
       for (const att of m.attachments) {
+        if (!att || typeof att !== 'object') continue;
         if (att.data && att.mimeType && (att.mimeType.startsWith('image/') || att.mimeType === 'application/pdf')) {
-          const rawBase64 = att.data.includes(',') ? att.data.split(',')[1] : att.data;
-          parts.push({
-            inlineData: {
-              mimeType: att.mimeType,
-              data: rawBase64,
-            },
-          });
+          const rawBase64 = extractRawBase64(att.data);
+          if (rawBase64) {
+            parts.push({
+              inlineData: {
+                mimeType: att.mimeType,
+                data: rawBase64,
+              },
+            });
+          }
         }
 
         if (att.text) {
@@ -77,6 +100,17 @@ export function formatMessagesForGemini(messages: ClientMessage[]) {
   return normalized;
 }
 
+function appendNonImageAttachmentText(att: ClientAttachment): string {
+  if (!att || typeof att !== 'object') return '';
+  if (att.text) {
+    return `\n\n--- [DOCUMENT JOINT: ${att.name || 'Document'}] ---\n${att.text}\n---------------------------------------------`;
+  }
+  if (att.mimeType === 'application/pdf') {
+    return `\n\n--- [DOCUMENT PDF JOINT: ${att.name || 'Document.pdf'}] ---\n[PDF scanné sans couche texte extractible automatiquement par ce fournisseur. Invite l'élève à utiliser Google Gemini ou à envoyer une capture d'écran de l'énoncé si besoin.]\n---------------------------------------------`;
+  }
+  return '';
+}
+
 export function formatMessagesForOpenAI(messages: ClientMessage[], systemInstruction: string) {
   const result: any[] = [];
 
@@ -84,9 +118,13 @@ export function formatMessagesForOpenAI(messages: ClientMessage[], systemInstruc
     result.push({ role: 'system', content: systemInstruction });
   }
 
+  const safeMessages = Array.isArray(messages)
+    ? messages.filter((m): m is ClientMessage => Boolean(m && typeof m === 'object'))
+    : [];
+
   // Drop leading assistant welcome messages so conversation starts with a user turn
-  const firstUserIdx = messages.findIndex((m) => m.role !== 'assistant' && m.role !== 'model');
-  const relevantMessages = firstUserIdx >= 0 ? messages.slice(firstUserIdx) : [];
+  const firstUserIdx = safeMessages.findIndex((m) => m.role !== 'assistant' && m.role !== 'model');
+  const relevantMessages = firstUserIdx >= 0 ? safeMessages.slice(firstUserIdx) : [];
 
   if (relevantMessages.length === 0) {
     result.push({ role: 'user', content: 'Bonjour Si Driss' });
@@ -96,26 +134,28 @@ export function formatMessagesForOpenAI(messages: ClientMessage[], systemInstruc
   for (const m of relevantMessages) {
     const isAssistant = m.role === 'assistant' || m.role === 'model';
     const role = isAssistant ? 'assistant' : 'user';
+    const baseText = (typeof m.content === 'string' ? m.content : String(m.content || '')).trim();
+    const atts = Array.isArray(m.attachments) ? m.attachments.filter((a) => a && typeof a === 'object') : [];
 
-    const hasImages = m.attachments?.some(
-      (a) => a.mimeType?.startsWith('image/') && a.data
+    const hasImages = atts.some(
+      (a) => a.mimeType?.startsWith('image/') && typeof a.data === 'string' && a.data.trim().length > 0
     );
 
     if (hasImages && !isAssistant) {
       const contentParts: any[] = [];
-      let textContent = (m.content || '').trim();
+      let textContent = baseText;
 
-      for (const att of m.attachments || []) {
+      for (const att of atts) {
         if (att.mimeType?.startsWith('image/') && att.data) {
-          const dataUrl = att.data.startsWith('data:') ? att.data : `data:${att.mimeType};base64,${att.data}`;
-          contentParts.push({
-            type: 'image_url',
-            image_url: { url: dataUrl },
-          });
+          const dataUrl = buildDataUrl(att.data, att.mimeType);
+          if (dataUrl) {
+            contentParts.push({
+              type: 'image_url',
+              image_url: { url: dataUrl },
+            });
+          }
         }
-        if (att.text) {
-          textContent += `\n\n--- [DOCUMENT JOINT: ${att.name || 'Document'}] ---\n${att.text}\n---------------------------------------------`;
-        }
+        textContent += appendNonImageAttachmentText(att);
       }
 
       contentParts.unshift({
@@ -125,13 +165,9 @@ export function formatMessagesForOpenAI(messages: ClientMessage[], systemInstruc
 
       result.push({ role, content: contentParts });
     } else {
-      let text = (m.content || '').trim();
-      if (m.attachments) {
-        for (const att of m.attachments) {
-          if (att.text) {
-            text += `\n\n--- [DOCUMENT JOINT: ${att.name || 'Document'}] ---\n${att.text}\n---------------------------------------------`;
-          }
-        }
+      let text = baseText;
+      for (const att of atts) {
+        text += appendNonImageAttachmentText(att);
       }
       result.push({ role, content: text || (isAssistant ? '...' : 'Bonjour Si Driss') });
     }
@@ -142,34 +178,39 @@ export function formatMessagesForOpenAI(messages: ClientMessage[], systemInstruc
 
 export function formatMessagesForAnthropic(messages: ClientMessage[]) {
   const rawTurns: { role: 'user' | 'assistant'; content: any }[] = [];
+  const safeMessages = Array.isArray(messages)
+    ? messages.filter((m): m is ClientMessage => Boolean(m && typeof m === 'object'))
+    : [];
 
-  for (const m of messages) {
+  for (const m of safeMessages) {
     const isAssistant = m.role === 'assistant' || m.role === 'model';
     const role: 'user' | 'assistant' = isAssistant ? 'assistant' : 'user';
+    const baseText = (typeof m.content === 'string' ? m.content : String(m.content || '')).trim();
+    const atts = Array.isArray(m.attachments) ? m.attachments.filter((a) => a && typeof a === 'object') : [];
 
-    const hasImages = m.attachments?.some(
-      (a) => a.mimeType?.startsWith('image/') && a.data
+    const hasImages = atts.some(
+      (a) => a.mimeType?.startsWith('image/') && typeof a.data === 'string' && a.data.trim().length > 0
     );
 
     if (hasImages && !isAssistant) {
       const contentParts: any[] = [];
-      let textContent = (m.content || '').trim();
+      let textContent = baseText;
 
-      for (const att of m.attachments || []) {
+      for (const att of atts) {
         if (att.mimeType?.startsWith('image/') && att.data) {
-          const rawBase64 = att.data.includes(',') ? att.data.split(',')[1] : att.data;
-          contentParts.push({
-            type: 'image',
-            source: {
-              type: 'base64',
-              media_type: att.mimeType,
-              data: rawBase64,
-            },
-          });
+          const rawBase64 = extractRawBase64(att.data);
+          if (rawBase64) {
+            contentParts.push({
+              type: 'image',
+              source: {
+                type: 'base64',
+                media_type: att.mimeType,
+                data: rawBase64,
+              },
+            });
+          }
         }
-        if (att.text) {
-          textContent += `\n\n--- [DOCUMENT JOINT: ${att.name || 'Document'}] ---\n${att.text}\n---------------------------------------------`;
-        }
+        textContent += appendNonImageAttachmentText(att);
       }
 
       contentParts.unshift({
@@ -179,13 +220,9 @@ export function formatMessagesForAnthropic(messages: ClientMessage[]) {
 
       rawTurns.push({ role, content: contentParts });
     } else {
-      let text = (m.content || '').trim();
-      if (m.attachments) {
-        for (const att of m.attachments) {
-          if (att.text) {
-            text += `\n\n--- [DOCUMENT JOINT: ${att.name || 'Document'}] ---\n${att.text}\n---------------------------------------------`;
-          }
-        }
+      let text = baseText;
+      for (const att of atts) {
+        text += appendNonImageAttachmentText(att);
       }
       rawTurns.push({ role, content: text || (isAssistant ? '...' : 'Bonjour Si Driss') });
     }

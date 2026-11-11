@@ -2,7 +2,7 @@ import { Router } from 'express';
 import fs from 'fs';
 import path from 'path';
 import { DOCS_DIR, ADMIN_TOKEN, GOOGLE_DRIVE_FOLDER_PC, GOOGLE_DRIVE_FOLDER_SM } from '../config';
-import { requireAdmin, documentMutationLimiter } from '../security';
+import { requireAdmin, documentMutationLimiter, safeTokenEqual } from '../security';
 import {
   extractTextFromPdf,
   getFreshExtractedPdfText,
@@ -72,7 +72,7 @@ function resolveDocumentFilePath(nameOrRelativePath: string): string | null {
  * ARCHITECTURE 100% LOCALE & CONFIDENTIELLE :
  * 1. Les documents officiels sont stockés localement sur le serveur dans /docs/programme/PC/ et /docs/programme/SM/.
  * 2. L'indexation et l'extraction de texte se font une seule fois par document avec mise en cache .extracted.txt.
- * 3. Les élèves ne voient jamais la liste des fichiers officiels ni ne peuvent les télécharger.
+ * 3. Les élèves ne peuvent consulter que la liste métadonnées en lecture seule (/documents/official) ; le téléchargement et la lecture brute restent réservés à l'admin.
  * 4. Étanchéité stricte : aucun dossier "Commun" — 2BAC PC et 2BAC SM sont entièrement séparés.
  */
 export function createDocumentsRouter(): Router {
@@ -128,11 +128,17 @@ export function createDocumentsRouter(): Router {
    * Lance l'extraction et le décodage visuel en tâche de fond cadencée pour éviter les timeouts 502/503
    * et les dépassements de quota API (429).
    */
-  router.post('/documents/sync', async (req, res) => {
+  router.post('/documents/sync', documentMutationLimiter, async (req, res) => {
     try {
       const adminToken = String(req.headers['x-admin-token'] || '').trim();
       const clientProvider = String(req.headers['x-ai-provider'] || req.body?.provider || '').toLowerCase();
-      const clientApiKey = String((req.headers['x-ai-api-key'] as string) || req.body?.apiKey || '').trim();
+      const clientApiKey = String(
+        (req.headers['x-ai-key'] as string) ||
+          (req.headers['x-gemini-api-key'] as string) ||
+          (req.headers['x-ai-api-key'] as string) ||
+          req.body?.apiKey ||
+          ''
+      ).trim();
 
       // N'utiliser la clé client pour Gemini Vision que si elle est compatible Gemini
       const validClientVisionKey =
@@ -142,15 +148,25 @@ export function createDocumentsRouter(): Router {
           ? clientApiKey
           : '';
 
-      const serverEnvGeminiKey =
-        process.env.GEMINI_API_KEY ||
-        (isLikelyGeminiKey(process.env.AI_API_KEY) ? process.env.AI_API_KEY : '') ||
-        '';
+      const isAdminAuthorized = ADMIN_TOKEN
+        ? safeTokenEqual(adminToken, ADMIN_TOKEN)
+        : process.env.NODE_ENV !== 'production';
+
+      // En production avec ADMIN_TOKEN défini (ou sans ADMIN_TOKEN configuré), seuls les admins
+      // authentifiés utilisent la clé GEMINI_API_KEY serveur ou lancent la synchro Drive ; les
+      // autres appels peuvent indexer localement ou utiliser leur propre clé Gemini fournie par le client.
+      const serverEnvGeminiKey = isAdminAuthorized
+        ? process.env.GEMINI_API_KEY ||
+          (isLikelyGeminiKey(process.env.AI_API_KEY) ? process.env.AI_API_KEY : '') ||
+          ''
+        : '';
 
       const visionApiKey = validClientVisionKey || serverEnvGeminiKey;
       const branch = (String(req.body?.branch || 'PC').toUpperCase() === 'SM' ? 'SM' : 'PC') as 'PC' | 'SM';
 
-      const isAuthorizedForDriveSync = Boolean(adminToken && (!ADMIN_TOKEN || adminToken === ADMIN_TOKEN));
+      const isAuthorizedForDriveSync = Boolean(
+        isAdminAuthorized && (!ADMIN_TOKEN ? (process.env.NODE_ENV !== 'production' && adminToken) : true)
+      );
       const runDriveSync = isAuthorizedForDriveSync
         ? async () => {
             const driveResult = await syncGoogleDriveBranch({ branch });
@@ -411,6 +427,8 @@ export function createDocumentsRouter(): Router {
         fs.writeFileSync(filePath, content, 'utf-8');
       }
 
+      await refreshDocumentsCache(true);
+
       return res.json({
         success: true,
         message: isPdf
@@ -430,11 +448,16 @@ export function createDocumentsRouter(): Router {
 
   /**
    * Suppression d'un document du RAG (RÉSERVÉ ADMIN / ENSEIGNANT).
+   * Accepte les chemins avec sous-dossier (ex: PC/mon_doc.pdf), encodés ou décodés par un proxy.
    */
-  router.delete('/documents/:filename', requireAdmin, documentMutationLimiter, async (req, res) => {
+  router.delete('/documents/*', requireAdmin, documentMutationLimiter, async (req, res) => {
     try {
-      const { filename } = req.params;
-      const filePath = resolveDocumentFilePath(filename);
+      const rawParam = String((req.params as Record<string, string>)[0] || '');
+      let decodedName = rawParam;
+      try {
+        decodedName = decodeURIComponent(rawParam);
+      } catch {}
+      const filePath = resolveDocumentFilePath(decodedName);
 
       if (!filePath || !fs.existsSync(filePath)) {
         return res.status(404).json({ error: 'Fichier non trouvé.' });
@@ -449,6 +472,8 @@ export function createDocumentsRouter(): Router {
           fs.unlinkSync(txtPath);
         } catch {}
       }
+
+      await refreshDocumentsCache(true);
 
       return res.json({ success: true, message: `Fichier ${safeName} supprimé.` });
     } catch (err: any) {

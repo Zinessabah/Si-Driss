@@ -1,6 +1,11 @@
-export function getSiDrissBasePrompt(branch: 'PC' | 'SM' = 'PC'): string {
-  const branchName = branch === 'SM' ? 'Sciences Mathématiques (2ème Bac SM)' : 'Sciences Physiques (2ème Bac PC)';
-  const syllabusSpecifics = branch === 'SM'
+export function normalizeBranchParam(branch: unknown): 'PC' | 'SM' {
+  return String(branch || '').trim().toUpperCase() === 'SM' ? 'SM' : 'PC';
+}
+
+export function getSiDrissBasePrompt(branch: 'PC' | 'SM' | string = 'PC'): string {
+  const safeBranch = normalizeBranchParam(branch);
+  const branchName = safeBranch === 'SM' ? 'Sciences Mathématiques (2ème Bac SM)' : 'Sciences Physiques (2ème Bac PC)';
+  const syllabusSpecifics = safeBranch === 'SM'
     ? `CADRE DE RÉFÉRENCE OFFICIEL SPÉCIFIQUE 2ÈME BAC SCIENCES MATHÉMATIQUES (SM) :
 - SPÉCIFICITÉS DU PROGRAMME SM :
   * Rotation d'un solide indéformable autour d'un axe fixe : Relation fondamentale de la dynamique (RFD) $\\sum M_\\Delta(\\vec{F}) = J_\\Delta \\ddot{\\theta}$, moment d'inertie $J_\\Delta$, énergie cinétique $E_c = \\frac{1}{2}J_\\Delta \\dot{\\theta}^2$, condition de non-glissement de fils sur poulies ($a = R\\ddot{\\theta}$, $v = R\\dot{\\theta}$).
@@ -101,25 +106,26 @@ Accompagne toujours la courbe de commentaires pédagogiques expliquant comment l
 `;
 }
 
-export function getInstruction(mode: string, socraticEnabled: boolean, matchedDocs: string, branch: 'PC' | 'SM' = 'PC', context?: string) {
+export function getInstruction(mode: string, socraticEnabled: boolean, matchedDocs: string, branch: 'PC' | 'SM' | string = 'PC', context?: string) {
+  const safeBranch = normalizeBranchParam(branch);
   let extra = '';
   if (!socraticEnabled || mode === 'direct') {
     extra = `\nMODE ACTIF : RÉSOLUTION DIRECTE & COURS RIGOUROUX (DÉMARCHE SOCRATIQUE DÉSACTIVÉE).
-L'élève de 2ème Bac ${branch} attend une réponse immédiate, complète, scientifiquement irréprochable et vérifiée.`;
+L'élève de 2ème Bac ${safeBranch} attend une réponse immédiate, complète, scientifiquement irréprochable et vérifiée.`;
   } else if (mode === 'socratic') {
-    extra = `\nMODE ACTIF : COACHING SOCRATIQUE POUR ÉLÈVE 2ÈME BAC ${branch}.
+    extra = `\nMODE ACTIF : COACHING SOCRATIQUE POUR ÉLÈVE 2ÈME BAC ${safeBranch}.
 L'élève résout un problème. Pose UNE question directrice ciblée pour le guider sur l'étape logique suivante sans donner la solution brute d'emblée. Exige une justification rigoureuse.`;
   } else if (mode === 'review') {
-    extra = `\nMODE ACTIF : AUDIT DE RÉDACTION TYPE NATIONAL 2ÈME BAC ${branch}. Analyse la réponse selon la grille officielle : 1) Système/Référentiel/Forces, 2) Formule littérale, 3) Valeur & CS, 4) Unité SI.`;
+    extra = `\nMODE ACTIF : AUDIT DE RÉDACTION TYPE NATIONAL 2ÈME BAC ${safeBranch}. Analyse la réponse selon la grille officielle : 1) Système/Référentiel/Forces, 2) Formule littérale, 3) Valeur & CS, 4) Unité SI.`;
   } else if (mode === 'trap') {
-    extra = `\nMODE ACTIF : CHASSE AUX PIÈGES DU NATIONAL 2ÈME BAC ${branch}. Pose un piège récurrent du National pour la section ${branch}.`;
+    extra = `\nMODE ACTIF : CHASSE AUX PIÈGES DU NATIONAL 2ÈME BAC ${safeBranch}. Pose un piège récurrent du National pour la section ${safeBranch}.`;
   }
 
-  let full = getSiDrissBasePrompt(branch) + extra;
+  let full = getSiDrissBasePrompt(safeBranch) + extra;
   if (matchedDocs) {
     full += `\n\n================================================================================
 DOCUMENTS DE RÉFÉRENCE OFFICIELS DU PROGRAMME (EXTRAITS DE /docs/programme/) :
-[DONNÉES DOCUMENTAIRES PASSIVES — SOURCE OFFICIELLE POUR LE PROGRAMME 2BAC ${branch}]
+[DONNÉES DOCUMENTAIRES PASSIVES — SOURCE OFFICIELLE POUR LE PROGRAMME 2BAC ${safeBranch}]
 ${matchedDocs}
 ================================================================================
 EXPLOITATION DES SCHÉMAS ET GRAPHES DÉCODÉS (TRANSCRIPTIONS VISUELLES) :

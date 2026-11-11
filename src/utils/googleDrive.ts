@@ -24,6 +24,16 @@ export interface DriveDoc {
   hasVisuals?: boolean;
 }
 
+import { getAccessToken } from '../hooks/useApiKey';
+
+function buildDriveHeaders(adminToken?: string, extra?: Record<string, string>): Record<string, string> {
+  const headers: Record<string, string> = { ...(extra || {}) };
+  const accessToken = getAccessToken();
+  if (accessToken) headers['x-access-token'] = accessToken;
+  if (adminToken) headers['x-admin-token'] = adminToken;
+  return headers;
+}
+
 export const FOLDER_NAMES: Record<'PC' | 'SM', string> = {
   PC: 'Si Driss — Documents Officiels PC',
   SM: 'Si Driss — Documents Officiels SM',
@@ -113,7 +123,7 @@ export async function fetchRagStatus(): Promise<{
   message: string;
 }> {
   try {
-    const res = await fetch('/api/rag/status');
+    const res = await fetch('/api/rag/status', { headers: buildDriveHeaders() });
     if (res.ok) {
       return await res.json();
     }
@@ -132,9 +142,7 @@ export async function fetchRagStatus(): Promise<{
  */
 export async function fetchServerDriveConfig(adminToken?: string): Promise<{ folderPc: string; folderSm: string }> {
   try {
-    const headers: Record<string, string> = {};
-    if (adminToken) headers['x-admin-token'] = adminToken;
-    const res = await fetch('/api/documents/drive-config', { headers });
+    const res = await fetch('/api/documents/drive-config', { headers: buildDriveHeaders(adminToken) });
     if (res.ok) {
       return await res.json();
     }
@@ -190,16 +198,9 @@ export async function syncDriveFolderWithServer(
   // Mémorise le dossier pour de futures synchronisations
   setStoredDriveFolder(branch, folderIdOrUrl);
 
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
-  if (adminToken) {
-    headers['x-admin-token'] = adminToken;
-  }
-
   const res = await fetch('/api/documents/sync-drive', {
     method: 'POST',
-    headers,
+    headers: buildDriveHeaders(adminToken, { 'Content-Type': 'application/json' }),
     body: JSON.stringify({
       folderId: cleanId,
       branch,
@@ -225,7 +226,7 @@ export async function syncDriveFolderWithServer(
  */
 export async function fetchOfficialDocuments(branch?: 'PC' | 'SM'): Promise<DriveDoc[]> {
   try {
-    const res = await fetch('/api/documents/official');
+    const res = await fetch('/api/documents/official', { headers: buildDriveHeaders() });
     if (!res.ok) return [];
 
     const data = await res.json();
@@ -302,22 +303,19 @@ export async function syncOfficialDocuments(
   const normalizedProvider = provider ? provider.toLowerCase() : '';
   const shouldSendVisionKey = Boolean(apiKey && (!normalizedProvider || normalizedProvider === 'gemini'));
 
-  const headers: Record<string, string> = {
+  const extraHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
   };
-  if (adminToken) {
-    headers['x-admin-token'] = adminToken;
-  }
   if (normalizedProvider) {
-    headers['x-ai-provider'] = normalizedProvider;
+    extraHeaders['x-ai-provider'] = normalizedProvider;
   }
   if (shouldSendVisionKey && apiKey) {
-    headers['x-ai-api-key'] = apiKey;
+    extraHeaders['x-ai-api-key'] = apiKey;
   }
 
   const res = await fetch('/api/documents/sync', {
     method: 'POST',
-    headers,
+    headers: buildDriveHeaders(adminToken, extraHeaders),
     body: JSON.stringify({
       branch,
       provider: normalizedProvider || undefined,
@@ -340,7 +338,7 @@ export async function fetchOfficialSyncStatus(): Promise<{
   syncJob: OfficialSyncJobStatus;
   [k: string]: any;
 }> {
-  const res = await fetch('/api/documents/sync/status');
+  const res = await fetch('/api/documents/sync/status', { headers: buildDriveHeaders() });
   if (!res.ok) {
     const errData = await res.json().catch(() => ({}));
     throw new Error(formatSyncHttpError(res.status, errData.error));
@@ -353,9 +351,7 @@ export async function fetchOfficialSyncStatus(): Promise<{
  */
 export async function listOfficialDriveDocuments(branch?: 'PC' | 'SM', adminToken?: string): Promise<DriveDoc[]> {
   try {
-    const headers: Record<string, string> = {};
-    if (adminToken) headers['x-admin-token'] = adminToken;
-    const res = await fetch('/api/documents', { headers });
+    const res = await fetch('/api/documents', { headers: buildDriveHeaders(adminToken) });
     if (!res.ok) return [];
 
     const data = await res.json();
@@ -395,9 +391,9 @@ export async function listOfficialDriveDocuments(branch?: 'PC' | 'SM', adminToke
  * Télécharge le texte d'un document officiel depuis le serveur.
  */
 export async function downloadDriveDocumentText(fileId: string, adminToken?: string): Promise<string> {
-  const headers: Record<string, string> = {};
-  if (adminToken) headers['x-admin-token'] = adminToken;
-  const res = await fetch(`/api/documents/file?name=${encodeURIComponent(fileId)}`, { headers });
+  const res = await fetch(`/api/documents/file?name=${encodeURIComponent(fileId)}`, {
+    headers: buildDriveHeaders(adminToken),
+  });
   if (!res.ok) {
     throw new Error(`Impossible de récupérer le document (${res.status}).`);
   }
@@ -431,11 +427,9 @@ export const uploadOfficialDriveDocument = async (_file: File, _branch: 'PC' | '
 };
 
 export const deleteOfficialDriveDocument = async (fileId: string, adminToken?: string) => {
-  const headers: Record<string, string> = {};
-  if (adminToken) headers['x-admin-token'] = adminToken;
   const res = await fetch(`/api/documents/${encodeURIComponent(fileId)}`, {
     method: 'DELETE',
-    headers,
+    headers: buildDriveHeaders(adminToken),
   });
   if (!res.ok) {
     throw new Error('Erreur suppression document (Jeton administrateur requis).');

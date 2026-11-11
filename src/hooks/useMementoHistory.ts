@@ -20,30 +20,35 @@ export interface MementoCalculationRecord {
 }
 
 const STORAGE_KEY = 'si_driss_memento_history_v1';
+const MEMENTO_SYNC_EVENT = 'si_driss_memento_history_changed';
 const MAX_HISTORY_ITEMS = 50;
 
-export function useMementoHistory() {
-  const [history, setHistory] = useState<MementoCalculationRecord[]>(() => {
-    if (typeof window === 'undefined') return [];
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return [];
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) {
-        return parsed;
-      }
-    } catch (e) {
-      console.warn('Error reading memento history from localStorage:', e);
+function readStoredHistory(): MementoCalculationRecord[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      return parsed;
     }
-    return [];
-  });
+  } catch (e) {
+    console.warn('Error reading memento history from localStorage:', e);
+  }
+  return [];
+}
 
-  // Save to localStorage whenever history changes
-  const persistHistory = useCallback((items: MementoCalculationRecord[]) => {
+export function useMementoHistory() {
+  const [history, setHistory] = useState<MementoCalculationRecord[]>(readStoredHistory);
+
+  const persistAndBroadcast = useCallback((items: MementoCalculationRecord[]) => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     } catch (e) {
       console.warn('Error saving memento history to localStorage:', e);
+    }
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent(MEMENTO_SYNC_EVENT, { detail: items }));
     }
   }, []);
 
@@ -55,34 +60,31 @@ export function useMementoHistory() {
         timestamp: Date.now(),
       };
 
-      setHistory((prev) => {
-        // Prevent duplicate calculation right at the top
-        const filtered = prev.filter(
-          (item) =>
-            !(
-              item.formulaId === record.formulaId &&
-              JSON.stringify(item.inputValues) === JSON.stringify(record.inputValues)
-            )
-        );
-        const updated = [newRecord, ...filtered].slice(0, MAX_HISTORY_ITEMS);
-        persistHistory(updated);
-        return updated;
-      });
+      const current = readStoredHistory();
+      // Prevent duplicate calculation right at the top
+      const filtered = current.filter(
+        (item) =>
+          !(
+            item.formulaId === record.formulaId &&
+            JSON.stringify(item.inputValues) === JSON.stringify(record.inputValues)
+          )
+      );
+      const updated = [newRecord, ...filtered].slice(0, MAX_HISTORY_ITEMS);
+      setHistory(updated);
+      persistAndBroadcast(updated);
 
       return newRecord;
     },
-    [persistHistory]
+    [persistAndBroadcast]
   );
 
   const removeCalculation = useCallback(
     (id: string) => {
-      setHistory((prev) => {
-        const updated = prev.filter((item) => item.id !== id);
-        persistHistory(updated);
-        return updated;
-      });
+      const updated = readStoredHistory().filter((item) => item.id !== id);
+      setHistory(updated);
+      persistAndBroadcast(updated);
     },
-    [persistHistory]
+    [persistAndBroadcast]
   );
 
   const clearHistory = useCallback(() => {
@@ -92,12 +94,19 @@ export function useMementoHistory() {
     } catch (e) {
       console.warn('Error clearing memento history:', e);
     }
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent(MEMENTO_SYNC_EVENT, { detail: [] }));
+    }
   }, []);
 
-  // Listen for storage events in case multiple tabs or components update history
+  // Listen for cross-tab storage events and same-tab updates across hook instances
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY && e.newValue) {
+      if (e.key === STORAGE_KEY) {
+        if (!e.newValue) {
+          setHistory([]);
+          return;
+        }
         try {
           const parsed = JSON.parse(e.newValue);
           if (Array.isArray(parsed)) {
@@ -106,8 +115,20 @@ export function useMementoHistory() {
         } catch {}
       }
     };
+    const handleLocalSync = (e: Event) => {
+      const detail = (e as CustomEvent<MementoCalculationRecord[]>).detail;
+      if (Array.isArray(detail)) {
+        setHistory(detail);
+      } else {
+        setHistory(readStoredHistory());
+      }
+    };
     window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener(MEMENTO_SYNC_EVENT, handleLocalSync);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener(MEMENTO_SYNC_EVENT, handleLocalSync);
+    };
   }, []);
 
   return {

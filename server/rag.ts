@@ -69,6 +69,28 @@ export function normalizeArabic(text: string): string {
     .replace(/\u0629/g, '\u0647'); // teh marbuta -> heh
 }
 
+/**
+ * Normalise un texte tout en conservant une table d'indices vers la chaîne brute,
+ * afin d'éviter tout décalage de découpage causé par la suppression des harakat/tatweel
+ * ou l'expansion NFKC des ligatures arabes.
+ */
+function normalizeArabicWithIndexMap(raw: string): { normalized: string; toRawIndex: number[] } {
+  let normalized = '';
+  const toRawIndex: number[] = [];
+  const clusterRegex = /\P{M}\p{M}*|\p{M}+/gu;
+  let m: RegExpExecArray | null;
+  while ((m = clusterRegex.exec(raw)) !== null) {
+    const rawPos = m.index;
+    const normCluster = normalizeArabic(m[0]);
+    for (let k = 0; k < normCluster.length; k++) {
+      normalized += normCluster[k];
+      toRawIndex.push(rawPos);
+    }
+  }
+  toRawIndex.push(raw.length);
+  return { normalized, toRawIndex };
+}
+
 export type ExamTopic = 'ondes' | 'nucleaire' | 'electricite' | 'mecanique' | 'chimie';
 
 export interface ParsedExamQuery {
@@ -84,8 +106,8 @@ export interface ParsedExamQuery {
 export function parseExamQuery(query: string): ParsedExamQuery {
   const q = query.toLowerCase();
 
-  // 1. Détection de l'année (2010 - 2029)
-  const yearMatch = q.match(/\b(20[12]\d)\b/);
+  // 1. Détection de l'année (2000 - 2029, incluant 2008-2009)
+  const yearMatch = q.match(/\b(20[012]\d)\b/);
   const year = yearMatch ? parseInt(yearMatch[1], 10) : null;
 
   // 2. Détection de la session (Normale vs Rattrapage)
@@ -120,7 +142,7 @@ const NEXT_SECTION_FOR_TOPIC: Record<ExamTopic, RegExp[]> = {
   ondes: [/النوو/i, /التمرين\s*(الثالث|3)/i, /الكهرب/i, /EXERCICE\s*3/i, /Nucl[eé]aire/i],
   nucleaire: [/التمرين\s*(الثالث|3)/i, /الكهرب/i, /EXERCICE\s*3/i, /[EÉ]lectricit[eé]/i],
   electricite: [/التمرين\s*(الرابع|4)/i, /الميكانيك/i, /EXERCICE\s*4/i, /M[eé]canique/i],
-  mecanique: [/===+\s*TRANSCRIPTION\s*VISUELLE/i, /FIN/i],
+  mecanique: [/===+\s*TRANSCRIPTION\s*VISUELLE/i, /^\s*FIN\s*(?:DE\s*L['’]ÉPREUVE|DU\s*SUJET)?\s*$/im],
 };
 
 const TOPIC_VISION_PATTERNS: Record<ExamTopic, RegExp[]> = {
@@ -169,7 +191,7 @@ export function extractExamExercise(
     };
   }
 
-  const normBody = normalizeArabic(bodyContent);
+  const { normalized: normBody, toRawIndex } = normalizeArabicWithIndexMap(bodyContent);
 
   const topicArPats: Record<ExamTopic, RegExp[]> = {
     ondes: [/الموجات/i, /موج/i],
@@ -188,7 +210,7 @@ export function extractExamExercise(
   };
 
   let bestStart = -1;
-  // Recherche en arabe d'abord
+  // Recherche en arabe d'abord (sur normBody)
   for (const re of topicArPats[topic]) {
     const matches = [...normBody.matchAll(new RegExp(re, 'gi'))];
     for (const m of matches) {
@@ -205,10 +227,11 @@ export function extractExamExercise(
     if (bestStart > 1000) break;
   }
 
-  // Si non trouvé en arabe, recherche en français (sujets BIOF)
+  // Si non trouvé en arabe, recherche en français sur normBody également (sujets BIOF)
+  // pour rester dans le même repère d'indices que normBody / toRawIndex
   if (bestStart === -1) {
     for (const re of topicFrPats[topic]) {
-      const match = bodyContent.search(re);
+      const match = normBody.search(re);
       if (match !== -1) {
         bestStart = match;
         break;
@@ -227,10 +250,10 @@ export function extractExamExercise(
   const lookbackStart = Math.max(0, bestStart - 350);
   const lookbackChunk = normBody.slice(lookbackStart, bestStart);
   const headerIdx = lookbackChunk.search(/(التمرين|EXERCICE)/i);
-  const actualStart = headerIdx !== -1 ? lookbackStart + headerIdx : bestStart;
+  const normStart = headerIdx !== -1 ? lookbackStart + headerIdx : bestStart;
 
   // Détection de la fin de l'exercice
-  const after = normBody.slice(actualStart + 150);
+  const after = normBody.slice(normStart + 150);
   const stopPatterns = NEXT_SECTION_FOR_TOPIC[topic];
   let stopOffset = -1;
   for (const re of stopPatterns) {
@@ -240,8 +263,13 @@ export function extractExamExercise(
     }
   }
 
-  const actualEnd = stopOffset !== -1 ? actualStart + 150 + stopOffset : actualStart + 3500;
-  const exerciseText = bodyContent.slice(actualStart, actualEnd).trim();
+  const normEnd = Math.min(
+    normBody.length,
+    stopOffset !== -1 ? normStart + 150 + stopOffset : normStart + 3500
+  );
+  const rawStart = toRawIndex[Math.min(normStart, toRawIndex.length - 1)] ?? 0;
+  const rawEnd = toRawIndex[Math.min(normEnd, toRawIndex.length - 1)] ?? bodyContent.length;
+  const exerciseText = bodyContent.slice(rawStart, rawEnd).trim();
 
   return {
     exerciseText,
