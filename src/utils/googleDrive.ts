@@ -155,6 +155,25 @@ export function getEffectiveDriveFolder(branch: 'PC' | 'SM', serverConfig?: { fo
 }
 
 /**
+ * Formate proprement les erreurs HTTP de synchronisation (429, 502, 503, 504) pour l'interface.
+ */
+function formatSyncHttpError(status: number, serverError?: string): string {
+  if (status === 429) {
+    return (
+      serverError ||
+      'Limite de requêtes atteinte (429). Patientez quelques instants avant de relancer la synchronisation.'
+    );
+  }
+  if (status === 502 || status === 503 || status === 504) {
+    return (
+      serverError ||
+      `Serveur temporairement occupé ou délai dépassé (${status}). Veuillez réessayer dans un instant.`
+    );
+  }
+  return serverError || `Erreur de synchronisation (${status})`;
+}
+
+/**
  * Déclenche la synchronisation du dossier Google Drive public avec le serveur
  * pour télécharger les PDFs officiels et les intégrer dans l'index RAG de Si Driss.
  */
@@ -189,7 +208,7 @@ export async function syncDriveFolderWithServer(
 
   if (!res.ok) {
     const errData = await res.json().catch(() => ({}));
-    throw new Error(errData.error || `Erreur de synchronisation (${res.status})`);
+    throw new Error(formatSyncHttpError(res.status, errData.error));
   }
 
   const data = await res.json();
@@ -240,44 +259,92 @@ export async function fetchOfficialDocuments(branch?: 'PC' | 'SM'): Promise<Driv
   }
 }
 
+export interface OfficialSyncJobStatus {
+  running: boolean;
+  phase: 'idle' | 'drive_sync' | 'text_indexing' | 'vision_decoding' | 'completed' | 'partial_rate_limit' | 'error';
+  branch: 'PC' | 'SM';
+  totalPdfs: number;
+  processedPdfs: number;
+  decodedCount: number;
+  alreadyDecodedCount: number;
+  skippedCount: number;
+  failedCount: number;
+  driveSyncCount: number;
+  currentFile: string;
+  message: string;
+  lastError?: string;
+  startedAt?: string;
+  finishedAt?: string;
+}
+
 /**
- * Déclenche la synchronisation et la ré-indexation des documents officiels téléchargés sur le serveur.
- * Transmet la clé API pour l'analyse visuelle des schémas & graphes si disponible.
+ * Déclenche la synchronisation et la ré-indexation des documents officiels en tâche de fond cadencée.
+ * N'envoie la clé client pour le décodage visuel que si le fournisseur actif est Gemini.
  */
 export async function syncOfficialDocuments(
   branch: 'PC' | 'SM',
   adminToken?: string,
-  apiKey?: string
+  apiKey?: string,
+  provider?: string
 ): Promise<{
   success: boolean;
+  started?: boolean;
+  alreadyRunning?: boolean;
+  syncJob?: OfficialSyncJobStatus;
   totalIndexedFiles: number;
   pcCount: number;
   smCount: number;
   visuallyDecodedCount?: number;
+  driveSyncCount?: number;
   hasVisionKey?: boolean;
   message: string;
 }> {
+  const normalizedProvider = provider ? provider.toLowerCase() : '';
+  const shouldSendVisionKey = Boolean(apiKey && (!normalizedProvider || normalizedProvider === 'gemini'));
+
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
   if (adminToken) {
     headers['x-admin-token'] = adminToken;
   }
-  if (apiKey) {
+  if (normalizedProvider) {
+    headers['x-ai-provider'] = normalizedProvider;
+  }
+  if (shouldSendVisionKey && apiKey) {
     headers['x-ai-api-key'] = apiKey;
   }
 
   const res = await fetch('/api/documents/sync', {
     method: 'POST',
     headers,
-    body: JSON.stringify({ branch, apiKey }),
+    body: JSON.stringify({
+      branch,
+      provider: normalizedProvider || undefined,
+      apiKey: shouldSendVisionKey ? apiKey : undefined,
+    }),
   });
 
   if (!res.ok) {
     const errData = await res.json().catch(() => ({}));
-    throw new Error(errData.error || `Erreur de synchronisation (${res.status})`);
+    throw new Error(formatSyncHttpError(res.status, errData.error));
   }
 
+  return await res.json();
+}
+
+/**
+ * Récupère l'avancement en direct de la tâche de synchronisation officielle en arrière-plan.
+ */
+export async function fetchOfficialSyncStatus(): Promise<{
+  syncJob: OfficialSyncJobStatus;
+  [k: string]: any;
+}> {
+  const res = await fetch('/api/documents/sync/status');
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(formatSyncHttpError(res.status, errData.error));
+  }
   return await res.json();
 }
 

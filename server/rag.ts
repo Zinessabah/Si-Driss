@@ -2,7 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import { PDFParse } from 'pdf-parse';
 import { DOCS_DIR } from './config';
-import { SCIENTIFIC_VISION_MARKER, extractVisualDataFromPdf } from './visionExtractor';
+import {
+  SCIENTIFIC_VISION_MARKER,
+  extractVisualDataFromPdfDetailed,
+  isLikelyGeminiKey,
+} from './visionExtractor';
 
 interface CachedDocSection {
   raw: string;
@@ -15,10 +19,28 @@ export type DocumentBranch = 'PC' | 'SM' | 'ALL';
 interface CachedDoc {
   name: string;
   relativePath: string;
+  absolutePath: string;
   branch: DocumentBranch;
   mtime: number;
   sections: CachedDocSection[];
-  fullContent?: string;
+}
+
+export interface OfficialSyncStatus {
+  running: boolean;
+  phase: 'idle' | 'drive_sync' | 'text_indexing' | 'vision_decoding' | 'completed' | 'partial_rate_limit' | 'error';
+  branch: 'PC' | 'SM';
+  totalPdfs: number;
+  processedPdfs: number;
+  decodedCount: number;
+  alreadyDecodedCount: number;
+  skippedCount: number;
+  failedCount: number;
+  driveSyncCount: number;
+  currentFile: string;
+  message: string;
+  lastError?: string;
+  startedAt?: string;
+  finishedAt?: string;
 }
 
 export interface DiscoveredFile {
@@ -307,11 +329,55 @@ export function hasVisualMarker(pdfPath: string): boolean {
   }
 }
 
+function buildCachedDoc(file: DiscoveredFile, content: string): CachedDoc {
+  const rawSections = content.split(/\n#{1,3}\s+|\n\n+/).filter((s) => s.trim().length > 20);
+  const sections: CachedDocSection[] = rawSections.map((s) => ({
+    raw: s.trim().slice(0, 2500),
+    lower: s.toLowerCase(),
+    arabicNorm: normalizeArabic(s),
+  }));
+
+  return {
+    name: file.name,
+    relativePath: file.relativePath,
+    absolutePath: file.absolutePath,
+    branch: file.branch,
+    mtime: file.mtime,
+    sections,
+  };
+}
+
+function upsertCachedDoc(file: DiscoveredFile, content: string): void {
+  if (!content) return;
+  const cached = buildCachedDoc(file, content);
+  const idx = documentsCache.findIndex((d) => d.relativePath === file.relativePath);
+  if (idx >= 0) {
+    documentsCache[idx] = cached;
+  } else {
+    documentsCache.push(cached);
+  }
+}
+
+function readDocumentFullText(doc: CachedDoc): string {
+  try {
+    const isPdf = doc.name.toLowerCase().endsWith('.pdf');
+    const target = isPdf ? `${doc.absolutePath}.extracted.txt` : doc.absolutePath;
+    if (fs.existsSync(target)) {
+      return fs.readFileSync(target, 'utf-8');
+    }
+  } catch (err) {
+    console.warn(`[RAG] Lecture complète impossible pour ${doc.name}:`, err);
+  }
+  return doc.sections.map((s) => s.raw).join('\n\n');
+}
+
 /**
  * Rafraîchit l'index RAG en mémoire à partir du stockage local (docs/programme/PC et docs/programme/SM).
- * L'extraction des PDF se fait avec mise en cache .extracted.txt et décodage visuel si apiKey est fournie.
+ * Extrait le texte brut des PDFs manquants avec mise en cache .extracted.txt.
+ * Note : le décodage visuel Gemini est assuré en tâche de fond cadencée via startBackgroundOfficialSync()
+ * afin d'éviter les dépassements de délai HTTP (502/503) et les quotas (429).
  */
-export async function refreshDocumentsCache(force: boolean = false, apiKey?: string) {
+export async function refreshDocumentsCache(force: boolean = false, _apiKey?: string) {
   const now = Date.now();
   if (!force && now - lastCacheRefreshTime < 4000) {
     return getLocalRagStatus();
@@ -326,14 +392,14 @@ export async function refreshDocumentsCache(force: boolean = false, apiKey?: str
 
     for (const file of discovered) {
       const isPdf = file.name.toLowerCase().endsWith('.pdf');
-      const alreadyHasVisuals = isPdf ? hasVisualMarker(file.absolutePath) : true;
 
       const existing = documentsCache.find(
         (d) => d.relativePath === file.relativePath && d.mtime === file.mtime
       );
 
-      // Si le document est déjà en cache mémoire et ne requiert pas de décodage visuel additionnel
-      if (existing && (!apiKey || !isPdf || alreadyHasVisuals)) {
+      // Réutiliser le cache mémoire tant que le fichier et son sidecar n'ont pas changé
+      const sidecarFresh = isPdf ? isExtractedTextFresh(file.absolutePath, `${file.absolutePath}.extracted.txt`) : true;
+      if (existing && (!isPdf || sidecarFresh)) {
         updatedCache.push(existing);
         continue;
       }
@@ -341,28 +407,13 @@ export async function refreshDocumentsCache(force: boolean = false, apiKey?: str
       let content = '';
       if (isPdf) {
         const sidecarPath = `${file.absolutePath}.extracted.txt`;
-        content = await getFreshExtractedPdfText(file.absolutePath, sidecarPath, apiKey);
+        content = await getFreshExtractedPdfText(file.absolutePath, sidecarPath);
       } else {
         content = fs.readFileSync(file.absolutePath, 'utf-8');
       }
 
       if (content) {
-        // Découpage en sections thématiques pour le RAG
-        const rawSections = content.split(/\n#{1,3}\s+|\n\n+/).filter((s) => s.trim().length > 20);
-        const sections: CachedDocSection[] = rawSections.map((s) => ({
-          raw: s.trim().slice(0, 2500),
-          lower: s.toLowerCase(),
-          arabicNorm: normalizeArabic(s),
-        }));
-
-        updatedCache.push({
-          name: file.name,
-          relativePath: file.relativePath,
-          branch: file.branch,
-          mtime: file.mtime,
-          sections,
-          fullContent: content,
-        });
+        updatedCache.push(buildCachedDoc(file, content));
       }
     }
 
@@ -430,8 +481,9 @@ export async function searchLocalDocuments(query: string, branch: string = 'PC')
       }
 
       // Si un document officiel national est identifié
-      if (bestDoc && bestScore >= 50 && bestDoc.fullContent) {
-        const { exerciseText, visualText } = extractExamExercise(bestDoc.fullContent, parsed.topic);
+      if (bestDoc && bestScore >= 50) {
+        const fullContent = readDocumentFullText(bestDoc);
+        const { exerciseText, visualText } = extractExamExercise(fullContent, parsed.topic);
         if (exerciseText || visualText) {
           const sessionLabel = parsed.session === 'SN'
             ? 'Session Normale'
@@ -551,7 +603,7 @@ function isExtractedTextFresh(pdfPath: string, txtPath: string): boolean {
 }
 
 /**
- * Récupère le texte extrait d'un PDF depuis le cache ou extrait + enrichit visuellement si nouveau/clé fournie.
+ * Récupère le texte extrait d'un PDF depuis le cache ou extrait + enrichit visuellement si demandé.
  */
 export async function getFreshExtractedPdfText(
   pdfPath: string,
@@ -559,12 +611,12 @@ export async function getFreshExtractedPdfText(
   apiKey?: string
 ): Promise<string> {
   const isFresh = fs.existsSync(txtPath) && isExtractedTextFresh(pdfPath, txtPath);
-  let existingContent = isFresh ? fs.readFileSync(txtPath, 'utf-8') : '';
+  const existingContent = isFresh ? fs.readFileSync(txtPath, 'utf-8') : '';
 
   const alreadyHasVisuals = existingContent.includes(SCIENTIFIC_VISION_MARKER);
 
-  // Si le cache est à jour et possède déjà la transcription visuelle, ou si aucune clé vision n'est fournie
-  if (isFresh && (alreadyHasVisuals || !apiKey)) {
+  // Si le cache est à jour et possède déjà la transcription visuelle, ou si aucune clé vision valide n'est fournie
+  if (isFresh && (alreadyHasVisuals || !apiKey || !isLikelyGeminiKey(apiKey))) {
     return existingContent;
   }
 
@@ -572,28 +624,269 @@ export async function getFreshExtractedPdfText(
   let rawText = existingContent;
   if (!isFresh || !rawText) {
     rawText = await extractTextFromPdf(fs.readFileSync(pdfPath));
+    // Sauvegarde immédiate du texte brut pour éviter de re-parser le PDF en cas d'erreur Vision ultérieure
+    try {
+      fs.writeFileSync(txtPath, rawText, 'utf-8');
+    } catch (err) {
+      console.warn('Impossible de mettre en cache le texte extrait:', err);
+    }
   }
 
-  // 2. Transcription visuelle IA des schémas, circuits et graphes si apiKey fournie
+  // 2. Transcription visuelle IA des schémas, circuits et graphes si clé Gemini valide fournie
   let fullContent = rawText;
-  if (apiKey && !alreadyHasVisuals) {
+  if (apiKey && isLikelyGeminiKey(apiKey) && !alreadyHasVisuals) {
     try {
-      const visualData = await extractVisualDataFromPdf(pdfPath, apiKey);
-      if (visualData && visualData.trim().length > 30) {
-        fullContent = `${rawText}\n\n================================================================================\n${SCIENTIFIC_VISION_MARKER}\n================================================================================\n\n${visualData}\n`;
+      const outcome = await extractVisualDataFromPdfDetailed(pdfPath, apiKey);
+      if (outcome.status === 'ok' && outcome.text.trim().length > 30) {
+        fullContent = `${rawText}\n\n================================================================================\n${SCIENTIFIC_VISION_MARKER}\n================================================================================\n\n${outcome.text}\n`;
         console.log(`[RAG] Document "${path.basename(pdfPath)}" enrichi avec succès avec le décodage des schémas/graphes.`);
+        try {
+          fs.writeFileSync(txtPath, fullContent, 'utf-8');
+        } catch (err) {
+          console.warn('Impossible de sauvegarder le décodage visuel:', err);
+        }
       }
     } catch (visErr) {
       console.warn(`[RAG] Avertissement décodage visuel pour ${path.basename(pdfPath)}:`, visErr);
     }
   }
 
-  try {
-    fs.writeFileSync(txtPath, fullContent, 'utf-8');
-  } catch (err) {
-    console.warn('Impossible de mettre en cache le texte extrait:', err);
-  }
   return fullContent;
+}
+
+const VISION_PACING_DELAY_MS = 4_500;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+let syncJobState: OfficialSyncStatus = {
+  running: false,
+  phase: 'idle',
+  branch: 'PC',
+  totalPdfs: 0,
+  processedPdfs: 0,
+  decodedCount: 0,
+  alreadyDecodedCount: 0,
+  skippedCount: 0,
+  failedCount: 0,
+  driveSyncCount: 0,
+  currentFile: '',
+  message: 'Prêt pour la synchronisation.',
+};
+
+export function getOfficialSyncStatus(): OfficialSyncStatus {
+  return { ...syncJobState };
+}
+
+/**
+ * Exécute la synchronisation complète en tâche de fond (Drive -> Extraction texte -> Vision Gemini cadencée).
+ * Évite tout timeout HTTP 502/503 côté proxy (Render) et tout pic 429 côté API Gemini.
+ */
+export function startBackgroundOfficialSync(params: {
+  branch: 'PC' | 'SM';
+  visionApiKey?: string;
+  runDriveSync?: () => Promise<number>;
+}): { started: boolean; alreadyRunning: boolean; syncJob: OfficialSyncStatus } {
+  if (syncJobState.running) {
+    return {
+      started: false,
+      alreadyRunning: true,
+      syncJob: getOfficialSyncStatus(),
+    };
+  }
+
+  const branch = params.branch === 'SM' ? 'SM' : 'PC';
+  const cleanVisionKey = isLikelyGeminiKey(params.visionApiKey) ? String(params.visionApiKey).trim() : '';
+
+  syncJobState = {
+    running: true,
+    phase: params.runDriveSync ? 'drive_sync' : 'text_indexing',
+    branch,
+    totalPdfs: 0,
+    processedPdfs: 0,
+    decodedCount: 0,
+    alreadyDecodedCount: 0,
+    skippedCount: 0,
+    failedCount: 0,
+    driveSyncCount: 0,
+    currentFile: '',
+    message: params.runDriveSync
+      ? 'Synchronisation Google Drive en cours…'
+      : 'Indexation textuelle des documents officiels en cours…',
+    lastError: undefined,
+    startedAt: new Date().toISOString(),
+    finishedAt: undefined,
+  };
+
+  void (async () => {
+    try {
+      // Phase 1 : Synchronisation Drive optionnelle
+      if (params.runDriveSync) {
+        syncJobState.phase = 'drive_sync';
+        syncJobState.message = `Synchronisation Google Drive (${branch})…`;
+        try {
+          syncJobState.driveSyncCount = await params.runDriveSync();
+        } catch (driveErr: any) {
+          console.warn('[SyncJob] Avertissement sync Drive:', driveErr?.message || driveErr);
+        }
+      }
+
+      // Phase 2 : Indexation textuelle rapide de tous les documents locaux
+      syncJobState.phase = 'text_indexing';
+      syncJobState.message = 'Extraction textuelle et mise en cache RAG…';
+      await refreshDocumentsCache(true);
+
+      const discovered = discoverProgrammeFiles(DOCS_DIR);
+      const allPdfs = discovered.filter((f) => f.name.toLowerCase().endsWith('.pdf'));
+      const pendingVision = allPdfs.filter((f) => !hasVisualMarker(f.absolutePath));
+      const alreadyDecoded = allPdfs.length - pendingVision.length;
+
+      syncJobState.alreadyDecodedCount = alreadyDecoded;
+      syncJobState.totalPdfs = pendingVision.length;
+
+      // Phase 3 : Décodage visuel Gemini cadencé (uniquement pour les PDF non encore décodés)
+      if (!cleanVisionKey || pendingVision.length === 0) {
+        const rag = getLocalRagStatus();
+        syncJobState.running = false;
+        syncJobState.phase = 'completed';
+        syncJobState.currentFile = '';
+        syncJobState.finishedAt = new Date().toISOString();
+        syncJobState.message = !cleanVisionKey && pendingVision.length > 0
+          ? `Base officielle synchronisée (texte) : ${rag.totalIndexedFiles} document(s) indexé(s) (${rag.pcCount} PC, ${rag.smCount} SM). Ajoutez une clé Gemini pour décoder les ${pendingVision.length} PDF restants.`
+          : `Base officielle entièrement à jour : ${rag.totalIndexedFiles} document(s) indexé(s) (${rag.pcCount} PC, ${rag.smCount} SM dont ${rag.visuallyDecodedCount} avec graphes décodés).`;
+        return;
+      }
+
+      // Prioriser la filière demandée et les examens légers avant les gros polycopiés
+      pendingVision.sort((a, b) => {
+        const aBranchPriority = a.branch === branch ? 0 : 1;
+        const bBranchPriority = b.branch === branch ? 0 : 1;
+        if (aBranchPriority !== bBranchPriority) return aBranchPriority - bBranchPriority;
+        let aSize = 0;
+        let bSize = 0;
+        try { aSize = fs.statSync(a.absolutePath).size; } catch {}
+        try { bSize = fs.statSync(b.absolutePath).size; } catch {}
+        return aSize - bSize;
+      });
+
+      syncJobState.phase = 'vision_decoding';
+      let usedQuotaPause = false;
+      let consecutiveTransientErrors = 0;
+      let stoppedEarlyReason = '';
+      let stoppedByRateLimit = false;
+
+      for (let idx = 0; idx < pendingVision.length; idx++) {
+        const file = pendingVision[idx];
+        syncJobState.currentFile = file.name;
+        syncJobState.message = `Décodage visuel (${idx + 1}/${pendingVision.length}) : ${file.name}…`;
+
+        // Double vérification au cas où le sidecar aurait été enrichi entretemps
+        if (hasVisualMarker(file.absolutePath)) {
+          syncJobState.alreadyDecodedCount++;
+          syncJobState.processedPdfs++;
+          continue;
+        }
+
+        const txtPath = `${file.absolutePath}.extracted.txt`;
+        let rawText = '';
+        try {
+          if (fs.existsSync(txtPath)) {
+            rawText = fs.readFileSync(txtPath, 'utf-8');
+          } else {
+            rawText = await extractTextFromPdf(fs.readFileSync(file.absolutePath));
+            fs.writeFileSync(txtPath, rawText, 'utf-8');
+          }
+        } catch (readErr: any) {
+          console.warn(`[SyncJob] Erreur lecture PDF ${file.name}:`, readErr?.message || readErr);
+          syncJobState.failedCount++;
+          syncJobState.processedPdfs++;
+          continue;
+        }
+
+        let outcome = await extractVisualDataFromPdfDetailed(file.absolutePath, cleanVisionKey);
+
+        if (outcome.status === 'rate_limited' && !usedQuotaPause) {
+          usedQuotaPause = true;
+          const waitMs = Math.min(25_000, outcome.retryAfterMs || 15_000);
+          syncJobState.message = `Quota Gemini atteint (429) — pause automatique de ${Math.round(waitMs / 1000)}s avant reprise…`;
+          await sleep(waitMs);
+          outcome = await extractVisualDataFromPdfDetailed(file.absolutePath, cleanVisionKey);
+        }
+
+        if (outcome.status === 'ok') {
+          consecutiveTransientErrors = 0;
+          const fullContent = `${rawText}\n\n================================================================================\n${SCIENTIFIC_VISION_MARKER}\n================================================================================\n\n${outcome.text}\n`;
+          try {
+            fs.writeFileSync(txtPath, fullContent, 'utf-8');
+          } catch {}
+          upsertCachedDoc(file, fullContent);
+          syncJobState.decodedCount++;
+          syncJobState.processedPdfs++;
+        } else if (outcome.status === 'skipped') {
+          consecutiveTransientErrors = 0;
+          syncJobState.skippedCount++;
+          syncJobState.processedPdfs++;
+        } else if (outcome.status === 'invalid_key') {
+          stoppedEarlyReason = outcome.errorMessage || 'Clé Gemini invalide ou refusée.';
+          syncJobState.lastError = stoppedEarlyReason;
+          break;
+        } else if (outcome.status === 'rate_limited') {
+          stoppedByRateLimit = true;
+          stoppedEarlyReason = 'Quota API Gemini temporairement atteint (429). Les documents déjà décodés sont sauvegardés ; relancez plus tard pour continuer les restants.';
+          syncJobState.lastError = stoppedEarlyReason;
+          break;
+        } else {
+          // transient_error (502 / 503)
+          syncJobState.failedCount++;
+          syncJobState.processedPdfs++;
+          consecutiveTransientErrors++;
+          syncJobState.lastError = outcome.errorMessage;
+          if (consecutiveTransientErrors >= 3) {
+            stoppedEarlyReason = 'Serveurs IA temporairement surchargés (502/503). Progression sauvegardée, réessayez dans quelques minutes.';
+            syncJobState.lastError = stoppedEarlyReason;
+            break;
+          }
+          await sleep(6_000);
+        }
+
+        // Cadencement entre deux fichiers pour respecter les limites RPM/TPM Gemini
+        if (idx < pendingVision.length - 1) {
+          await sleep(VISION_PACING_DELAY_MS);
+        }
+      }
+
+      const rag = getLocalRagStatus();
+      syncJobState.running = false;
+      syncJobState.currentFile = '';
+      syncJobState.finishedAt = new Date().toISOString();
+      syncJobState.phase = stoppedByRateLimit
+        ? 'partial_rate_limit'
+        : stoppedEarlyReason
+        ? 'error'
+        : 'completed';
+
+      if (stoppedEarlyReason) {
+        syncJobState.message = `Index texte prêt (${rag.totalIndexedFiles} docs). ${syncJobState.decodedCount} nouveau(x) schéma(s) décodé(s). ${stoppedEarlyReason}`;
+      } else {
+        syncJobState.message = `Base officielle synchronisée : ${rag.totalIndexedFiles} document(s) indexé(s) (${rag.pcCount} PC, ${rag.smCount} SM dont ${rag.visuallyDecodedCount} avec graphes décodés).`;
+      }
+    } catch (err: any) {
+      console.error('[SyncJob] Erreur critique tâche de fond:', err);
+      syncJobState.running = false;
+      syncJobState.phase = 'error';
+      syncJobState.currentFile = '';
+      syncJobState.finishedAt = new Date().toISOString();
+      syncJobState.lastError = err?.message || 'Erreur inattendue.';
+      syncJobState.message = `Erreur lors de la synchronisation : ${syncJobState.lastError}`;
+    }
+  })();
+
+  return {
+    started: true,
+    alreadyRunning: false,
+    syncJob: getOfficialSyncStatus(),
+  };
 }
 
 /**

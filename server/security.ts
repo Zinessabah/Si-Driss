@@ -9,6 +9,7 @@ export const apiLimiter = rateLimit({
   limit: 300,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.path === '/documents/sync/status' || req.path === '/rag/status' || req.path === '/ai-status',
   message: RATE_LIMIT_MSG,
 });
 

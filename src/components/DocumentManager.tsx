@@ -41,6 +41,8 @@ import {
   fetchRagStatus,
   fetchOfficialDocuments,
   syncOfficialDocuments,
+  fetchOfficialSyncStatus,
+  OfficialSyncJobStatus,
   listOfficialDriveDocuments,
   DriveDoc,
 } from '../utils/googleDrive';
@@ -114,6 +116,23 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
 
   const importLocalFileInputRef = useRef<HTMLInputElement | null>(null);
   const localFileInputRef = useRef<HTMLInputElement | null>(null);
+  const syncPollTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const isMountedRef = useRef<boolean>(true);
+
+  const stopSyncPolling = () => {
+    if (syncPollTimerRef.current) {
+      clearInterval(syncPollTimerRef.current);
+      syncPollTimerRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      stopSyncPolling();
+    };
+  }, []);
 
   const previewModalRef = useModalA11y(Boolean(previewDoc), () => setPreviewDoc(null));
   const deleteModalRef = useModalA11y(Boolean(docToDelete), () => setDocToDelete(null));
@@ -163,26 +182,115 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
     refreshOfficialDocs();
   }, [selectedBranch]);
 
-  // Synchronisation des documents officiels téléchargés et ré-indexation du RAG (avec décodage visuel IA)
+  const formatSyncProgressText = (job: OfficialSyncJobStatus): string => {
+    const base = job.message || 'Synchronisation des documents officiels en cours…';
+    if (job.totalPdfs > 0 && !base.includes(`/${job.totalPdfs}`)) {
+      return `${base} (${job.processedPdfs}/${job.totalPdfs})`;
+    }
+    return base;
+  };
+
+  const applySyncCompletion = async (job?: OfficialSyncJobStatus, fallbackMessage?: string) => {
+    stopSyncPolling();
+    if (!isMountedRef.current) return;
+
+    try {
+      const updatedRag = await fetchRagStatus();
+      if (isMountedRef.current) setRagStatus(updatedRag);
+      await refreshOfficialDocs();
+    } catch (refreshErr) {
+      console.warn('[OfficialDocs] Rafraîchissement post-sync incomplet:', refreshErr);
+    }
+
+    if (!isMountedRef.current) return;
+
+    if (job?.phase === 'error') {
+      setStatusMsg({
+        text: job.message || job.lastError || 'Erreur lors de la synchronisation des documents officiels.',
+        type: 'error',
+      });
+    } else if (job?.phase === 'partial_rate_limit') {
+      setStatusMsg({
+        text: job.message || fallbackMessage || 'Synchronisation partielle (limite de requêtes atteinte).',
+        type: 'info',
+      });
+    } else {
+      setStatusMsg({
+        text: `✅ ${job?.message || fallbackMessage || 'Documents officiels synchronisés avec succès !'}`,
+        type: 'success',
+      });
+    }
+    setIsSyncingOfficial(false);
+  };
+
+  // Synchronisation des documents officiels téléchargés et ré-indexation du RAG (tâche de fond cadencée)
   const handleSyncOfficialDocs = async () => {
+    stopSyncPolling();
     setIsSyncingOfficial(true);
     setStatusMsg(null);
     try {
-      const res = await syncOfficialDocuments(selectedBranch, adminTokenVal, aiConfig.apiKey);
-      setStatusMsg({
-        text: `✅ ${res.message || 'Documents officiels synchronisés avec succès !'}`,
-        type: 'success',
-      });
-      const updatedRag = await fetchRagStatus();
-      setRagStatus(updatedRag);
-      await refreshOfficialDocs();
+      const res = await syncOfficialDocuments(
+        selectedBranch,
+        adminTokenVal,
+        aiConfig.apiKey,
+        aiConfig.provider
+      );
+
+      if (res.syncJob?.running) {
+        setStatusMsg({
+          text: formatSyncProgressText(res.syncJob),
+          type: 'info',
+        });
+
+        let consecutivePollErrors = 0;
+        let pollInFlight = false;
+
+        syncPollTimerRef.current = setInterval(async () => {
+          if (pollInFlight || !isMountedRef.current) return;
+          pollInFlight = true;
+          try {
+            const statusRes = await fetchOfficialSyncStatus();
+            consecutivePollErrors = 0;
+            if (!isMountedRef.current) return;
+
+            const job = statusRes.syncJob;
+            if (job?.running) {
+              setStatusMsg({
+                text: formatSyncProgressText(job),
+                type: 'info',
+              });
+            } else {
+              await applySyncCompletion(job, res.message);
+            }
+          } catch (pollErr: any) {
+            consecutivePollErrors += 1;
+            if (consecutivePollErrors >= 3) {
+              stopSyncPolling();
+              if (isMountedRef.current) {
+                setIsSyncingOfficial(false);
+                setStatusMsg({
+                  text: `Erreur suivi de synchronisation : ${pollErr?.message || 'Connexion interrompue'}`,
+                  type: 'error',
+                });
+              }
+            }
+          } finally {
+            pollInFlight = false;
+          }
+        }, 3000);
+        return;
+      }
+
+      await applySyncCompletion(res.syncJob, res.message);
     } catch (err: any) {
-      setStatusMsg({
-        text: `Erreur synchronisation documents officiels : ${err?.message || 'Erreur inconnue'}`,
-        type: 'error',
-      });
-    } finally {
-      setIsSyncingOfficial(false);
+      stopSyncPolling();
+      if (isMountedRef.current) {
+        setStatusMsg({
+          text: `Erreur synchronisation documents officiels : ${err?.message || 'Erreur inconnue'}`,
+          type: 'error',
+        });
+        setIsSyncingOfficial(false);
+      }
     }
   };
 

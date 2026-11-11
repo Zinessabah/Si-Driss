@@ -55,6 +55,47 @@ function resolveDriveApiKey(customKey?: string): string {
   ).trim();
 }
 
+const DRIVE_FETCH_TIMEOUT_MS = 25_000;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchWithRetry(
+  url: string,
+  init: RequestInit = {},
+  maxAttempts: number = 3
+): Promise<Response> {
+  let lastError: any = null;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const res = await fetch(url, {
+        ...init,
+        signal: AbortSignal.timeout(DRIVE_FETCH_TIMEOUT_MS),
+      });
+      if (res.status === 429 || res.status === 502 || res.status === 503 || res.status === 504) {
+        if (attempt < maxAttempts) {
+          const retryAfterHdr = Number(res.headers.get('retry-after') || 0);
+          const delayMs = retryAfterHdr > 0
+            ? Math.min(20_000, retryAfterHdr * 1000)
+            : 1500 * Math.pow(2, attempt - 1) + Math.floor(Math.random() * 500);
+          console.warn(`[DriveSync] HTTP ${res.status}, réessai dans ${delayMs}ms (${attempt}/${maxAttempts})`);
+          await sleep(delayMs);
+          continue;
+        }
+      }
+      return res;
+    } catch (err: any) {
+      lastError = err;
+      if (attempt < maxAttempts) {
+        const delayMs = 1500 * Math.pow(2, attempt - 1);
+        await sleep(delayMs);
+      }
+    }
+  }
+  throw lastError || new Error('Délai dépassé lors de la connexion Google Drive.');
+}
+
 /**
  * Récupère la liste des fichiers d'un dossier Google Drive public.
  * Tente d'abord l'URL Apps Script si configurée, puis l'API Google Drive v3 avec clé.
@@ -70,7 +111,7 @@ async function listPublicDriveFolderFiles(
     try {
       const sep = GOOGLE_DRIVE_APPS_SCRIPT_URL.includes('?') ? '&' : '?';
       const scriptUrl = `${GOOGLE_DRIVE_APPS_SCRIPT_URL}${sep}id=${encodeURIComponent(folderId)}`;
-      const res = await fetch(scriptUrl);
+      const res = await fetchWithRetry(scriptUrl);
       if (res.ok) {
         const data = await res.json();
         const items = Array.isArray(data) ? data : data.files || [];
@@ -103,7 +144,7 @@ async function listPublicDriveFolderFiles(
         apiKey
       )}&fields=files(id,name,mimeType,size)&pageSize=100`;
 
-      const res = await fetch(listUrl);
+      const res = await fetchWithRetry(listUrl);
       if (res.ok) {
         const data = await res.json();
         const items = (data.files || []).filter(
@@ -139,7 +180,7 @@ async function listPublicDriveFolderFiles(
 /**
  * Télécharge un fichier depuis Google Drive en utilisant l'API avec clé ou le lien direct uc?export=download.
  */
-async function downloadDriveFile(fileId: string, apiKey: string): Promise<Buffer> {
+async function downloadDriveFile(fileId: string, apiKey: string, expectPdf: boolean): Promise<Buffer> {
   const downloadUrls: string[] = [];
   if (apiKey) {
     downloadUrls.push(
@@ -151,7 +192,7 @@ async function downloadDriveFile(fileId: string, apiKey: string): Promise<Buffer
 
   for (const url of downloadUrls) {
     try {
-      const res = await fetch(url, {
+      const res = await fetchWithRetry(url, {
         headers: {
           'User-Agent':
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -159,9 +200,17 @@ async function downloadDriveFile(fileId: string, apiKey: string): Promise<Buffer
       });
 
       if (res.ok) {
+        const contentType = (res.headers.get('content-type') || '').toLowerCase();
+        if (expectPdf && contentType.includes('text/html')) {
+          continue; // Page HTML de confirmation/erreur Google Drive
+        }
         const arrayBuffer = await res.arrayBuffer();
         if (arrayBuffer.byteLength > 100) {
-          return Buffer.from(arrayBuffer);
+          const buf = Buffer.from(arrayBuffer);
+          if (expectPdf && buf.subarray(0, 5).toString() !== '%PDF-') {
+            continue;
+          }
+          return buf;
         }
       }
     } catch {}
@@ -172,13 +221,13 @@ async function downloadDriveFile(fileId: string, apiKey: string): Promise<Buffer
 
 /**
  * Synchronise un dossier Google Drive pour une filière donnée (PC ou SM).
- * Télécharge les documents, les renomme avec le préfixe de la filière et extrait
- * immédiatement le texte pour enrichir l'index RAG de Si Driss.
+ * Télécharge uniquement les documents nouveaux/modifiés et extrait le texte pour le RAG.
  */
 export async function syncGoogleDriveBranch(params: {
   branch: 'PC' | 'SM';
   folderIdOrUrl?: string;
   apiKey?: string;
+  force?: boolean;
 }): Promise<DriveSyncResult> {
   const branch = params.branch.toUpperCase() as 'PC' | 'SM';
   const envFolder = branch === 'SM' ? GOOGLE_DRIVE_FOLDER_SM : GOOGLE_DRIVE_FOLDER_PC;
@@ -221,6 +270,7 @@ export async function syncGoogleDriveBranch(params: {
   }
 
   const downloadedFiles: string[] = [];
+  let skippedExisting = 0;
 
   for (const file of files) {
     try {
@@ -243,11 +293,31 @@ export async function syncGoogleDriveBranch(params: {
       }
 
       const targetPath = path.join(branchDir, targetName);
-      const fileBuffer = await downloadDriveFile(file.id, apiKey);
+      const isPdf = targetName.toLowerCase().endsWith('.pdf');
+
+      // Éviter de re-télécharger inutilement (prévient les 429 Google Drive et 502 timeout)
+      if (!params.force && fs.existsSync(targetPath)) {
+        const localStat = fs.statSync(targetPath);
+        const sameSize = file.size ? localStat.size === file.size : localStat.size > 512;
+        if (sameSize) {
+          skippedExisting++;
+          if (isPdf && !fs.existsSync(`${targetPath}.extracted.txt`)) {
+            try {
+              const extractedText = await extractTextFromPdf(fs.readFileSync(targetPath));
+              if (extractedText && extractedText.trim().length > 20) {
+                fs.writeFileSync(`${targetPath}.extracted.txt`, extractedText, 'utf-8');
+              }
+            } catch {}
+          }
+          continue;
+        }
+      }
+
+      const fileBuffer = await downloadDriveFile(file.id, apiKey, isPdf);
       fs.writeFileSync(targetPath, fileBuffer);
 
       // Extraction immédiate du texte pour le RAG
-      if (targetName.toLowerCase().endsWith('.pdf')) {
+      if (isPdf) {
         try {
           const extractedText = await extractTextFromPdf(fileBuffer);
           if (extractedText && extractedText.trim().length > 20) {
@@ -260,13 +330,16 @@ export async function syncGoogleDriveBranch(params: {
 
       downloadedFiles.push(targetName);
       console.log(`[DriveSync] Fichier indexé avec succès dans le RAG (${branch}): ${targetName}`);
+
+      // Pause douce entre téléchargements pour éviter le rate-limit Drive
+      await sleep(450);
     } catch (err: any) {
       console.warn(`[DriveSync] Échec du téléchargement pour ${file.name}:`, err?.message || err);
     }
   }
 
   return {
-    success: downloadedFiles.length > 0,
+    success: true,
     branch,
     folderId: cleanFolderId,
     filesFound: files.length,
@@ -274,7 +347,9 @@ export async function syncGoogleDriveBranch(params: {
     downloadedFiles,
     message:
       downloadedFiles.length > 0
-        ? `✅ ${downloadedFiles.length} document(s) synchronisé(s) et indexé(s) pour la filière 2BAC ${branch} !`
+        ? `✅ ${downloadedFiles.length} nouveau(x) document(s) téléchargé(s) (${skippedExisting} déjà à jour) pour 2BAC ${branch} !`
+        : skippedExisting > 0
+        ? `✅ Tous les documents (${skippedExisting}) de 2BAC ${branch} sont déjà à jour.`
         : `⚠️ Aucun document n'a pu être téléchargé depuis le dossier 2BAC ${branch}.`,
   };
 }

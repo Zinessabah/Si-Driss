@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import fs from 'fs';
 import path from 'path';
-import { DOCS_DIR, GOOGLE_DRIVE_FOLDER_PC, GOOGLE_DRIVE_FOLDER_SM } from '../config';
+import { DOCS_DIR, ADMIN_TOKEN, GOOGLE_DRIVE_FOLDER_PC, GOOGLE_DRIVE_FOLDER_SM } from '../config';
 import { requireAdmin, documentMutationLimiter } from '../security';
 import {
   extractTextFromPdf,
@@ -10,7 +10,10 @@ import {
   discoverProgrammeFiles,
   refreshDocumentsCache,
   hasVisualMarker,
+  startBackgroundOfficialSync,
+  getOfficialSyncStatus,
 } from '../rag';
+import { isLikelyGeminiKey } from '../visionExtractor';
 import { syncGoogleDriveBranch, extractDriveFolderId } from '../driveSync';
 
 /**
@@ -122,45 +125,71 @@ export function createDocumentsRouter(): Router {
 
   /**
    * Synchronisation des documents officiels téléchargés et ré-indexation du RAG local.
-   * Re-scanne les sous-dossiers PC/ et SM/, extrait les textes des nouveaux PDFs et
-   * décode les schémas/graphes si une clé API est fournie.
+   * Lance l'extraction et le décodage visuel en tâche de fond cadencée pour éviter les timeouts 502/503
+   * et les dépassements de quota API (429).
    */
   router.post('/documents/sync', async (req, res) => {
     try {
-      const adminToken = req.headers['x-admin-token'] as string | undefined;
-      const clientApiKey = (req.headers['x-ai-api-key'] as string) || req.body?.apiKey;
-      const apiKey = clientApiKey || process.env.GEMINI_API_KEY || process.env.AI_API_KEY || '';
-      const branch = (String(req.body.branch || 'PC').toUpperCase() === 'SM' ? 'SM' : 'PC') as 'PC' | 'SM';
-      let driveSyncCount = 0;
+      const adminToken = String(req.headers['x-admin-token'] || '').trim();
+      const clientProvider = String(req.headers['x-ai-provider'] || req.body?.provider || '').toLowerCase();
+      const clientApiKey = String((req.headers['x-ai-api-key'] as string) || req.body?.apiKey || '').trim();
 
-      // Si un token admin est fourni, synchroniser également le dossier Drive de la filière
-      if (adminToken) {
-        try {
-          const driveResult = await syncGoogleDriveBranch({ branch });
-          if (driveResult.success) {
-            driveSyncCount = driveResult.downloadedCount;
+      // N'utiliser la clé client pour Gemini Vision que si elle est compatible Gemini
+      const validClientVisionKey =
+        clientApiKey &&
+        (!clientProvider || clientProvider === 'gemini') &&
+        isLikelyGeminiKey(clientApiKey)
+          ? clientApiKey
+          : '';
+
+      const serverEnvGeminiKey =
+        process.env.GEMINI_API_KEY ||
+        (isLikelyGeminiKey(process.env.AI_API_KEY) ? process.env.AI_API_KEY : '') ||
+        '';
+
+      const visionApiKey = validClientVisionKey || serverEnvGeminiKey;
+      const branch = (String(req.body?.branch || 'PC').toUpperCase() === 'SM' ? 'SM' : 'PC') as 'PC' | 'SM';
+
+      const isAuthorizedForDriveSync = Boolean(adminToken && (!ADMIN_TOKEN || adminToken === ADMIN_TOKEN));
+      const runDriveSync = isAuthorizedForDriveSync
+        ? async () => {
+            const driveResult = await syncGoogleDriveBranch({ branch });
+            return driveResult.success ? driveResult.downloadedCount : 0;
           }
-        } catch (e) {
-          console.warn('[Sync] Sync Drive facultatif non exécuté :', e);
-        }
-      }
+        : undefined;
 
-      // Re-scan et ré-indexation complète du RAG local avec transcription visuelle IA
-      const status = await refreshDocumentsCache(true, apiKey);
+      const { started, alreadyRunning, syncJob } = startBackgroundOfficialSync({
+        branch,
+        visionApiKey,
+        runDriveSync,
+      });
 
-      return res.json({
+      const status = getLocalRagStatus();
+
+      return res.status(202).json({
         success: true,
+        started,
+        alreadyRunning,
+        syncJob,
         ...status,
-        driveSyncCount,
-        hasVisionKey: Boolean(apiKey),
-        message: apiKey
-          ? `Base officielle synchronisée avec décodage des schémas & graphes : ${status.totalIndexedFiles} document(s) indexé(s) (${status.pcCount} PC, ${status.smCount} SM dont ${status.visuallyDecodedCount} avec graphes décodés).`
-          : `Base officielle synchronisée (texte) : ${status.totalIndexedFiles} document(s) indexé(s) (${status.pcCount} PC, ${status.smCount} SM).`,
+        driveSyncCount: syncJob.driveSyncCount,
+        hasVisionKey: Boolean(visionApiKey),
+        message: syncJob.message,
       });
     } catch (err: any) {
       console.error('Erreur synchronisation documents officiels:', err);
       return res.status(500).json({ error: 'Erreur lors de la synchronisation des documents officiels.' });
     }
+  });
+
+  /**
+   * Statut en temps réel de la tâche de synchronisation et de décodage visuel en arrière-plan.
+   */
+  router.get('/documents/sync/status', (_req, res) => {
+    return res.json({
+      syncJob: getOfficialSyncStatus(),
+      ...getLocalRagStatus(),
+    });
   });
 
   /**
@@ -173,40 +202,41 @@ export function createDocumentsRouter(): Router {
       }
 
       const discovered = discoverProgrammeFiles(DOCS_DIR);
-      const files = await Promise.all(
-        discovered.map(async (doc) => {
-          const filePath = doc.absolutePath;
-          const stat = fs.statSync(filePath);
-          let preview = '';
-          const isPdf = doc.name.toLowerCase().endsWith('.pdf');
+      const files = [];
 
-          if (isPdf) {
-            try {
-              const text = await getFreshExtractedPdfText(filePath, `${filePath}.extracted.txt`);
-              preview = text.slice(0, 150).replace(/\n/g, ' ');
-            } catch {
-              preview = 'Document PDF prêt à être indexé';
-            }
-          } else {
-            try {
-              const text = fs.readFileSync(filePath, 'utf-8');
-              preview = text.slice(0, 150).replace(/\n/g, ' ');
-            } catch {
-              preview = 'Document texte';
-            }
+      // Traitement séquentiel (évite les pics mémoire 502/503 sur 40+ PDFs simultanés)
+      for (const doc of discovered) {
+        const filePath = doc.absolutePath;
+        const stat = fs.statSync(filePath);
+        let preview = '';
+        const isPdf = doc.name.toLowerCase().endsWith('.pdf');
+
+        if (isPdf) {
+          try {
+            const text = await getFreshExtractedPdfText(filePath, `${filePath}.extracted.txt`);
+            preview = text.slice(0, 150).replace(/\n/g, ' ');
+          } catch {
+            preview = 'Document PDF prêt à être indexé';
           }
+        } else {
+          try {
+            const text = fs.readFileSync(filePath, 'utf-8');
+            preview = text.slice(0, 150).replace(/\n/g, ' ');
+          } catch {
+            preview = 'Document texte';
+          }
+        }
 
-          return {
-            name: doc.name,
-            relativePath: doc.relativePath,
-            branch: doc.branch,
-            size: stat.size,
-            modified: stat.mtime,
-            preview,
-            isPdf,
-          };
-        })
-      );
+        files.push({
+          name: doc.name,
+          relativePath: doc.relativePath,
+          branch: doc.branch,
+          size: stat.size,
+          modified: stat.mtime,
+          preview,
+          isPdf,
+        });
+      }
 
       return res.json({
         directory: '/docs/programme',
@@ -292,10 +322,18 @@ export function createDocumentsRouter(): Router {
         apiKey: apiKey || undefined,
       });
 
+      if (result.downloadedCount > 0) {
+        await refreshDocumentsCache(true);
+      }
+
       return res.json(result);
     } catch (err: any) {
       console.error('Erreur synchronisation Drive:', err);
-      return res.status(500).json({ error: `Erreur synchronisation Drive : ${err?.message || 'Erreur inconnue'}` });
+      const msg = String(err?.message || 'Erreur inconnue');
+      const isRateLimit = msg.includes('429') || /quota|rate.?limit/i.test(msg);
+      const isUpstreamBusy = /\b(502|503|504)\b/.test(msg) || /timeout|aborted|temporarily/i.test(msg);
+      const status = isRateLimit ? 429 : isUpstreamBusy ? 503 : 500;
+      return res.status(status).json({ error: `Erreur synchronisation Drive : ${msg}` });
     }
   });
 
