@@ -6,6 +6,7 @@ import {
   ScientificSvgCard,
   GraphicSpec,
   MindMapSpec,
+  MindMapNode,
 } from './ScientificGraphicsRenderer';
 
 interface MathViewProps {
@@ -212,8 +213,24 @@ function normalizeAllMathDelimiters(raw: string): string {
   if (!raw) return '';
 
   let normalized = raw
-    // Blocs de code ```latex ... ```
-    .replace(/```(?:latex|math|tex)\s*([\s\S]*?)```/gi, (_m, inner) => `\n$$${inner.trim()}$$\n`)
+    // Déballe les blocs markdown/text génériques s'ils encadrent un énoncé ou du texte pédagogique
+    .replace(/```(?:markdown|md|text|txt)\s*([\s\S]*?)```/gi, (_m, inner) => `\n${inner.trim()}\n`)
+    // Blocs ```latex / ```math / ```tex : si c'est une formule pure, passer en $$...$$ ;
+    // si c'est un énoncé mixte (prose + $...$ + \textbf...), déballer sans casser KaTeX.
+    .replace(/```(?:latex|math|tex)\s*([\s\S]*?)```/gi, (_m, inner) => {
+      const clean = inner.trim();
+      const isMixedDocument =
+        /\$\$|\$(?:\\.|[^$\\\n])+\$|\\documentclass|\\begin\{(?:document|tikzpicture|circuitikz|enumerate|itemize)\}|\\section|\n\n/i.test(
+          clean
+        ) || (/\\textbf|\\textit/.test(clean) && clean.length > 140);
+      if (!isMixedDocument) {
+        return `\n$$${clean}$$\n`;
+      }
+      return `\n${clean
+        .replace(/\\textbf\{([^}]*)\}/g, '**$1**')
+        .replace(/\\textit\{([^}]*)\}/g, '$1')
+        .replace(/\\section\*?\{([^}]*)\}/g, '\n**$1**\n')}\n`;
+    })
     // Délimiteurs \[ ... \] (attention: utilisation d'une fonction de remplacement pour éviter le piège JS de '$$')
     .replace(/\\\[([\s\S]*?)\\\]/g, (_m, inner) => `$$${inner.trim()}$$`)
     // Délimiteurs \( ... \)
@@ -233,12 +250,12 @@ function normalizeAllMathDelimiters(raw: string): string {
 }
 
 /**
- * Formate le texte inline (gras **...**, italique *...*, code `...`) hors formules mathématiques
+ * Formate le texte inline (gras **...**, blocs de code ```...```, code `...`) hors formules mathématiques
  */
 function renderFormattedPlainText(text: string, keyPrefix: string): React.ReactNode[] {
   if (!text) return [];
 
-  const tokenRegex = /(\*\*[\s\S]+?\*\*|`[^`\n]+`)/g;
+  const tokenRegex = /(```[a-zA-Z0-9_+-]*[ \t]*\r?\n[\s\S]*?```|\*\*[\s\S]+?\*\*|`[^`\n]+`)/g;
   const parts: React.ReactNode[] = [];
   let lastIdx = 0;
   let match: RegExpExecArray | null;
@@ -253,7 +270,17 @@ function renderFormattedPlainText(text: string, keyPrefix: string): React.ReactN
     }
 
     const token = match[0];
-    if (token.startsWith('**') && token.endsWith('**')) {
+    if (token.startsWith('```') && token.endsWith('```')) {
+      const codeBody = token.replace(/^```[a-zA-Z0-9_+-]*[ \t]*\r?\n?/, '').replace(/```$/, '').trimEnd();
+      parts.push(
+        <pre
+          key={`${keyPrefix}-pre-${match.index}`}
+          className="my-2 p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono text-amber-300 overflow-x-auto"
+        >
+          <code>{codeBody}</code>
+        </pre>
+      );
+    } else if (token.startsWith('**') && token.endsWith('**')) {
       parts.push(
         <strong key={`${keyPrefix}-b-${match.index}`} className="font-semibold text-white">
           {token.slice(2, -2)}
@@ -297,8 +324,8 @@ function stableHash(s: string): string {
  * Rend une chaîne contenant des formules ($...$ et $$...$$) ainsi que du texte enrichi
  */
 function renderMathAndTextNodes(input: string, forceBlock: boolean, keyPrefix: string): React.ReactNode[] {
-  // 1. Découpe d'abord sur les délimiteurs explicites $$...$$ et $...$
-  const explicitMathRegex = /(\$\$[\s\S]*?\$\$|\$(?:\\.|[^$\\])+?\$)/g;
+  // 1. Découpe d'abord sur les délimiteurs explicites $$...$$ et $...$ (inline mono-ligne pour éviter qu'un $ isolé n'avale le texte)
+  const explicitMathRegex = /(\$\$[\s\S]*?\$\$|\$(?:\\.|[^$\\\n])+?\$)/g;
   const preliminarySegments: { type: 'math' | 'text'; value: string; display: boolean }[] = [];
 
   let lastIndex = 0;
@@ -462,8 +489,9 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
 
   // Cas 3 : Contenu mixte (texte + schémas SVG + graphiques scientifiques interactifs + formules LaTeX)
   const graphicBlockRegex =
-    /```(svg|xml|curve|mindmap|graph|chart|mermaid)\s*([\s\S]*?)```|```(json)\s*(\{[\s\S]*?(?:"type"\s*:\s*"(?:curve|mindmap)"|"root"\s*:|"function"\s*:)[\s\S]*?\})\s*```/gi;
-  const openStreamingFenceRe = /```(?:svg|curve|mindmap)\b(?![\s\S]*```)/i;
+    /```(svg(?:\+xml)?|xml|curve|mindmap|graph|chart|mermaid)\b[^\n]*\r?\n?([\s\S]*?)```|```(html?)?[ \t]*\r?\n?([\s\S]*?<svg\b[^>]*>[\s\S]*?<\/svg>[\s\S]*?)```|```(json)?[ \t]*\r?\n?(\{[\s\S]*?(?:"type"\s*:\s*"(?:curve|mindmap)"|"root"\s*:|"function"\s*:|"curves"\s*:)[\s\S]*?\})\s*```|(<svg\b[^>]*>[\s\S]*?<\/svg>)/gi;
+  const openStreamingFenceRe =
+    /(?:```(?:svg(?:\+xml)?|xml|curve|mindmap|graph|chart|mermaid|html?|json)\b|<svg\b(?![\s\S]*<\/svg>))(?![\s\S]*```)/i;
   const hasCompleteGraphic = graphicBlockRegex.test(content);
   graphicBlockRegex.lastIndex = 0;
 
@@ -479,11 +507,14 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
         elements.push(...renderMathAndTextNodes(normalizedChunk, block, `mv-txt-${lastIndex}`));
       }
 
-      const fenceLang = (match[1] || match[3] || '').toLowerCase();
-      const rawBlock = (match[2] || match[4] || '').trim();
+      const explicitLang = (match[1] || match[3] || match[5] || '').toLowerCase();
+      const rawBlock = (match[2] || match[4] || match[6] || match[7] || '').trim();
       const isSvgBlock =
-        fenceLang === 'svg' ||
-        ((fenceLang === 'xml' || !fenceLang) && /<svg[\s>][\s\S]*<\/svg>/i.test(rawBlock));
+        Boolean(match[7]) ||
+        Boolean(match[4]) ||
+        explicitLang === 'svg' ||
+        explicitLang === 'svg+xml' ||
+        ((explicitLang === 'xml' || !explicitLang) && /<svg\b[\s>][\s\S]*<\/svg>/i.test(rawBlock));
 
       if (isSvgBlock) {
         elements.push(
@@ -505,7 +536,7 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
               key={`mv-raw-code-${match.index}`}
               className="my-2 p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-amber-300 overflow-x-auto"
             >
-              <code>{match[0]}</code>
+              <code>{rawBlock || match[0]}</code>
             </pre>
           );
         }
@@ -519,20 +550,32 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
       const pendingFenceIdx = tailChunk.search(openStreamingFenceRe);
       if (pendingFenceIdx !== -1) {
         const visibleText = tailChunk.slice(0, pendingFenceIdx);
+        const pendingBody = tailChunk.slice(pendingFenceIdx);
+        const completeSvgInsidePending = pendingBody.match(/<svg\b[^>]*>[\s\S]*?<\/svg>/i);
+
         if (visibleText.trim()) {
           elements.push(
             ...renderMathAndTextNodes(normalizeAllMathDelimiters(visibleText), block, `mv-txt-tail-${lastIndex}`)
           );
         }
-        elements.push(
-          <div
-            key={`mv-pending-${lastIndex}`}
-            className="my-2 px-3 py-2 rounded-xl bg-slate-900/70 border border-slate-800 text-xs text-sky-300 inline-flex items-center gap-2"
-          >
-            <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
-            <span>Tracé du schéma scientifique en cours…</span>
-          </div>
-        );
+
+        if (completeSvgInsidePending) {
+          elements.push(
+            <div key={`mv-svg-tail-${lastIndex}`} className="my-3 w-full">
+              <ScientificSvgCard svgCode={completeSvgInsidePending[0]} />
+            </div>
+          );
+        } else {
+          elements.push(
+            <div
+              key={`mv-pending-${lastIndex}`}
+              className="my-2 px-3 py-2 rounded-xl bg-slate-900/70 border border-slate-800 text-xs text-sky-300 inline-flex items-center gap-2"
+            >
+              <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
+              <span>Tracé du schéma scientifique en cours…</span>
+            </div>
+          );
+        }
       } else {
         const normalizedChunk = normalizeAllMathDelimiters(tailChunk);
         elements.push(...renderMathAndTextNodes(normalizedChunk, block, `mv-txt-end-${lastIndex}`));
@@ -558,18 +601,160 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
 });
 
 /**
+ * Supprime les commentaires // et /* ... *\/ uniquement HORS des chaînes JSON entre guillemets.
+ */
+function stripCommentsOutsideStrings(input: string): string {
+  let out = '';
+  let inString = false;
+  let escaped = false;
+  let i = 0;
+
+  while (i < input.length) {
+    const ch = input[i];
+    const next = input[i + 1];
+
+    if (inString) {
+      out += ch;
+      if (escaped) {
+        escaped = false;
+      } else if (ch === '\\') {
+        escaped = true;
+      } else if (ch === '"') {
+        inString = false;
+      }
+      i++;
+      continue;
+    }
+
+    if (ch === '"') {
+      inString = true;
+      out += ch;
+      i++;
+      continue;
+    }
+
+    if (ch === '/' && next === '/') {
+      while (i < input.length && input[i] !== '\n') i++;
+      continue;
+    }
+
+    if (ch === '/' && next === '*') {
+      i += 2;
+      while (i < input.length && !(input[i] === '*' && input[i + 1] === '/')) i++;
+      i += 2;
+      continue;
+    }
+
+    out += ch;
+    i++;
+  }
+
+  return out;
+}
+
+/**
+ * Extrait la plus grande sous-chaîne JSON équilibrée {...} s'il y a du bruit autour.
+ */
+function extractBalancedJsonObject(str: string): string {
+  const firstBrace = str.indexOf('{');
+  if (firstBrace === -1) return str;
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  for (let i = firstBrace; i < str.length; i++) {
+    const ch = str[i];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (ch === '\\') escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') inString = true;
+    else if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      if (depth === 0) return str.slice(firstBrace, i + 1);
+    }
+  }
+  return str.slice(firstBrace);
+}
+
+/**
  * Nettoie et répare une chaîne JSON générée par un LLM (LaTeX avec antislashs simples, virgules orphelines, commentaires).
  */
 function cleanJsonString(str: string): string {
-  let cleaned = str.trim();
-  // Enlever les commentaires // en fin de ligne
-  cleaned = cleaned.replace(/\/\/.*$/gm, '');
+  let cleaned = extractBalancedJsonObject(str.trim());
+  cleaned = stripCommentsOutsideStrings(cleaned);
   // Remplacer les antislashs simples invalides en JSON (ex: \lambda, \tau, \pi, \omega, \Delta, \approx, etc.) par des doubles \\
   // En JSON standard, les seuls échappements valides sont " \ / b f n r t u
   cleaned = cleaned.replace(/\\([^"\\\/bfnrtu]|u[0-9a-fA-F]{0,3}[^0-9a-fA-F])/g, '\\\\$1');
+  // Constantes mathématiques non quotées dans les valeurs ou tableaux numériques (sans toucher aux chaînes "...")
+  cleaned = cleaned.replace(/([:\[,]\s*(?:-\s*)?)Math\.PI\b/g, '$13.14159265');
+  cleaned = cleaned.replace(/([:\[,]\s*(?:-\s*)?)Math\.E\b/g, '$12.71828183');
   // Enlever les virgules orphelines avant un crochet ou une accolade
   cleaned = cleaned.replace(/,\s*([\]}])/g, '$1');
   return cleaned;
+}
+
+/**
+ * Convertit un graphe Mermaid de type `graph TD` / `flowchart LR` (`A[Label] --> B[Label]`)
+ * en spécification MindMapSpec affichable visuellement.
+ */
+function parseMermaidFlowchartToMindmap(content: string): MindMapSpec | null {
+  const lines = content.split('\n').map((l) => l.trim()).filter(Boolean);
+  const labels = new Map<string, string>();
+  const childrenMap = new Map<string, string[]>();
+  const hasParent = new Set<string>();
+  const orderedIds: string[] = [];
+
+  const registerNode = (rawToken: string): string => {
+    const clean = rawToken.replace(/\|[^|]*\|/g, '').trim();
+    const m = clean.match(/^([A-Za-z0-9_-]+)\s*(?:\(\((.+?)\)\)|\[(.+?)\]|\((.+?)\)|\{(.+?)\})?/);
+    if (!m) return '';
+    const id = m[1];
+    const lbl = (m[2] || m[3] || m[4] || m[5] || id).trim().replace(/^["']|["']$/g, '');
+    if (!labels.has(id)) {
+      labels.set(id, lbl);
+      orderedIds.push(id);
+    } else if (lbl && lbl !== id) {
+      labels.set(id, lbl);
+    }
+    return id;
+  };
+
+  for (const line of lines) {
+    if (/^(?:graph|flowchart)\s+/i.test(line) || line.startsWith('%%')) continue;
+    const arrowParts = line.split(/\s*(?:--+>|==+>|-\.+->|-->)\s*(?:\|[^|]*\|\s*)?/);
+    if (arrowParts.length < 2) continue;
+    for (let i = 0; i < arrowParts.length - 1; i++) {
+      const fromId = registerNode(arrowParts[i]);
+      const toId = registerNode(arrowParts[i + 1]);
+      if (!fromId || !toId) continue;
+      const list = childrenMap.get(fromId) || [];
+      if (!list.includes(toId)) list.push(toId);
+      childrenMap.set(fromId, list);
+      hasParent.add(toId);
+    }
+  }
+
+  if (orderedIds.length === 0) return null;
+  const rootId = orderedIds.find((id) => !hasParent.has(id)) || orderedIds[0];
+  const visited = new Set<string>();
+
+  const buildNode = (id: string): MindMapNode => {
+    visited.add(id);
+    const kids = (childrenMap.get(id) || [])
+      .filter((kid) => !visited.has(kid))
+      .map((kid) => buildNode(kid));
+    return { label: labels.get(id) || id, children: kids };
+  };
+
+  const root = buildNode(rootId);
+  return {
+    type: 'mindmap',
+    title: root.label || 'Schéma de synthèse',
+    root,
+  };
 }
 
 /**
@@ -578,6 +763,11 @@ function cleanJsonString(str: string): string {
 function parseIndentedTextMindmap(content: string): MindMapSpec | null {
   const lines = content.split('\n').map((l) => l.trimEnd()).filter((l) => l.trim().length > 0);
   if (lines.length === 0) return null;
+
+  if (/^(?:graph|flowchart)\s+/im.test(content) || /-->/.test(content)) {
+    const flow = parseMermaidFlowchartToMindmap(content);
+    if (flow) return flow;
+  }
 
   let title = 'Carte Mentale';
   let rootNode: any = null;
@@ -653,7 +843,7 @@ function tryParseGraphicSpec(raw: string): GraphicSpec | null {
   if (!raw) return null;
   const trimmed = raw.trim();
 
-  // 1. Essai JSON standard ou nettoyé si commence par { ou contient des clés graphiques
+  // 1. Essai JSON standard ou nettoyé si contient une accolade ouvrante ou des clés graphiques
   if (
     trimmed.startsWith('{') ||
     trimmed.includes('"root"') ||
@@ -684,11 +874,12 @@ function tryParseGraphicSpec(raw: string): GraphicSpec | null {
 
   // 2. Essai Mermaid ou Liste indentée
   if (
-    trimmed.startsWith('mindmap') ||
+    /^(?:mindmap|graph|flowchart)\b/im.test(trimmed) ||
     trimmed.startsWith('- ') ||
     trimmed.startsWith('* ') ||
     trimmed.startsWith('#') ||
-    trimmed.includes('root((')
+    trimmed.includes('root((') ||
+    trimmed.includes('-->')
   ) {
     const mm = parseIndentedTextMindmap(trimmed);
     if (mm) return mm;

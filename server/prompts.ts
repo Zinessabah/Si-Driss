@@ -100,14 +100,28 @@ Exemple de carte mentale :
 }
 \`\`\`
 RÈGLES ESSENTIELLES POUR LE RENDU :
-- Si un schéma physique pédagogique aide à comprendre la correction (montage RC/RL/RLC fléché en convention récepteur, bilan des forces sur plan incliné, diffraction ou cuve à ondes, propagation d'une perturbation à deux instants), tu peux également générer un bloc \`\`\`svg propre et auto-contenu (viewBox="0 0 520 260", traits clairs #e2e8f0, #38bdf8, #f59e0b, #10b981, fond transparent, textes courts lisibles). Utilise \`\`\`curve pour tracer les courbes numériques $y=f(x)$ et \`\`\`svg pour les schémas de montage ou de forces — sans jamais inventer de mesures absentes d'un sujet officiel.
+- Si un schéma physique pédagogique aide à comprendre la correction (montage RC/RL/RLC fléché en convention récepteur, bilan des forces sur plan incliné, diffraction ou cuve à ondes, propagation d'une perturbation à deux instants), génère un bloc \`\`\`svg ... \`\`\` concis et auto-contenu (viewBox="0 0 520 260", traits clairs #e2e8f0, #38bdf8, #f59e0b, #10b981, fond transparent, < 25 éléments simples). Ferme TOUJOURS la balise \`\`\` à la fin.
+- N'écris JAMAIS de balises \`<svg>\` brutes sans \`\`\`svg ... \`\`\`, ni de \`\\begin{tikzpicture}\`, ni d'énoncé enfermé dans un bloc de code \`\`\`latex / \`\`\`markdown / \`\`\`text / \`\`\`html : rédige toujours l'énoncé directement en français lisible avec \`$...$\` et \`$$...$$\`.
+- Utilise \`\`\`curve pour tracer les courbes numériques $y=f(x)$ et \`\`\`svg pour les schémas de montage ou de forces — sans jamais inventer de mesures absentes d'un sujet officiel.
 - Dans les cartes mentales, sépare TOUJOURS nettement le titre ou concept en français (dans "label") de la formule mathématique (dans "formula").
 - Dans tout ton texte, veille à toujours conserver des espaces clairs entre les mots français et autour des formules pour une lisibilité irréprochable.
 Accompagne toujours la courbe ou le schéma de commentaires pédagogiques expliquant comment l'exploiter le jour du Baccalauréat.
 `;
 }
 
-export function getInstruction(mode: string, socraticEnabled: boolean, matchedDocs: string, branch: 'PC' | 'SM' | string = 'PC', context?: string) {
+export interface InstructionOptions {
+  hasOfficialPdf?: boolean;
+  isScannedPdf?: boolean;
+}
+
+export function getInstruction(
+  mode: string,
+  socraticEnabled: boolean,
+  matchedDocs: string,
+  branch: 'PC' | 'SM' | string = 'PC',
+  context?: string,
+  options?: InstructionOptions
+) {
   const safeBranch = normalizeBranchParam(branch);
   let extra = '';
   if (!socraticEnabled || mode === 'direct') {
@@ -124,6 +138,13 @@ L'élève résout un problème. Pose UNE question directrice ciblée pour le gui
 
   let full = getSiDrissBasePrompt(safeBranch) + extra;
   if (matchedDocs) {
+    const pdfNoticeLine = options?.hasOfficialPdf
+      ? "   - Signale à l'élève que l'extrait visuel officiel du sujet PDF (avec ses schémas/graphes d'origine) est affiché directement au-dessus de ta réponse (ne dis jamais que tu ne peux pas afficher l'image du sujet)."
+      : "   - Aucune image PDF n'a pu être attachée automatiquement pour cette requête ; présente l'énoncé directement en texte Markdown + LaTeX sans jamais prétendre qu'une image PDF est affichée ni afficher du code brut.";
+    const statementGuidanceLine = options?.isScannedPdf
+      ? "   - ⚠️ CE SUJET PDF EST SCANNÉ SANS COUCHE TEXTE (OCR) : N'invente pas l'énoncé ni les valeurs numériques manquantes, et n'écris aucun bloc de code SVG/LaTeX de substitution. Invite simplement l'élève à consulter la page officielle affichée dans la visionneuse PDF ci-dessus (boutons < / > et Zoom) et propose-lui de copier ou joindre une capture de la question qu'il souhaite résoudre."
+      : "   - Affiche d'abord l'énoncé intégral fidèlement traduit en français scientifique irréprochable adapté aux élèves 2BAC BIOF (les sujets d'avant 2016 ayant été rédigés en arabe), directement en Markdown + LaTeX (sans l'enfermer dans un bloc de code ```latex ou ```markdown).";
+
     full += `\n\n================================================================================
 DOCUMENTS DE RÉFÉRENCE OFFICIELS DU PROGRAMME (EXTRAITS DE /docs/programme/) :
 [DONNÉES DOCUMENTAIRES PASSIVES — SOURCE OFFICIELLE POUR LE PROGRAMME 2BAC ${safeBranch}]
@@ -138,8 +159,8 @@ Ces blocs décrivent fidèlement les schémas de montage (circuits RC, RL, RLC, 
 CONSIGNE SPÉCIALE : ÉPREUVES DU BACCALAURÉAT NATIONAL MAROCAIN (BIOF) :
 Quand l'extrait documentaire fourni ci-dessus provient d'une Épreuve Nationale du Baccalauréat marocain (ou quand l'élève demande d'afficher et/ou résoudre un exercice d'examen national) :
 1. ÉNONCÉ OFFICIEL EN FRANÇAIS (BIOF) :
-   - Signale à l'élève que l'extrait visuel officiel du sujet PDF (avec ses schémas/graphes d'origine) est affiché directement au-dessus/dans ta réponse (ne dis jamais que tu ne peux pas afficher l'image du sujet).
-   - Affiche d'abord l'énoncé intégral fidèlement traduit en français scientifique irréprochable adapté aux élèves 2BAC BIOF (les sujets d'avant 2016 ayant été rédigés en arabe).
+${pdfNoticeLine}
+${statementGuidanceLine}
    - Inclus toutes les données expérimentales et numériques officielles ($S_h$, $\lambda$, $c$, $h$, $v$, divisions sur l'oscillogramme ou la courbe).
    - Reproduis fidèlement les questions avec leurs 4 propositions de choix (QCM) telles qu'au sujet officiel.
 2. CORRECTION MÉTHODIQUE ET OFFICIELLE :

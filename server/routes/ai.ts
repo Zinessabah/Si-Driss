@@ -256,8 +256,11 @@ router.post('/chat/stream', async (req, res) => {
         if (att.text) searchTerms += ' ' + att.text.slice(0, 200);
       }
     }
-    const { contextText: matchedDocs, officialSource } = await searchLocalDocumentsDetailed(searchTerms, branch);
-    const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context);
+    const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(searchTerms, branch);
+    const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context, {
+      hasOfficialPdf: Boolean(officialSource?.isPdf),
+      isScannedPdf,
+    });
 
     // Setup SSE headers
     res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
@@ -328,8 +331,11 @@ router.post('/chat', async (req, res) => {
         if (att.text) searchTerms += ' ' + att.text.slice(0, 200);
       }
     }
-    const { contextText: matchedDocs, officialSource } = await searchLocalDocumentsDetailed(searchTerms, branch);
-    const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context);
+    const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(searchTerms, branch);
+    const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context, {
+      hasOfficialPdf: Boolean(officialSource?.isPdf),
+      isScannedPdf,
+    });
 
     const { text, model } = await generateUnifiedCompletion(aiConfig, enrichedMessages, fullInstruction, false);
 

@@ -10,6 +10,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import type { OfficialSourceRef } from '../types/chat';
+import { getAccessToken } from '../hooks/useApiKey';
 
 interface OfficialExamPageViewerProps {
   source: OfficialSourceRef;
@@ -75,8 +76,10 @@ export const OfficialExamPageViewer: React.FC<OfficialExamPageViewerProps> = ({
             pdfDocRef.current = null;
           }
 
+          const accessToken = getAccessToken();
           const loadingTask = pdfjsLib.getDocument({
             url: pdfUrl,
+            httpHeaders: accessToken ? { 'x-access-token': accessToken } : undefined,
             disableAutoFetch: true,
             disableStream: false,
           });

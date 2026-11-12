@@ -54,6 +54,7 @@ export interface DiscoveredFile {
 
 let documentsCache: CachedDoc[] = [];
 let lastCacheRefreshTime = 0;
+let inflightRefresh: Promise<ReturnType<typeof getLocalRagStatus>> | null = null;
 
 /**
  * Normalise le texte arabe (NFKC, suppression tashkeel, tatweel, unification des variantes d'alef, yeh et kaf).
@@ -99,13 +100,14 @@ export interface ParsedExamQuery {
   year: number | null;
   session: 'SN' | 'SR' | null;
   topic: ExamTopic | null;
+  exerciseNumber: number | null;
 }
 
 /**
- * Analyse la requête utilisateur pour identifier les demandes d'examens nationaux (année, session, thème).
+ * Analyse la requête utilisateur pour identifier les demandes d'examens nationaux (année, session, thème, numéro d'exercice).
  */
 export function parseExamQuery(query: string): ParsedExamQuery {
-  const q = query.toLowerCase();
+  const q = query.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
   // 1. Détection de l'année (2000 - 2029, incluant 2008-2009)
   const yearMatch = q.match(/\b(20[012]\d)\b/);
@@ -119,23 +121,32 @@ export function parseExamQuery(query: string): ParsedExamQuery {
     session = 'SR';
   }
 
-  // 3. Détection du thème disciplinaire
+  // 3. Détection du thème disciplinaire (sans accents grâce au NFD ci-dessus)
   let topic: ExamTopic | null = null;
-  if (/\b(onde|ondes|lumineus|sonor|optique|laser|diffraction|propagation|fibre)\b/i.test(q)) {
+  if (/\b(onde|ondes|ultrason|lumineus|sonor|optique|laser|diffraction|propagation|fibre)\b/i.test(q)) {
     topic = 'ondes';
-  } else if (/\b(nucleaire|nucl[eé]aire|radioactiv|d[eé]croissance|astate|polonium|uranium|radium|noyau)\b/i.test(q)) {
+  } else if (/\b(nucleaire|nucleaires|radioactiv|decroissance|astate|polonium|uranium|radium|noyau)\b/i.test(q)) {
     topic = 'nucleaire';
-  } else if (/\b(electr|[eé]lectricit[eé]|rlc|circuit|condensateur|bobine|dipole|modulation)\b/i.test(q)) {
+  } else if (/\b(electr|electricite|rlc|circuit|condensateur|bobine|dipole|modulation)\b/i.test(q)) {
     topic = 'electricite';
-  } else if (/\b(mecan|m[eé]canique|newton|chute|projectile|satellite|planete|oscillat|pendule)\b/i.test(q)) {
+  } else if (/\b(mecan|mecanique|newton|chute|projectile|satellite|planete|oscillat|pendule)\b/i.test(q)) {
     topic = 'mecanique';
   } else if (/\b(chimie|acide|base|titrage|dosage|ester|pile|electrolyse)\b/i.test(q)) {
     topic = 'chimie';
   }
 
-  const isExamQuery = !!(year || session || /\b(examen|national|bac|baccalaureat|epreuve|sujet)\b/i.test(q));
+  // 4. Détection éventuelle du numéro d'exercice (ex: "exercice 2", "ex II")
+  let exerciseNumber: number | null = null;
+  const exNumMatch = q.match(/\b(?:exercice|exercise|ex)\s*(?:n[°o]?\s*)?(1|2|3|4|5|iv|iii|ii|i|v)\b/i);
+  if (exNumMatch) {
+    const token = exNumMatch[1].toLowerCase();
+    const romanMap: Record<string, number> = { i: 1, ii: 2, iii: 3, iv: 4, v: 5 };
+    exerciseNumber = romanMap[token] || parseInt(token, 10) || null;
+  }
 
-  return { isExamQuery, year, session, topic };
+  const isExamQuery = !!(year || session || /\b(examen|national|bac|baccalaureat|epreuve|sujet|annale)\b/i.test(q));
+
+  return { isExamQuery, year, session, topic, exerciseNumber };
 }
 
 const EXERCISE_HEADING_RE =
@@ -237,12 +248,50 @@ function computeExamPageRange(
   return { pages: pages.length > 0 ? pages : [1], totalPages };
 }
 
+function findSectionByExerciseNumber(normBody: string, exerciseNumber: number): { start: number; end: number } | null {
+  const romanList = ['', 'I', 'II', 'III', 'IV', 'V'];
+  const arList = ['', 'الاول', 'الثاني', 'الثالث', 'الرابع', 'الخامس'];
+  const roman = romanList[exerciseNumber] || '';
+  const arOrd = arList[exerciseNumber] || '';
+  const numPattern = roman
+    ? `(?:${exerciseNumber}|${roman})`
+    : String(exerciseNumber);
+  const arPattern = arOrd ? `(?:${arOrd}|${exerciseNumber})` : String(exerciseNumber);
+
+  const targetRe = new RegExp(
+    `(?:^\\s*(?:EXERCICE|EXERCISE)\\s*${numPattern}\\b|^\\s*(?:التمرين\\s*${arPattern}|${arPattern}\\s*التمرين)(?:\\s|\\(|$))`,
+    'gim'
+  );
+
+  let matchIdx = -1;
+  for (const m of normBody.matchAll(targetRe)) {
+    if (m.index !== undefined && m.index > 950) {
+      matchIdx = m.index;
+      break;
+    } else if (m.index !== undefined && matchIdx === -1) {
+      matchIdx = m.index;
+    }
+  }
+  if (matchIdx === -1) return null;
+
+  const after = normBody.slice(matchIdx + 80);
+  const arOrdAll = '(?:الاول|الثاني|الثالث|الرابع|الخامس|[1-5])';
+  const nextRe = new RegExp(
+    `^\\s*(?:EXERCICE|EXERCISE)\\s*(?:[1-5]|[I]{1,3}|IV|V)\\b|^\\s*(?:التمرين\\s*${arOrdAll}|${arOrdAll}\\s*التمرين)(?:\\s|\\(|$)|===+\\s*TRANSCRIPTION\\s*VISUELLE`,
+    'im'
+  );
+  const nextMatch = after.search(nextRe);
+  const endIdx = nextMatch !== -1 ? matchIdx + 80 + nextMatch : Math.min(normBody.length, matchIdx + 3500);
+  return { start: matchIdx, end: endIdx };
+}
+
 /**
  * Extrait précisément l'énoncé d'un exercice et ses données visuelles (graphes/schémas décodés).
  */
 export function extractExamExercise(
   rawContent: string,
-  topic: ExamTopic | null
+  topic: ExamTopic | null,
+  exerciseNumber: number | null = null
 ): {
   exerciseText: string;
   visualText: string;
@@ -274,6 +323,23 @@ export function extractExamExercise(
     visualText = visionContent.slice(0, 2500);
   }
 
+  const { normalized: normBody, toRawIndex } = normalizeArabicWithIndexMap(bodyContent);
+
+  if (!topic && exerciseNumber) {
+    const byNum = findSectionByExerciseNumber(normBody, exerciseNumber);
+    if (byNum) {
+      const rawStart = toRawIndex[Math.min(byNum.start, toRawIndex.length - 1)] ?? 0;
+      const rawEnd = toRawIndex[Math.min(byNum.end, toRawIndex.length - 1)] ?? bodyContent.length;
+      return {
+        exerciseText: bodyContent.slice(rawStart, rawEnd).trim(),
+        visualText: visualText.trim(),
+        rawStart,
+        rawEnd,
+        matchedSection: true,
+      };
+    }
+  }
+
   if (!topic) {
     const fallbackEnd = Math.min(bodyContent.length, 3500);
     return {
@@ -284,8 +350,6 @@ export function extractExamExercise(
       matchedSection: false,
     };
   }
-
-  const { normalized: normBody, toRawIndex } = normalizeArabicWithIndexMap(bodyContent);
 
   const topicArPats: Record<ExamTopic, RegExp[]> = {
     ondes: [/الموجات/i, /موج/i],
@@ -648,53 +712,64 @@ function readDocumentFullText(doc: CachedDoc): string {
  * afin d'éviter les dépassements de délai HTTP (502/503) et les quotas (429).
  */
 export async function refreshDocumentsCache(force: boolean = false, _apiKey?: string) {
+  if (inflightRefresh && !force) {
+    return inflightRefresh;
+  }
+
   const now = Date.now();
-  if (!force && now - lastCacheRefreshTime < 4000) {
+  if (!force && now - lastCacheRefreshTime < 4000 && documentsCache.length > 0) {
     return getLocalRagStatus();
   }
-  lastCacheRefreshTime = now;
 
-  try {
-    if (!fs.existsSync(DOCS_DIR)) return getLocalRagStatus();
+  const runRefresh = async () => {
+    try {
+      if (!fs.existsSync(DOCS_DIR)) return getLocalRagStatus();
 
-    const discovered = discoverProgrammeFiles(DOCS_DIR);
-    const updatedCache: CachedDoc[] = [];
+      const discovered = discoverProgrammeFiles(DOCS_DIR);
+      const updatedCache: CachedDoc[] = [];
 
-    for (const file of discovered) {
-      const isPdf = file.name.toLowerCase().endsWith('.pdf');
+      for (const file of discovered) {
+        const isPdf = file.name.toLowerCase().endsWith('.pdf');
 
-      const existing = documentsCache.find(
-        (d) => d.relativePath === file.relativePath && d.mtime === file.mtime
-      );
+        const existing = documentsCache.find(
+          (d) => d.relativePath === file.relativePath && d.mtime === file.mtime
+        );
 
-      // Réutiliser le cache mémoire tant que le fichier et son sidecar n'ont pas changé
-      const sidecarFresh = isPdf ? isExtractedTextFresh(file.absolutePath, `${file.absolutePath}.extracted.txt`) : true;
-      if (existing && (!isPdf || sidecarFresh)) {
-        updatedCache.push(existing);
-        continue;
+        // Réutiliser le cache mémoire tant que le fichier et son sidecar n'ont pas changé
+        const sidecarFresh = isPdf ? isExtractedTextFresh(file.absolutePath, `${file.absolutePath}.extracted.txt`) : true;
+        if (existing && (!isPdf || sidecarFresh)) {
+          updatedCache.push(existing);
+          continue;
+        }
+
+        let content = '';
+        if (isPdf) {
+          const sidecarPath = `${file.absolutePath}.extracted.txt`;
+          content = await getFreshExtractedPdfText(file.absolutePath, sidecarPath);
+          // Libérer la boucle événementielle entre chaque PDF pour prévenir les timeouts HTTP 502/503
+          await sleep(5);
+        } else {
+          content = fs.readFileSync(file.absolutePath, 'utf-8');
+        }
+
+        if (content) {
+          updatedCache.push(buildCachedDoc(file, content));
+        }
       }
 
-      let content = '';
-      if (isPdf) {
-        const sidecarPath = `${file.absolutePath}.extracted.txt`;
-        content = await getFreshExtractedPdfText(file.absolutePath, sidecarPath);
-        // Libérer la boucle événementielle entre chaque PDF pour prévenir les timeouts HTTP 502/503
-        await sleep(5);
-      } else {
-        content = fs.readFileSync(file.absolutePath, 'utf-8');
-      }
-
-      if (content) {
-        updatedCache.push(buildCachedDoc(file, content));
-      }
+      documentsCache = updatedCache;
+      lastCacheRefreshTime = Date.now();
+    } catch (err) {
+      console.warn('Erreur rafraîchissement cache RAG local:', err);
     }
 
-    documentsCache = updatedCache;
-  } catch (err) {
-    console.warn('Erreur rafraîchissement cache RAG local:', err);
-  }
+    return getLocalRagStatus();
+  };
 
-  return getLocalRagStatus();
+  inflightRefresh = runRefresh().finally(() => {
+    inflightRefresh = null;
+  });
+  return inflightRefresh;
 }
 
 /**
@@ -711,10 +786,20 @@ export async function searchLocalDocuments(query: string, branch: string = 'PC')
  * Recherche contextuelle enrichie : retourne le texte RAG ET la référence PDF officielle
  * (nom de fichier + numéros de pages exactes) pour affichage visuel direct dans le chat.
  */
+function extractExamMetaFromFilename(fileName: string): { year: number | null; session: 'SN' | 'SR' | null } {
+  const lower = fileName.toLowerCase();
+  const yMatch = lower.match(/(20[012]\d)/);
+  const year = yMatch ? parseInt(yMatch[1], 10) : null;
+  let session: 'SN' | 'SR' | null = null;
+  if (/(?:^|[_\-\s])sn(?:\d|[_\-\s.]|$)|normale/.test(lower)) session = 'SN';
+  else if (/(?:^|[_\-\s])sr(?:\d|[_\-\s.]|$)|rattrapage/.test(lower)) session = 'SR';
+  return { year, session };
+}
+
 export async function searchLocalDocumentsDetailed(
   query: string,
   branch: string = 'PC'
-): Promise<{ contextText: string; officialSource?: OfficialSourceRef }> {
+): Promise<{ contextText: string; officialSource?: OfficialSourceRef; isScannedPdf?: boolean }> {
   try {
     await refreshDocumentsCache();
     if (!documentsCache.length) return { contextText: '' };
@@ -735,32 +820,54 @@ export async function searchLocalDocumentsDetailed(
           continue;
         }
 
-        let docScore = 0;
         const normName = doc.name.toLowerCase();
+        const isPdf = normName.endsWith('.pdf');
+        const isNonExamRef = /cadre[-_ ]?de[-_ ]?reference|cours/.test(normName);
 
-        // Correspondance sur l'année (ex: 2015, 2014, etc.)
-        if (parsed.year && normName.includes(String(parsed.year))) {
-          docScore += 60;
-        }
+        if (parsed.year) {
+          const meta = extractExamMetaFromFilename(doc.name);
+          const text = readDocumentFullText(doc);
+          const cleanLen = text.replace(/^--\s*\d+\s+of\s+\d+\s*--$/gm, '').trim().length;
+          let docScore = 0;
+          if (normName.includes(String(parsed.year))) docScore += 60;
+          if (parsed.session && meta.session === parsed.session) {
+            docScore += 45;
+          } else if (!parsed.session && meta.session === 'SN') {
+            docScore += 4;
+          }
+          if (cleanLen >= 300) docScore += 20;
+          if (text.includes(SCIENTIFIC_VISION_MARKER)) docScore += 8;
+          if (normName.includes(branchUpper.toLowerCase())) docScore += 10;
+          if (isPdf) docScore += 5;
 
-        // Correspondance sur la session (SN vs SR)
-        if (parsed.session === 'SN' && (normName.includes('sn') || normName.includes('normale'))) {
-          docScore += 30;
-        } else if (parsed.session === 'SR' && (normName.includes('sr') || normName.includes('rattrapage'))) {
-          docScore += 30;
-        }
+          if (docScore > bestScore) {
+            bestScore = docScore;
+            bestDoc = doc;
+          }
+        } else if (isPdf && !isNonExamRef && /(?:^|[_\-\s])(20\d\d|sn\d*|sr\d*)/i.test(normName)) {
+          // Aucune année précisée (ex: "affiche un exercice des ondes du national") :
+          // sélectionner un vrai sujet national PDF lisible contenant le thème demandé.
+          const meta = extractExamMetaFromFilename(doc.name);
+          const text = readDocumentFullText(doc);
+          const cleanLen = text.replace(/^--\s*\d+\s+of\s+\d+\s*--$/gm, '').trim().length;
+          let docScore = 10;
+          if (cleanLen >= 300) docScore += 40;
+          if (text.includes(SCIENTIFIC_VISION_MARKER)) docScore += 15;
+          if (parsed.session && meta.session === parsed.session) docScore += 25;
+          else if (!parsed.session && meta.session === 'SN') docScore += 8;
+          if (parsed.topic && extractExamExercise(text, parsed.topic).matchedSection) {
+            docScore += 30;
+          } else if (parsed.exerciseNumber && extractExamExercise(text, null, parsed.exerciseNumber).matchedSection) {
+            docScore += 20;
+          }
+          if (meta.year) {
+            docScore += Math.max(0, (meta.year - 2008) * 0.25);
+          }
 
-        // Bonus filière et type PDF
-        if (normName.includes(branchUpper.toLowerCase())) {
-          docScore += 10;
-        }
-        if (normName.endsWith('.pdf')) {
-          docScore += 5;
-        }
-
-        if (docScore > bestScore) {
-          bestScore = docScore;
-          bestDoc = doc;
+          if (docScore > bestScore) {
+            bestScore = docScore;
+            bestDoc = doc;
+          }
         }
       }
 
@@ -769,7 +876,8 @@ export async function searchLocalDocumentsDetailed(
         const fullContent = readDocumentFullText(bestDoc);
         const { exerciseText, visualText, rawStart, rawEnd, matchedSection } = extractExamExercise(
           fullContent,
-          parsed.topic
+          parsed.topic,
+          parsed.exerciseNumber
         );
         const isPdf = bestDoc.name.toLowerCase().endsWith('.pdf');
         const markerIdx = fullContent.indexOf(SCIENTIFIC_VISION_MARKER);
@@ -778,38 +886,44 @@ export async function searchLocalDocumentsDetailed(
           ? computeExamPageRange(bodyOnly, rawStart, rawEnd, matchedSection, parsed.topic)
           : { pages: [1], totalPages: 1 };
 
+        const meta = extractExamMetaFromFilename(bestDoc.name);
+        const resolvedYear = parsed.year ?? meta.year;
+        const resolvedSession = parsed.session ?? meta.session;
+
         const officialSource: OfficialSourceRef = {
           name: bestDoc.name,
           relativePath: bestDoc.relativePath,
           branch: bestDoc.branch,
-          year: parsed.year,
-          session: parsed.session,
+          year: resolvedYear,
+          session: resolvedSession,
           topic: parsed.topic,
           pages,
           totalPages,
           isPdf,
         };
 
+        const cleanTextLen = bodyOnly.replace(/^--\s*\d+\s+of\s+\d+\s*--$/gm, '').trim().length;
+        const isScannedPdf = isPdf && cleanTextLen < 150;
+
         if (exerciseText || visualText || isPdf) {
-          const sessionLabel = parsed.session === 'SN'
+          const sessionLabel = resolvedSession === 'SN'
             ? 'Session Normale'
-            : parsed.session === 'SR'
+            : resolvedSession === 'SR'
             ? 'Session de Rattrapage'
             : 'Épreuve Officielle';
 
-          const cleanTextLen = bodyOnly.replace(/^--\s*\d+\s+of\s+\d+\s*--$/gm, '').trim().length;
-          const scannedNotice = isPdf && cleanTextLen < 150
-            ? '\n[Note : Ce PDF officiel est un document scanné sans OCR ; ses pages officielles sont directement affichées visuellement à l’élève dans le chat. Ne jamais inventer de valeurs numériques non fournies.]\n'
+          const scannedNotice = isScannedPdf
+            ? '\n[IMPORTANT — PDF SCANNÉ SANS OCR : Ce fichier officiel ne contient pas de texte extractible ; ses pages officielles sont directement affichées visuellement à l’élève dans la visionneuse PDF au-dessus de ta réponse. Ne jamais inventer l’énoncé ni des valeurs numériques, et n’écris aucun code SVG/LaTeX de remplacement : invite l’élève à consulter la page affichée ou à joindre une capture de la question.]\n'
             : '';
 
           const examHeader = `[Cadre Officiel 2BAC ${branchUpper} - Épreuve Nationale du Baccalauréat marocain]\n` +
-            `Document officiel : ${bestDoc.name} | ${sessionLabel} ${parsed.year || ''} | Page(s) PDF ciblée(s) : ${pages.join(', ')}/${totalPages}\n` +
+            `Document officiel : ${bestDoc.name} | ${sessionLabel} ${resolvedYear || ''} | Page(s) PDF ciblée(s) : ${pages.join(', ')}/${totalPages}\n` +
             (parsed.topic ? `Discipline / Thème : ${parsed.topic.toUpperCase()}\n` : '');
 
           const contextText = `${examHeader}${scannedNotice}\n--- ÉNONCÉ OFFICIEL EXTRAIT DU SUJET NATIONAL ---\n${exerciseText}\n\n` +
             (visualText ? `--- DONNÉES VISUELLES & SCHÉMAS DÉCODÉS (TRANSCRIPTION OFFICIELLE SI DRISS) ---\n${visualText}\n` : '');
 
-          return { contextText, officialSource };
+          return { contextText, officialSource, isScannedPdf };
         }
       }
     }
