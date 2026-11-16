@@ -43,6 +43,12 @@ export const CURRICULUM: ChapterInfo[] = [
         units: '$\\lambda$ en $m$, $T$ en $s$, $N$ (ou $\\nu$) en $Hz$',
       },
       {
+        name: "Période à l'écran de l'oscilloscope",
+        latex: 'T = X \\cdot S_h \\quad \\iff \\quad f = \\frac{1}{T}',
+        units: '$X$ en divisions ($div$), $S_h$ en $s/div$ ($ms/div$, $\\mu s/div$), $T$ en $s$, $f$ en $Hz$',
+        condition: 'X = nombre de divisions horizontales par période, S_h = sensibilité horizontale (balayage)',
+      },
+      {
         name: 'Milieu dispersif',
         latex: 'v = f(N) \\neq \\text{cte}',
         units: 'La célérité dépend de la fréquence de l\'onde',
@@ -55,13 +61,15 @@ export const CURRICULUM: ChapterInfo[] = [
     ],
     nationalChecklist: [
       'Distinguer onde longitudinale (ex: son) et transversale (ex: corde, surface de l\'eau).',
-      'Calculer le retard temporel $\\tau$ graphiquement ou par calcul.',
+      'Calculer la période $T$ à partir de l\'écran de l\'oscilloscope ($T = X \\cdot S_h$) et en déduire la fréquence $f = 1/T$.',
+      'Calculer le retard temporel $\\tau$ graphiquement ou par calcul (sur oscilloscope : $\\tau = d_x \\cdot S_h$).',
       'Justifier si un milieu est dispersif ou non.',
       'Établir l\'état vibratoire de deux points (en phase si $d = k\\lambda$, en opposition de phase si $d = (2k+1)\\frac{\\lambda}{2}$).',
     ],
     classicPitfalls: [
       'Confondre retard temporel $\\tau$ et période temporelle $T$.',
-      'Oublier de convertir la sensibilité de balayage ou l\'échelle graphique en mètres/secondes.',
+      'Oublier de convertir la sensibilité de balayage $S_h$ (ex: $ms/div \\to 10^{-3} s/div$ ou $\\mu s/div \\to 10^{-6} s/div$).',
+      'Confondre la sensibilité horizontale $S_h$ (en temps/div) et la sensibilité verticale $S_v$ (en V/div).',
       'Affirmer qu\'il y a transport de matière (seule l\'énergie est transportée).',
     ],
     suggestedPrompt: 'Si Driss, comment déterminer graphiquement si deux points vibrent en phase ou en opposition de phase sur une onde périodique ?',
@@ -309,9 +317,10 @@ export const CURRICULUM: ChapterInfo[] = [
         units: '$T_0$ en secondes, $L$ en $H$, $C$ en $F$',
       },
       {
-        name: 'Pseudo-période',
-        latex: 'T \\approx T_0 = 2\\pi \\sqrt{LC} \\quad (\\text{pour faible amortissement})',
-        units: 'Mesurée graphiquement entre 2 sommets successifs',
+        name: 'Pseudo-période à l\'oscilloscope',
+        latex: 'T = X \\cdot S_h \\approx T_0 = 2\\pi \\sqrt{LC}',
+        units: '$X$ en divisions ($div$), $S_h$ balayage en $s/div$ ($ms/div$), $T$ en secondes ($s$)',
+        condition: 'Mesurée sur l\'oscillogramme : X divisions pour une oscillation complète (R faible)',
       },
       {
         name: 'Énergie totale du circuit',

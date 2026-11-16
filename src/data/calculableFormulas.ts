@@ -32,6 +32,47 @@ export interface CalculableFormula {
 export const CALCULABLE_FORMULAS: CalculableFormula[] = [
   // --- ONDES ---
   {
+    id: 'ondes-oscilloscope-periode',
+    name: "Période à l'oscilloscope (T = X · S_h)",
+    domain: 'Ondes',
+    latex: 'T = X \\cdot S_h \\quad \\iff \\quad f = \\frac{1}{T}',
+    targetSymbol: 'T',
+    targetUnit: 's',
+    description: "Calcul de la période T et de la fréquence f à partir de l'écran d'un oscilloscope (balayage horizontal S_h et nombre de divisions X).",
+    examNote: "Au National : convertissez S_h en s/div (ex: 0.5 ms/div = 0.5 × 10⁻³ s/div, ou 20 µs/div = 20 × 10⁻⁶ s/div).",
+    variables: [
+      { symbol: 'X_div', label: 'Nombre de divisions horizontales (X)', unit: 'div', defaultVal: 4, step: 0.5, min: 0.1 },
+      { symbol: 'Sh_ms', label: 'Sensibilité horizontale S_h (en ms/div)', unit: 'ms/div', defaultVal: 0.5, step: 0.05, min: 0.000001 }
+    ],
+    compute: (inputs) => {
+      const shSec = inputs.Sh_ms * 1e-3;
+      const tSec = inputs.X_div * shSec;
+      const fHz = tSec > 0 ? 1 / tSec : 0;
+      const tMs = tSec * 1000;
+      const tMicro = tSec * 1e6;
+      let formattedT = '';
+      if (tSec < 1e-4) {
+        formattedT = `${tMicro.toFixed(1)} µs (${tMs.toFixed(4)} ms)`;
+      } else if (tSec < 0.1) {
+        formattedT = `${tMs.toFixed(3)} ms (${tSec.toFixed(5)} s)`;
+      } else {
+        formattedT = `${tSec.toFixed(3)} s`;
+      }
+      const fFormatted = fHz >= 1e6
+        ? `${(fHz / 1e6).toFixed(2)} MHz`
+        : fHz >= 1000
+          ? `${(fHz / 1000).toFixed(2)} kHz`
+          : `${fHz.toFixed(1)} Hz`;
+      return {
+        value: tSec,
+        formatted: `${formattedT} — f = ${fFormatted}`,
+        scientific: `${tSec.toExponential(2).replace('e+', ' \\times 10^{').replace('e-', ' \\times 10^{-')}}\\text{ s}`,
+        unit: 's',
+        substitutionLatex: `T = X \\cdot S_h = ${inputs.X_div}\\text{ div} \\times (${inputs.Sh_ms}\\text{ ms/div}) = ${formattedT} \\implies f = \\frac{1}{T} = ${fFormatted}`
+      };
+    }
+  },
+  {
     id: 'ondes-celerite',
     name: "Célérité d'une onde (v = d / Δt)",
     domain: 'Ondes',

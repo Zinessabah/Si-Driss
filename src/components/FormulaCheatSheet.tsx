@@ -78,6 +78,7 @@ export const FormulaCheatSheet: React.FC<FormulaCheatSheetProps> = ({
 
   const findCalculableFormulaId = (fName: string, latex: string): string | null => {
     const lower = (fName + ' ' + latex).toLowerCase();
+    if (lower.includes('oscilloscope') || lower.includes('s_h') || lower.includes('x \\cdot s_h')) return 'ondes-oscilloscope-periode';
     if (lower.includes('célérité') || lower.includes('v = \\frac{d}')) return 'ondes-celerite';
     if (lower.includes('longueur') || lower.includes('\\lambda = \\frac{v}')) return 'ondes-longueur-onde';
     if (lower.includes('écart angulaire') || lower.includes('\\theta = \\frac{\\lambda}{a}')) return 'ondes-diffraction-fente';
@@ -293,6 +294,11 @@ export const FormulaCheatSheet: React.FC<FormulaCheatSheetProps> = ({
                               <div className="text-[10px] text-[#8e918f] font-mono">
                                 <MathView content={f.units} className="inline" />
                               </div>
+                              {f.condition && (
+                                <div className="text-[10px] text-amber-400/90 italic">
+                                  <MathView content={`📌 ${f.condition}`} className="inline" />
+                                </div>
+                              )}
                             </div>
 
                             <div className="flex items-center gap-1.5 shrink-0">
