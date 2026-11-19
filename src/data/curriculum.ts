@@ -346,10 +346,10 @@ export const CURRICULUM: ChapterInfo[] = [
   },
   {
     id: 'modulation-am',
-    title: 'Modulation et Démodulation d\'Amplitude (AM) - Spécifique PC',
+    title: 'Modulation et Démodulation d\'Amplitude (AM)',
     subject: 'Physique',
     domain: 'Électricité',
-    branches: ['PC'],
+    branches: ['PC', 'SM'],
     weightInExam: '1.5 à 2.0 pts',
     summary: 'Transmission d\'un signal informatif BF sur une onde porteuse HF. Circuit multiplieur, signal modulé $s(t)$, taux de modulation $m$, condition de bonne modulation, détection d\'enveloppe.',
     keyFormulas: [
@@ -493,7 +493,7 @@ export const CURRICULUM: ChapterInfo[] = [
     subject: 'Physique',
     domain: 'Mécanique',
     weightInExam: '3.0 à 3.5 pts',
-    summary: 'Mouvement dans un champ de pesanteur uniforme $\\vec{g}$ (équations horaires, trajectoire parabolique, portée, flèche), mouvement des satellites et planètes (lois de Kepler), particule dans un champ électrostatique $\\vec{E}$ et force de Lorentz magnétique $\\vec{B}$ (SM).',
+    summary: 'Mouvement dans un champ de pesanteur uniforme $\\vec{g}$ (équations horaires, trajectoire parabolique, portée, flèche), mouvement des satellites et planètes (lois de Kepler), déflexion magnétique de Lorentz $\\vec{B}$ (PC & SM) et champ électrostatique $\\vec{E}$ (exclusif SM).',
     keyFormulas: [
       {
         name: 'Accélération du projectile',
@@ -516,12 +516,12 @@ export const CURRICULUM: ChapterInfo[] = [
         units: '$G = 6.67\\times 10^{-11}\\ N\\cdot m^2\\cdot kg^{-2}$, $r = R_T + h$',
       },
       {
-        name: 'Force électrostatique',
+        name: 'Force électrostatique dans champ E (Exclusif SM)',
         latex: '\\vec{F}_e = q \\cdot \\vec{E} \\implies \\vec{a} = \\frac{q}{m} \\vec{E}',
-        units: '$E = \\frac{U}{d}$ en $V\\cdot m^{-1}$, $F_e$ en $N$',
+        units: '$E = \\frac{U}{d}$ en $V\\cdot m^{-1}$, $F_e$ en $N$ (au programme SM, absent du cadre PC)',
       },
       {
-        name: 'Force de Lorentz et rayon magnétique (SM)',
+        name: 'Force de Lorentz et rayon magnétique (PC & SM)',
         latex: '\\vec{F} = q \\vec{v} \\wedge \\vec{B} \\implies R = \\frac{m \\cdot v}{|q| \\cdot B}',
         units: 'Mouvement circulaire uniforme dans le plan orthogonal à $\\vec{B}$, $B$ en Tesla ($T$)',
       },
@@ -531,7 +531,7 @@ export const CURRICULUM: ChapterInfo[] = [
       'Intégrer les composantes de $\\vec{a}$ pour trouver $\\vec{v}(t)$ puis $\\vec{OM}(t)$ en justifiant les constantes d\'intégration.',
       'Calculer la portée $x_P$ ($y=0$) ou la flèche $y_S$ ($v_y = 0$).',
       'Démontrer que le mouvement d\'un satellite circulaire est uniforme ($a_t = dv/dt = 0$) et déduire la vitesse orbitale $v = \\sqrt{GM/r}$.',
-      'Démontrer que la trajectoire d\'une particule dans un champ magnétique uniforme $\\vec{B}$ est circulaire uniforme de rayon $R = \\frac{mv}{|q|B}$ (SM).',
+      'Démontrer que la trajectoire d\'une particule dans un champ magnétique uniforme $\\vec{B}$ est circulaire uniforme de rayon $R = \\frac{mv}{|q|B}$ (PC & SM).',
     ],
     classicPitfalls: [
       'Inverser $\\cos\\alpha$ et $\\sin\\alpha$ dans les composantes de $\\vec{v}_0$.',
@@ -542,11 +542,11 @@ export const CURRICULUM: ChapterInfo[] = [
   },
   {
     id: 'oscillateurs-mecaniques',
-    title: 'Systèmes mécaniques oscillants & Aspects énergétiques',
+    title: 'Systèmes mécaniques oscillants & Aspects énergétiques (PC & SM)',
     subject: 'Physique',
     domain: 'Mécanique',
     weightInExam: '3.0 à 4.0 pts',
-    summary: 'Pendule élastique horizontal/vertical, pendule de torsion, pendule pesant et pendule simple. Étude dynamique (équations différentielles) et énergétique (énergie cinétique, potentielle élastique/pesanteur, conservation de l\'énergie mécanique).',
+    summary: 'Pendule élastique horizontal/vertical, pendule de torsion, pendule pesant et pendule simple synchrone. Étude dynamique (équations différentielles) et énergétique (énergie cinétique, potentielle élastique/pesanteur/torsion, conservation de l\'énergie mécanique).',
     keyFormulas: [
       {
         name: 'Force de rappel élastique',
@@ -564,28 +564,33 @@ export const CURRICULUM: ChapterInfo[] = [
         units: '$C$ constante de torsion en $N\\cdot m\\cdot rad^{-1}$',
       },
       {
+        name: 'Pendule pesant & pendule simple',
+        latex: 'J_\\Delta \\ddot{\\theta} + m g d \\theta = 0 \\implies T_0 = 2\\pi \\sqrt{\\frac{J_\\Delta}{m g d}} \\quad (\\text{simple : } T_0 = 2\\pi\\sqrt{\\ell/g})',
+        units: 'Petites oscillations ($\\sin\\theta \\approx \\theta$)',
+      },
+      {
         name: 'Énergie mécanique',
-        latex: 'E_m = E_c + E_{pe} + E_{pp} = \\frac{1}{2} m \\dot{x}^2 + \\frac{1}{2} k x^2 + \\text{cte}',
-        units: 'Sans frottements : $E_m = \\text{constante} \\implies \\frac{dE_m}{dt} = 0$',
+        latex: 'E_m = E_c + E_p = \\text{constante} \\implies \\frac{dE_m}{dt} = 0',
+        units: 'Sans frottements',
       },
     ],
     nationalChecklist: [
-      'Établir l\'équation différentielle par 2 méthodes : dynamique (2ème loi de Newton) et énergétique ($dE_m/dt = 0$).',
-      'Exploiter les graphes $E_c(x), E_{pe}(x), E_m(x)$ pour trouver l\'amplitude $X_m$ et la vitesse maximale $V_{max}$.',
+      'Établir l\'équation différentielle par 2 méthodes : dynamique (2ème loi de Newton ou RFD) et énergétique ($dE_m/dt = 0$).',
+      'Exploiter les graphes $E_c, E_{p}, E_m$ pour trouver l\'amplitude et la vitesse maximale.',
       'Vérifier l\'expression de la période propre par analyse dimensionnelle.',
     ],
     classicPitfalls: [
-      'Confondre l\'énergie potentielle élastique $E_{pe} = \\frac{1}{2} k x^2 + C$ et de pesanteur $E_{pp} = mgz + C$.',
-      'Dérivée de $x^2$ par rapport au temps : attention $\\frac{d(x^2)}{dt} = 2 x \\dot{x}$ !',
+      'Confondre l\'énergie potentielle élastique $E_{pe} = \\frac{1}{2} k x^2 + C$, de pesanteur $E_{pp} = mgz + C$, et de torsion $E_{pt} = \\frac{1}{2} C \\theta^2$.',
+      'Dérivée de $x^2$ par rapport au temps : attention $\\frac{d(x^2)}{dt} = 2 x \\dot{x}$ et $\\frac{d(\\theta^2)}{dt} = 2 \\theta \\dot{\\theta}$ !',
     ],
     suggestedPrompt: 'Si Driss, comment démontrer l\'équation différentielle du pendule élastique en utilisant la conservation de l\'énergie mécanique ?',
   },
   {
     id: 'rotation-solide-axe-fixe',
-    title: 'Rotation d\'un solide indéformable autour d\'un axe fixe - Spécifique SM',
+    title: 'Rotation d\'un solide indéformable autour d\'un axe fixe (PC & SM)',
     subject: 'Physique',
     domain: 'Mécanique',
-    branches: ['SM'],
+    branches: ['PC', 'SM'],
     weightInExam: '2.5 à 3.5 pts',
     summary: 'Relation fondamentale de la dynamique en rotation autour d\'un axe fixe $\\Delta$ : $\\sum M_\\Delta(\\vec{F}) = J_\\Delta \\ddot{\\theta}$. Moment d\'une force $M_\\Delta(\\vec{F}) = \\pm F \\cdot d$, moment d\'inertie $J_\\Delta$, énergie cinétique de rotation $E_{c,rot} = \\frac{1}{2} J_\\Delta \\dot{\\theta}^2$, travail d\'un couple et théorème de l\'énergie cinétique.',
     keyFormulas: [
@@ -635,12 +640,12 @@ export const CURRICULUM: ChapterInfo[] = [
   },
   {
     id: 'oscillations-mecaniques-forcees',
-    title: 'Oscillations Mécaniques Forcées & Résonance Mécanique - Spécifique SM',
+    title: 'Oscillations Mécaniques Forcées & Résonance Mécanique (PC & SM)',
     subject: 'Physique',
     domain: 'Mécanique',
-    branches: ['SM'],
+    branches: ['PC', 'SM'],
     weightInExam: '2.0 à 3.0 pts',
-    summary: 'Système oscillant soumis à une force excitatrice périodique $F(t) = F_m \\cos(\\omega t)$. Excitateur et résonateur, régime transitoire et permanent. Phénomène de résonance mécanique d\'amplitude et de vitesse, influence du frottement fluide sur l\'acuité.',
+    summary: 'Système oscillant soumis à une force excitatrice périodique $F(t) = F_m \\cos(\\omega t)$. Excitateur et résonateur, régime transitoire et permanent. Phénomène de résonance mécanique d\'amplitude et de vitesse, influence de l\'amortissement sur l\'acuité.',
     keyFormulas: [
       {
         name: 'Équation différentielle en régime forcé',

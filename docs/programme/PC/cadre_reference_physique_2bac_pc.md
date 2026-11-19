@@ -127,22 +127,23 @@ Document de cadrage officiel du Ministère de l'Éducation Nationale pour l'Exam
 - **Entretien des oscillations** : Ajout d'un générateur de résistance négative délivrant $u_G(t) = R_0 \cdot i(t)$.
   - Condition d'oscillations sinusoïdales entretenues : $R_0 = R_T = R + r$.
 
-### D. SPÉCIFIQUE SCIENCES PHYSIQUES (PC) : Modulation d'Amplitude (AM)
-- **Principe** : Transmettre un signal informatif basse fréquence $s(t) = S_m \cos(2\pi f_s t)$ sur une onde porteuse haute fréquence $p(t) = P_m \cos(2\pi F_p t)$ avec $F_p \gg f_s$.
+### D. Modulation d'Amplitude (AM)
+- **Principe** : Transmettre un signal informatif basse fréquence $s(t) = S_m \cos(2\pi f_s t)$ sur une onde porteuse haute fréquence $p(t) = P_m \cos(2\pi F_p t)$ avec $F_p \gg f_s$. (Figure au cadre de référence officiel des deux filières PC et SM).
 - **Circuit multiplieur & Expression du signal modulé** :
   $$u(t) = k \cdot [s(t) + U_0] \cdot p(t) = A [1 + m \cos(2\pi f_s t)] \cos(2\pi F_p t)$$
   - $U_0$ : Tension continue de décalage (offset).
   - $m$ : Taux de modulation :
-    $$m = \frac{S_m}{U_0} = \frac{U_{max} - U_{min}}{U_{max} + U_{min}}$$
+    $$m = \frac{S_m}{U_0} = \frac{U_{\max} - U_{\min}}{U_{\max} + U_{\min}}$$
 - **Conditions de bonne modulation** :
   1. $m < 1$ (pas de surmodulation, évite l'inversion de phase).
   2. $F_p \ge 10 f_s$ (la fréquence porteuse est nettement supérieure à la fréquence du signal).
 - **Spectre de fréquences du signal modulé** : Composé de 3 raies fréquentielles :
   $$F_p - f_s, \quad F_p, \quad F_p + f_s \implies \text{Largeur de bande : } \Delta F = 2 f_s$$
-- **Démodulation d'amplitude (Récepteur)** :
+- **Démodulation d'amplitude (Récepteur AM)** :
   1. **Détection d'enveloppe** (diode + circuit RC parallèle) : Condition de bonne détection :
      $$T_p \ll \tau = RC < T_s \iff \frac{1}{F_p} \ll RC < \frac{1}{f_s}$$
-  2. **Filtre éliminateur de la composante continue** (circuit RC série passe-haut) : Bloque la tension $U_0$ pour ne restituer que le signal informatif $s(t)$.
+  2. **Filtre éliminateur de la composante continue** (circuit RC série passe-haut) : Bloque la tension continue $U_0$ pour restituer le signal informatif $s(t)$.
+  3. **Circuit bouchon LC parallèle** (sélection de la station par résonance) : $f_0 = \frac{1}{2\pi\sqrt{LC}} = F_p$.
 
 ---
 
@@ -167,8 +168,11 @@ Document de cadrage officiel du Ministère de l'Éducation Nationale pour l'Exam
 - **Méthode d'Euler (Résolution numérique pas à pas)** :
   $$a_i = A - B v_i^n \quad \text{puis} \quad v_{i+1} = v_i + a_i \cdot \Delta t$$
   (Le pas de calcul $\Delta t$ doit respecter $\Delta t \ll \tau$).
+- **Mouvement sur plan horizontal et plan incliné** :
+  - Décomposition du poids et de la réaction du support : $\vec{R} = \vec{R}_N + \vec{f}$.
+  - Coefficient de frottement : $\tan\varphi = \frac{f}{R_N}$.
 
-### B. Mouvements plans : Projectiles & Champ électrique
+### B. Mouvements de Projectiles & Déflexion Magnétique (Champ B)
 - **Mouvement d'un projectile dans un champ de pesanteur uniforme $\vec{g}$** :
   - Équations horaires de la vitesse : $v_x(t) = v_0 \cos\alpha$ et $v_y(t) = -gt + v_0 \sin\alpha$.
   - Équations horaires de position :
@@ -177,12 +181,18 @@ Document de cadrage officiel du Ministère de l'Éducation Nationale pour l'Exam
     $$y(x) = -\frac{g}{2 v_0^2 \cos^2\alpha} x^2 + (\tan\alpha) x + y_0$$
   - Flèche (sommet $S$, $v_y = 0$) : $y_S = \frac{v_0^2 \sin^2\alpha}{2g} + y_0$.
   - Portée (impact $y_P = 0$) : $x_P = \frac{v_0^2 \sin(2\alpha)}{g}$ (si $y_0 = 0$).
-- **Mouvement d'une particule chargée dans un champ électrique uniforme $\vec{E}$** :
-  - Force électrostatique : $\vec{F}_e = q \cdot \vec{E}$ avec $E = \frac{U}{d}$.
-  - Accélération : $\vec{a} = \frac{q}{m} \vec{E}$.
+- **Particule chargée dans un champ magnétique uniforme $\vec{B}$ (Force de Lorentz - Commun PC et SM)** :
+  - Force de Lorentz magnétique : $\vec{F} = q \cdot (\vec{v} \wedge \vec{B})$ avec $\vec{v}_0 \perp \vec{B}$.
+  - Propriété fondamentale : $\vec{F} \perp \vec{v} \implies$ puissance mécanique $\mathcal{P} = \vec{F} \cdot \vec{v} = 0 \implies$ travail nul $\implies$ l'énergie cinétique est constante, le mouvement est donc **uniforme** ($v = v_0 = \text{cte}$).
+  - Accélération normale dans le repère de Frenet : $a_n = \frac{v^2}{R} = \frac{|q| v B}{m}$.
+  - Trajectoire circulaire plane de rayon :
+    $$R = \frac{m \cdot v}{|q| \cdot B}$$
+  - Période et vitesse angulaire : $T = \frac{2\pi R}{v} = \frac{2\pi m}{|q| B}$.
+  - Déflexion magnétique : mesure sur écran distant $D_m \approx \frac{q B L L'}{m v}$.
+  - ⚠️ *Précision du Cadre de Référence Officiel* : Le champ électrique uniforme $\vec{E}$ ($\vec{F} = q\vec{E}$, $E = U/d$, déflexion électrostatique) est au programme des **Sciences Mathématiques (SM)** mais **ne figure pas au cadre de référence de Sciences Physiques (PC)**.
 
 ### C. Mouvement des Satellites et des Planètes (Lois de Kepler)
-- **Les 3 Lois de Kepler** :
+- **Les 3 Lois de Kepler (Communes PC et SM)** :
   1. Loi des orbites : Les orbites des planètes sont des ellipses dont le Soleil occupe l'un des foyers.
   2. Loi des aires : Le rayon vecteur balaie des aires égales pendant des durées égales.
   3. Loi des périodes : Le rapport du carré de la période de révolution au cube du demi-grand axe est constant : $\frac{T^2}{a^3} = \text{cte}$.
@@ -190,15 +200,48 @@ Document de cadrage officiel du Ministère de l'Éducation Nationale pour l'Exam
   - Force gravitationnelle centripète : $F = G \frac{M \cdot m}{r^2} = m \frac{v^2}{r}$.
   - Vitesse orbitale : $v = \sqrt{\frac{G M}{r}}$.
   - Période orbitale : $T = \frac{2\pi r}{v} = 2\pi \sqrt{\frac{r^3}{G M}} \implies \frac{T^2}{r^3} = \frac{4\pi^2}{G M}$.
-  - Satellite géostationnaire : Période $T = 24\text{ h} = 86400\text{ s}$, orbite circulaire dans le plan équatorial, tournant dans le même sens que la Terre.
+  - Satellite géostationnaire : Période $T \approx 86164\text{ s}$ ($\approx 24\text{ h}$), orbite circulaire équatoriale, sens de rotation identique à la rotation propre de la Terre.
 
-### D. Systèmes Mécaniques Oscillants (Pendule élastique horizontal/vertical)
-- Force de rappel exercée par le ressort : $\vec{T} = -k \cdot x \cdot \vec{i}$.
-- **Équation différentielle du pendule élastique non amorti** :
-  $$\ddot{x} + \frac{k}{m} x = 0 \iff \ddot{x} + \omega_0^2 x = 0 \implies T_0 = 2\pi\sqrt{\frac{m}{k}}$$
-- **Énergie mécanique du pendule élastique** :
-  $$E_m = E_c + E_{pe} = \frac{1}{2} m \dot{x}^2 + \frac{1}{2} k x^2 = \text{constante} \quad (\text{sans frottements})$$
-  - Vitesse maximale au passage par l'équilibre ($x = 0$) : $V_{max} = X_m \sqrt{\frac{k}{m}} = X_m \cdot \omega_0$.
+### D. Rotation d'un solide autour d'un axe fixe ($\Delta$) (Commun PC et SM)
+- **Repérage angulaire & Cinématique** :
+  - Abscisse angulaire $\theta(t)$, vitesse angulaire $\dot{\theta} = \omega = \frac{d\theta}{dt}$, accélération angulaire $\ddot{\theta} = \alpha = \frac{d^2\theta}{dt^2}$.
+  - Relations avec les grandeurs linéaires d'un point à distance $r$ de l'axe :
+    $$s(t) = r \cdot \theta(t), \quad v(t) = r \cdot \dot{\theta}(t), \quad a_T = r \cdot \ddot{\theta}(t), \quad a_N = r \cdot \dot{\theta}^2(t) = \frac{v^2}{r}$$
+- **Relation fondamentale de la dynamique en rotation (RFD)** :
+  $$\sum M_\Delta(\vec{F}_{\text{ext}}) = J_\Delta \cdot \ddot{\theta}$$
+  - $J_\Delta$ : Moment d'inertie du solide par rapport à l'axe $\Delta$ (en $\text{kg}\cdot\text{m}^2$).
+  - Mouvement de rotation uniformément varié ($\ddot{\theta} = \text{cte}$) :
+    $$\dot{\theta}(t) = \ddot{\theta} \cdot t + \dot{\theta}_0 \quad \text{et} \quad \theta(t) = \frac{1}{2}\ddot{\theta} \cdot t^2 + \dot{\theta}_0 \cdot t + \theta_0$$
+    $$\dot{\theta}_2^2 - \dot{\theta}_1^2 = 2 \ddot{\theta} (\theta_2 - \theta_1)$$
+- **Système couplé translation-rotation** :
+  - Couplage d'un solide en translation (masse $m$) et d'une poulie en rotation (moment d'inertie $J_\Delta$) par un fil inextensible et sans masse.
+  - Condition de non-glissement du fil sur la poulie : $a = r \cdot \ddot{\theta}$.
+
+### E. Systèmes Mécaniques Oscillants & Pendules (Commun PC et SM)
+- **1. Pendule élastique (Solide-Ressort horizontal, incliné ou vertical)** :
+  - Force de rappel : $\vec{T} = -k x \vec{i}$.
+  - Équation différentielle : $\ddot{x} + \frac{k}{m} x = 0 \implies T_0 = 2\pi\sqrt{\frac{m}{k}}$.
+  - Énergie mécanique : $E_m = \frac{1}{2} m \dot{x}^2 + \frac{1}{2} k x^2 = \text{constante}$.
+- **2. Pendule de torsion (Présent au cadre officiel PC et SM)** :
+  - Couple de rappel exercé par le fil métallique : $M_c = -C \cdot \theta$ ($C$ en $\text{N}\cdot\text{m}\cdot\text{rad}^{-1}$).
+  - Équation différentielle non amortie :
+    $$J_\Delta \ddot{\theta} + C \theta = 0 \implies T_0 = 2\pi\sqrt{\frac{J_\Delta}{C}}$$
+  - Énergie potentielle de torsion : $E_{pt} = \frac{1}{2} C \theta^2 \implies E_m = \frac{1}{2} J_\Delta \dot{\theta}^2 + \frac{1}{2} C \theta^2 = \text{cte}$.
+- **3. Pendule pesant & Pendule simple synchrone (Présent au cadre officiel PC et SM)** :
+  - Pendule pesant : Solide en rotation autour d'un axe horizontal $\Delta$ ne passant pas par son centre de gravité $G$ ($d = OG$).
+  - Moment du poids : $M_\Delta(\vec{P}) = -m g d \sin\theta$.
+  - Équation différentielle aux faibles oscillations ($\sin\theta \approx \theta$ en rad) :
+    $$J_\Delta \ddot{\theta} + m g d \theta = 0 \implies T_0 = 2\pi\sqrt{\frac{J_\Delta}{m g d}}$$
+  - Pendule simple synchrone de longueur $\ell$ ($J_\Delta = m \ell^2$, $d = \ell$) :
+    $$T_0 = 2\pi\sqrt{\frac{\ell}{g}}$$
+- **4. Résonance mécanique (Présent au cadre officiel PC et SM)** :
+  - Excitateur imposant des oscillations périodiques à un résonateur.
+  - Phénomène de résonance mécanique : amplitude maximale obtenue pour une fréquence d'excitation proche de la fréquence propre.
+  - Rôle de l'amortissement : abaisse le pic de résonance et décale légèrement la fréquence de résonance.
+- **5. Aspects énergétiques des oscillateurs** :
+  - Travail d'une force de rappel élastique : $W = -\Delta E_{pe} = \frac{1}{2} k (x_1^2 - x_2^2)$.
+  - Travail d'un couple de torsion : $W = -\Delta E_{pt} = \frac{1}{2} C (\theta_1^2 - \theta_2^2)$.
+  - Travail du poids : $W = -\Delta E_{pp} = m g d (\cos\theta_2 - \cos\theta_1)$.
 
 ---
 

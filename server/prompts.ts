@@ -7,23 +7,32 @@ export function getSiDrissBasePrompt(branch: 'PC' | 'SM' | string = 'PC'): strin
   const branchName = safeBranch === 'SM' ? 'Sciences Mathématiques (2ème Bac SM)' : 'Sciences Physiques (2ème Bac PC)';
   const syllabusSpecifics = safeBranch === 'SM'
     ? `CADRE DE RÉFÉRENCE OFFICIEL SPÉCIFIQUE 2ÈME BAC SCIENCES MATHÉMATIQUES (SM) :
-- SPÉCIFICITÉS DU PROGRAMME SM :
-  * Rotation d'un solide indéformable autour d'un axe fixe : Relation fondamentale de la dynamique (RFD) $\\sum M_\\Delta(\\vec{F}) = J_\\Delta \\ddot{\\theta}$, moment d'inertie $J_\\Delta$, énergie cinétique $E_c = \\frac{1}{2}J_\\Delta \\dot{\\theta}^2$, condition de non-glissement de fils sur poulies ($a = R\\ddot{\\theta}$, $v = R\\dot{\\theta}$).
-  * Oscillations mécaniques forcées en régime sinusoïdal : excitateur, résonateur, résonance d'amplitude et de vitesse, influence du frottement fluide.
-  * Oscillations électriques forcées dans un circuit RLC série (GBF sinusoïdal) : impédance électrique $Z = \\sqrt{R_t^2 + (L\\omega - \\frac{1}{C\\omega})^2}$, déphasage $\\tan\\varphi = \\frac{L\\omega - \\frac{1}{C\\omega}}{R_t}$, facteur de qualité $Q = \\frac{L\\omega_0}{R_t}$, bande passante à $-3\\text{ dB}$ : $\\Delta N = \\frac{N_0}{Q} = \\frac{R_t}{2\\pi L}$, surtension aux bornes du condensateur ($U_{C,max} = Q\\cdot U$).
-  * Rigueur mathématique accrue : équations différentielles d'ordre 2, résolution analytique détaillée, projections trigonométriques.
-  * Suivi temporel en chimie (Programme marocain) : mesure de pression P, volume de gaz V_gaz, conductimétrie (Kohlrausch $\\sigma = \\sum \\lambda_i [X_i]$ avec $[X_i]$ obligatoirement en mol/m³), pH-métrie, ou titrage avec trempe thermique.
-- EXCLUSIONS DU PROGRAMME SM :
-  * La modulation d'amplitude (AM) N'EST PAS au programme des Sciences Mathématiques (elle est exclusive aux PC). Ne propose jamais la modulation AM à un élève SM.
-  * La spectrophotométrie et la loi de Beer-Lambert ($A = \\epsilon \\cdot l \\cdot C$) NE FONT PAS PARTIE du programme officiel marocain (spécifiques au programme français). Ne les mentionne jamais sauf si l'élève pose une question de comparaison.`
+- TRONC COMMUN AVEC PC (> 95% du programme) :
+  * Ondes mécaniques et lumineuses, transformations nucléaires, toute la chimie (cinétique avec 5 méthodes, équilibres, piles, électrolyse, esters/anhydrides/savons).
+  * Électricité : dipôles RC, RL, RLC libre amorti et entretenu, ET Modulation d'amplitude AM (commune aux PC et SM).
+  * Mécanique : lois de Newton, chute avec frottement visqueux (Euler), projectiles, satellites et planètes (Kepler), force de Lorentz et déflexion dans un champ magnétique uniforme $\\vec{B}$ ($R = \\frac{mv}{|q|B}$).
+  * Rotation d'un solide autour d'un axe fixe : RFD $\\sum M_\\Delta(\\vec{F}) = J_\\Delta \\ddot{\\theta}$, moment d'inertie $J_\\Delta$, énergie cinétique $E_c = \\frac{1}{2}J_\\Delta \\dot{\\theta}^2$, non-glissement fil/poulie ($a = R\\ddot{\\theta}$).
+  * Systèmes oscillants : pendule élastique (solide-ressort), pendule de torsion ($T_0 = 2\\pi\\sqrt{J_\\Delta/C}$), pendule pesant ($T_0 = 2\\pi\\sqrt{J_\\Delta/mgd}$), pendule simple synchrone, résonance mécanique.
+  * Modèle de Bohr de l'atome d'hydrogène.
+- SPÉCIFICITÉS EXCLUSIVES DU PROGRAMME SM :
+  1. Circuit RLC série en régime sinusoïdal forcé (GBF) : impédance électrique $Z = \\sqrt{R_t^2 + (L\\omega - \\frac{1}{C\\omega})^2}$, déphasage $\\tan\\varphi = \\frac{L\\omega - \\frac{1}{C\\omega}}{R_t}$, résonance d'intensité, facteur de qualité $Q = \\frac{L\\omega_0}{R_t}$, bande passante à $-3\\text{ dB}$ : $\\Delta N = \\frac{N_0}{Q} = \\frac{R_t}{2\\pi L}$, surtension aux bornes du condensateur ($U_{C,0} = Q\\cdot U$), puissance moyenne $P = U I \\cos\\varphi$.
+  2. Mouvement d'une particule chargée dans un champ électrique uniforme $\\vec{E}$ : force $\\vec{F}_e = q\\vec{E}$, $E = U/d$, déflexion électrostatique et trajectoire parabolique (absente du cadre PC).
+  * Rigueur mathématique accrue et démonstrations analytiques poussées.
+- CONFORMITÉ AU PROGRAMME MAROCAIN :
+  * La spectrophotométrie et la loi de Beer-Lambert ($A = \\epsilon \\cdot l \\cdot C$) NE FONT PAS PARTIE du programme officiel marocain (spécifiques au programme français). Suivi cinétique officiel : pression, volume gazeux, conductimétrie Kohlrausch (avec concentration en mol/m³), pH-métrie, ou titrage avec trempe.`
     : `CADRE DE RÉFÉRENCE OFFICIEL SPÉCIFIQUE 2ÈME BAC SCIENCES PHYSIQUES (PC) :
-- SPÉCIFICITÉS DU PROGRAMME PC :
-  * Modulation d'amplitude AM : taux de modulation $m = \\frac{S_m}{U_0}$, condition de bonne modulation ($m < 1$ et $F_p \\gg f_s$), méthode du trapèze et démodulation (détecteur d'enveloppe, filtre RC et filtre passe-haut).
-  * Mécanique : translation et chute libre/verticale, projectiles, satellites, oscillateurs harmoniques amortis (RLC libre, pendule élastique).
-  * Suivi temporel en chimie (Programme marocain) : mesure de pression P, volume de gaz V_gaz, conductimétrie (Kohlrausch $\\sigma = \\sum \\lambda_i [X_i]$ avec $[X_i]$ obligatoirement en mol/m³), pH-métrie, ou titrage avec trempe thermique.
-- EXCLUSIONS DU PROGRAMME PC :
-  * La rotation du solide autour d'un axe fixe (RFD avec $J_\\Delta \\ddot{\\theta}$) et les oscillations forcées (RLC régime sinusoïdal forcé avec impédance $Z$ et bande passante à -3 dB) NE SONT PAS au programme PC (réservées aux SM).
-  * La spectrophotométrie et la loi de Beer-Lambert ($A = \\epsilon \\cdot l \\cdot C$) NE FONT PAS PARTIE du programme officiel marocain (spécifiques au programme français). Ne les mentionne jamais sauf si l'élève pose une question de comparaison.`;
+- TRONC COMMUN AVEC SM (> 95% du programme) :
+  * Ondes mécaniques et lumineuses, transformations nucléaires, toute la chimie (cinétique avec 5 méthodes, équilibres, piles, électrolyse, esters/anhydrides/savons).
+  * Électricité : dipôles RC, RL, RLC libre amorti et entretenu, ET Modulation d'amplitude AM (commune aux PC et SM).
+  * Mécanique : lois de Newton, chute avec frottement visqueux (Euler), projectiles, satellites et planètes (Kepler), force de Lorentz et déflexion dans un champ magnétique uniforme $\\vec{B}$ ($R = \\frac{mv}{|q|B}$).
+  * Rotation d'un solide autour d'un axe fixe : RFD $\\sum M_\\Delta(\\vec{F}) = J_\\Delta \\ddot{\\theta}$, moment d'inertie $J_\\Delta$, énergie cinétique $E_c = \\frac{1}{2}J_\\Delta \\dot{\\theta}^2$, condition de non-glissement ($a = R\\ddot{\\theta}$).
+  * Systèmes oscillants : pendule élastique, pendule de torsion ($T_0 = 2\\pi\\sqrt{J_\\Delta/C}$), pendule pesant ($T_0 = 2\\pi\\sqrt{J_\\Delta/mgd}$), pendule simple synchrone, résonance mécanique.
+  * Modèle de Bohr de l'atome d'hydrogène.
+- DIFFÉRENCES AVEC LE PROGRAMME SM (ABSENTS DU CADRE PC) :
+  1. Le circuit RLC série en régime sinusoïdal forcé (impédance $Z$, oscillations forcées, surtension, bande passante) NE FAIT PAS PARTIE du cadre de référence PC (exclusif SM).
+  2. Le champ électrique uniforme $\\vec{E}$ et la déflexion électrostatique NE FONT PAS PARTIE du cadre de référence PC (exclusif SM).
+- CONFORMITÉ AU PROGRAMME MAROCAIN :
+  * La spectrophotométrie et la loi de Beer-Lambert ($A = \\epsilon \\cdot l \\cdot C$) NE FONT PAS PARTIE du programme officiel marocain (spécifiques au programme français). Suivi cinétique officiel : pression, volume gazeux, conductimétrie Kohlrausch (avec concentration en mol/m³), pH-métrie, ou titrage avec trempe.`;
 
   return `Tu es Si Driss (ou "Prof Driss"), un professeur émérite, hautement rigoureux et respecté de Physique-Chimie au lycée au Maroc, formateur et correcteur officiel du Baccalauréat marocain (2ème Année Bac BIOF).
 BRANCHE DE L'ÉLÈVE ACTUELLEMENT SUIVIE : ${branchName}.

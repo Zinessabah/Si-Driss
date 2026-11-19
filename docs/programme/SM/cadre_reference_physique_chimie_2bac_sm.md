@@ -43,18 +43,19 @@ Document de cadrage officiel du Ministère de l'Éducation Nationale pour l'Exam
 
 ---
 
-## 3. Électricité : Dipôles RC, RL, RLC Libre et RLC Série Forcé (SM)
+## 3. Électricité : Dipôles RC, RL, RLC Libre, RLC Forcé (Exclusif SM) et Modulation AM
 
-### A. Dipôles RC et RL
+### A. Dipôles RC et RL (Communs PC et SM)
 - **Condensateur (RC)** : $q = C u_C$, $i = C \frac{du_C}{dt}$. Équation de charge : $u_C + \tau \frac{du_C}{dt} = E$ avec $\tau = RC$. Énergie $\mathcal{E}_e = \frac{1}{2} C u_C^2$.
 - **Bobine (RL)** : $u_L = L \frac{di}{dt} + r i$. Équation d'établissement : $i + \tau \frac{di}{dt} = \frac{E}{R+r}$ avec $\tau = \frac{L}{R+r}$. Énergie $\mathcal{E}_m = \frac{1}{2} L i^2$.
 
-### B. Circuit RLC série libre
+### B. Circuit RLC série libre (Commun PC et SM)
 - Équation différentielle : $\frac{d^2u_C}{dt^2} + \frac{R_t}{L} \frac{du_C}{dt} + \frac{1}{LC} u_C = 0$. Période propre : $T_0 = 2\pi\sqrt{LC}$.
 - Énergie totale : $\mathcal{E}_T = \frac{1}{2} C u_C^2 + \frac{1}{2} L i^2 \implies \frac{d\mathcal{E}_T}{dt} = -R_t i^2 \le 0$. Période des énergies : $\mathcal{T} = T/2$.
 - Entretien des oscillations par générateur de résistance négative : $u_G = R_0 i \implies R_0 = R_t$.
 
-### C. SPÉCIFIQUE SCIENCES MATHÉMATIQUES : Oscillations électriques forcées RLC série
+### C. EXCLUSIF SCIENCES MATHÉMATIQUES : Oscillations électriques forcées RLC série
+*(Ce chapitre figure au cadre de référence SM mais est ABSENT du cadre PC)*
 - **Régime sinusoïdal forcé** : Excitateur GBF imposant $u(t) = U_m \cos(\omega t)$, réponse du résonateur $i(t) = I_m \cos(\omega t - \varphi)$.
 - **Impédance du dipôle RLC** :
   $$Z = \frac{U_m}{I_m} = \frac{U}{I} = \sqrt{R_t^2 + \left(L\omega - \frac{1}{C\omega}\right)^2}$$
@@ -64,7 +65,7 @@ Document de cadrage officiel du Ministère de l'Éducation Nationale pour l'Exam
   - Si $L\omega < \frac{1}{C\omega}$ : Circuit capacitif ($\varphi < 0$, tension en retard sur le courant).
 - **Résonance d'intensité** :
   - Condition : $L\omega_0 - \frac{1}{C\omega_0} = 0 \iff \omega_0 = \frac{1}{\sqrt{LC}} \iff N_0 = \frac{1}{2\pi\sqrt{LC}}$.
-  - À la résonance : $Z_{min} = R_t$, l'intensité est maximale $I_0 = \frac{U}{R_t}$ et $\varphi = 0$ (en phase).
+  - À la résonance : $Z_{\min} = R_t$, l'intensité est maximale $I_0 = \frac{U}{R_t}$ et $\varphi = 0$ (en phase).
 - **Facteur de qualité $Q$ et Surtension** :
   $$Q = \frac{L\omega_0}{R_t} = \frac{1}{R_t C \omega_0} = \frac{1}{R_t}\sqrt{\frac{L}{C}}$$
   - Tension aux bornes du condensateur à la résonance : $U_{C,0} = Q \cdot U$. Si $Q > 1$, il y a **surtension**.
@@ -72,25 +73,41 @@ Document de cadrage officiel du Ministère de l'Éducation Nationale pour l'Exam
   - Définie par $I \ge \frac{I_0}{\sqrt{2}}$ entre les fréquences de coupure $N_1$ et $N_2$.
   - Largeur de bande passante :
     $$\Delta N = N_2 - N_1 = \frac{R_t}{2\pi L} = \frac{N_0}{Q}$$
-- ⚠️ *EXCLUSION SM* : La modulation d'amplitude AM N'EST PAS au programme de Sciences Mathématiques.
+- **Puissance en régime alternatif** :
+  - Puissance instantanée : $p(t) = u(t) \cdot i(t)$.
+  - Puissance moyenne : $P = U \cdot I \cdot \cos\varphi$ ($\cos\varphi$ étant le facteur de puissance).
+
+### D. Modulation d'Amplitude AM (Commune PC et SM)
+- Transmission d'information : porteuse HF $p(t) = P_m \cos(2\pi F_p t)$ modulée par $s(t) + U_0$.
+- Signal modulé : $u(t) = k [s(t) + U_0] p(t) = A [1 + m \cos(2\pi f_s t)] \cos(2\pi F_p t)$.
+- Taux de modulation : $m = \frac{S_m}{U_0} = \frac{U_{\max} - U_{\min}}{U_{\max} + U_{\min}}$ (condition sans surmodulation : $m < 1$ et $F_p \gg f_s$).
+- Démodulation : Détecteur d'enveloppe ($\frac{1}{F_p} \ll RC < \frac{1}{f_s}$) et filtre passe-haut d'élimination de composante continue.
+- Sélection par circuit bouchon LC parallèle accordé à la fréquence porteuse : $F_0 = \frac{1}{2\pi\sqrt{LC}} = F_p$.
 
 ---
 
-## 4. Mécanique Générale et Spécifique SM
+## 4. Mécanique (Commune à 95% avec PC)
 
-### A. Lois de Newton & Mouvements dans les champs
+### A. Lois de Newton, Chute dans un fluide & Projectiles (Communs PC et SM)
 - 2ème loi de Newton : $\sum \vec{F}_{ext} = m \cdot \vec{a}_G$ dans un référentiel galiléen.
 - Chute verticale avec frottement visqueux : $\frac{dv}{dt} + \frac{k}{m} v^n = g\left(1 - \frac{\rho_f}{\rho_s}\right)$, vitesse limite $v_{lim}$, algorithme d'Euler.
 - Mouvement des projectiles dans le champ $\vec{g}$ : équations horaires, trajectoire parabolique, flèche et portée.
-- **Particules chargées dans les champs uniformes** :
-  - Champ électrique $\vec{E}$ : Force $\vec{F}_e = q \vec{E} \implies \vec{a} = \frac{q}{m} \vec{E}$.
-  - **Champ magnétique $\vec{B}$ (Spécifique SM)** : Force de Lorentz $\vec{F} = q \vec{v} \wedge \vec{B}$.
-    - Force orthogonale à la vitesse $\implies$ travail nul $\implies$ énergie cinétique constante $\implies$ mouvement uniforme ($v = \text{cte}$).
-    - Trajectoire circulaire dans le plan orthogonal à $\vec{B}$, de rayon :
-      $$R = \frac{m \cdot v}{|q| \cdot B}$$
 - Mouvement des satellites et planètes : 3 lois de Kepler, vitesse $v = \sqrt{\frac{GM}{r}}$, période $T = 2\pi\sqrt{\frac{r^3}{GM}}$.
 
-### B. SPÉCIFIQUE SCIENCES MATHÉMATIQUES : Rotation d'un solide indéformable autour d'un axe fixe
+### B. Mouvement d'une particule chargée dans les champs
+- **EXCLUSIF SCIENCES MATHÉMATIQUES : Particule chargée dans un champ électrique uniforme $\vec{E}$** :
+  *(Présent en SM, absent du cadre de référence PC)*
+  - Force électrostatique : $\vec{F}_e = q \cdot \vec{E}$ avec $E = \frac{U}{d}$.
+  - Accélération : $\vec{a} = \frac{q}{m} \vec{E}$.
+  - Déflexion électrostatique : établissement des équations horaires, équation de trajectoire parabolique et calcul de la déflexion sur écran.
+- **Particule chargée dans un champ magnétique uniforme $\vec{B}$ (Commun PC et SM)** :
+  - Force de Lorentz magnétique : $\vec{F} = q (\vec{v} \wedge \vec{B})$ avec $\vec{v}_0 \perp \vec{B}$.
+  - $\vec{F} \perp \vec{v} \implies$ travail nul $\implies$ énergie cinétique constante $\implies$ mouvement uniforme ($v = \text{cte}$).
+  - Trajectoire circulaire dans le plan orthogonal à $\vec{B}$, de rayon orbital :
+    $$R = \frac{m \cdot v}{|q| \cdot B}$$
+  - Calcul de la déflexion magnétique.
+
+### C. Rotation d'un solide autour d'un axe fixe (Commun PC et SM)
 - **Relation Fondamentale de la Dynamique en rotation (RFD)** :
   $$\sum M_\Delta(\vec{F}_{ext}) = J_\Delta \cdot \ddot{\theta} = J_\Delta \cdot \alpha$$
   - $J_\Delta$ : Moment d'inertie du solide par rapport à l'axe $\Delta$ (en $\text{kg}\cdot\text{m}^2$).
@@ -103,26 +120,27 @@ Document de cadrage officiel du Ministère de l'Éducation Nationale pour l'Exam
 - **Conditions de non-glissement d'un fil sur une poulie de rayon $R$** :
   $$s(t) = R \cdot \theta(t), \quad v(t) = R \cdot \dot{\theta}(t), \quad a(t) = R \cdot \ddot{\theta}(t)$$
 
-### C. SPÉCIFIQUE SCIENCES MATHÉMATIQUES : Systèmes Mécaniques Oscillants
-- **Pendule élastique (horizontal / vertical)** :
+### D. Systèmes Mécaniques Oscillants & Pendules (Communs PC et SM)
+- **1. Pendule élastique (horizontal, incliné, vertical)** :
   - Équation différentielle : $\ddot{x} + \frac{k}{m} x = 0 \implies T_0 = 2\pi\sqrt{\frac{m}{k}}$.
   - Énergie mécanique : $E_m = \frac{1}{2} m \dot{x}^2 + \frac{1}{2} k x^2 = \text{constante}$.
-- **Pendule de torsion (Spécifique SM)** :
+- **2. Pendule de torsion (Commun PC et SM)** :
   - Couple de rappel de torsion : $M_c = -C \cdot \theta$ ($C$ constante de torsion en $\text{N}\cdot\text{m}\cdot\text{rad}^{-1}$).
   - Équation différentielle non amortie :
     $$J_\Delta \ddot{\theta} + C \theta = 0 \implies T_0 = 2\pi\sqrt{\frac{J_\Delta}{C}}$$
   - Énergie potentielle de torsion : $E_{pt} = \frac{1}{2} C \theta^2 \implies E_m = \frac{1}{2} J_\Delta \dot{\theta}^2 + \frac{1}{2} C \theta^2 = \text{cte}$.
-- **Pendule pesant et Pendule simple (Spécifique SM)** :
+- **3. Pendule pesant et Pendule simple synchrone (Commun PC et SM)** :
   - Équation différentielle aux petites oscillations ($\sin\theta \approx \theta$) :
     $$J_\Delta \ddot{\theta} + m g d \theta = 0 \implies T_0 = 2\pi\sqrt{\frac{J_\Delta}{m g d}}$$
-  - Pour le pendule simple de longueur $\ell$ ($J_\Delta = m \ell^2$, $d = \ell$) :
+  - Pour le pendule simple synchrone de longueur $\ell$ ($J_\Delta = m \ell^2$, $d = \ell$) :
     $$T_0 = 2\pi\sqrt{\frac{\ell}{g}}$$
-- **Oscillations mécaniques forcées et résonance mécanique (Spécifique SM)** :
+- **4. Oscillations mécaniques forcées et résonance mécanique (Commun PC et SM)** :
   - Excitateur imposant une force $F(t) = F_m \cos(\omega t)$ à un résonateur de pulsation propre $\omega_0 = \sqrt{k/m}$.
   - Résonance d'amplitude : pic d'amplitude pour une fréquence proche de $N_0$ ; l'amortissement décale et aplatit le pic.
-  - Résonance de vitesse : la vitesse maximale $v_m$ est atteinte exactement à $\omega = \omega_0$ (vitesse et force en phase).
+- **5. Aspects énergétiques des oscillateurs** :
+  - Travail du ressort, du couple de torsion et du poids.
 
-### D. Modèle de Bohr de l'atome
+### E. Modèle de Bohr de l'atome (Commun PC et SM)
 - Énergie quantifiée : $E_n = -\frac{13.6}{n^2}\text{ eV}$.
 - Relation de Planck-Einstein : $\Delta E = h \nu = \frac{h c}{\lambda}$ ($1\text{ eV} = 1.602 \times 10^{-19}\text{ J}$).
 

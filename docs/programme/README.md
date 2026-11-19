@@ -11,10 +11,16 @@ Ce répertoire contient les documents officiels du programme ministériel maroca
   - [Cadre de Référence Physique & Chimie 2BAC SM](file:///home/driss/Bureau/Si-Driss/docs/programme/SM/cadre_reference_physique_chimie_2bac_sm.md)
 
 > [!IMPORTANT]
-> **Règle d'or du programme marocain :**
-> - La loi de Beer-Lambert / spectrophotométrie **NE FAIT PAS PARTIE** du programme marocain. Seules 5 méthodes officielles de suivi cinétique sont admises : Pression, Volume de gaz, Conductimétrie, pH-métrie, et Titrage volumétrique avec trempe.
-> - La modulation d'amplitude (AM) est exclusive à la filière **PC**.
-> - La rotation autour d'un axe fixe, les oscillations électriques et mécaniques forcées avec résonance/impédance, le pendule de torsion et la force magnétique de Lorentz sont exclusifs à la filière **SM**.
+> **Règles d'or & Comparaison Officielle PC vs SM (selon les cadres ministériels marocains) :**
+> - **Absence de Beer-Lambert** : La spectrophotométrie et la loi de Beer-Lambert **NE FONT PAS PARTIE** du programme marocain (spécifiques au programme français). Seules 5 méthodes officielles de suivi cinétique sont au programme : Pression, Volume de gaz, Conductimétrie, pH-métrie, et Titrage volumétrique avec trempe.
+> - **Tronc commun à plus de 95%** :
+>   - La Chimie est **100% identique** entre PC et SM (cinétique, équilibres acido-basiques, piles, électrolyse, estérification/hydrolyse/saponification).
+>   - Les Ondes et le Nucléaire sont **100% identiques** entre PC et SM.
+>   - L'Électricité (RC, RL, RLC libre) et la **Modulation d'amplitude AM** sont présentes dans les **deux filières (PC et SM)**.
+>   - En Mécanique : les lois de Newton, la chute dans un fluide (Euler), les projectiles, les satellites (Kepler), le **champ magnétique de Lorentz ($\vec{F}=q\vec{v}\wedge\vec{B}$)**, la **rotation d'un solide autour d'un axe fixe ($\sum M_\Delta = J_\Delta \ddot{\theta}$)**, tous les oscillateurs mécaniques (**pendule élastique, pendule de torsion, pendule pesant, pendule simple synchrone**) et la **résonance mécanique** font partie du programme des **deux filières (PC et SM)**.
+> - **Les 2 seules différences réelles de contenu** :
+>   1. **Circuit RLC série en régime sinusoïdal forcé** (impédance $Z$, déphasage $\varphi$, résonance d'intensité, bande passante $\Delta N$, facteur de qualité $Q$, surtension, puissance moyenne) : **Au programme SM uniquement (absent de PC)**.
+>   2. **Mouvement d'une particule chargée dans un champ électrique uniforme $\vec{E}$** ($\vec{F}=q\vec{E}$, $E=U/d$, déflexion électrostatique) : **Au programme SM uniquement (absent du cadre PC)**.
 
 ## 📂 Chemin absolu du répertoire :
 `/docs/programme/`
