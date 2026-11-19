@@ -489,11 +489,11 @@ export const CURRICULUM: ChapterInfo[] = [
   },
   {
     id: 'mouvements-plans',
-    title: 'Mouvements plans : Projectiles & Particules chargées',
+    title: 'Mouvements plans : Projectiles, Satellites & Particules chargées',
     subject: 'Physique',
     domain: 'Mécanique',
     weightInExam: '3.0 à 3.5 pts',
-    summary: 'Mouvement dans un champ de pesanteur uniforme $\\vec{g}$ (équations horaires, trajectoire parabolique, portée, flèche) et mouvement d\'une particule chargée dans un champ électrostatique uniforme $\\vec{E}$.',
+    summary: 'Mouvement dans un champ de pesanteur uniforme $\\vec{g}$ (équations horaires, trajectoire parabolique, portée, flèche), mouvement des satellites et planètes (lois de Kepler), particule dans un champ électrostatique $\\vec{E}$ et force de Lorentz magnétique $\\vec{B}$ (SM).',
     keyFormulas: [
       {
         name: 'Accélération du projectile',
@@ -511,21 +511,34 @@ export const CURRICULUM: ChapterInfo[] = [
         units: 'Trajectoire parabolique',
       },
       {
+        name: 'Vitesse orbitale d\'un satellite',
+        latex: 'v = \\sqrt{\\frac{G \\cdot M}{r}} \\quad \\text{et 3ème loi de Kepler : } \\frac{T^2}{r^3} = \\frac{4\\pi^2}{G M}',
+        units: '$G = 6.67\\times 10^{-11}\\ N\\cdot m^2\\cdot kg^{-2}$, $r = R_T + h$',
+      },
+      {
         name: 'Force électrostatique',
         latex: '\\vec{F}_e = q \\cdot \\vec{E} \\implies \\vec{a} = \\frac{q}{m} \\vec{E}',
         units: '$E = \\frac{U}{d}$ en $V\\cdot m^{-1}$, $F_e$ en $N$',
+      },
+      {
+        name: 'Force de Lorentz et rayon magnétique (SM)',
+        latex: '\\vec{F} = q \\vec{v} \\wedge \\vec{B} \\implies R = \\frac{m \\cdot v}{|q| \\cdot B}',
+        units: 'Mouvement circulaire uniforme dans le plan orthogonal à $\\vec{B}$, $B$ en Tesla ($T$)',
       },
     ],
     nationalChecklist: [
       'Poser les conditions initiales à $t = 0$ pour $\\vec{OM}_0$ et $\\vec{v}_0$.',
       'Intégrer les composantes de $\\vec{a}$ pour trouver $\\vec{v}(t)$ puis $\\vec{OM}(t)$ en justifiant les constantes d\'intégration.',
       'Calculer la portée $x_P$ ($y=0$) ou la flèche $y_S$ ($v_y = 0$).',
+      'Démontrer que le mouvement d\'un satellite circulaire est uniforme ($a_t = dv/dt = 0$) et déduire la vitesse orbitale $v = \\sqrt{GM/r}$.',
+      'Démontrer que la trajectoire d\'une particule dans un champ magnétique uniforme $\\vec{B}$ est circulaire uniforme de rayon $R = \\frac{mv}{|q|B}$ (SM).',
     ],
     classicPitfalls: [
       'Inverser $\\cos\\alpha$ et $\\sin\\alpha$ dans les composantes de $\\vec{v}_0$.',
       'Oublier le signe de la charge $q$ (si électron, $q = -e < 0$, donc $\\vec{F}_e$ est opposée à $\\vec{E}$).',
+      'Pour un satellite : attention au rayon $r = R_T + h$ (ne pas oublier le rayon de la Terre $R_T$ !).',
     ],
-    suggestedPrompt: 'Prof, comment calculer la portée et la flèche d\'un projectile étape par étape sans apprendre par cœur l\'équation finale ?',
+    suggestedPrompt: 'Prof, comment démontrer rigoureusement que le mouvement d\'un satellite en orbite circulaire est uniforme ?',
   },
   {
     id: 'oscillateurs-mecaniques',
@@ -703,7 +716,7 @@ export const CURRICULUM: ChapterInfo[] = [
     subject: 'Chimie',
     domain: 'Cinétique Chimique',
     weightInExam: '2.5 à 3.0 pts',
-    summary: 'Facteurs cinétiques (température, concentration des réactifs, catalyseur). Suivi temporel par spectrophotométrie (loi de Beer-Lambert), conductimétrie, pressiométrie, ou titrage. Vitesse volumique et temps de demi-réaction $t_{1/2}$.',
+    summary: 'Facteurs cinétiques (température, concentration des réactifs, catalyseur). Méthodes officielles de suivi temporel du Bac marocain : mesure de pression P, volume de gaz dégagé V_gaz, conductimétrie, pH-métrie ou dosage volumétrique avec trempe. Vitesse volumique et temps de demi-réaction $t_{1/2}$.',
     keyFormulas: [
       {
         name: 'Vitesse volumique de réaction',
@@ -716,33 +729,40 @@ export const CURRICULUM: ChapterInfo[] = [
         units: 'Déterminé graphiquement sur la courbe $x(t)$',
       },
       {
-        name: 'Loi de Beer-Lambert',
-        latex: 'A = k \\cdot [X] = \\epsilon \\cdot l \\cdot [X]',
-        units: '$A$ absorbance sans unité',
+        name: 'Suivi par volume de gaz dégagé',
+        latex: 'V_{\\text{gaz}}(t) = n_{\\text{gaz}}(t) \\cdot V_m \\iff x(t) = \\frac{V_{\\text{gaz}}(t)}{V_m}',
+        units: '$V_{\\text{gaz}}$ en $L$, $V_m$ volume molaire en $L\\cdot mol^{-1}$',
       },
       {
-        name: 'Conductivité de la solution',
-        latex: '\\sigma = \\sum \\lambda_i [X_i]',
-        units: '$\\sigma$ en $S\\cdot m^{-1}$, attention $[X_i]$ en $mol\\cdot m^{-3}$ !',
+        name: 'Suivi par mesure de pression (Gaz parfaits)',
+        latex: 'P \\cdot V = n_{\\text{gaz}} \\cdot R \\cdot T \\iff x(t) = \\frac{\\Delta P(t) \\cdot V}{R \\cdot T}',
+        units: '$P$ en $Pa$, $V$ en $m^3$, $T$ en $K$ ($T = \\theta + 273.15$), $R = 8.314\\ J\\cdot K^{-1}\\cdot mol^{-1}$',
       },
       {
-        name: 'Équation des gaz parfaits',
-        latex: 'P \\cdot V = n \\cdot R \\cdot T',
-        units: '$P$ en $Pa$, $V$ en $m^3$, $T$ en $K$ ($T = \\theta + 273.15$)',
+        name: 'Suivi par conductimétrie (Loi de Kohlrausch)',
+        latex: '\\sigma(t) = \\sum \\lambda_i [X_i](t)',
+        units: '$\\sigma$ en $S\\cdot m^{-1}$, ATTENTION : $[X_i]$ en $mol\\cdot m^{-3}$ ($1\\ mol/L = 1000\\ mol/m^3$) !',
+      },
+      {
+        name: 'Suivi par pH-métrie',
+        latex: 'pH = -\\log[H_3O^+] \\iff [H_3O^+](t) = 10^{-pH(t)}',
+        units: '$pH$ sans unité, $[H_3O^+]$ en $mol\\cdot L^{-1}$',
       },
     ],
     nationalChecklist: [
       'Dresser le tableau d\'avancement complet (initial, intermédiaire, final en moles).',
-      'Établir la relation entre $x(t)$ et la grandeur mesurée ($A(t), \\sigma(t)$ ou $P(t)$).',
+      'Établir la relation entre $x(t)$ et la grandeur mesurée ($P(t), V_{\\text{gaz}}(t), \\sigma(t)$ ou $pH(t)$).',
       'Calculer la vitesse $v$ à un instant $t$ par la pente de la tangente : $\\frac{dx}{dt} = \\frac{\\Delta x}{\\Delta t}$.',
       'Justifier la diminution de la vitesse volumique au cours du temps (diminution des concentrations des réactifs).',
+      'Expliquer le principe de la trempe thermique (eau glacée) pour figer la réaction lors d\'un suivi par dosage volumétrique.',
     ],
     classicPitfalls: [
       'PIÈGE CONDUCTIMÉTRIE : Dans $\\sigma = \\sum \\lambda_i [X_i]$, les concentrations DOIVENT être converties en $mol\\cdot m^{-3}$ ($1\\ mol/L = 1000\\ mol/m^3$) !',
+      'CADRE DE RÉFÉRENCE MAROCAIN : La spectrophotométrie (loi de Beer-Lambert) NE fait PAS partie du programme du Bac marocain (elle est propre au programme français). Le National marocain utilise exclusivement : Pression, Volume de gaz, Conductimétrie, pH-métrie ou Titrage.',
       'Oublier le volume total $V$ dans $v = \\frac{1}{V}\\frac{dx}{dt}$.',
       'Confondre $x_f$ et $x_{max}$ pour une réaction limitée.',
     ],
-    suggestedPrompt: 'Si Driss, quelle est la méthode pour relier l\'avancement $x(t)$ à la conductivité $\\sigma(t)$ au National ?',
+    suggestedPrompt: 'Si Driss, quelle est la méthode pour relier l\'avancement $x(t)$ à la conductivité $\\sigma(t)$ ou à la pression $P(t)$ au National ?',
   },
   {
     id: 'acide-base-equilibre',

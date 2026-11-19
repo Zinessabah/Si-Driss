@@ -1,24 +1,33 @@
 import React, { useState } from 'react';
-import { Cpu, AlertTriangle, CheckCircle2, Zap } from 'lucide-react';
+import { Cpu, AlertTriangle, CheckCircle2, Zap, ChevronDown } from 'lucide-react';
 import { useApiKey } from '../hooks/useApiKey';
 import { ApiKeyModal } from './ApiKeyModal';
 import { getProviderDef } from '../types/aiProviders';
 
 interface ApiKeyStatusBadgeProps {
   compact?: boolean;
+  onOpenModal?: () => void;
 }
 
-export const ApiKeyStatusBadge: React.FC<ApiKeyStatusBadgeProps> = ({ compact = false }) => {
+export const ApiKeyStatusBadge: React.FC<ApiKeyStatusBadgeProps> = ({ compact = false, onOpenModal }) => {
   const { hasApiKey, provider, model, serverHasKey, serverDefaultProvider } = useApiKey();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const providerDef = getProviderDef(provider);
   const activeLabel = serverHasKey && !hasApiKey ? `${serverDefaultProvider.toUpperCase()} (Serveur)` : providerDef.name;
 
+  const handleClick = () => {
+    if (onOpenModal) {
+      onOpenModal();
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
   return (
     <>
       <button
-        onClick={() => setIsModalOpen(true)}
+        onClick={handleClick}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border shadow-sm ${
           hasApiKey || serverHasKey
             ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
@@ -26,7 +35,7 @@ export const ApiKeyStatusBadge: React.FC<ApiKeyStatusBadgeProps> = ({ compact = 
         }`}
         title={
           hasApiKey || serverHasKey
-            ? `Moteur IA actif : ${activeLabel} (${model}). Cliquer pour changer de fournisseur.`
+            ? `Fournisseur IA actif : ${activeLabel} (${model}). Cliquer pour basculer de fournisseur (Gemini, Groq, Ollama, OpenAI...).`
             : 'Aucune clé configurée. Cliquer pour choisir votre IA (Gemini, Groq, OpenAI, Ollama...).'
         }
       >
@@ -48,9 +57,12 @@ export const ApiKeyStatusBadge: React.FC<ApiKeyStatusBadgeProps> = ({ compact = 
             )}
           </span>
         )}
+        <ChevronDown className="w-3 h-3 opacity-60 shrink-0" />
       </button>
 
-      <ApiKeyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {!onOpenModal && (
+        <ApiKeyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      )}
     </>
   );
 };

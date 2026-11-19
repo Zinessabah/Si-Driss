@@ -24,6 +24,8 @@ import {
   ChevronDown,
   SquarePen,
   Waves,
+  Maximize2,
+  Palette,
 } from 'lucide-react';
 
 // (H10) Code-splitting : les onglets secondaires, les simulateurs et le générateur
@@ -35,6 +37,8 @@ const PitfallsVault = lazy(() => import('./components/PitfallsVault').then((m) =
 const DocumentManager = lazy(() => import('./components/DocumentManager').then((m) => ({ default: m.DocumentManager })));
 const ExerciseGeneratorModal = lazy(() => import('./components/ExerciseGeneratorModal').then((m) => ({ default: m.ExerciseGeneratorModal })));
 const WavesSimulator = lazy(() => import('./components/simulators/WavesSimulator').then((m) => ({ default: m.WavesSimulator })));
+const DiffractionSimulator = lazy(() => import('./components/simulators/DiffractionSimulator').then((m) => ({ default: m.DiffractionSimulator })));
+const DispersionSimulator = lazy(() => import('./components/simulators/DispersionSimulator').then((m) => ({ default: m.DispersionSimulator })));
 const RlcSimulator = lazy(() => import('./components/simulators/RlcSimulator').then((m) => ({ default: m.RlcSimulator })));
 const AmModulationSimulator = lazy(() => import('./components/simulators/AmModulationSimulator').then((m) => ({ default: m.AmModulationSimulator })));
 const MechanicsFallSimulator = lazy(() => import('./components/simulators/MechanicsFallSimulator').then((m) => ({ default: m.MechanicsFallSimulator })));
@@ -51,7 +55,7 @@ export default function App() {
   const { hasApiKey } = useApiKey();
 
   const [activeTab, setActiveTab] = useState<'chat' | 'audit' | 'simulators' | 'formulas' | 'pitfalls' | 'documents'>('chat');
-  const [activeSimulator, setActiveSimulator] = useState<'waves' | 'rlc' | 'am' | 'mechanics' | 'titration'>('waves');
+  const [activeSimulator, setActiveSimulator] = useState<'waves' | 'diffraction' | 'dispersion' | 'rlc' | 'am' | 'mechanics' | 'titration'>('waves');
   const [chatInitialPrompt, setChatInitialPrompt] = useState<string>('');
   // (dette) Nonce : garantit que le même prompt poussé deux fois relance bien l'effet
   const [chatPromptNonce, setChatPromptNonce] = useState<number>(0);
@@ -240,7 +244,7 @@ export default function App() {
             <div className="flex items-center gap-2">
               <PWAInstallButton variant="nav" />
 
-              <ApiKeyStatusBadge compact />
+              <ApiKeyStatusBadge compact onOpenModal={() => setIsApiKeyModalOpen(true)} />
 
               <button
                 onClick={handleNewChat}
@@ -304,19 +308,43 @@ export default function App() {
                 <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
                   <button
                     onClick={() => setActiveSimulator('waves')}
-                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition ${
+                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition shrink-0 ${
                       activeSimulator === 'waves'
                         ? 'bg-[#282a2c] text-white border border-[#3c4043]'
                         : 'bg-[#1e1f20] text-[#8e918f] hover:text-white'
                     }`}
                   >
                     <Waves className="w-3.5 h-3.5 text-sky-400" />
-                    Ondes (Transversales & Longitudinales)
+                    Ondes (Propagation)
+                  </button>
+
+                  <button
+                    onClick={() => setActiveSimulator('diffraction')}
+                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition shrink-0 ${
+                      activeSimulator === 'diffraction'
+                        ? 'bg-[#282a2c] text-white border border-[#3c4043]'
+                        : 'bg-[#1e1f20] text-[#8e918f] hover:text-white'
+                    }`}
+                  >
+                    <Maximize2 className="w-3.5 h-3.5 text-cyan-400" />
+                    Diffraction (Cuve & Laser)
+                  </button>
+
+                  <button
+                    onClick={() => setActiveSimulator('dispersion')}
+                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition shrink-0 ${
+                      activeSimulator === 'dispersion'
+                        ? 'bg-[#282a2c] text-white border border-[#3c4043]'
+                        : 'bg-[#1e1f20] text-[#8e918f] hover:text-white'
+                    }`}
+                  >
+                    <Palette className="w-3.5 h-3.5 text-amber-400" />
+                    Dispersion (Prisme & Eau)
                   </button>
 
                   <button
                     onClick={() => setActiveSimulator('rlc')}
-                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition ${
+                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition shrink-0 ${
                       activeSimulator === 'rlc'
                         ? 'bg-[#282a2c] text-white border border-[#3c4043]'
                         : 'bg-[#1e1f20] text-[#8e918f] hover:text-white'
@@ -328,7 +356,7 @@ export default function App() {
 
                   <button
                     onClick={() => setActiveSimulator('am')}
-                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition ${
+                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition shrink-0 ${
                       activeSimulator === 'am'
                         ? 'bg-[#282a2c] text-white border border-[#3c4043]'
                         : 'bg-[#1e1f20] text-[#8e918f] hover:text-white'
@@ -340,7 +368,7 @@ export default function App() {
 
                   <button
                     onClick={() => setActiveSimulator('mechanics')}
-                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition ${
+                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition shrink-0 ${
                       activeSimulator === 'mechanics'
                         ? 'bg-[#282a2c] text-white border border-[#3c4043]'
                         : 'bg-[#1e1f20] text-[#8e918f] hover:text-white'
@@ -352,7 +380,7 @@ export default function App() {
 
                   <button
                     onClick={() => setActiveSimulator('titration')}
-                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition ${
+                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition shrink-0 ${
                       activeSimulator === 'titration'
                         ? 'bg-[#282a2c] text-white border border-[#3c4043]'
                         : 'bg-[#1e1f20] text-[#8e918f] hover:text-white'
@@ -366,6 +394,8 @@ export default function App() {
                 {/* Render Selected Simulator (H10 : chargé à la demande) */}
                 <Suspense fallback={<TabSuspenseFallback />}>
                   {activeSimulator === 'waves' && <WavesSimulator />}
+                  {activeSimulator === 'diffraction' && <DiffractionSimulator />}
+                  {activeSimulator === 'dispersion' && <DispersionSimulator />}
                   {activeSimulator === 'rlc' && <RlcSimulator />}
                   {activeSimulator === 'am' && <AmModulationSimulator />}
                   {activeSimulator === 'mechanics' && <MechanicsFallSimulator />}

@@ -3,9 +3,30 @@ import { AIProviderId, AIProviderConfig, AI_PROVIDERS, getProviderDef } from '..
 
 const OLD_STORAGE_KEY = 'sidriss_student_gemini_api_key_v1';
 const NEW_STORAGE_KEY = 'sidriss_ai_provider_config_v2';
+const SAVED_PROVIDERS_STORAGE_KEY = 'sidriss_ai_saved_providers_v1';
 const EVENT_NAME = 'sidriss_ai_config_changed';
 const ACCESS_TOKEN_KEY = 'sidriss_access_token_v1';
 const ADMIN_TOKEN_KEY = 'sidriss_admin_token_v1';
+
+export function getSavedProvidersMap(): Record<string, { apiKey?: string; model?: string; baseUrl?: string }> {
+  try {
+    const raw = localStorage.getItem(SAVED_PROVIDERS_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+export function saveProviderToStore(provider: AIProviderId, data: { apiKey?: string; model?: string; baseUrl?: string }): void {
+  try {
+    const current = getSavedProvidersMap();
+    current[provider] = {
+      ...(current[provider] || {}),
+      ...data,
+    };
+    localStorage.setItem(SAVED_PROVIDERS_STORAGE_KEY, JSON.stringify(current));
+  } catch {}
+}
 
 // (dette) Sonde unique du statut serveur : partagée par toutes les instances du
 // hook (App, chat, audit, modales…) — un seul appel /api/ai-status au démarrage
@@ -192,6 +213,11 @@ export function useApiKey() {
       };
 
       localStorage.setItem(NEW_STORAGE_KEY, JSON.stringify(updated));
+      saveProviderToStore(updated.provider, {
+        apiKey: updated.apiKey,
+        model: updated.model,
+        baseUrl: updated.baseUrl,
+      });
 
       setConfig(updated);
       window.dispatchEvent(new Event(EVENT_NAME));
@@ -199,6 +225,18 @@ export function useApiKey() {
       console.warn('Erreur sauvegarde configuration IA:', err);
     }
   }, []);
+
+  const switchProvider = useCallback((targetProvider: AIProviderId) => {
+    const savedMap = getSavedProvidersMap();
+    const saved = savedMap[targetProvider];
+    const def = getProviderDef(targetProvider);
+    saveConfig({
+      provider: targetProvider,
+      apiKey: saved?.apiKey || '',
+      model: saved?.model || def.defaultModel,
+      baseUrl: saved?.baseUrl || def.defaultBaseUrl || '',
+    });
+  }, [saveConfig]);
 
   const saveApiKey = useCallback(
     (key: string, providerOverride?: AIProviderId, modelOverride?: string) => {
@@ -345,6 +383,8 @@ export function useApiKey() {
     saveConfig,
     saveApiKey,
     removeApiKey,
+    switchProvider,
+    savedProvidersMap: getSavedProvidersMap(),
     validateApiKey: validateConnection,
     getAuthHeaders,
   };

@@ -187,6 +187,7 @@ export const AI_PROVIDERS: ProviderDefinition[] = [
     requiresKey: false,
     freeTier: true,
     models: [
+      { id: 'gemma2:2b', name: 'Gemma 2 2B (Google)', tag: 'Ultra-Léger Mobile/PC', description: 'Idéal pour téléphone ou PC avec petite RAM (~2 Go)' },
       { id: 'llama3.3', name: 'Llama 3.3', tag: 'Recommandé', description: 'Exécuté localement via `ollama run llama3.3`' },
       { id: 'qwen2.5:14b', name: 'Qwen 2.5 14B', tag: 'Excellent en maths', description: 'Très fort en physique et calculs formels' },
       { id: 'deepseek-r1:14b', name: 'DeepSeek R1 14B Distill', tag: 'Raisonnement local', description: 'Pensée socratique en local' },

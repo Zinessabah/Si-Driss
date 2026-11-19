@@ -19,6 +19,8 @@ import {
   Search,
 } from 'lucide-react';
 import { SavedSession } from '../types/chat';
+import { useApiKey } from '../hooks/useApiKey';
+import { getProviderDef } from '../types/aiProviders';
 
 interface GeminiSidebarProps {
   isOpen: boolean;
@@ -55,6 +57,8 @@ export const GeminiSidebar: React.FC<GeminiSidebarProps> = ({
   onOpenInstallModal,
   hasApiKey,
 }) => {
+  const { provider } = useApiKey();
+  const providerDef = getProviderDef(provider);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState<string>('');
@@ -456,7 +460,7 @@ export const GeminiSidebar: React.FC<GeminiSidebarProps> = ({
           >
             <div className="flex items-center gap-2">
               <Key className="w-4 h-4 text-[#8ab4f8]" />
-              <span className="text-slate-200">Clé API Gemini</span>
+              <span className="text-slate-200">Fournisseur IA ({providerDef.name})</span>
             </div>
             <span
               className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${

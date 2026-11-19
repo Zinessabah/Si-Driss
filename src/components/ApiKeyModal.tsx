@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useModalA11y } from '../hooks/useModalA11y';
 import {
   Key,
@@ -42,6 +43,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
     serverDefaultProvider,
     saveConfig,
     removeApiKey,
+    savedProvidersMap,
     validateApiKey,
   } = useApiKey();
 
@@ -92,29 +94,90 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
     }
   }, [isOpen, config]);
 
-  // When changing provider, reset model and baseUrl defaults
+  // When changing provider, load previously saved credentials or defaults
   const handleProviderSelect = (providerId: AIProviderId) => {
     setSelectedProvider(providerId);
     const def = getProviderDef(providerId);
+    const saved = savedProvidersMap[providerId];
 
-    // If switching back to existing config's provider, keep key, else reset if needed
     if (providerId === config.provider) {
       setApiKeyInput(config.apiKey || '');
+      const currentModel = config.model || def.defaultModel;
+      const isKnown = def.models.some((m) => m.id === currentModel);
+      if (isKnown) {
+        setSelectedModel(currentModel);
+        setIsCustomModelActive(false);
+        setCustomModelInput('');
+      } else {
+        setSelectedModel('__custom__');
+        setIsCustomModelActive(true);
+        setCustomModelInput(currentModel);
+      }
+      setBaseUrlInput(config.baseUrl || def.defaultBaseUrl || '');
+    } else if (saved?.apiKey) {
+      setApiKeyInput(saved.apiKey);
+      const targetModel = saved.model || def.defaultModel;
+      const isKnown = def.models.some((m) => m.id === targetModel);
+      if (isKnown) {
+        setSelectedModel(targetModel);
+        setIsCustomModelActive(false);
+        setCustomModelInput('');
+      } else {
+        setSelectedModel('__custom__');
+        setIsCustomModelActive(true);
+        setCustomModelInput(targetModel);
+      }
+      setBaseUrlInput(saved.baseUrl || def.defaultBaseUrl || '');
     } else {
       setApiKeyInput('');
+      setSelectedModel(def.defaultModel);
+      setIsCustomModelActive(false);
+      setCustomModelInput('');
+      setBaseUrlInput(def.defaultBaseUrl || '');
     }
 
-    setSelectedModel(def.defaultModel);
-    setIsCustomModelActive(false);
-    setCustomModelInput('');
-    setBaseUrlInput(def.defaultBaseUrl || '');
     setStatusMessage(null);
+  };
+
+  const handleQuickSwitch = (providerId: AIProviderId) => {
+    const def = getProviderDef(providerId);
+    const saved = savedProvidersMap[providerId];
+    const keyToUse = providerId === config.provider ? config.apiKey : (saved?.apiKey || apiKeyInput || '');
+    const modelToUse = (providerId === config.provider ? config.model : (saved?.model || selectedModel)) || def.defaultModel;
+    const baseUrlToUse = (providerId === config.provider ? config.baseUrl : (saved?.baseUrl || baseUrlInput)) || def.defaultBaseUrl || undefined;
+
+    if (def.requiresKey && !keyToUse && !(serverHasKey && serverDefaultProvider === providerId)) {
+      setSelectedProvider(providerId);
+      setStatusMessage({
+        type: 'error',
+        text: `Veuillez renseigner votre clé API pour ${def.name} ci-dessous avant d'activer.`,
+      });
+      return;
+    }
+
+    saveConfig({
+      provider: providerId,
+      apiKey: keyToUse,
+      model: modelToUse,
+      baseUrl: baseUrlToUse,
+    });
+
+    setStatusMessage({
+      type: 'success',
+      text: `Moteur IA basculé sur ${def.name} (${modelToUse}) !`,
+    });
+
+    setTimeout(() => {
+      onSuccess?.();
+      onClose();
+    }, 700);
   };
 
   // (M14) Accessibilité : rôle dialog, Échap, piège de focus
   const dialogRef = useModalA11y(isOpen, onClose);
 
   if (!isOpen) return null;
+  if (typeof document === 'undefined') return null;
 
   const handlePaste = async () => {
     try {
@@ -226,19 +289,19 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
 
   const cleanedPreview = sanitizeKeyString(apiKeyInput);
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
       <div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Configuration du moteur IA"
         tabIndex={-1}
-        className="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+        className="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[94vh] sm:max-h-[90vh] my-auto relative z-10"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-slate-900 p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between">
+        <div className="shrink-0 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-slate-900 p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500/20 to-yellow-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
               <Cpu className="w-5 h-5" />
@@ -267,7 +330,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
 
         {/* Server key alert if pre-configured */}
         {serverHasKey && (
-          <div className="bg-emerald-500/10 border-b border-emerald-500/20 px-4 py-2 flex items-center gap-2 text-xs text-emerald-300">
+          <div className="shrink-0 bg-emerald-500/10 border-b border-emerald-500/20 px-4 py-2 flex items-center gap-2 text-xs text-emerald-300">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
               <strong>Serveur configuré :</strong> Une clé par défaut ({serverDefaultProvider.toUpperCase()}) est déjà active sur le serveur. Tu peux l'utiliser sans rien configurer ou brancher ta propre clé ci-dessous.
@@ -276,52 +339,76 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
         )}
 
         {/* Content body */}
-        <div className="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs text-slate-300">
+        <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-5 space-y-4 text-xs text-slate-300 overscroll-contain">
           {/* Provider Selection Tabs */}
           <div>
-            <label className="block text-xs font-bold text-slate-200 mb-2">
-              1. Choisis ton Fournisseur IA :
-            </label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-xs font-bold text-slate-200">
+                1. Choisis ton Fournisseur IA :
+              </label>
+              <span className="text-[11px] text-slate-400">
+                Actif : <strong className="text-emerald-400">{getProviderDef(config.provider).name}</strong>
+              </span>
+            </div>
+
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {AI_PROVIDERS.map((prov) => {
                 const isSelected = selectedProvider === prov.id;
+                const isCurrentlyActive = config.provider === prov.id;
+                const saved = savedProvidersMap[prov.id];
+                const hasReadyConfig = Boolean(
+                  saved?.apiKey ||
+                  !prov.requiresKey ||
+                  (serverHasKey && serverDefaultProvider === prov.id)
+                );
+
                 return (
                   <button
                     key={prov.id}
                     type="button"
                     onClick={() => handleProviderSelect(prov.id)}
-                    className={`relative p-2.5 rounded-2xl border text-left transition-all flex flex-col justify-between ${
+                    className={`relative p-2.5 rounded-2xl border text-left transition-all flex flex-col justify-between gap-1.5 ${
                       isSelected
-                        ? 'bg-amber-500/15 border-amber-500/60 shadow-lg shadow-amber-500/5'
+                        ? 'bg-amber-500/15 border-amber-500/70 shadow-lg shadow-amber-500/10 ring-1 ring-amber-500/40'
+                        : isCurrentlyActive
+                        ? 'bg-emerald-500/10 border-emerald-500/40 hover:bg-emerald-500/15'
                         : 'bg-slate-950/60 border-slate-800 hover:bg-slate-800/50 hover:border-slate-700'
                     }`}
                   >
                     <div>
-                      <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center justify-between gap-1 mb-1">
                         <span
-                          className={`font-bold text-xs ${
-                            isSelected ? 'text-amber-300' : 'text-slate-200'
+                          className={`font-bold text-xs truncate ${
+                            isSelected ? 'text-amber-300' : isCurrentlyActive ? 'text-emerald-300' : 'text-slate-200'
                           }`}
                         >
                           {prov.name}
                         </span>
-                        {isSelected && (
-                          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                        )}
+                        {isCurrentlyActive ? (
+                          <span className="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0">
+                            Actif
+                          </span>
+                        ) : isSelected ? (
+                          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+                        ) : hasReadyConfig ? (
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/60 shrink-0" title="Prêt" />
+                        ) : null}
                       </div>
                       <span className="text-[10px] text-slate-400 block line-clamp-1">
                         {prov.badge}
                       </span>
                     </div>
 
-                    <div className="mt-2 flex items-center justify-between text-[9px]">
-                      {prov.freeTier ? (
+                    <div className="mt-1 flex items-center justify-between text-[9px]">
+                      {prov.id === 'custom' ? (
+                        <span className="text-sky-400 font-semibold">Local (100% gratuit)</span>
+                      ) : prov.freeTier ? (
                         <span className="text-emerald-400 font-semibold">Gratuit</span>
                       ) : (
                         <span className="text-slate-400">Pay-as-you-go</span>
                       )}
-                      {prov.id === 'custom' && (
-                        <span className="text-sky-400 font-semibold">Local</span>
+                      {isSelected && !isCurrentlyActive && (
+                        <span className="text-amber-400 font-semibold">Choisi</span>
                       )}
                     </div>
                   </button>
@@ -329,6 +416,36 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
               })}
             </div>
           </div>
+
+          {/* Quick Switch Banner if a different provider is selected */}
+          {selectedProvider !== config.provider && (
+            <div className="bg-gradient-to-r from-amber-500/15 via-[#18191b] to-emerald-500/10 border border-amber-500/40 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2.5 shadow-md">
+              <div className="space-y-0.5">
+                <div className="text-white font-bold text-xs flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping shrink-0" />
+                  <span>Basculer sur {activeProviderDef.name}</span>
+                </div>
+                <p className="text-[11px] text-slate-300">
+                  {!activeProviderDef.requiresKey
+                    ? 'Aucune clé requise — prêt à être activé en local !'
+                    : (apiKeyInput || (serverHasKey && serverDefaultProvider === selectedProvider))
+                    ? 'Clé prête — clique pour activer ce moteur immédiatement.'
+                    : 'Renseigne ta clé ci-dessous puis clique sur Activer.'}
+                </p>
+              </div>
+
+              {(!activeProviderDef.requiresKey || apiKeyInput || (serverHasKey && serverDefaultProvider === selectedProvider)) && (
+                <button
+                  type="button"
+                  onClick={() => handleQuickSwitch(selectedProvider)}
+                  className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm ml-auto"
+                >
+                  <Check className="w-3.5 h-3.5" />
+                  <span>Activer {activeProviderDef.name} maintenant</span>
+                </button>
+              )}
+            </div>
+          )}
 
           {/* Provider description & help banner */}
           <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-3.5 space-y-2">
@@ -536,7 +653,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
         </div>
 
         {/* Footer */}
-        <div className="p-4 bg-slate-950/90 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2.5">
+        <div className="shrink-0 p-3 sm:p-4 bg-slate-950/95 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2.5">
           {config.apiKey || config.provider === 'custom' ? (
             <button
               onClick={handleRemove}
@@ -590,6 +707,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

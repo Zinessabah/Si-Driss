@@ -1,6 +1,20 @@
-# Dossier des Documents du Programme (2ème Bac PC BIOF)
+# Dossier des Documents du Programme (2ème Bac Marocain - PC & SM BIOF)
 
-Ce répertoire est l'emplacement officiel où tu peux déposer tes documents de cours, résumés, séries d'exercices et annales d'examen pour que Si Mohamed y accède instantanément.
+Ce répertoire contient les documents officiels du programme ministériel marocain, les cadres de référence officiels, les cours et les annales du Baccalauréat National.
+
+## 📚 Cadres de Référence Officiels (Conformes 100% au Ministère Marocain)
+
+- **Filière PC (Sciences Physiques) :**
+  - [Cadre de Référence Chimie 2BAC PC](file:///home/driss/Bureau/Si-Driss/docs/programme/PC/cadre_reference_chimie_2bac_pc.md)
+  - [Cadre de Référence Physique 2BAC PC](file:///home/driss/Bureau/Si-Driss/docs/programme/PC/cadre_reference_physique_2bac_pc.md)
+- **Filière SM (Sciences Mathématiques A & B) :**
+  - [Cadre de Référence Physique & Chimie 2BAC SM](file:///home/driss/Bureau/Si-Driss/docs/programme/SM/cadre_reference_physique_chimie_2bac_sm.md)
+
+> [!IMPORTANT]
+> **Règle d'or du programme marocain :**
+> - La loi de Beer-Lambert / spectrophotométrie **NE FAIT PAS PARTIE** du programme marocain. Seules 5 méthodes officielles de suivi cinétique sont admises : Pression, Volume de gaz, Conductimétrie, pH-métrie, et Titrage volumétrique avec trempe.
+> - La modulation d'amplitude (AM) est exclusive à la filière **PC**.
+> - La rotation autour d'un axe fixe, les oscillations électriques et mécaniques forcées avec résonance/impédance, le pendule de torsion et la force magnétique de Lorentz sont exclusifs à la filière **SM**.
 
 ## 📂 Chemin absolu du répertoire :
 `/docs/programme/`
