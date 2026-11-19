@@ -1263,7 +1263,7 @@ export const MechanicsFallSimulator: React.FC = () => {
           <div className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
               <div className="text-slate-300">
-                <MathView content="Algorithme itératif : $a_i = A - B \\cdot v_i^n \\quad \\text{et} \\quad v_{i+1} = v_i + a_i \\cdot \\Delta t$" />
+                <MathView content="Algorithme itératif : $a_i = A - B \cdot v_i^n \quad \text{et} \quad v_{i+1} = v_i + a_i \cdot \Delta t$" />
               </div>
 
               {/* Sélecteur de pas d'Euler dt */}

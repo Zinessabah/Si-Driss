@@ -80,6 +80,9 @@ function sanitizeLatexForKatex(rawMath: string, isDisplay: boolean): { code: str
   let code = unwrapBoxedLatex(rawMath.trim());
   let forceDisplay = isDisplay;
 
+  // Corrige les commandes LaTeX accidentellement double-échappées (ex: \\cdot, \\quad, \\text, \\frac...)
+  code = code.replace(/\\\\([a-zA-Z]+)/g, '\\$1');
+
   // Convertit \begin{align} ou \begin{align*} en \begin{aligned} (compatible partout dans KaTeX)
   if (/\\begin\{align\*?\}/.test(code)) {
     code = code
@@ -213,6 +216,8 @@ function normalizeAllMathDelimiters(raw: string): string {
   if (!raw) return '';
 
   let normalized = raw
+    // Normalise les doubles antislashs accidentels avant une commande LaTeX (ex: \\cdot, \\frac...)
+    .replace(/\\\\([a-zA-Z]+)/g, '\\$1')
     // Déballe les blocs markdown/text génériques s'ils encadrent un énoncé ou du texte pédagogique
     .replace(/```(?:markdown|md|text|txt)\s*([\s\S]*?)```/gi, (_m, inner) => `\n${inner.trim()}\n`)
     // Blocs ```latex / ```math / ```tex : si c'est une formule pure, passer en $$...$$ ;
