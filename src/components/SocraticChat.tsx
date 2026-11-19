@@ -988,7 +988,7 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                   type="button"
                   onClick={() =>
                     handleSend(
-                      "Donne-moi la définition exacte d'une onde mécanique progressive selon le Cadre de Référence officiel du National."
+                      "Donne-moi la définition exacte d'une onde mécanique progressive selon le Cadre de Référence officiel."
                     )
                   }
                   className="p-4 rounded-2xl bg-[#1e1f20] hover:bg-[#282a2c] border border-[#282a2c] hover:border-[#3c4043] transition-all text-left flex flex-col justify-between group shadow-sm"

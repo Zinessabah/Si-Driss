@@ -144,7 +144,17 @@ export function parseExamQuery(query: string): ParsedExamQuery {
     exerciseNumber = romanMap[token] || parseInt(token, 10) || null;
   }
 
-  const isExamQuery = !!(year || session || /\b(examen|national|bac|baccalaureat|epreuve|sujet|annale)\b/i.test(q));
+  // 5. Détection de requêtes de cours, définitions, formules, pièges ou cadre de référence
+  const isTheoryOrDefinitionOrTrap = /\b(definition|definir|cadre\s*(?:de)?\s*reference|cours|formule|resume|piege|pieges|c'est\s*quoi|qu'est[- ]ce\s*que|que\s*signifie|sens\s*physique|enonce\s*(?:de\s*la)?\s*loi)\b/i.test(q);
+
+  // Demande explicite d'ouverture d'un sujet, d'une annale ou d'un exercice d'examen
+  const isExplicitExamPaperRequest = /\b(sujet|annale|epreuve|exercice\s*(?:d'examen|du\s*national|du\s*bac)|resoudre\s*(?:le|l'|un)?\s*(?:sujet|epreuve|examen|annale)|affiche\s*(?:le|l'|un)?\s*(?:sujet|epreuve|examen|exercice|annale))\b/i.test(q);
+
+  // Une requête est qualifiée d'examen (recherche d'un PDF d'annale officiel) uniquement si :
+  // - Elle n'est PAS une requête de définition / théorie / piège / cadre sans année explicite,
+  // - ET qu'elle contient SOIT une année d'examen explicite (ex: 2015, 2023),
+  //   SOIT une demande explicite d'épreuve/sujet/annale (ex: "affiche un exercice du national", "sujet de bac").
+  const isExamQuery = !isTheoryOrDefinitionOrTrap && !!(year || isExplicitExamPaperRequest);
 
   return { isExamQuery, year, session, topic, exerciseNumber };
 }
@@ -822,7 +832,7 @@ export async function searchLocalDocumentsDetailed(
 
         const normName = doc.name.toLowerCase();
         const isPdf = normName.endsWith('.pdf');
-        const isNonExamRef = /cadre[-_ ]?de[-_ ]?reference|cours/.test(normName);
+        const isNonExamRef = /cadre[-_ ]?(?:de[-_ ]?)?reference|cours/i.test(normName);
 
         if (parsed.year) {
           const meta = extractExamMetaFromFilename(doc.name);
@@ -955,6 +965,7 @@ export async function searchLocalDocumentsDetailed(
     }
 
     const matchedSnippets: { score: number; text: string }[] = [];
+    const isCadreOrTheory = /\b(definition|definir|cadre|reference|programme|cours|formule|resume|piege|pieges|enonce)\b/i.test(query);
 
     for (const doc of documentsCache) {
       // ÉTANCHÉITÉ STRICTE : Si l'élève est en PC, on rejette tout document SM.
@@ -962,6 +973,9 @@ export async function searchLocalDocumentsDetailed(
       if (doc.branch !== 'ALL' && doc.branch !== branchUpper) {
         continue;
       }
+
+      const isCadreDoc = /cadre[-_ ]?(?:de[-_ ]?)?reference/i.test(doc.name);
+      const isVisualQuery = /\b(figure|schema|graphe|courbe|montage|circuit|dispositif)\b/i.test(query);
 
       for (const sec of doc.sections) {
         let score = 0;
@@ -974,8 +988,16 @@ export async function searchLocalDocumentsDetailed(
           }
         }
 
-        // Si la section contient des données visuelles décodées pertinentes
-        if (sec.raw.includes('FIGURE / SCHÉMA DÉCODÉ') && score > 0) {
+        // Bonus si la section correspond précisément au thème détecté dans la question
+        if (parsed.topic && TOPIC_VISION_PATTERNS[parsed.topic]) {
+          const matchesTopic = TOPIC_VISION_PATTERNS[parsed.topic].some((p) => p.test(sec.lower));
+          if (matchesTopic) {
+            score += 10;
+          }
+        }
+
+        // Si la section contient des données visuelles décodées pertinentes et que la requête porte sur un schéma/graphe
+        if (sec.raw.includes('FIGURE / SCHÉMA DÉCODÉ') && score > 0 && isVisualQuery) {
           score += 4;
         }
 
@@ -983,6 +1005,13 @@ export async function searchLocalDocumentsDetailed(
           // Bonus de pertinence si spécifiquement affilié à la filière
           if (doc.branch === branchUpper) {
             score += 3;
+          }
+          // Priorité absolue aux documents du Cadre de Référence officiel
+          if (isCadreDoc) {
+            score += 25;
+            if (isCadreOrTheory) {
+              score += 35;
+            }
           }
           matchedSnippets.push({
             score,
