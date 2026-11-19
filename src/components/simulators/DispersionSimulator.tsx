@@ -809,9 +809,9 @@ export const DispersionSimulator: React.FC = () => {
             <span>Démonstration type National : Pourquoi le violet est plus dévié ?</span>
           </div>
           <div className="space-y-1.5 text-[11px] text-[#c4c7c5]">
-            <MathView content="$$1.\quad \lambda_{\text{violet}} < \lambda_{\text{rouge}}$$" />
-            <MathView content="$$2.\quad n = A + \frac{B}{\lambda^2} \implies n_{\text{violet}} > n_{\text{rouge}}$$" />
-            <MathView content="$$3.\quad \text{L'indice } n \text{ étant plus élevé} \implies D_{\text{violet}} > D_{\text{rouge}}$$" />
+            <MathView content="$$1.\\quad \\lambda_{\\text{violet}} < \\lambda_{\\text{rouge}}$$" />
+            <MathView content="$$2.\\quad n = A + \\frac{B}{\\lambda^2} \\implies n_{\\text{violet}} > n_{\\text{rouge}}$$" />
+            <MathView content="$$3.\\quad \\text{L'\''indice } n \\text{ étant plus élevé} \\implies D_{\\text{violet}} > D_{\\text{rouge}}$$" />
           </div>
         </div>
       </div>

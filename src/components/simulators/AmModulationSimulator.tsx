@@ -224,12 +224,12 @@ export const AmModulationSimulator: React.FC = () => {
           {isGoodModulation ? (
             <>
               <CheckCircle className="w-4 h-4 text-emerald-400" />
-              <span>Bonne modulation : $m = {m.toFixed(2)}$ (&lt; 1)</span>
+              <span>Bonne modulation : m = {m.toFixed(2)} (&lt; 1)</span>
             </>
           ) : (
             <>
               <AlertTriangle className="w-4 h-4 text-rose-400" />
-              <span>Surmodulation ($m = {m.toFixed(2)} \ge 1$)</span>
+              <span>Surmodulation (m = {m.toFixed(2)} ≥ 1)</span>
             </>
           )}
         </div>
@@ -311,7 +311,7 @@ export const AmModulationSimulator: React.FC = () => {
         <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
           <div className="font-semibold text-slate-200">1. Condition de non-surmodulation :</div>
           <div className="text-slate-400 space-y-1">
-            <MathView content="$$m = \frac{S_m}{U_0} = \frac{U_{max} - U_{min}}{U_{max} + U_{min}} < 1 \iff U_0 > S_m$$" />
+            <MathView content="$$m = \\frac{S_m}{U_0} = \\frac{U_{max} - U_{min}}{U_{max} + U_{min}} < 1 \\iff U_0 > S_m$$" />
             <div>
               Actuellement : <span className="font-mono text-emerald-400 font-bold">m = {m.toFixed(2)}</span>
               {m >= 1 ? " (ALERTE : Inversion de l'enveloppe !)" : " (Condition validée)"}
@@ -322,7 +322,7 @@ export const AmModulationSimulator: React.FC = () => {
         <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
           <div className="font-semibold text-slate-200">2. Condition sur le détecteur d'enveloppe :</div>
           <div className="text-slate-400 font-mono space-y-1">
-            <MathView content="$T_p \ll \tau = RC < T_s$ soit :" />
+            <MathView content="$T_p \\ll \\tau = RC < T_s$ soit :" />
             <div>
               {(Tp * 1000).toFixed(3)} ms &lt;&lt; RC &lt; {(Ts * 1000).toFixed(2)} ms
             </div>

@@ -798,7 +798,7 @@ export const MechanicsFallSimulator: React.FC = () => {
                 Laboratoire Mécanique : Chute Verticale dans un Fluide
               </h3>
               <div className="text-xs text-slate-400 mt-0.5">
-                <MathView content="Équation différentielle $\frac{\mathrm{d}v}{\mathrm{d}t} = A - B \cdot v^n$, vitesse limite $v_{\mathrm{lim}}$ et méthode d'Euler" />
+                <MathView content="Équation différentielle $\\frac{\\mathrm{d}v}{\\mathrm{d}t} = A - B \\cdot v^n$, vitesse limite $v_{\\mathrm{lim}}$ et méthode d'Euler" />
               </div>
             </div>
           </div>
@@ -814,7 +814,7 @@ export const MechanicsFallSimulator: React.FC = () => {
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            <MathView content="Frottement linéaire : $f = k \cdot v$" />
+            <MathView content="Frottement linéaire : $f = k \\cdot v$" />
           </button>
           <button
             onClick={() => setFrictionPower(2)}
@@ -824,7 +824,7 @@ export const MechanicsFallSimulator: React.FC = () => {
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            <MathView content="Frottement quadratique : $f = k \cdot v^2$" />
+            <MathView content="Frottement quadratique : $f = k \\cdot v^2$" />
           </button>
         </div>
       </div>
@@ -901,15 +901,15 @@ export const MechanicsFallSimulator: React.FC = () => {
             <div className="flex items-center justify-around text-[10px] text-slate-400 bg-slate-900/60 p-1.5 rounded-lg border border-slate-800/60">
               <span className="flex items-center gap-1">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block" />
-                <MathView content="$\vec{P}$" />
+                <MathView content="$\\vec{P}$" />
               </span>
               <span className="flex items-center gap-1">
                 <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block" />
-                <MathView content="$\vec{F}_A$" />
+                <MathView content="$\\vec{F}_A$" />
               </span>
               <span className="flex items-center gap-1">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block" />
-                <MathView content="$\vec{f}$" />
+                <MathView content="$\\vec{f}$" />
               </span>
             </div>
           </div>
@@ -986,7 +986,7 @@ export const MechanicsFallSimulator: React.FC = () => {
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-3 h-0.5 border-t border-dashed border-emerald-400" />
-                <MathView content="Asymptote $v_{\mathrm{lim}}$" />
+                <MathView content="Asymptote $v_{\\mathrm{lim}}$" />
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-3 h-0.5 border-t border-dashed border-rose-500" />
@@ -994,7 +994,7 @@ export const MechanicsFallSimulator: React.FC = () => {
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-3 h-0.5 border-t border-dashed border-amber-400" />
-                <MathView content="Temps $\tau$" />
+                <MathView content="Temps $\\tau$" />
               </span>
               {referenceCurve && (
                 <span className="flex items-center gap-1.5 text-purple-400">
@@ -1052,7 +1052,7 @@ export const MechanicsFallSimulator: React.FC = () => {
         <div className="space-y-1.5">
           <div className="flex justify-between items-center text-xs">
             <span className="text-slate-300 font-medium">
-              <MathView content="Fluide $\rho_f$ :" />
+              <MathView content="Fluide $\\rho_f$ :" />
             </span>
             <span className="font-mono text-sky-400 font-bold text-xs">{fluidDensity} kg/m³</span>
           </div>
@@ -1165,14 +1165,14 @@ export const MechanicsFallSimulator: React.FC = () => {
             {A.toFixed(2)} m/s²
           </div>
           <div className="text-[10px] text-slate-500 mt-0.5">
-            <MathView content="$g \cdot \left(1 - \frac{\rho_f \cdot V}{m}\right)$" />
+            <MathView content="$g \\cdot \\left(1 - \\frac{\\rho_f \\cdot V}{m}\\right)$" />
           </div>
         </div>
 
         {/* Vitesse limite v_lim */}
         <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-800 hover:border-slate-700 transition-all">
           <div className="text-slate-400 text-[11px]">
-            <MathView content="Vitesse limite $v_{\mathrm{lim}}$" />
+            <MathView content="Vitesse limite $v_{\\mathrm{lim}}$" />
           </div>
           <div className="font-mono text-base font-bold text-emerald-400 mt-1">
             {v_lim.toFixed(2)} m/s
@@ -1191,7 +1191,7 @@ export const MechanicsFallSimulator: React.FC = () => {
         {/* Temps caractéristique tau */}
         <div className="bg-slate-950/80 p-3 rounded-xl border border-slate-800 hover:border-slate-700 transition-all">
           <div className="text-slate-400 text-[11px]">
-            <MathView content="Temps caractéristique $\tau$" />
+            <MathView content="Temps caractéristique $\\tau$" />
           </div>
           <div className="font-mono text-base font-bold text-amber-400 mt-1">
             {(tau * 1000).toFixed(0)} ms
@@ -1263,13 +1263,13 @@ export const MechanicsFallSimulator: React.FC = () => {
           <div className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
               <div className="text-slate-300">
-                <MathView content="Algorithme itératif : $a_i = A - B \cdot v_i^n \quad \text{et} \quad v_{i+1} = v_i + a_i \cdot \Delta t$" />
+                <MathView content="Algorithme itératif : $a_i = A - B \\cdot v_i^n \\quad \\text{et} \\quad v_{i+1} = v_i + a_i \\cdot \\Delta t$" />
               </div>
 
               {/* Sélecteur de pas d'Euler dt */}
               <div className="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
                 <span className="text-slate-400">
-                  <MathView content="Pas de calcul $\Delta t$ :" />
+                  <MathView content="Pas de calcul $\\Delta t$ :" />
                 </span>
                 <input
                   type="range"
@@ -1289,17 +1289,17 @@ export const MechanicsFallSimulator: React.FC = () => {
               {eulerDtMs * 1e-3 <= tau / 10 ? (
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-lg border border-emerald-500/20 text-[11px]">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <MathView content="Condition respectée : $\Delta t \le \frac{\tau}{10}$ (Excellente précision numérique)" />
+                  <MathView content="Condition respectée : $\\Delta t \\le \\frac{\\tau}{10}$ (Excellente précision numérique)" />
                 </span>
               ) : eulerDtMs * 1e-3 <= tau / 5 ? (
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-lg border border-amber-500/20 text-[11px]">
                   <AlertTriangle className="w-3.5 h-3.5" />
-                  <MathView content="Attention : $\Delta t > \frac{\tau}{10}$ (Précision modérée)" />
+                  <MathView content="Attention : $\\Delta t > \\frac{\\tau}{10}$ (Précision modérée)" />
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-red-500/10 text-red-400 rounded-lg border border-red-500/20 text-[11px]">
                   <AlertTriangle className="w-3.5 h-3.5" />
-                  <MathView content="Pas trop grand : $\Delta t > \frac{\tau}{5}$ (Risque d'erreur ou d'instabilité)" />
+                  <MathView content="Pas trop grand : $\\Delta t > \\frac{\\tau}{5}$ (Risque d'erreur ou d'instabilité)" />
                 </span>
               )}
             </div>
@@ -1312,16 +1312,16 @@ export const MechanicsFallSimulator: React.FC = () => {
                     <th className="py-2 px-3">Étape $i$</th>
                     <th className="py-2 px-3">Temps $t_i$ (s)</th>
                     <th className="py-2 px-3">
-                      <MathView content="$v_i^{\mathrm{Euler}}$ (m/s)" />
+                      <MathView content="$v_i^{\\mathrm{Euler}}$ (m/s)" />
                     </th>
                     <th className="py-2 px-3">
-                      <MathView content="$v(t_i)^{\mathrm{Exact}}$ (m/s)" />
+                      <MathView content="$v(t_i)^{\\mathrm{Exact}}$ (m/s)" />
                     </th>
                     <th className="py-2 px-3">
-                      <MathView content="$a_i = A - B v_i^n$ (m/s²)" />
+                      <MathView content="$a_i = A - B \\cdot v_i^n$ (m/s²)" />
                     </th>
                     <th className="py-2 px-3">
-                      <MathView content="$v_{i+1} = v_i + a_i \Delta t$" />
+                      <MathView content="$v_{i+1} = v_i + a_i \\cdot \\Delta t$" />
                     </th>
                     <th className="py-2 px-3">Écart (%)</th>
                   </tr>
@@ -1378,16 +1378,16 @@ export const MechanicsFallSimulator: React.FC = () => {
                 </p>
                 <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800/60 text-center">
                   <MathView
-                    content="\frac{\mathrm{d}v}{\mathrm{d}t} = g \left(1 - \frac{\rho_f \cdot V}{m}\right) - \frac{k}{m} \cdot v^n = A - B \cdot v^n"
+                    content="$$\\frac{\\mathrm{d}v}{\\mathrm{d}t} = g \\left(1 - \\frac{\\rho_f \\cdot V}{m}\\right) - \\frac{k}{m} \\cdot v^n = A - B \\cdot v^n$$"
                     block
                   />
                 </div>
                 <ul className="list-disc list-inside space-y-1 text-slate-400 text-[11px]">
                   <li>
-                    <MathView content="$A = g\left(1 - \frac{\rho_f \cdot V}{m}\right) = a_0$ : accélération initiale à $t=0$" />
+                    <MathView content="$A = g \\left(1 - \\frac{\\rho_f \\cdot V}{m}\\right) = a_0$ : accélération initiale à $t=0$" />
                   </li>
                   <li>
-                    <MathView content="$B = \frac{k}{m}$ : coefficient de frottement massique" />
+                    <MathView content="$B = \\frac{k}{m}$ : coefficient de frottement massique" />
                   </li>
                 </ul>
               </div>
@@ -1398,25 +1398,25 @@ export const MechanicsFallSimulator: React.FC = () => {
                   2. Régime permanent et vitesse limite
                 </div>
                 <p className="text-slate-400">
-                  En régime permanent ($t \ge 5\tau$), la vitesse devient constante donc{' '}
-                  <MathView content="$\frac{\mathrm{d}v}{\mathrm{d}t} = 0$" /> :
+                  En régime permanent (<MathView content="$t \\ge 5\\tau$" />), la vitesse devient constante donc{' '}
+                  <MathView content="$\\frac{\\mathrm{d}v}{\\mathrm{d}t} = 0$" /> :
                 </p>
                 <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800/60 text-center">
                   <MathView
                     content={
                       frictionPower === 1
-                        ? '0 = A - B \cdot v_{\mathrm{lim}} \implies v_{\mathrm{lim}} = \frac{A}{B} = \frac{m \cdot g \left(1 - \frac{\rho_f V}{m}\right)}{k}'
-                        : '0 = A - B \cdot v_{\mathrm{lim}}^2 \implies v_{\mathrm{lim}} = \sqrt{\frac{A}{B}}'
+                        ? '$$0 = A - B \\cdot v_{\\mathrm{lim}} \\implies v_{\\mathrm{lim}} = \\frac{A}{B} = \\frac{m \\cdot g \\left(1 - \\frac{\\rho_f V}{m}\\right)}{k}$$'
+                        : '$$0 = A - B \\cdot v_{\\mathrm{lim}}^2 \\implies v_{\\mathrm{lim}} = \\sqrt{\\frac{A}{B}}$$'
                     }
                     block
                   />
                 </div>
                 <ul className="list-disc list-inside space-y-1 text-slate-400 text-[11px]">
                   <li>
-                    <MathView content="À $t = \tau$ : $v(\tau) \approx 0{,}63 \cdot v_{\mathrm{lim}}$ (régime linéaire)" />
+                    <MathView content="À $t = \\tau$ : $v(\\tau) \\approx 0{,}63 \\cdot v_{\\mathrm{lim}}$ (régime linéaire)" />
                   </li>
                   <li>
-                    <MathView content="La tangente à l'origine coupe l'asymptote $v = v_{\mathrm{lim}}$ en $t = \tau$" />
+                    <MathView content="La tangente à l'origine coupe l'asymptote $v = v_{\\mathrm{lim}}$ en $t = \\tau$" />
                   </li>
                 </ul>
               </div>

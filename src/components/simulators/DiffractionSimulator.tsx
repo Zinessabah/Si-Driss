@@ -856,7 +856,7 @@ export const DiffractionSimulator: React.FC = () => {
             <em>« Comment évolue la largeur L de la tache centrale si on diminue la largeur de la fente a ? »</em>
           </p>
           <div className="p-2.5 bg-[#131314] rounded-xl border border-[#282a2c] text-[11px] text-sky-300 font-mono">
-            <MathView content="$$L = \frac{2\lambda D}{a} \implies a \searrow \ \implies L \nearrow$$" />
+            <MathView content="$$L = \\frac{2\\lambda D}{a} \\implies a \\searrow \\implies L \\nearrow$$" />
           </div>
           <p className="text-[10px] text-[#8e918f]">
             La largeur $L$ de la tache centrale est inversement proportionnelle à $a$.

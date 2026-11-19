@@ -769,12 +769,12 @@ export const WavesSimulator: React.FC = () => {
             <span>Relation fondamentale de l'Examen National</span>
           </div>
           <div className="p-3 bg-[#131314] rounded-xl border border-[#282a2c] font-mono text-center text-xs text-sky-300">
-            <MathView content="$$y_M(t) = y_S(t - \tau) \quad \text{pour } t \ge \tau$$" />
+            <MathView content="$$y_M(t) = y_S(t - \\tau) \\quad \\text{pour } t \\ge \\tau$$" />
           </div>
           <p className="text-[11px] text-[#8e918f] leading-relaxed">
             Le mouvement du point <strong>M</strong> est identique à celui de la source <strong>S</strong>, mais avec un retard temporel{' '}
-            <span className="text-white font-mono inline-block align-middle"><MathView content="$\tau = \frac{SM}{v}$" /></span>.
-            Avant l'instant $t = \tau$, le point reste immobile ($y_M(t) = 0$).
+            <span className="text-white font-mono inline-block align-middle"><MathView content="$\\tau = \\frac{SM}{v}$" /></span>.
+            Avant l'instant <MathView content="$t = \\tau$" />, le point reste immobile (<MathView content="$y_M(t) = 0$" />).
           </p>
         </div>
 
@@ -786,7 +786,7 @@ export const WavesSimulator: React.FC = () => {
           </div>
           <div className="p-3 bg-[#131314] rounded-xl border border-[#282a2c] space-y-1 text-[11px]">
             <div className="flex justify-between">
-              <span className="text-[#8e918f]">Distance $SM_1$ / $\lambda$ :</span>
+              <span className="text-[#8e918f]">Distance SM₁ / λ :</span>
               <span className="font-mono font-bold text-white">{(pointM1Pos / wavelength).toFixed(2)} · λ</span>
             </div>
             <div className="flex justify-between">
@@ -798,10 +798,10 @@ export const WavesSimulator: React.FC = () => {
           </div>
           <div className="text-[11px] text-[#8e918f] leading-relaxed space-y-1">
             <div>
-              <MathView content="• Si $d = k \cdot \lambda$ : S et M vibrent **en phase** (atteignent leurs maxima en même temps)." />
+              <MathView content="• Si $d = k \\cdot \\lambda$ : S et M vibrent **en phase** (atteignent leurs maxima en même temps)." />
             </div>
             <div>
-              <MathView content="• Si $d = (2k+1) \cdot \frac{\lambda}{2}$ : S et M vibrent **en opposition de phase** ($y_M(t) = -y_S(t)$)." />
+              <MathView content="• Si $d = (2k+1) \\cdot \\frac{\\lambda}{2}$ : S et M vibrent **en opposition de phase** ($y_M(t) = -y_S(t)$)." />
             </div>
           </div>
         </div>
@@ -815,7 +815,7 @@ export const WavesSimulator: React.FC = () => {
         </div>
         <p className="text-[11px] text-[#c4c7c5] leading-relaxed">
           Lorsqu'on demande dans le sujet du Bac : <em>« Déterminer le sens du premier mouvement du point M »</em>, la réponse est toujours :{' '}
-          <strong>le point M reproduit exactement le premier mouvement effectué par la source S</strong> (si S a commencé par monter vers le haut à $t = 0$, le premier mouvement de M sera de monter vers le haut à $t = \tau$).
+          <strong>le point M reproduit exactement le premier mouvement effectué par la source S</strong> (si S a commencé par monter vers le haut à t = 0, le premier mouvement de M sera de monter vers le haut à t = τ).
         </p>
       </div>
     </div>
