@@ -619,7 +619,11 @@ export const WavesSimulator: React.FC = () => {
                 onChange={(e) => setShowVectors(e.target.checked)}
                 className="rounded accent-sky-500 cursor-pointer"
               />
-              <span>Vecteurs de propagation v⃗ et perturbation</span>
+              <span className="flex items-center gap-1">
+                <span>Vecteurs de propagation</span>
+                <MathView content="$\vec{v}$" className="inline text-sky-400" />
+                <span>et perturbation</span>
+              </span>
             </label>
 
             <label className="flex items-center gap-1.5 cursor-pointer hover:text-white transition">
@@ -629,7 +633,10 @@ export const WavesSimulator: React.FC = () => {
                 onChange={(e) => setShowRuler(e.target.checked)}
                 className="rounded accent-sky-500 cursor-pointer"
               />
-              <span>Règle et mesure de λ</span>
+              <span className="flex items-center gap-1">
+                <span>Règle et mesure de</span>
+                <MathView content="$\lambda$" className="inline text-amber-400" />
+              </span>
             </label>
           </div>
 
@@ -646,30 +653,44 @@ export const WavesSimulator: React.FC = () => {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {/* Card 1: Célérité */}
         <div className="p-3.5 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-1">
-          <div className="text-[11px] text-[#8e918f]">Célérité de l'onde (v)</div>
+          <div className="text-[11px] text-[#8e918f] flex items-center gap-1">
+            <span>Célérité de l'onde</span> <MathView content="$v$" className="inline" />
+          </div>
           <div className="text-lg font-bold text-white font-mono">{velocity.toFixed(1)} m/s</div>
-          <div className="text-[10px] text-sky-400 font-mono">v = d / Δt = λ / T</div>
+          <div className="text-[10px] text-sky-400 font-mono">
+            <MathView content="$v = \frac{d}{\Delta t} = \frac{\lambda}{T} = \lambda \cdot N$" />
+          </div>
         </div>
 
         {/* Card 2: Longueur d'onde */}
         <div className="p-3.5 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-1">
-          <div className="text-[11px] text-[#8e918f]">Longueur d'onde (λ)</div>
+          <div className="text-[11px] text-[#8e918f] flex items-center gap-1">
+            <span>Longueur d'onde</span> <MathView content="$\lambda$" className="inline" />
+          </div>
           <div className="text-lg font-bold text-white font-mono">{wavelength.toFixed(2)} m</div>
           <div className="text-[10px] text-amber-400 font-mono">Périodicité spatiale</div>
         </div>
 
         {/* Card 3: Période temporelle */}
         <div className="p-3.5 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-1">
-          <div className="text-[11px] text-[#8e918f]">Période temporelle (T)</div>
+          <div className="text-[11px] text-[#8e918f] flex items-center gap-1">
+            <span>Période temporelle</span> <MathView content="$T$" className="inline" />
+          </div>
           <div className="text-lg font-bold text-white font-mono">{period.toFixed(3)} s</div>
-          <div className="text-[10px] text-purple-400 font-mono">Fréquence N = {frequency.toFixed(1)} Hz</div>
+          <div className="text-[10px] text-purple-400 font-mono">
+            <MathView content={`$N = ${frequency.toFixed(1)}\\text{ Hz} = \\frac{1}{T}$`} />
+          </div>
         </div>
 
         {/* Card 4: Retard temporel tau */}
         <div className="p-3.5 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-1">
-          <div className="text-[11px] text-[#8e918f]">Retard en M₁ (τ)</div>
+          <div className="text-[11px] text-[#8e918f] flex items-center gap-1">
+            <span>Retard en</span> <MathView content="$M_1$" className="inline" /> (<MathView content="$\tau$" className="inline" />)
+          </div>
           <div className="text-lg font-bold text-rose-300 font-mono">{delayTau1.toFixed(3)} s</div>
-          <div className="text-[10px] text-rose-400 font-mono">τ = SM₁ / v</div>
+          <div className="text-[10px] text-rose-400 font-mono">
+            <MathView content="$\tau = \frac{SM_1}{v}$" />
+          </div>
         </div>
       </div>
 
@@ -680,16 +701,19 @@ export const WavesSimulator: React.FC = () => {
             <Sliders className="w-4 h-4 text-[#8ab4f8]" />
             Réglages des paramètres physiques
           </span>
-          <span className="text-[11px] text-[#8e918f]">
-            Modifiez pour observer l'effet direct sur λ, T et τ
+          <span className="text-[11px] text-[#8e918f] flex items-center gap-1">
+            <span>Modifiez pour observer l'effet direct sur</span>
+            <MathView content="$\lambda$" className="inline" />, <MathView content="$T$" className="inline" /> et <MathView content="$\tau$" className="inline" />
           </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
           {/* Slider 1: Célérité */}
           <div className="space-y-1.5">
-            <div className="flex justify-between">
-              <span className="text-[#8e918f]">Célérité (v) :</span>
+            <div className="flex justify-between items-center">
+              <span className="text-[#8e918f] flex items-center gap-1">
+                <span>Célérité</span> <MathView content="$v$" className="inline" /> :
+              </span>
               <span className="font-mono font-bold text-white">{velocity.toFixed(1)} m/s</span>
             </div>
             <input
@@ -706,8 +730,10 @@ export const WavesSimulator: React.FC = () => {
 
           {/* Slider 2: Fréquence */}
           <div className="space-y-1.5">
-            <div className="flex justify-between">
-              <span className="text-[#8e918f]">Fréquence (N) :</span>
+            <div className="flex justify-between items-center">
+              <span className="text-[#8e918f] flex items-center gap-1">
+                <span>Fréquence</span> <MathView content="$N$" className="inline" /> :
+              </span>
               <span className="font-mono font-bold text-white">{frequency.toFixed(1)} Hz</span>
             </div>
             <input
@@ -724,8 +750,10 @@ export const WavesSimulator: React.FC = () => {
 
           {/* Slider 3: Amplitude */}
           <div className="space-y-1.5">
-            <div className="flex justify-between">
-              <span className="text-[#8e918f]">Amplitude (Y_m) :</span>
+            <div className="flex justify-between items-center">
+              <span className="text-[#8e918f] flex items-center gap-1">
+                <span>Amplitude</span> <MathView content="$Y_m$" className="inline" /> :
+              </span>
               <span className="font-mono font-bold text-white">{amplitude.toFixed(1)} cm</span>
             </div>
             <input
@@ -742,8 +770,10 @@ export const WavesSimulator: React.FC = () => {
 
           {/* Slider 4: Position M1 */}
           <div className="space-y-1.5">
-            <div className="flex justify-between">
-              <span className="text-[#8e918f]">Position de M₁ :</span>
+            <div className="flex justify-between items-center">
+              <span className="text-[#8e918f] flex items-center gap-1">
+                <span>Position de</span> <MathView content="$M_1$" className="inline" /> :
+              </span>
               <span className="font-mono font-bold text-rose-300">{pointM1Pos.toFixed(2)} m</span>
             </div>
             <input
@@ -769,12 +799,12 @@ export const WavesSimulator: React.FC = () => {
             <span>Relation fondamentale de l'Examen National</span>
           </div>
           <div className="p-3 bg-[#131314] rounded-xl border border-[#282a2c] font-mono text-center text-xs text-sky-300">
-            <MathView content="$$y_M(t) = y_S(t - \\tau) \\quad \\text{pour } t \\ge \\tau$$" />
+            <MathView content="$$y_M(t) = y_S(t - \tau) \quad \text{pour } t \ge \tau$$" />
           </div>
           <p className="text-[11px] text-[#8e918f] leading-relaxed">
             Le mouvement du point <strong>M</strong> est identique à celui de la source <strong>S</strong>, mais avec un retard temporel{' '}
-            <span className="text-white font-mono inline-block align-middle"><MathView content="$\\tau = \\frac{SM}{v}$" /></span>.
-            Avant l'instant <MathView content="$t = \\tau$" />, le point reste immobile (<MathView content="$y_M(t) = 0$" />).
+            <span className="text-white font-mono inline-block align-middle"><MathView content="$\tau = \frac{SM}{v}$" /></span>.
+            Avant l'instant <MathView content="$t = \tau$" />, le point reste immobile (<MathView content="$y_M(t) = 0$" />).
           </p>
         </div>
 
@@ -782,12 +812,22 @@ export const WavesSimulator: React.FC = () => {
         <div className="p-4 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-2.5">
           <div className="font-bold text-white flex items-center gap-1.5">
             <Info className="w-4 h-4 text-sky-400" />
-            <span>État vibratoire entre S et M₁ (Question fréquente)</span>
+            <div className="flex items-center gap-1">
+              <span>État vibratoire entre</span>
+              <MathView content="$S$" className="inline" />
+              <span>et</span>
+              <MathView content="$M_1$" className="inline" />
+              <span>(Question fréquente)</span>
+            </div>
           </div>
           <div className="p-3 bg-[#131314] rounded-xl border border-[#282a2c] space-y-1 text-[11px]">
-            <div className="flex justify-between">
-              <span className="text-[#8e918f]">Distance SM₁ / λ :</span>
-              <span className="font-mono font-bold text-white">{(pointM1Pos / wavelength).toFixed(2)} · λ</span>
+            <div className="flex justify-between items-center">
+              <span className="text-[#8e918f] flex items-center gap-1">
+                <span>Distance</span> <MathView content="$SM_1 / \lambda$" className="inline" /> :
+              </span>
+              <span className="font-mono font-bold text-white">
+                <MathView content={`$${(pointM1Pos / wavelength).toFixed(2)} \\cdot \\lambda$`} />
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#8e918f]">État de vibration :</span>
@@ -798,10 +838,10 @@ export const WavesSimulator: React.FC = () => {
           </div>
           <div className="text-[11px] text-[#8e918f] leading-relaxed space-y-1">
             <div>
-              <MathView content="• Si $d = k \\cdot \\lambda$ : S et M vibrent **en phase** (atteignent leurs maxima en même temps)." />
+              <MathView content="• Si $d = k \cdot \lambda$ : S et M vibrent **en phase** (atteignent leurs maxima en même temps)." />
             </div>
             <div>
-              <MathView content="• Si $d = (2k+1) \\cdot \\frac{\\lambda}{2}$ : S et M vibrent **en opposition de phase** ($y_M(t) = -y_S(t)$)." />
+              <MathView content="• Si $d = (2k+1) \cdot \frac{\lambda}{2}$ : S et M vibrent **en opposition de phase** ($y_M(t) = -y_S(t)$)." />
             </div>
           </div>
         </div>
@@ -813,10 +853,14 @@ export const WavesSimulator: React.FC = () => {
           <HelpCircle className="w-4 h-4 text-amber-400" />
           <span>Le piège du National : Premier mouvement du point M</span>
         </div>
-        <p className="text-[11px] text-[#c4c7c5] leading-relaxed">
-          Lorsqu'on demande dans le sujet du Bac : <em>« Déterminer le sens du premier mouvement du point M »</em>, la réponse est toujours :{' '}
-          <strong>le point M reproduit exactement le premier mouvement effectué par la source S</strong> (si S a commencé par monter vers le haut à t = 0, le premier mouvement de M sera de monter vers le haut à t = τ).
-        </p>
+        <div className="text-[11px] text-[#c4c7c5] leading-relaxed space-y-1">
+          <p>
+            Lorsqu'on demande dans le sujet du Bac : <em>« Déterminer le sens du premier mouvement du point M »</em>, la règle absolue est :
+          </p>
+          <p>
+            <strong>Le point M reproduit exactement le premier mouvement effectué par la source S</strong> : si S a commencé par monter vers le haut à <MathView content="$t = 0$" className="inline text-amber-300" />, le premier mouvement de M sera de monter vers le haut à la date <MathView content="$t = \tau$" className="inline text-amber-300" />.
+          </p>
+        </div>
       </div>
     </div>
   );

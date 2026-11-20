@@ -602,10 +602,11 @@ export const DispersionSimulator: React.FC = () => {
           <div className="p-3.5 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-1">
             <div className="text-[11px] text-[#8e918f]">Vitesse de la lumière dans le prisme</div>
             <div className="text-base font-bold text-sky-400 font-mono">
-              v_R &gt; v_V
+              <MathView content="$v_{\text{rouge}} > v_{\text{violet}}$" className="inline" />
             </div>
-            <div className="text-[10px] text-slate-400 font-mono">
-              v = c / n (le rouge va plus vite dans le verre)
+            <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
+              <MathView content="$v = \frac{c}{n}$" className="inline" />
+              <span>(le rouge va plus vite dans le verre)</span>
             </div>
           </div>
         </div>
@@ -616,21 +617,33 @@ export const DispersionSimulator: React.FC = () => {
             <div className={`text-base font-bold font-mono ${isDispersiveMedium ? 'text-amber-400' : 'text-emerald-400'}`}>
               {isDispersiveMedium ? 'Milieu Dispersif (Eau)' : 'Milieu Non-Dispersif'}
             </div>
-            <div className="text-[10px] text-slate-400 font-mono">
-              {isDispersiveMedium ? 'v dépend de la fréquence N' : 'v = cte = 3.5 m/s'}
+            <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
+              {isDispersiveMedium ? (
+                <MathView content="$v = f(N)$ (dépend de la fréquence)" className="inline" />
+              ) : (
+                <MathView content="$v = \text{cte} = 3{,}5\text{ m/s}$" className="inline" />
+              )}
             </div>
           </div>
 
           <div className="p-3.5 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-1">
-            <div className="text-[11px] text-[#8e918f]">Célérité onde 1 (N₁ = {freq1} Hz)</div>
+            <div className="text-[11px] text-[#8e918f] flex items-center gap-1">
+              <span>Célérité onde 1</span> (<MathView content={`$N_1 = ${freq1}\\text{ Hz}$`} className="inline" />)
+            </div>
             <div className="text-base font-bold text-sky-400 font-mono">{v1.toFixed(2)} m/s</div>
-            <div className="text-[10px] text-slate-400 font-mono">λ₁ = {(v1 / freq1).toFixed(3)} m</div>
+            <div className="text-[10px] text-slate-400 font-mono">
+              <MathView content={`$\\lambda_1 = ${(v1 / freq1).toFixed(3)}\\text{ m}$`} />
+            </div>
           </div>
 
           <div className="p-3.5 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-1">
-            <div className="text-[11px] text-[#8e918f]">Célérité onde 2 (N₂ = {freq2} Hz)</div>
+            <div className="text-[11px] text-[#8e918f] flex items-center gap-1">
+              <span>Célérité onde 2</span> (<MathView content={`$N_2 = ${freq2}\\text{ Hz}$`} className="inline" />)
+            </div>
             <div className="text-base font-bold text-purple-400 font-mono">{v2.toFixed(2)} m/s</div>
-            <div className="text-[10px] text-slate-400 font-mono">λ₂ = {(v2 / freq2).toFixed(3)} m</div>
+            <div className="text-[10px] text-slate-400 font-mono">
+              <MathView content={`$\\lambda_2 = ${(v2 / freq2).toFixed(3)}\\text{ m}$`} />
+            </div>
           </div>
         </div>
       )}
@@ -675,14 +688,16 @@ export const DispersionSimulator: React.FC = () => {
                 </button>
               </div>
               <span className="text-[10px] text-[#8e918f] block">
-                {lightType === 'white' ? 'Polychromatique (décomposition)' : '1 seule radiation (pas de décomposition)'}
+                {lightType === 'white' ? 'Polychromatique (décomposition en spectre)' : '1 seule radiation (pas de dispersion)'}
               </span>
             </div>
 
             {/* Slider : Angle d'incidence i */}
             <div className="space-y-1.5">
-              <div className="flex justify-between">
-                <span className="text-[#8e918f]">Angle d'incidence (i) :</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[#8e918f] flex items-center gap-1">
+                  <span>Angle d'incidence</span> <MathView content="$i$" className="inline" /> :
+                </span>
                 <span className="font-mono font-bold text-amber-400">{incidenceAngleDeg}°</span>
               </div>
               <input
@@ -694,14 +709,16 @@ export const DispersionSimulator: React.FC = () => {
                 onChange={(e) => setIncidenceAngleDeg(parseFloat(e.target.value))}
                 className="w-full accent-amber-500 cursor-pointer"
               />
-              <span className="text-[10px] text-[#8e918f] block">Modifie l'angle d'entrée sur la face 1</span>
+              <span className="text-[10px] text-[#8e918f] block">Modifie l'angle d'entrée sur la première face</span>
             </div>
 
             {/* Slider si monochromatique */}
             {lightType === 'mono' && (
               <div className="space-y-1.5">
-                <div className="flex justify-between">
-                  <span className="text-[#8e918f]">Longueur d'onde (λ) :</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-[#8e918f] flex items-center gap-1">
+                    <span>Longueur d'onde</span> <MathView content="$\lambda$" className="inline" /> :
+                  </span>
                   <span className="font-mono font-bold text-purple-400">{monoWavelengthNm} nm</span>
                 </div>
                 <input
@@ -713,7 +730,9 @@ export const DispersionSimulator: React.FC = () => {
                   onChange={(e) => setMonoWavelengthNm(parseFloat(e.target.value))}
                   className="w-full accent-purple-500 cursor-pointer"
                 />
-                <span className="text-[10px] text-[#8e918f] block">Indice n = {getRefractiveIndex(monoWavelengthNm).toFixed(3)}</span>
+                <span className="text-[10px] text-[#8e918f] block">
+                  <MathView content={`$n(\\lambda) = ${getRefractiveIndex(monoWavelengthNm).toFixed(3)}$`} />
+                </span>
               </div>
             )}
           </div>
@@ -741,18 +760,24 @@ export const DispersionSimulator: React.FC = () => {
                       : 'bg-[#131314] text-[#8e918f] border-[#282a2c]'
                   }`}
                 >
-                  Non-Dispersif (Corde)
+                  Non-Dispersif (Air/Son)
                 </button>
               </div>
               <span className="text-[10px] text-[#8e918f] block">
-                {isDispersiveMedium ? 'v dépend de N (v1 ≠ v2)' : 'v = constante pour tout N'}
+                {isDispersiveMedium ? (
+                  <MathView content="$v = f(N) \implies v_1 \ne v_2$" className="inline text-amber-300" />
+                ) : (
+                  <MathView content="$v = \text{cte pour tout } N$" className="inline text-emerald-300" />
+                )}
               </span>
             </div>
 
             {/* Slider: Fréquence N1 */}
             <div className="space-y-1.5">
-              <div className="flex justify-between">
-                <span className="text-[#8e918f]">Fréquence N₁ :</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[#8e918f] flex items-center gap-1">
+                  <span>Fréquence</span> <MathView content="$N_1$" className="inline" /> :
+                </span>
                 <span className="font-mono font-bold text-sky-400">{freq1} Hz</span>
               </div>
               <input
@@ -764,13 +789,17 @@ export const DispersionSimulator: React.FC = () => {
                 onChange={(e) => setFreq1(parseFloat(e.target.value))}
                 className="w-full accent-sky-500 cursor-pointer"
               />
-              <span className="text-[10px] text-[#8e918f] block">Célérité résultante : v₁ = {v1.toFixed(2)} m/s</span>
+              <span className="text-[10px] text-[#8e918f] block">
+                <MathView content={`$v_1 = ${v1.toFixed(2)}\\text{ m/s}$`} />
+              </span>
             </div>
 
             {/* Slider: Fréquence N2 */}
             <div className="space-y-1.5">
-              <div className="flex justify-between">
-                <span className="text-[#8e918f]">Fréquence N₂ :</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[#8e918f] flex items-center gap-1">
+                  <span>Fréquence</span> <MathView content="$N_2$" className="inline" /> :
+                </span>
                 <span className="font-mono font-bold text-purple-400">{freq2} Hz</span>
               </div>
               <input
@@ -782,7 +811,9 @@ export const DispersionSimulator: React.FC = () => {
                 onChange={(e) => setFreq2(parseFloat(e.target.value))}
                 className="w-full accent-purple-500 cursor-pointer"
               />
-              <span className="text-[10px] text-[#8e918f] block">Célérité résultante : v₂ = {v2.toFixed(2)} m/s</span>
+              <span className="text-[10px] text-[#8e918f] block">
+                <MathView content={`$v_2 = ${v2.toFixed(2)}\\text{ m/s}$`} />
+              </span>
             </div>
           </div>
         )}
@@ -795,8 +826,11 @@ export const DispersionSimulator: React.FC = () => {
             <Sparkles className="w-4 h-4 text-amber-400" />
             <span>Définition officielle 2BAC BIOF</span>
           </div>
-          <div className="p-2.5 bg-[#131314] rounded-xl border border-[#282a2c] text-xs text-sky-300 font-medium leading-relaxed">
-            « Un milieu de propagation est dit <strong>dispersif</strong> si la célérité $v$ de l'onde dans ce milieu <strong>dépend de sa fréquence $N$</strong> ($v = f(N)$). »
+          <div className="p-3 bg-[#131314] rounded-xl border border-[#282a2c] text-xs text-slate-200 leading-relaxed space-y-1.5">
+            <p>
+              « Un milieu de propagation est dit <strong>dispersif</strong> si la célérité <MathView content="$v$" className="inline text-sky-300" /> de l'onde dans ce milieu <strong>dépend de sa fréquence <MathView content="$N$" className="inline text-sky-300" /></strong> :
+            </p>
+            <MathView content="$$v = f(N)$$" />
           </div>
           <p className="text-[11px] text-[#8e918f]">
             Exemples du cours : la surface de l'eau est un milieu dispersif. L'air pour les ondes sonores est non dispersif. Le verre pour la lumière est un milieu dispersif.
@@ -809,9 +843,9 @@ export const DispersionSimulator: React.FC = () => {
             <span>Démonstration type National : Pourquoi le violet est plus dévié ?</span>
           </div>
           <div className="space-y-1.5 text-[11px] text-[#c4c7c5]">
-            <MathView content="$$1.\\quad \\lambda_{\\text{violet}} < \\lambda_{\\text{rouge}}$$" />
-            <MathView content="$$2.\\quad n = A + \\frac{B}{\\lambda^2} \\implies n_{\\text{violet}} > n_{\\text{rouge}}$$" />
-            <MathView content="$$3.\\quad \\text{L'\''indice } n \\text{ étant plus élevé} \\implies D_{\\text{violet}} > D_{\\text{rouge}}$$" />
+            <MathView content="$$1.\quad \lambda_{\text{violet}} < \lambda_{\text{rouge}}$$" />
+            <MathView content="$$2.\quad n(\lambda) = A + \frac{B}{\lambda^2} \implies n_{\text{violet}} > n_{\text{rouge}}$$" />
+            <MathView content="$$3.\quad \text{L'indice } n \text{ étant plus grand} \implies D_{\text{violet}} > D_{\text{rouge}}$$" />
           </div>
         </div>
       </div>

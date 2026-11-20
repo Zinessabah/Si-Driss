@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, Zap, Sparkles } from 'lucide-react';
+import { Play, Pause, RotateCcw, Zap, Sparkles, BookOpen } from 'lucide-react';
 import { MathView } from '../MathView';
 
 export const RlcSimulator: React.FC = () => {
@@ -179,7 +179,7 @@ export const RlcSimulator: React.FC = () => {
             <h3 className="text-lg font-bold text-white">Laboratoire Virtuel : Oscillateur RC / RLC Série</h3>
           </div>
           <p className="text-xs text-slate-400 mt-0.5">
-            Visualisation temps réel de l'oscilloscope et des transferts d'énergie (Conforme 2ème Bac PC BIOF)
+            Visualisation temps réel de l'oscilloscope et des transferts d'énergie (Conforme 2 BAC BIOF PC & SM)
           </p>
         </div>
 
@@ -211,8 +211,12 @@ export const RlcSimulator: React.FC = () => {
         {/* Floating badge for regime */}
         <div className="absolute top-3 right-3 bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs px-3 py-1.5 rounded-lg flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-slate-300 font-mono">
-            {circuitMode === 'RLC' ? `Régime : ${regime}` : `Charge à 63% : ${(tau_RC * 1000).toFixed(2)} ms`}
+          <span className="text-slate-300 font-mono flex items-center gap-1.5">
+            {circuitMode === 'RLC' ? (
+              <span>Régime : {regime}</span>
+            ) : (
+              <span>Charge à 63% : <MathView content={`$t = \\tau = ${(tau_RC * 1000).toFixed(2)}\\text{ ms}$`} className="inline" /></span>
+            )}
           </span>
         </div>
       </div>
@@ -221,9 +225,13 @@ export const RlcSimulator: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-950/60 p-4 rounded-xl border border-slate-800/80">
         {/* Resistance R */}
         <div className="space-y-1.5">
-          <div className="flex justify-between text-xs">
-            <span className="text-slate-400 font-medium">Résistance totale $R_T$ :</span>
-            <span className="font-mono text-cyan-400 font-bold">{R} $\Omega$</span>
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-slate-400 font-medium flex items-center gap-1">
+              Résistance totale <MathView content="$R_T$" className="inline" /> :
+            </span>
+            <span className="font-mono text-cyan-400 font-bold flex items-center gap-1">
+              {R} <MathView content="$\Omega$" className="inline" />
+            </span>
           </div>
           <input
             type="range"
@@ -235,15 +243,21 @@ export const RlcSimulator: React.FC = () => {
             className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
           />
           <div className="text-[10px] text-slate-500">
-            {circuitMode === 'RLC' ? `R_critique = ${R_critique.toFixed(1)} $\\Omega$` : 'Plus R est grand, plus la charge est lente'}
+            {circuitMode === 'RLC' ? (
+              <MathView content={`$R_c = 2\\sqrt{\\frac{L}{C}} = ${R_critique.toFixed(1)}\\,\\Omega$`} />
+            ) : (
+              'Plus R est grand, plus la constante de temps tau augmente'
+            )}
           </div>
         </div>
 
         {/* Inductance L (RLC only) */}
         {circuitMode === 'RLC' && (
           <div className="space-y-1.5">
-            <div className="flex justify-between text-xs">
-              <span className="text-slate-400 font-medium">Inductance $L$ :</span>
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-slate-400 font-medium flex items-center gap-1">
+                Inductance <MathView content="$L$" className="inline" /> :
+              </span>
               <span className="font-mono text-cyan-400 font-bold">{(L * 1000).toFixed(0)} mH</span>
             </div>
             <input
@@ -256,16 +270,20 @@ export const RlcSimulator: React.FC = () => {
               className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
             />
             <div className="text-[10px] text-slate-500">
-              Période propre $T_0 = {(T0 * 1000).toFixed(2)}$ ms
+              <MathView content={`$T_0 = 2\\pi\\sqrt{LC} = ${(T0 * 1000).toFixed(2)}\\text{ ms}$`} />
             </div>
           </div>
         )}
 
         {/* Capacity C */}
         <div className="space-y-1.5">
-          <div className="flex justify-between text-xs">
-            <span className="text-slate-400 font-medium">Capacité $C$ :</span>
-            <span className="font-mono text-cyan-400 font-bold">{C} µF</span>
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-slate-400 font-medium flex items-center gap-1">
+              Capacité <MathView content="$C$" className="inline" /> :
+            </span>
+            <span className="font-mono text-cyan-400 font-bold flex items-center gap-1">
+              {C} <MathView content="$\mu\mathrm{F}$" className="inline" />
+            </span>
           </div>
           <input
             type="range"
@@ -277,14 +295,20 @@ export const RlcSimulator: React.FC = () => {
             className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
           />
           <div className="text-[10px] text-slate-500">
-            {circuitMode === 'RLC' ? `Énergie max = ${(0.5 * C_F * E * E * 1e3).toFixed(2)} mJ` : `$\\tau = RC = ${(tau_RC * 1000).toFixed(2)}$ ms`}
+            {circuitMode === 'RLC' ? (
+              <MathView content={`$E_{\\max} = \\frac{1}{2} C E^2 = ${(0.5 * C_F * E * E * 1e3).toFixed(2)}\\text{ mJ}$`} />
+            ) : (
+              <MathView content={`$\\tau = RC = ${(tau_RC * 1000).toFixed(2)}\\text{ ms}$`} />
+            )}
           </div>
         </div>
 
         {/* Voltage E */}
         <div className="space-y-1.5">
-          <div className="flex justify-between text-xs">
-            <span className="text-slate-400 font-medium">Tension générateur $E$ :</span>
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-slate-400 font-medium flex items-center gap-1">
+              Tension générateur <MathView content="$E$" className="inline" /> :
+            </span>
             <span className="font-mono text-cyan-400 font-bold">{E} V</span>
           </div>
           <input
@@ -300,22 +324,67 @@ export const RlcSimulator: React.FC = () => {
         </div>
       </div>
 
-      {/* Si Driss's live note */}
-      <div className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 p-3.5 rounded-xl text-xs text-amber-200">
-        <Sparkles className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-        <div className="space-y-1">
-          <span className="font-bold text-amber-300">Remarque de Si Driss pour le National : </span>
-          {circuitMode === 'RLC' ? (
-            <MathView
-              content="Regarde bien la courbe orange d'énergie : elle oscille à une fréquence double ! Au National, quand on te donne le graphe de $E_e(t)$ ou $E_m(t)$, la période lue graphiquement est $\mathcal{T} = T/2$ et NON $T$. Pour trouver la pseudo-période des oscillations de tension, tu dois impérativement multiplier par 2 : $T = 2 \times \mathcal{T}$ !"
-              className="inline text-amber-200"
-            />
-          ) : (
-            <MathView
-              content={`À $t = \\tau = RC$, la tension $u_C$ atteint exactement $63\\%$ de $E$ (soit ${(0.63 * E).toFixed(2)} V). La méthode de la tangente à l'origine coupe l'asymptote $u_C = E$ exactement à $t = \\tau$.`}
-              className="inline text-amber-200"
-            />
-          )}
+      {/* Official Exam Criteria Box */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+        <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+          <div className="flex items-center gap-2 font-semibold text-blue-300">
+            <BookOpen className="w-4 h-4 text-blue-400" />
+            <span>
+              {circuitMode === 'RLC' ? "1. Équation différentielle & Régimes (RLC) :" : "1. Équation différentielle & Solution (RC) :"}
+            </span>
+          </div>
+          <div className="text-slate-300 space-y-1.5">
+            {circuitMode === 'RLC' ? (
+              <>
+                <MathView content="$$\frac{\mathrm{d}^2 u_C}{\mathrm{d}t^2} + \frac{R_T}{L} \cdot \frac{\mathrm{d}u_C}{\mathrm{d}t} + \frac{1}{LC} \cdot u_C = 0$$" />
+                <div className="text-[11px] text-slate-400 space-y-1">
+                  <div>• Si <MathView content="$R_T = 0$" className="inline" /> : Circuit idéal non amorti, régime périodique avec <MathView content="$T_0 = 2\pi\sqrt{LC}$" className="inline" />.</div>
+                  <div>• Si <MathView content="$R_T < R_c = 2\sqrt{L/C}$" className="inline" /> : Régime pseudo-périodique de pseudo-période <MathView content="$T \approx T_0$" className="inline" />.</div>
+                  <div>• Si <MathView content="$R_T \ge R_c$" className="inline" /> : Régime apériodique sans oscillations.</div>
+                </div>
+              </>
+            ) : (
+              <>
+                <MathView content="$$\frac{\mathrm{d}u_C}{\mathrm{d}t} + \frac{1}{\tau} \cdot u_C = \frac{E}{\tau} \quad \text{avec} \quad \tau = R \cdot C$$" />
+                <div className="text-[11px] text-slate-400 space-y-1">
+                  <div>• Solution analytique de charge : <MathView content="$u_C(t) = E \left(1 - e^{-t/\tau}\right)$" className="inline" />.</div>
+                  <div>• À l'instant <MathView content="$t = \tau$" className="inline" /> : <MathView content="$u_C(\tau) = E(1 - e^{-1}) \approx 0{,}63 \cdot E$" className="inline" />.</div>
+                  <div>• Régime permanent atteint pour <MathView content="$t \ge 5\tau$" className="inline" /> (<MathView content="$u_C \approx E$" className="inline" />).</div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+          <div className="flex items-center gap-2 font-semibold text-blue-300">
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span>2. Bilan d'énergie & Piège classique du National :</span>
+          </div>
+          <div className="text-slate-300 space-y-1.5 text-[11px] leading-relaxed">
+            {circuitMode === 'RLC' ? (
+              <>
+                <MathView content="$$E_T = E_e + E_m = \frac{1}{2} C \cdot u_C^2 + \frac{1}{2} L \cdot i^2$$" />
+                <p>
+                  • <strong>Décroissance de l'énergie :</strong> <MathView content="$\frac{\mathrm{d}E_T}{\mathrm{d}t} = -R_T \cdot i^2 \le 0$" className="inline" /> due à la dissipation par effet Joule dans la résistance.
+                </p>
+                <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-200">
+                  <span className="font-bold text-amber-300">⚠️ Piège fréquent au Bac National :</span>
+                  <div className="mt-1">
+                    La courbe des énergies <MathView content="$E_e(t)$" className="inline" /> et <MathView content="$E_m(t)$" className="inline" /> oscille à une fréquence <strong>double</strong> ! La période spatiale ou temporelle lue sur le graphe de l'énergie est :
+                    <MathView content="$$\mathcal{T}_{\text{énergie}} = \frac{T}{2} \iff T = 2 \cdot \mathcal{T}_{\text{énergie}}$$" />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <MathView content="$$E_e(t) = \frac{1}{2} C \cdot u_C^2(t) \quad \text{et} \quad E_{e,\max} = \frac{1}{2} C \cdot E^2$$" />
+                <p>
+                  • <strong>Détermination graphique de <MathView content="$\tau$" className="inline" /> :</strong> L'intersection de la tangente à l'origine avec l'asymptote horizontale <MathView content="$u_C = E$" className="inline" /> donne directement la date <MathView content="$t = \tau$" className="inline" />.
+                </p>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FlaskConical, CheckCircle2, XCircle, Info } from 'lucide-react';
+import { FlaskConical, CheckCircle2, XCircle, Info, Sparkles, BookOpen } from 'lucide-react';
+import { MathView } from '../MathView';
 
 interface Indicator {
   name: string;
@@ -229,10 +230,11 @@ export const TitrationSimulator: React.FC = () => {
           <span className="text-xs font-semibold text-slate-300">
             Choisir un indicateur coloré pour le titrage :
           </span>
-          <span className="text-[11px] text-slate-400 flex items-center gap-1">
-            <Info className="w-3.5 h-3.5 text-slate-500" />
-            Critère officiel : la zone de virage doit encadrer $pH_E = {pHe.toFixed(2)}$
-          </span>
+          <div className="text-[11px] text-slate-400 flex items-center gap-1.5 flex-wrap">
+            <Info className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+            <span>Critère officiel : la zone de virage doit encadrer</span>
+            <MathView content={`$pH_E = ${pHe.toFixed(2)}$`} className="inline text-emerald-400 font-bold" />
+          </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -275,8 +277,10 @@ export const TitrationSimulator: React.FC = () => {
       {/* Sliders */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-950/60 p-4 rounded-xl border border-slate-800/80">
         <div className="space-y-1.5">
-          <div className="flex justify-between text-xs">
-            <span className="text-slate-400">Concentration acide $C_A$ :</span>
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-slate-400 flex items-center gap-1">
+              Concentration acide <MathView content="$C_A$" className="inline" /> :
+            </span>
             <span className="font-mono text-purple-400 font-bold">{Ca.toFixed(3)} mol/L</span>
           </div>
           <input
@@ -291,8 +295,10 @@ export const TitrationSimulator: React.FC = () => {
         </div>
 
         <div className="space-y-1.5">
-          <div className="flex justify-between text-xs">
-            <span className="text-slate-400">Concentration base $C_B$ :</span>
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-slate-400 flex items-center gap-1">
+              Concentration base <MathView content="$C_B$" className="inline" /> :
+            </span>
             <span className="font-mono text-purple-400 font-bold">{Cb.toFixed(3)} mol/L</span>
           </div>
           <input
@@ -307,8 +313,10 @@ export const TitrationSimulator: React.FC = () => {
         </div>
 
         <div className="space-y-1.5">
-          <div className="flex justify-between text-xs">
-            <span className="text-slate-400">$pK_A$ de l'acide faible :</span>
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-slate-400 flex items-center gap-1">
+              <MathView content="$pK_A$" className="inline" /> de l'acide faible :
+            </span>
             <span className="font-mono text-purple-400 font-bold">{pKa.toFixed(1)}</span>
           </div>
           <input
@@ -320,6 +328,46 @@ export const TitrationSimulator: React.FC = () => {
             onChange={(e) => setPKa(Number(e.target.value))}
             className="w-full accent-purple-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
           />
+        </div>
+      </div>
+
+      {/* Official Exam Criteria & Theoretical Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+        <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+          <div className="flex items-center gap-2 font-semibold text-purple-300">
+            <BookOpen className="w-4 h-4 text-purple-400" />
+            <span>1. Relation à l'équivalence & Demi-équivalence :</span>
+          </div>
+          <div className="text-slate-300 space-y-1.5">
+            <MathView content="$$C_A \cdot V_A = C_B \cdot V_{bE} \implies V_{bE} = \frac{C_A \cdot V_A}{C_B}$$" />
+            <div className="text-[11px] text-slate-400">
+              Valeur calculée : <span className="font-mono text-emerald-400 font-bold">V_bE = {VbE.toFixed(1)} mL</span>, avec <MathView content={`$pH_E = ${pHe.toFixed(2)}$`} className="inline" /> (milieu basique car présence de la base conjuguée <MathView content="$A^-$" className="inline" />).
+            </div>
+            <div className="pt-1 border-t border-slate-800/80">
+              <span className="text-amber-300 font-medium">À la demi-équivalence :</span>
+              <MathView content="$$V_b = \frac{V_{bE}}{2} \implies [AH] = [A^-] \implies pH = pK_A$$" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+          <div className="flex items-center gap-2 font-semibold text-purple-300">
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span>2. Règle d'or de Si Driss pour le National :</span>
+          </div>
+          <div className="text-slate-300 space-y-2 text-[11px] leading-relaxed">
+            <p>
+              • <strong>Choix de l'indicateur coloré :</strong> La zone de virage de l'indicateur <MathView content="$[pH_{\min}\,;\,pH_{\max}]$" className="inline" /> doit <strong>impérativement contenir le point d'équivalence</strong> <MathView content="$pH_E$" className="inline" />.
+            </p>
+            <p>
+              • <strong>Équation de la réaction de dosage :</strong>
+            </p>
+            <MathView content="$$AH_{(aq)} + HO^-_{(aq)} \longrightarrow A^-_{(aq)} + H_2O_{(l)}$$" />
+            <p className="text-slate-400">
+              Constante d'équilibre : <MathView content="$$K = \frac{[A^-]}{[AH] \cdot [HO^-]} = \frac{K_A}{K_e} \gg 10^4$$" />
+              La réaction est <strong>rapide, univoque et totale</strong>.
+            </p>
+          </div>
         </div>
       </div>
     </div>

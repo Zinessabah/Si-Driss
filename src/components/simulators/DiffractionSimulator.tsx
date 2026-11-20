@@ -649,7 +649,9 @@ export const DiffractionSimulator: React.FC = () => {
           </div>
 
           <div className="p-3.5 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-1">
-            <div className="text-[11px] text-[#8e918f]">Longueur d'onde (λ)</div>
+            <div className="text-[11px] text-[#8e918f] flex items-center gap-1">
+              <span>Longueur d'onde</span> <MathView content="$\lambda$" className="inline" />
+            </div>
             <div className="text-base font-bold text-white font-mono">{waterWavelength} mm</div>
             <div className="text-[10px] text-sky-400">Conservée après la fente</div>
           </div>
@@ -657,27 +659,37 @@ export const DiffractionSimulator: React.FC = () => {
           <div className="p-3.5 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-1">
             <div className="text-[11px] text-[#8e918f]">Célérité & Fréquence</div>
             <div className="text-base font-bold text-white font-mono">Inchangées</div>
-            <div className="text-[10px] text-emerald-400 font-mono">v_avant = v_après et N = {waveFrequency} Hz</div>
+            <div className="text-[10px] text-emerald-400 font-mono">
+              <MathView content={`$v_{\\text{avant}} = v_{\\text{après}}$ et $N = ${waveFrequency}\\text{ Hz}$`} />
+            </div>
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="p-3.5 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-1">
-            <div className="text-[11px] text-[#8e918f]">Écart angulaire (θ)</div>
+            <div className="text-[11px] text-[#8e918f] flex items-center gap-1">
+              <span>Écart angulaire</span> <MathView content="$\theta$" className="inline" />
+            </div>
             <div className="text-base font-bold text-amber-400 font-mono">{thetaMrad.toFixed(2)} mrad</div>
-            <div className="text-[10px] text-slate-400 font-mono">θ = λ / a ({thetaRad.toExponential(2)} rad)</div>
+            <div className="text-[10px] text-slate-400 font-mono">
+              <MathView content={`$\\theta = \\frac{\\lambda}{a} = ${thetaMrad.toFixed(2)}\\text{ mrad}$`} />
+            </div>
           </div>
 
           <div className="p-3.5 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-1">
-            <div className="text-[11px] text-[#8e918f]">Largeur tache centrale (L)</div>
+            <div className="text-[11px] text-[#8e918f] flex items-center gap-1">
+              <span>Largeur tache centrale</span> <MathView content="$L$" className="inline" />
+            </div>
             <div className="text-base font-bold text-sky-400 font-mono">{centralWidthCm.toFixed(2)} cm</div>
-            <div className="text-[10px] text-slate-400 font-mono">L = (2 · λ · D) / a</div>
+            <div className="text-[10px] text-slate-400 font-mono">
+              <MathView content="$L = \frac{2\lambda D}{a}$" />
+            </div>
           </div>
 
           <div className="p-3.5 bg-[#17181c] border border-[#282a2c] rounded-2xl space-y-1">
             <div className="text-[11px] text-[#8e918f]">Laser sélectionné</div>
             <div className="text-base font-bold font-mono" style={{ color: laserHexColor }}>
-              λ = {laserWavelengthNm} nm
+              <MathView content={`$\\lambda = ${laserWavelengthNm}\\text{ nm}$`} />
             </div>
             <div className="text-[10px] text-slate-400">Couleur {laserColor.toUpperCase()}</div>
           </div>
@@ -700,8 +712,10 @@ export const DiffractionSimulator: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
             {/* Slider: Largeur de la fente a */}
             <div className="space-y-1.5">
-              <div className="flex justify-between">
-                <span className="text-[#8e918f]">Largeur de fente (a) :</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[#8e918f] flex items-center gap-1">
+                  <span>Largeur de fente</span> <MathView content="$a$" className="inline" /> :
+                </span>
                 <span className="font-mono font-bold text-amber-400">{slitWidthWater} mm</span>
               </div>
               <input
@@ -714,14 +728,24 @@ export const DiffractionSimulator: React.FC = () => {
                 className="w-full accent-amber-500 cursor-pointer"
               />
               <span className="text-[10px] text-[#8e918f] block">
-                {ratioWater <= 1 ? '✓ a ≤ λ : onde circulaire' : 'a > λ : peu de diffraction'}
+                {ratioWater <= 1 ? (
+                  <span className="text-emerald-400 flex items-center gap-1">
+                    ✓ <MathView content="$a \le \lambda$" className="inline" /> : diffraction circulaire nette
+                  </span>
+                ) : (
+                  <span>
+                    <MathView content="$a > \lambda$" className="inline" /> : diaphragme (peu de diffraction)
+                  </span>
+                )}
               </span>
             </div>
 
             {/* Slider: Longueur d'onde lambda */}
             <div className="space-y-1.5">
-              <div className="flex justify-between">
-                <span className="text-[#8e918f]">Longueur d'onde (λ) :</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[#8e918f] flex items-center gap-1">
+                  <span>Longueur d'onde</span> <MathView content="$\lambda$" className="inline" /> :
+                </span>
                 <span className="font-mono font-bold text-sky-400">{waterWavelength} mm</span>
               </div>
               <input
@@ -738,8 +762,10 @@ export const DiffractionSimulator: React.FC = () => {
 
             {/* Slider: Fréquence N */}
             <div className="space-y-1.5">
-              <div className="flex justify-between">
-                <span className="text-[#8e918f]">Fréquence vibreur (N) :</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[#8e918f] flex items-center gap-1">
+                  <span>Fréquence vibreur</span> <MathView content="$N$" className="inline" /> :
+                </span>
                 <span className="font-mono font-bold text-purple-400">{waveFrequency} Hz</span>
               </div>
               <input
@@ -779,14 +805,16 @@ export const DiffractionSimulator: React.FC = () => {
                 ))}
               </div>
               <span className="text-[10px] text-[#8e918f] block">
-                λ_rouge &gt; λ_vert &gt; λ_bleu (le rouge s'étale plus !)
+                <MathView content="$\lambda_{\text{rouge}} > \lambda_{\text{vert}} > \lambda_{\text{bleu}}$" className="inline" /> (le rouge s'étale plus !)
               </span>
             </div>
 
             {/* Slider: Largeur de fente a */}
             <div className="space-y-1.5">
-              <div className="flex justify-between">
-                <span className="text-[#8e918f]">Largeur fente (a) :</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[#8e918f] flex items-center gap-1">
+                  <span>Largeur fente</span> <MathView content="$a$" className="inline" /> :
+                </span>
                 <span className="font-mono font-bold text-amber-400">{slitWidthLaser} µm</span>
               </div>
               <input
@@ -805,8 +833,10 @@ export const DiffractionSimulator: React.FC = () => {
 
             {/* Slider: Distance fente-écran D */}
             <div className="space-y-1.5">
-              <div className="flex justify-between">
-                <span className="text-[#8e918f]">Distance écran (D) :</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[#8e918f] flex items-center gap-1">
+                  <span>Distance écran</span> <MathView content="$D$" className="inline" /> :
+                </span>
                 <span className="font-mono font-bold text-sky-400">{distanceScreen.toFixed(1)} m</span>
               </div>
               <input
@@ -818,7 +848,9 @@ export const DiffractionSimulator: React.FC = () => {
                 onChange={(e) => setDistanceScreen(parseFloat(e.target.value))}
                 className="w-full accent-sky-500 cursor-pointer"
               />
-              <span className="text-[10px] text-[#8e918f] block">L est proportionnelle à la distance D</span>
+              <span className="text-[10px] text-[#8e918f] flex items-center gap-1">
+                <MathView content="$L$" className="inline" /> est proportionnelle à la distance <MathView content="$D$" className="inline" />
+              </span>
             </div>
           </div>
         )}
@@ -834,7 +866,12 @@ export const DiffractionSimulator: React.FC = () => {
           <ul className="space-y-1.5 text-[11px] text-[#c4c7c5]">
             <li className="flex items-start gap-1.5">
               <span className="text-emerald-400 font-bold">✓</span>
-              <span><strong>λ, v et N sont strictement conservées</strong> après le passage de l'ouverture (car le milieu reste le même).</span>
+              <span>
+                <strong>
+                  <MathView content="$\lambda$" className="inline" />, <MathView content="$v$" className="inline" /> et <MathView content="$N$" className="inline" /> sont strictement conservées
+                </strong>{' '}
+                après le passage de l'ouverture (car le milieu reste le même).
+              </span>
             </li>
             <li className="flex items-start gap-1.5">
               <span className="text-emerald-400 font-bold">✓</span>
@@ -852,14 +889,21 @@ export const DiffractionSimulator: React.FC = () => {
             <HelpCircle className="w-4 h-4 text-amber-400" />
             <span>Questions typiques du Baccalauréat BIOF</span>
           </div>
-          <p className="text-[11px] text-[#c4c7c5] leading-relaxed">
-            <em>« Comment évolue la largeur L de la tache centrale si on diminue la largeur de la fente a ? »</em>
-          </p>
-          <div className="p-2.5 bg-[#131314] rounded-xl border border-[#282a2c] text-[11px] text-sky-300 font-mono">
-            <MathView content="$$L = \\frac{2\\lambda D}{a} \\implies a \\searrow \\implies L \\nearrow$$" />
+          <div className="text-[11px] text-[#c4c7c5] leading-relaxed flex items-center gap-1 flex-wrap">
+            <em>« Comment évolue la largeur</em>
+            <MathView content="$L$" className="inline" />
+            <em>de la tache centrale si on diminue la largeur de la fente</em>
+            <MathView content="$a$" className="inline" />
+            <em>? »</em>
           </div>
-          <p className="text-[10px] text-[#8e918f]">
-            La largeur $L$ de la tache centrale est inversement proportionnelle à $a$.
+          <div className="p-2.5 bg-[#131314] rounded-xl border border-[#282a2c] text-[11px] text-sky-300 font-mono">
+            <MathView content="$$L = \frac{2\lambda D}{a} \implies a \searrow \implies L \nearrow$$" />
+          </div>
+          <p className="text-[10px] text-[#8e918f] flex items-center gap-1 flex-wrap">
+            <span>La largeur</span>
+            <MathView content="$L$" className="inline text-sky-300" />
+            <span>de la tache centrale est inversement proportionnelle à</span>
+            <MathView content="$a$" className="inline text-amber-300" />.
           </p>
         </div>
       </div>

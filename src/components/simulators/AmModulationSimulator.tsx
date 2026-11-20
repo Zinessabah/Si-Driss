@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Radio, AlertTriangle, CheckCircle, Sliders } from 'lucide-react';
+import { Radio, AlertTriangle, CheckCircle, Sliders, BookOpen, Sparkles } from 'lucide-react';
 import { MathView } from '../MathView';
 
 export const AmModulationSimulator: React.FC = () => {
@@ -181,22 +181,25 @@ export const AmModulationSimulator: React.FC = () => {
             <span className="p-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg">
               <Radio className="w-5 h-5" />
             </span>
-            <h3 className="text-lg font-bold text-white">Laboratoire Modulation AM (Spécifique 2ème Bac PC)</h3>
+            <h3 className="text-lg font-bold text-white">Laboratoire Modulation & Démodulation AM (2 BAC PC)</h3>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Étude du taux de modulation $m$, condition de bonne modulation et méthode du trapèze en mode XY
-          </p>
+          <div className="text-xs text-slate-400 mt-0.5 flex items-center gap-1 flex-wrap">
+            <span>Étude du taux de modulation</span>
+            <MathView content="$m$" className="inline text-emerald-300" />
+            <span>, condition de bonne modulation et méthode du trapèze en mode XY</span>
+          </div>
         </div>
 
         {/* View toggle */}
         <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800">
           <button
             onClick={() => setViewMode('temporal')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 ${
               viewMode === 'temporal' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
             }`}
           >
-            Oscillogramme Temporel $u(t)$
+            <span>Oscillogramme Temporel</span>
+            <MathView content="$u(t)$" className="inline" />
           </button>
           <button
             onClick={() => setViewMode('xy')}
@@ -223,13 +226,19 @@ export const AmModulationSimulator: React.FC = () => {
         >
           {isGoodModulation ? (
             <>
-              <CheckCircle className="w-4 h-4 text-emerald-400" />
-              <span>Bonne modulation : m = {m.toFixed(2)} (&lt; 1)</span>
+              <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+              <div className="flex items-center gap-1">
+                <span>Bonne modulation :</span>
+                <MathView content={`$m = ${m.toFixed(2)} < 1$`} className="inline" />
+              </div>
             </>
           ) : (
             <>
-              <AlertTriangle className="w-4 h-4 text-rose-400" />
-              <span>Surmodulation (m = {m.toFixed(2)} ≥ 1)</span>
+              <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+              <div className="flex items-center gap-1">
+                <span>Surmodulation :</span>
+                <MathView content={`$m = ${m.toFixed(2)} \\ge 1$`} className="inline" />
+              </div>
             </>
           )}
         </div>
@@ -239,8 +248,10 @@ export const AmModulationSimulator: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-slate-950/60 p-4 rounded-xl border border-slate-800/80">
         {/* Signal Amplitude Sm */}
         <div className="space-y-1.5">
-          <div className="flex justify-between text-xs">
-            <span className="text-slate-400">Amplitude signal $S_m$ :</span>
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-slate-400 flex items-center gap-1">
+              Amplitude signal <MathView content="$S_m$" className="inline" /> :
+            </span>
             <span className="font-mono text-emerald-400 font-bold">{Sm.toFixed(1)} V</span>
           </div>
           <input
@@ -256,8 +267,10 @@ export const AmModulationSimulator: React.FC = () => {
 
         {/* Offset Voltage U0 */}
         <div className="space-y-1.5">
-          <div className="flex justify-between text-xs">
-            <span className="text-slate-400">Tension décalage $U_0$ :</span>
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-slate-400 flex items-center gap-1">
+              Tension décalage <MathView content="$U_0$" className="inline" /> :
+            </span>
             <span className="font-mono text-emerald-400 font-bold">{U0.toFixed(1)} V</span>
           </div>
           <input
@@ -273,8 +286,10 @@ export const AmModulationSimulator: React.FC = () => {
 
         {/* Signal Frequency fs */}
         <div className="space-y-1.5">
-          <div className="flex justify-between text-xs">
-            <span className="text-slate-400">Fréquence info $f_s$ (BF) :</span>
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-slate-400 flex items-center gap-1">
+              Fréquence info <MathView content="$f_s$" className="inline" /> (BF) :
+            </span>
             <span className="font-mono text-emerald-400 font-bold">{fs} Hz</span>
           </div>
           <input
@@ -290,8 +305,10 @@ export const AmModulationSimulator: React.FC = () => {
 
         {/* Carrier Frequency Fp */}
         <div className="space-y-1.5">
-          <div className="flex justify-between text-xs">
-            <span className="text-slate-400">Fréquence porteuse $F_p$ (HF) :</span>
+          <div className="flex justify-between items-center text-xs">
+            <span className="text-slate-400 flex items-center gap-1">
+              Fréquence porteuse <MathView content="$F_p$" className="inline" /> (HF) :
+            </span>
             <span className="font-mono text-emerald-400 font-bold">{Fp} Hz</span>
           </div>
           <input
@@ -308,23 +325,47 @@ export const AmModulationSimulator: React.FC = () => {
 
       {/* Official Exam Criteria Box */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-        <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
-          <div className="font-semibold text-slate-200">1. Condition de non-surmodulation :</div>
-          <div className="text-slate-400 space-y-1">
-            <MathView content="$$m = \\frac{S_m}{U_0} = \\frac{U_{max} - U_{min}}{U_{max} + U_{min}} < 1 \\iff U_0 > S_m$$" />
-            <div>
+        <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+          <div className="flex items-center gap-2 font-semibold text-emerald-300">
+            <BookOpen className="w-4 h-4 text-emerald-400" />
+            <span>1. Conditions d'une bonne modulation AM :</span>
+          </div>
+          <div className="text-slate-300 space-y-1.5">
+            <div className="text-[11px] text-slate-400">
+              • <strong>Taux de modulation <MathView content="$m < 1$" className="inline" /> :</strong>
+            </div>
+            <MathView content="$$m = \frac{S_m}{U_0} = \frac{U_{\max} - U_{\min}}{U_{\max} + U_{\min}} < 1 \iff U_0 > S_m$$" />
+            <div className="text-[11px] text-slate-400">
               Actuellement : <span className="font-mono text-emerald-400 font-bold">m = {m.toFixed(2)}</span>
-              {m >= 1 ? " (ALERTE : Inversion de l'enveloppe !)" : " (Condition validée)"}
+              {m >= 1 ? " (⚠️ ALERTE : Surmodulation avec inversion de phase !)" : " (✅ Pas de surmodulation)"}
+            </div>
+            <div className="text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
+              • <strong>Condition sur les fréquences :</strong> <MathView content="$F_p \ge 10 \cdot f_s$" className="inline text-emerald-300" />
+              {' '}(ici <MathView content={`$F_p/f_s = ${(Fp / fs).toFixed(1)}$`} className="inline" />).
             </div>
           </div>
         </div>
 
-        <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
-          <div className="font-semibold text-slate-200">2. Condition sur le détecteur d'enveloppe :</div>
-          <div className="text-slate-400 font-mono space-y-1">
-            <MathView content="$T_p \\ll \\tau = RC < T_s$ soit :" />
-            <div>
-              {(Tp * 1000).toFixed(3)} ms &lt;&lt; RC &lt; {(Ts * 1000).toFixed(2)} ms
+        <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+          <div className="flex items-center gap-2 font-semibold text-emerald-300">
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span>2. Démodulation & Règle d'or du détecteur d'enveloppe :</span>
+          </div>
+          <div className="text-slate-300 space-y-1.5 text-[11px] leading-relaxed">
+            <p>
+              • <strong>Condition sur la constante de temps <MathView content="$\tau = RC$" className="inline" /> :</strong>
+            </p>
+            <MathView content="$$T_p \ll \tau = R \cdot C < T_s \iff \frac{1}{F_p} \ll R \cdot C < \frac{1}{f_s}$$" />
+            <div className="text-slate-400 font-mono text-[10px]">
+              Domaine optimal : {(Tp * 1000).toFixed(3)} ms &lt;&lt; RC &lt; {(Ts * 1000).toFixed(2)} ms
+            </div>
+            <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-200 mt-1">
+              <span className="font-bold text-amber-300">Au National :</span>
+              <ul className="list-disc list-inside mt-0.5 space-y-0.5">
+                <li>Diode : redresse le signal (supprime l'alternance négative).</li>
+                <li>Filtre parallèle (R, C) : élimine la porteuse haute fréquence <MathView content="$F_p$" className="inline" />.</li>
+                <li>Filtre série (R', C') : élimine la composante continue <MathView content="$U_0$" className="inline" />.</li>
+              </ul>
             </div>
           </div>
         </div>
