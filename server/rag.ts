@@ -17,11 +17,14 @@ interface CachedDocSection {
 
 export type DocumentBranch = 'PC' | 'SM' | 'ALL';
 
+export type DocumentCategory = 'examens' | 'series' | 'cours' | 'cadres' | 'autre';
+
 interface CachedDoc {
   name: string;
   relativePath: string;
   absolutePath: string;
   branch: DocumentBranch;
+  category: DocumentCategory;
   mtime: number;
   sections: CachedDocSection[];
 }
@@ -49,6 +52,7 @@ export interface DiscoveredFile {
   relativePath: string;
   name: string;
   branch: DocumentBranch;
+  category: DocumentCategory;
   mtime: number;
 }
 
@@ -555,6 +559,25 @@ function resolveDocumentBranch(relativePath: string, fileName: string): Document
 }
 
 /**
+ * Détermine la catégorie d'un document selon son sous-dossier ou son nom.
+ * Catégories : 'examens' | 'series' | 'cours' | 'cadres' | 'autre'
+ */
+export function resolveDocumentCategory(relativePath: string, fileName: string): DocumentCategory {
+  const normPath = relativePath.replace(/\\/g, '/').toLowerCase();
+  if (normPath.includes('/examens/') || normPath.startsWith('examens/')) return 'examens';
+  if (normPath.includes('/series/') || normPath.startsWith('series/')) return 'series';
+  if (normPath.includes('/cours/') || normPath.startsWith('cours/')) return 'cours';
+  if (normPath.includes('/cadres/') || normPath.startsWith('cadres/')) return 'cadres';
+
+  const normName = fileName.toLowerCase();
+  if (/cadre[-_ ]?(?:de[-_ ]?)?reference/i.test(normName)) return 'cadres';
+  if (/cours/i.test(normName)) return 'cours';
+  if (/(?:^|[_\-\s])(20\d\d|sn\d*|sr\d*)/i.test(normName)) return 'examens';
+  if (/serie|devoir/i.test(normName)) return 'series';
+  return 'autre';
+}
+
+/**
  * Parcourt récursivement le dossier docs/programme pour découvrir les fichiers des 2 filières.
  */
 export function discoverProgrammeFiles(dir: string, baseDir: string = dir): DiscoveredFile[] {
@@ -587,12 +610,14 @@ export function discoverProgrammeFiles(dir: string, baseDir: string = dir): Disc
       const relPath = path.relative(baseDir, fullPath);
       const stat = fs.statSync(fullPath);
       const branch = resolveDocumentBranch(relPath, entry.name);
+      const category = resolveDocumentCategory(relPath, entry.name);
 
       results.push({
         absolutePath: fullPath,
         relativePath: relPath,
         name: entry.name,
         branch,
+        category,
         mtime: stat.mtimeMs,
       });
     }
@@ -694,6 +719,7 @@ function buildCachedDoc(file: DiscoveredFile, content: string): CachedDoc {
     relativePath: file.relativePath,
     absolutePath: file.absolutePath,
     branch: file.branch,
+    category: file.category,
     mtime: file.mtime,
     sections,
   };
@@ -851,7 +877,17 @@ export async function searchLocalDocumentsDetailed(
 
         const normName = doc.name.toLowerCase();
         const isPdf = normName.endsWith('.pdf');
-        const isNonExamRef = /cadre[-_ ]?(?:de[-_ ]?)?reference|cours/i.test(normName);
+        const isExamDoc =
+          doc.category === 'examens' ||
+          (doc.category !== 'cadres' &&
+            doc.category !== 'cours' &&
+            doc.category !== 'series' &&
+            !/cadre[-_ ]?(?:de[-_ ]?)?reference|cours/i.test(normName) &&
+            /(?:^|[_\-\s])(20\d\d|sn\d*|sr\d*)/i.test(normName));
+
+        if (!isExamDoc) {
+          continue;
+        }
 
         if (parsed.year) {
           // CORRESPONDANCE STRICTE SUR L'ANNÉE : le fichier DOIT contenir l'année demandée
@@ -877,7 +913,7 @@ export async function searchLocalDocumentsDetailed(
             bestScore = docScore;
             bestDoc = doc;
           }
-        } else if (isPdf && !isNonExamRef && /(?:^|[_\-\s])(20\d\d|sn\d*|sr\d*)/i.test(normName)) {
+        } else if (isPdf) {
           // Aucune année précisée (ex: "affiche un exercice des ondes du national") :
           // EXIGE impérativement un thème ou un numéro d'exercice demandé,
           // ET vérifie qu'il existe réellement dans le sujet national cible !

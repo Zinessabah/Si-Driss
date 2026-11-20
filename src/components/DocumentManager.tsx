@@ -113,6 +113,7 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
   const [officialDocs, setOfficialDocs] = useState<DriveDoc[]>([]);
   const [isSyncingOfficial, setIsSyncingOfficial] = useState<boolean>(false);
   const [showOfficialList, setShowOfficialList] = useState<boolean>(false);
+  const [officialCategoryFilter, setOfficialCategoryFilter] = useState<'all' | 'examens' | 'series' | 'cours' | 'cadres'>('all');
 
   const importLocalFileInputRef = useRef<HTMLInputElement | null>(null);
   const localFileInputRef = useRef<HTMLInputElement | null>(null);
@@ -656,57 +657,113 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
           </div>
 
           {showOfficialList && officialDocs.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1 animate-in fade-in">
-              {officialDocs.map((doc) => (
-                <div
-                  key={doc.id}
-                  className="p-2.5 rounded-xl bg-[#131314]/80 border border-[#282a2c] flex items-center justify-between gap-2"
-                >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <FileText className="w-3.5 h-3.5 text-sky-400 shrink-0" />
-                    <span className="text-xs text-white font-medium truncate" title={doc.name}>
-                      {doc.name}
+            <div className="space-y-3 pt-2 animate-in fade-in">
+              {/* Category Filter Tabs */}
+              <div className="flex flex-wrap items-center gap-1.5 pb-1 border-b border-[#282a2c]/60">
+                {[
+                  { id: 'all', label: 'Tous', count: officialDocs.length },
+                  { id: 'examens', label: 'Examens Nationaux', count: officialDocs.filter((d) => d.category === 'examens').length },
+                  { id: 'series', label: 'Séries d\'exercices', count: officialDocs.filter((d) => d.category === 'series').length },
+                  { id: 'cours', label: 'Cours & Fiches', count: officialDocs.filter((d) => d.category === 'cours').length },
+                  { id: 'cadres', label: 'Cadres de Référence', count: officialDocs.filter((d) => d.category === 'cadres').length },
+                ].map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setOfficialCategoryFilter(cat.id as any)}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-medium transition flex items-center gap-1.5 ${
+                      officialCategoryFilter === cat.id
+                        ? 'bg-[#282a2c] text-white border border-[#3c4043]'
+                        : 'text-[#8e918f] hover:text-[#e3e3e3] hover:bg-[#1e1f20]'
+                    }`}
+                  >
+                    <span>{cat.label}</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-black/40 text-[#8ab4f8] font-mono">
+                      {cat.count}
                     </span>
-                    {doc.hasVisuals && (
-                      <span
-                        className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[9px] font-semibold flex items-center gap-1 shrink-0"
-                        title="Schémas de circuits et graphes expérimentaux transcrits et décodés par l'IA"
-                      >
-                        <Sparkles className="w-2.5 h-2.5 text-purple-400" />
-                        Graphes décodés
-                      </span>
-                    )}
-                    {doc.size ? (
-                      <span className="text-[10px] text-[#8e918f] shrink-0 font-mono">
-                        ({(doc.size / (1024 * 1024)).toFixed(1) === '0.0'
-                          ? `${(doc.size / 1024).toFixed(1)} Ko`
-                          : `${(doc.size / (1024 * 1024)).toFixed(1)} Mo`})
-                      </span>
-                    ) : null}
-                  </div>
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <button
-                      type="button"
-                      onClick={() => handlePreviewOfficialDoc(doc.name)}
-                      className="p-1 rounded-lg text-[#9aa0a6] hover:text-white hover:bg-[#202124] transition"
-                      title="Consulter le contenu et le décodage du document"
+                  </button>
+                ))}
+              </div>
+
+              {/* Official Documents Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {officialDocs
+                  .filter((doc) => {
+                    if (officialCategoryFilter === 'all') return true;
+                    return doc.category === officialCategoryFilter;
+                  })
+                  .map((doc) => (
+                    <div
+                      key={doc.id}
+                      className="p-2.5 rounded-xl bg-[#131314]/80 border border-[#282a2c] flex items-center justify-between gap-2 hover:border-[#3c4043] transition"
                     >
-                      <Eye className="w-3.5 h-3.5" />
-                    </button>
-                    {onAskQuestionAboutDoc && (
-                      <button
-                        type="button"
-                        onClick={() => onAskQuestionAboutDoc(doc.name)}
-                        className="text-[11px] text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-1 transition px-1.5 py-0.5 rounded-lg hover:bg-sky-500/10"
-                        title="Poser une question à Si Driss sur ce document officiel"
-                      >
-                        <span>Interroger</span>
-                        <ArrowRight className="w-3 h-3" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
+                      <div className="flex items-center gap-2 min-w-0">
+                        <FileText className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                        <span className="text-xs text-white font-medium truncate" title={doc.name}>
+                          {doc.name}
+                        </span>
+                        {/* Category badge */}
+                        {doc.category === 'examens' && (
+                          <span className="px-1.5 py-0.2 rounded bg-blue-500/15 text-blue-300 border border-blue-500/20 text-[9px] font-semibold shrink-0">
+                            Examen
+                          </span>
+                        )}
+                        {doc.category === 'series' && (
+                          <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/20 text-[9px] font-semibold shrink-0">
+                            Série
+                          </span>
+                        )}
+                        {doc.category === 'cours' && (
+                          <span className="px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-300 border border-amber-500/20 text-[9px] font-semibold shrink-0">
+                            Cours
+                          </span>
+                        )}
+                        {doc.category === 'cadres' && (
+                          <span className="px-1.5 py-0.2 rounded bg-purple-500/15 text-purple-300 border border-purple-500/20 text-[9px] font-semibold shrink-0">
+                            Cadre
+                          </span>
+                        )}
+                        {doc.hasVisuals && (
+                          <span
+                            className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[9px] font-semibold flex items-center gap-1 shrink-0"
+                            title="Schémas de circuits et graphes expérimentaux transcrits et décodés par l'IA"
+                          >
+                            <Sparkles className="w-2.5 h-2.5 text-purple-400" />
+                            Graphes décodés
+                          </span>
+                        )}
+                        {doc.size ? (
+                          <span className="text-[10px] text-[#8e918f] shrink-0 font-mono">
+                            ({(doc.size / (1024 * 1024)).toFixed(1) === '0.0'
+                              ? `${(doc.size / 1024).toFixed(1)} Ko`
+                              : `${(doc.size / (1024 * 1024)).toFixed(1)} Mo`})
+                          </span>
+                        ) : null}
+                      </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => handlePreviewOfficialDoc(doc.name)}
+                          className="p-1 rounded-lg text-[#9aa0a6] hover:text-white hover:bg-[#202124] transition"
+                          title="Consulter le contenu et le décodage du document"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                        </button>
+                        {onAskQuestionAboutDoc && (
+                          <button
+                            type="button"
+                            onClick={() => onAskQuestionAboutDoc(doc.name)}
+                            className="text-[11px] text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-1 transition px-1.5 py-0.5 rounded-lg hover:bg-sky-500/10"
+                            title="Poser une question à Si Driss sur ce document officiel"
+                          >
+                            <span>Interroger</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+              </div>
             </div>
           )}
         </div>

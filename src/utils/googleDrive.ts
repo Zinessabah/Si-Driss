@@ -20,6 +20,8 @@ export interface DriveDoc {
   webViewLink?: string;
   downloadUrl?: string;
   branch: 'PC' | 'SM';
+  relativePath?: string;
+  category?: 'examens' | 'series' | 'cours' | 'cadres' | 'autre';
   preview?: string;
   hasVisuals?: boolean;
 }
@@ -259,6 +261,8 @@ export async function fetchOfficialDocuments(branch?: 'PC' | 'SM'): Promise<Driv
       .map((f: any) => ({
         id: f.relativePath || f.name,
         name: f.name,
+        relativePath: f.relativePath,
+        category: f.category,
         mimeType: f.isPdf ? 'application/pdf' : 'text/plain',
         size: f.size,
         branch: (f.branch === 'SM' ? 'SM' : 'PC') as 'PC' | 'SM',

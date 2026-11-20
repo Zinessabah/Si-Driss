@@ -65,9 +65,17 @@ function resolveDocumentFilePath(nameOrRelativePath: string): string | null {
     return resolved;
   }
 
-  // 2. Recherche par nom de base dans DOCS_DIR/PC, DOCS_DIR/SM, ou DOCS_DIR
+  // 2. Recherche par nom de base dans les sous-dossiers PC/SM (examens, series, cours, cadres) ou racine
   const baseName = path.basename(clean);
   const candidates = [
+    path.join(DOCS_DIR, 'PC', 'examens', baseName),
+    path.join(DOCS_DIR, 'PC', 'series', baseName),
+    path.join(DOCS_DIR, 'PC', 'cours', baseName),
+    path.join(DOCS_DIR, 'PC', 'cadres', baseName),
+    path.join(DOCS_DIR, 'SM', 'examens', baseName),
+    path.join(DOCS_DIR, 'SM', 'series', baseName),
+    path.join(DOCS_DIR, 'SM', 'cours', baseName),
+    path.join(DOCS_DIR, 'SM', 'cadres', baseName),
     path.join(DOCS_DIR, 'PC', baseName),
     path.join(DOCS_DIR, 'SM', baseName),
     path.join(DOCS_DIR, baseName),
@@ -135,6 +143,7 @@ export function createDocumentsRouter(): Router {
           name: doc.name,
           relativePath: doc.relativePath,
           branch: doc.branch,
+          category: doc.category,
           size,
           isPdf,
           hasVisuals,
@@ -292,6 +301,7 @@ export function createDocumentsRouter(): Router {
           name: doc.name,
           relativePath: doc.relativePath,
           branch: doc.branch,
+          category: doc.category,
           size: stat.size,
           modified: stat.mtime,
           preview,
