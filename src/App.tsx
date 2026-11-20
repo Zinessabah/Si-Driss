@@ -26,6 +26,7 @@ import {
   Waves,
   Maximize2,
   Palette,
+  Activity,
 } from 'lucide-react';
 
 // (H10) Code-splitting : les onglets secondaires, les simulateurs et le générateur
@@ -40,6 +41,7 @@ const WavesSimulator = lazy(() => import('./components/simulators/WavesSimulator
 const DiffractionSimulator = lazy(() => import('./components/simulators/DiffractionSimulator').then((m) => ({ default: m.DiffractionSimulator })));
 const DispersionSimulator = lazy(() => import('./components/simulators/DispersionSimulator').then((m) => ({ default: m.DispersionSimulator })));
 const RlcSimulator = lazy(() => import('./components/simulators/RlcSimulator').then((m) => ({ default: m.RlcSimulator })));
+const RcExaoSimulator = lazy(() => import('./components/simulators/RcExaoSimulator').then((m) => ({ default: m.RcExaoSimulator })));
 const AmModulationSimulator = lazy(() => import('./components/simulators/AmModulationSimulator').then((m) => ({ default: m.AmModulationSimulator })));
 const MechanicsFallSimulator = lazy(() => import('./components/simulators/MechanicsFallSimulator').then((m) => ({ default: m.MechanicsFallSimulator })));
 const TitrationSimulator = lazy(() => import('./components/simulators/TitrationSimulator').then((m) => ({ default: m.TitrationSimulator })));
@@ -55,7 +57,7 @@ export default function App() {
   const { hasApiKey } = useApiKey();
 
   const [activeTab, setActiveTab] = useState<'chat' | 'audit' | 'simulators' | 'formulas' | 'pitfalls' | 'documents'>('chat');
-  const [activeSimulator, setActiveSimulator] = useState<'waves' | 'diffraction' | 'dispersion' | 'rlc' | 'am' | 'mechanics' | 'titration'>('waves');
+  const [activeSimulator, setActiveSimulator] = useState<'waves' | 'diffraction' | 'dispersion' | 'rlc' | 'rc-exao' | 'am' | 'mechanics' | 'titration'>('waves');
   const [chatInitialPrompt, setChatInitialPrompt] = useState<string>('');
   // (dette) Nonce : garantit que le même prompt poussé deux fois relance bien l'effet
   const [chatPromptNonce, setChatPromptNonce] = useState<number>(0);
@@ -355,6 +357,18 @@ export default function App() {
                   </button>
 
                   <button
+                    onClick={() => setActiveSimulator('rc-exao')}
+                    className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition shrink-0 ${
+                      activeSimulator === 'rc-exao'
+                        ? 'bg-[#282a2c] text-white border border-[#3c4043]'
+                        : 'bg-[#1e1f20] text-[#8e918f] hover:text-white'
+                    }`}
+                  >
+                    <Activity className="w-3.5 h-3.5 text-rose-400" />
+                    RC ExAO (Charge & Décharge)
+                  </button>
+
+                  <button
                     onClick={() => setActiveSimulator('am')}
                     className={`px-3.5 py-1.5 rounded-full font-medium flex items-center gap-1.5 transition shrink-0 ${
                       activeSimulator === 'am'
@@ -397,6 +411,7 @@ export default function App() {
                   {activeSimulator === 'diffraction' && <DiffractionSimulator />}
                   {activeSimulator === 'dispersion' && <DispersionSimulator />}
                   {activeSimulator === 'rlc' && <RlcSimulator />}
+                  {activeSimulator === 'rc-exao' && <RcExaoSimulator />}
                   {activeSimulator === 'am' && <AmModulationSimulator />}
                   {activeSimulator === 'mechanics' && <MechanicsFallSimulator />}
                   {activeSimulator === 'titration' && <TitrationSimulator />}
