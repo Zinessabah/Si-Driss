@@ -83,6 +83,15 @@ function sanitizeLatexForKatex(rawMath: string, isDisplay: boolean): { code: str
   // Corrige les commandes LaTeX accidentellement double-échappées (ex: \\cdot, \\quad, \\text, \\frac...)
   code = code.replace(/\\\\([a-zA-Z]+)/g, '\\$1');
 
+  // Répare automatiquement les séquences d'échappement JavaScript accidentelles (\f, \r, \b, \t)
+  code = code.replace(/\x0c([a-zA-Z]+)/g, '\\f$1');
+  code = code.replace(/\r([a-zA-Z]+)/g, '\\r$1');
+  code = code.replace(/\x08([a-zA-Z]+)/g, '\\b$1');
+  code = code.replace(/\t(au|heta|imes|ext|an)/g, '\\t$1');
+
+  // Répare les commandes LaTeX mathématiques standards dont le backslash a été avalé par un littéral JS
+  code = code.replace(/(^|[^\\])\b(cdot|implies|iff|mathrm|mathbf|mathit|sqrt|left|right|quad|qquad|approx|equiv)\b/g, '$1\\$2');
+
   // Convertit \begin{align} ou \begin{align*} en \begin{aligned} (compatible partout dans KaTeX)
   if (/\\begin\{align\*?\}/.test(code)) {
     code = code

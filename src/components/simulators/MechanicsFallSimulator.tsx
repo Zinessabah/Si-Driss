@@ -1455,8 +1455,8 @@ export const MechanicsFallSimulator: React.FC = () => {
                   <MathView
                     content={
                       frictionPower === 1
-                        ? '$$0 = A - B \cdot v_{\mathrm{lim}} \implies v_{\mathrm{lim}} = \frac{A}{B} = \frac{m \cdot g \left(1 - \frac{\rho_f V}{m}\right)}{k}$$'
-                        : '$$0 = A - B \cdot v_{\mathrm{lim}}^2 \implies v_{\mathrm{lim}} = \sqrt{\frac{A}{B}}$$'
+                        ? '$$0 = A - B \\cdot v_{\\mathrm{lim}} \\implies v_{\\mathrm{lim}} = \\frac{A}{B} = \\frac{m \\cdot g \\left(1 - \\frac{\\rho_f V}{m}\\right)}{k}$$'
+                        : '$$0 = A - B \\cdot v_{\\mathrm{lim}}^2 \\implies v_{\\mathrm{lim}} = \\sqrt{\\frac{A}{B}}$$'
                     }
                     block
                   />
