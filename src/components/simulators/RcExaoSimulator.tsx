@@ -1,20 +1,15 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Play,
   Pause,
   RotateCcw,
-  Sliders,
   Sparkles,
-  Info,
-  HelpCircle,
   Activity,
   CheckCircle2,
   AlertTriangle,
   Zap,
-  ArrowRight,
   TrendingUp,
   Clock,
-  Layers,
   Gauge,
   BookOpen,
 } from 'lucide-react';
@@ -28,8 +23,8 @@ interface DataPoint {
 }
 
 export const RcExaoSimulator: React.FC = () => {
-  // --- Paramètres du circuit RC ---
-  const [E, setE] = useState<number>(6.0); // Volts (comme dans la vidéo PASCO)
+  // --- Paramètres physiques du dipôle RC ---
+  const [E, setE] = useState<number>(6.0); // Volts (comme dans la vidéo PASCO RC_2016_1.cap)
   const [R, setR] = useState<number>(500); // Ohms
   const [C_uF, setC_uF] = useState<number>(1200); // microFarads
 
@@ -51,12 +46,23 @@ export const RcExaoSimulator: React.FC = () => {
   // --- Hover / Curseur de mesure sur le graphe ---
   const [hoverData, setHoverData] = useState<{ t: number; uC: number; i: number } | null>(null);
 
-  // Refs Canvas et animation
+  // --- REFS pour synchronisation directe 60 FPS (Zero Lag, Zero Stutter) ---
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animFrameId = useRef<number | null>(null);
-  const lastTimeRef = useRef<number>(0);
+  const lastTimestampRef = useRef<number>(0);
 
-  // État physique dynamique
+  // Direct DOM refs pour aiguilles et affichages instantanés
+  const needleCurrentRef = useRef<SVGGElement | null>(null);
+  const needleVoltageRef = useRef<SVGGElement | null>(null);
+  const textCurrentValRef = useRef<HTMLSpanElement | null>(null);
+  const textVoltageValRef = useRef<HTMLSpanElement | null>(null);
+  const boxTimeRef = useRef<HTMLDivElement | null>(null);
+  const boxUcRef = useRef<HTMLDivElement | null>(null);
+  const boxIRef = useRef<HTMLDivElement | null>(null);
+  const boxQRef = useRef<HTMLDivElement | null>(null);
+  const boxEnergyRef = useRef<HTMLDivElement | null>(null);
+
+  // État physique continu (en refs pour éviter tout re-render intempestif)
   const simTimeRef = useRef<number>(0);
   const currentModeRef = useRef<'charge' | 'discharge'>('charge');
   const uC_startRef = useRef<number>(0);
@@ -65,28 +71,43 @@ export const RcExaoSimulator: React.FC = () => {
   const current_iRef = useRef<number>(0);
   const historyRef = useRef<DataPoint[]>([]);
 
-  // Constantes physiques dérivées
-  const C_F = C_uF * 1e-6; // Farads
-  const tau = R * C_F; // Constante de temps en secondes (ex: 500 * 1200e-6 = 0.6s)
-  const I0_max = E / R; // Courant initial maximal en Ampères (ex: 6 / 500 = 0.012 A = 12 mA)
-  const halfCycleDuration = 5 * tau; // Durée d'une demi-période en mode auto (5 * tau permet d'atteindre 99.3%)
-
-  // Valeurs instantanées exposées pour l'UI React
-  const [instantValues, setInstantValues] = useState<{
-    t: number;
-    uC: number;
-    i: number;
-    q: number;
-    energy: number;
-  }>({
-    t: 0,
-    uC: 0,
-    i: I0_max,
-    q: 0,
-    energy: 0,
+  // Refs de paramètres pour lecture instantanée dans la boucle
+  const paramsRef = useRef({
+    E,
+    R,
+    C_uF,
+    isPlaying,
+    simSpeed,
+    isAutoCycle,
+    showTangent,
+    showTauLine,
+    showAsymptote,
+    showGrid,
   });
 
-  // Basculer l'interrupteur K
+  useEffect(() => {
+    paramsRef.current = {
+      E,
+      R,
+      C_uF,
+      isPlaying,
+      simSpeed,
+      isAutoCycle,
+      showTangent,
+      showTauLine,
+      showAsymptote,
+      showGrid,
+    };
+  }, [E, R, C_uF, isPlaying, simSpeed, isAutoCycle, showTangent, showTauLine, showAsymptote, showGrid]);
+
+  // Constantes physiques
+  const C_F = C_uF * 1e-6; // Farads
+  const tau = R * C_F; // secondes (ex: 500 * 1200e-6 = 0.60 s)
+  const I0_max = E / R; // Ampères (ex: 6 / 500 = 0.012 A = 12 mA)
+  // Durée d'une demi-alternance : 5*tau + palier d'observation stable (comme dans la vidéo où chaque phase dure ~ 4.8s)
+  const halfCycleDuration = Math.max(5 * tau + 1.8, 4.5);
+
+  // Basculement manuel de l'interrupteur K
   const toggleSwitch = useCallback((newPos: 1 | 2) => {
     setSwitchPosition(newPos);
     currentModeRef.current = newPos === 1 ? 'charge' : 'discharge';
@@ -94,113 +115,151 @@ export const RcExaoSimulator: React.FC = () => {
     t_switchRef.current = simTimeRef.current;
   }, []);
 
-  // Réinitialiser la simulation
+  // Réinitialiser la simulation (à t=0)
   const handleReset = useCallback(() => {
     simTimeRef.current = 0;
-    currentModeRef.current = switchPosition === 1 ? 'charge' : 'discharge';
-    uC_startRef.current = switchPosition === 1 ? 0 : E;
+    currentModeRef.current = 'charge';
+    setSwitchPosition(1);
+    uC_startRef.current = 0;
     t_switchRef.current = 0;
-    current_uCRef.current = uC_startRef.current;
-    current_iRef.current = switchPosition === 1 ? E / R : -E / R;
-    historyRef.current = [{
-      t: 0,
-      uC: current_uCRef.current,
-      i: current_iRef.current,
-      mode: currentModeRef.current,
-    }];
-    setInstantValues({
-      t: 0,
-      uC: current_uCRef.current,
-      i: current_iRef.current,
-      q: C_F * current_uCRef.current,
-      energy: 0.5 * C_F * Math.pow(current_uCRef.current, 2) * 1000,
-    });
-  }, [switchPosition, E, R, C_F]);
+    current_uCRef.current = 0;
+    current_iRef.current = E / R;
 
-  // Initialisation au montage ou changement de composants critiques
+    historyRef.current = [
+      {
+        t: 0,
+        uC: 0,
+        i: E / R,
+        mode: 'charge',
+      },
+    ];
+
+    // Mise à jour visuelle immédiate des aiguilles et compteurs
+    updateMetersAndReadouts(0, 0, E / R);
+  }, [E, R]);
+
+  // Réinitialisation lors du changement des composants du circuit
   useEffect(() => {
     handleReset();
   }, [E, R, C_uF, handleReset]);
 
-  // Boucle d'animation principale
+  // Synchronisation directe des aiguilles et des affichages
+  const updateMetersAndReadouts = (t: number, uC: number, iVal: number) => {
+    // 1. Galvanomètre de Courant :
+    // Échelle : -0.020 A (-20 mA) à +0.020 A (+20 mA), ZÉRO AU CENTRE VERTICAL
+    // Angle : -68° à +68°
+    const maxI_scale = 0.020; // 20 mA comme sur le cadran PASCO
+    const currentAngleDeg = Math.min(Math.max((iVal / maxI_scale) * 68, -75), 75);
+
+    if (needleCurrentRef.current) {
+      needleCurrentRef.current.setAttribute('transform', `rotate(${currentAngleDeg}, 100, 95)`);
+    }
+    if (textCurrentValRef.current) {
+      textCurrentValRef.current.textContent = `${(iVal * 1000).toFixed(2)} mA`;
+    }
+
+    // 2. Voltmètre de Tension :
+    // Échelle : -6 V à +6 V, ZÉRO AU CENTRE VERTICAL (comme dans la vidéo PASCO !)
+    // Angle : -68° à +68°
+    const maxV_scale = Math.max(paramsRef.current.E, 6.0);
+    const voltAngleDeg = Math.min(Math.max((uC / maxV_scale) * 68, -75), 75);
+
+    if (needleVoltageRef.current) {
+      needleVoltageRef.current.setAttribute('transform', `rotate(${voltAngleDeg}, 100, 95)`);
+    }
+    if (textVoltageValRef.current) {
+      textVoltageValRef.current.textContent = `${uC.toFixed(2)} V`;
+    }
+
+    // 3. Compteurs numériques d'état instantané
+    if (boxTimeRef.current) boxTimeRef.current.textContent = `${t.toFixed(2)} s`;
+    if (boxUcRef.current) boxUcRef.current.textContent = `${uC.toFixed(2)} V`;
+    if (boxIRef.current) boxIRef.current.textContent = `${(iVal * 1000).toFixed(2)} mA`;
+    if (boxQRef.current) boxQRef.current.textContent = `${(C_F * uC * 1000).toFixed(2)} mC`;
+    if (boxEnergyRef.current) {
+      boxEnergyRef.current.textContent = `${(0.5 * C_F * Math.pow(uC, 2) * 1000).toFixed(1)} mJ`;
+    }
+  };
+
+  // BOUCLE D'ANIMATION PRINCIPALE (60 FPS SYNCHRONISÉE)
   useEffect(() => {
-    let active = true;
+    let animActive = true;
 
     const tick = (timestamp: number) => {
-      if (!active) return;
+      if (!animActive) return;
 
-      if (!lastTimeRef.current) lastTimeRef.current = timestamp;
-      const realDt = Math.min((timestamp - lastTimeRef.current) / 1000, 0.05); // cap à 50ms pour stabilité
-      lastTimeRef.current = timestamp;
+      if (!lastTimestampRef.current) lastTimestampRef.current = timestamp;
+      const realDt = Math.min((timestamp - lastTimestampRef.current) / 1000, 0.04);
+      lastTimestampRef.current = timestamp;
 
-      if (isPlaying) {
-        const simDt = realDt * simSpeed;
+      const p = paramsRef.current;
+
+      if (p.isPlaying) {
+        const simDt = realDt * p.simSpeed;
         simTimeRef.current += simDt;
         const t = simTimeRef.current;
 
-        // Gestion du cycle automatique (comme dans la vidéo ExAO)
-        if (isAutoCycle) {
-          const cyclePeriod = 2 * halfCycleDuration;
-          const phase = t % cyclePeriod;
-          const shouldBeCharge = phase < halfCycleDuration;
-          const targetPos: 1 | 2 = shouldBeCharge ? 1 : 2;
+        const currentTau = p.R * (p.C_uF * 1e-6);
+        const currentHalfCycle = Math.max(5 * currentTau + 1.8, 4.5);
 
-          if (targetPos !== switchPosition) {
-            setSwitchPosition(targetPos);
-            currentModeRef.current = shouldBeCharge ? 'charge' : 'discharge';
+        // Mode Automatique (reproduction de la vidéo PASCO)
+        if (p.isAutoCycle) {
+          const cyclePeriod = 2 * currentHalfCycle;
+          const phase = t % cyclePeriod;
+          const shouldBeCharge = phase < currentHalfCycle;
+          const targetMode: 'charge' | 'discharge' = shouldBeCharge ? 'charge' : 'discharge';
+
+          if (targetMode !== currentModeRef.current) {
+            currentModeRef.current = targetMode;
+            setSwitchPosition(shouldBeCharge ? 1 : 2);
             uC_startRef.current = current_uCRef.current;
             t_switchRef.current = t;
           }
         }
 
-        // Calcul analytique exact de uC(t) et i(t) depuis le dernier basculement
+        // Calcul analytique exact
         const dtSinceSwitch = Math.max(0, t - t_switchRef.current);
-        const expFactor = Math.exp(-dtSinceSwitch / tau);
+        const expFactor = Math.exp(-dtSinceSwitch / currentTau);
 
         let uC = 0;
-        let i = 0;
+        let iVal = 0;
 
         if (currentModeRef.current === 'charge') {
           // Charge : u_C tend vers E
-          uC = E + (uC_startRef.current - E) * expFactor;
-          i = ((E - uC_startRef.current) / R) * expFactor;
+          uC = p.E + (uC_startRef.current - p.E) * expFactor;
+          iVal = ((p.E - uC_startRef.current) / p.R) * expFactor;
         } else {
           // Décharge : u_C tend vers 0
           uC = uC_startRef.current * expFactor;
-          i = -(uC_startRef.current / R) * expFactor;
+          iVal = -(uC_startRef.current / p.R) * expFactor;
         }
 
         current_uCRef.current = uC;
-        current_iRef.current = i;
+        current_iRef.current = iVal;
 
-        // Ajouter au buffer d'historique (fréquence ~ 60fps)
-        const lastPt = historyRef.current[historyRef.current.length - 1];
+        // Mise à jour de l'historique des points tracés
+        const history = historyRef.current;
+        const lastPt = history[history.length - 1];
         if (!lastPt || t - lastPt.t >= 0.015) {
-          historyRef.current.push({
+          history.push({
             t,
             uC,
-            i,
+            i: iVal,
             mode: currentModeRef.current,
           });
 
-          // Garder un historique jusqu'à 60 secondes max pour éviter fuite mémoire
-          if (historyRef.current.length > 3500) {
-            historyRef.current.shift();
+          // Rognage propre après 45 secondes pour fluidité maximale
+          if (history.length > 2500) {
+            history.shift();
           }
         }
 
-        // Mettre à jour l'état affiché à l'écran
-        setInstantValues({
-          t,
-          uC,
-          i,
-          q: C_F * uC,
-          energy: 0.5 * C_F * Math.pow(uC, 2) * 1000, // en mJ
-        });
+        // MISE À JOUR SYNCHRONE DES CADRANS ET AIGUILLES
+        updateMetersAndReadouts(t, uC, iVal);
       }
 
-      // Rendu graphique sur le Canvas
-      renderExaoCanvas();
+      // Rendu Canvas
+      renderCanvas();
 
       animFrameId.current = requestAnimationFrame(tick);
     };
@@ -208,19 +267,18 @@ export const RcExaoSimulator: React.FC = () => {
     animFrameId.current = requestAnimationFrame(tick);
 
     return () => {
-      active = false;
+      animActive = false;
       if (animFrameId.current) cancelAnimationFrame(animFrameId.current);
     };
-  }, [isPlaying, simSpeed, isAutoCycle, switchPosition, tau, E, R, C_F, halfCycleDuration]);
+  }, []);
 
-  // Rendu Canvas ExAO style PASCO Capstone
-  const renderExaoCanvas = () => {
+  // RENDU DU CANVAS EXAO (COURBES I(t) ET Uc(t) SYNCHRONISÉES)
+  const renderCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Gestion de la résolution Retina
     const dpr = window.devicePixelRatio || 1;
     const displayWidth = canvas.clientWidth;
     const displayHeight = canvas.clientHeight;
@@ -236,14 +294,13 @@ export const RcExaoSimulator: React.FC = () => {
     const width = displayWidth;
     const height = displayHeight;
 
-    // Arrière-plan sombre de l'oscilloscope ExAO
-    ctx.fillStyle = '#0a0d14';
+    const p = paramsRef.current;
+    const currentTau = p.R * (p.C_uF * 1e-6);
+
+    // Fond blanc/gris épuré comme le logiciel PASCO Capstone dans la vidéo
+    ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, width, height);
 
-    // Séparation des deux graphes :
-    // Haut : I = f(t) (46% de la hauteur)
-    // Bas : Uc = f(t) (46% de la hauteur)
-    // Marge et gouttière
     const paddingLeft = 58;
     const paddingRight = 24;
     const plotWidth = width - paddingLeft - paddingRight;
@@ -253,33 +310,31 @@ export const RcExaoSimulator: React.FC = () => {
     const graphBottomY = graphTopHeight + graphGap;
     const graphBottomHeight = height - graphBottomY - 32;
 
-    // Détermination de la fenêtre temporelle [tMin, tMax]
-    // La vidéo montre une acquisition sur ~ 24s.
+    // Fenêtre temporelle [0, tMax]
     const currentTime = simTimeRef.current;
-    const windowSpan = Math.max(16, Math.ceil(currentTime / 6) * 6);
+    const windowSpan = Math.max(20, Math.ceil((currentTime + 2) / 4) * 4);
     const tMin = 0;
-    const tMax = Math.max(windowSpan, 12);
+    const tMax = Math.max(windowSpan, 16);
 
     const timeToX = (t: number) => paddingLeft + ((t - tMin) / (tMax - tMin)) * plotWidth;
 
-    // Échelles verticales
-    // Graph 1: Courant I(t) de -I_max à +I_max
-    const maxI_scale = Math.max(I0_max * 1.25, 0.015); // au moins 15 mA comme dans la vidéo
+    // Échelle I(t) : -0.015 A à +0.015 A (ou dynamique selon E/R)
+    const maxI_scale = Math.max(p.E / p.R * 1.25, 0.015);
     const zeroY_I = graphTopHeight / 2;
-    const currentToY = (iVal: number) => zeroY_I - (iVal / maxI_scale) * (graphTopHeight * 0.44);
+    const currentToY = (iVal: number) => zeroY_I - (iVal / maxI_scale) * (graphTopHeight * 0.43);
 
-    // Graph 2: Tension Uc(t) de 0 à E + marge
-    const maxUc_scale = E * 1.15;
+    // Échelle Uc(t) : 0 à E + marge
+    const maxUc_scale = Math.max(p.E * 1.15, 6.5);
     const zeroY_Uc = graphBottomY + graphBottomHeight;
     const uCToY = (uVal: number) => zeroY_Uc - (uVal / maxUc_scale) * graphBottomHeight;
 
-    // --- GRILLES ET AXES ---
-    if (showGrid) {
-      ctx.strokeStyle = '#1a2333';
+    // GRILLES DE L'INTERFACE EXAO
+    if (p.showGrid) {
+      ctx.strokeStyle = '#e2e8f0';
       ctx.lineWidth = 1;
 
-      // Lignes de temps verticales
-      const timeStep = tMax <= 15 ? 2 : tMax <= 30 ? 4 : 5;
+      // Graduations de temps
+      const timeStep = tMax <= 16 ? 2 : tMax <= 30 ? 2 : 4;
       for (let t = tMin; t <= tMax; t += timeStep) {
         const x = timeToX(t);
         ctx.beginPath();
@@ -289,27 +344,24 @@ export const RcExaoSimulator: React.FC = () => {
         ctx.lineTo(x, zeroY_Uc);
         ctx.stroke();
 
-        // Label de temps en bas
-        ctx.fillStyle = '#64748b';
+        ctx.fillStyle = '#475569';
         ctx.font = '10px monospace';
         ctx.textAlign = 'center';
-        ctx.fillText(`${t}s`, x, zeroY_Uc + 18);
+        ctx.fillText(`${t}`, x, zeroY_Uc + 16);
       }
 
-      // Lignes horizontales pour I(t)
-      const iSteps = [-maxI_scale * 0.8, -maxI_scale * 0.4, 0, maxI_scale * 0.4, maxI_scale * 0.8];
-      iSteps.forEach((iVal) => {
-        const y = currentToY(iVal);
+      // Grille I(t)
+      [-maxI_scale * 0.8, 0, maxI_scale * 0.8].forEach((val) => {
+        const y = currentToY(val);
         ctx.beginPath();
         ctx.moveTo(paddingLeft, y);
         ctx.lineTo(paddingLeft + plotWidth, y);
         ctx.stroke();
       });
 
-      // Lignes horizontales pour Uc(t)
-      const uSteps = [0, E * 0.25, E * 0.5, E * 0.75, E];
-      uSteps.forEach((uVal) => {
-        const y = uCToY(uVal);
+      // Grille Uc(t)
+      [p.E * 0.33, p.E * 0.67, p.E].forEach((val) => {
+        const y = uCToY(val);
         ctx.beginPath();
         ctx.moveTo(paddingLeft, y);
         ctx.lineTo(paddingLeft + plotWidth, y);
@@ -317,62 +369,66 @@ export const RcExaoSimulator: React.FC = () => {
       });
     }
 
-    // Axe zéro principal pour I(t)
-    ctx.strokeStyle = '#475569';
+    // Axe ZÉRO pour I(t) (ligne noire bien visible comme dans PASCO)
+    ctx.strokeStyle = '#1e293b';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(paddingLeft, zeroY_I);
     ctx.lineTo(paddingLeft + plotWidth, zeroY_I);
     ctx.stroke();
 
-    // Axe zéro principal pour Uc(t)
+    // Axe ZÉRO pour Uc(t)
     ctx.beginPath();
     ctx.moveTo(paddingLeft, zeroY_Uc);
     ctx.lineTo(paddingLeft + plotWidth, zeroY_Uc);
     ctx.stroke();
 
-    // Cadres des graphes
-    ctx.strokeStyle = '#223049';
+    // Cadres extérieurs
+    ctx.strokeStyle = '#cbd5e1';
     ctx.lineWidth = 1;
     ctx.strokeRect(paddingLeft, 14, plotWidth, graphTopHeight - 14);
     ctx.strokeRect(paddingLeft, graphBottomY, plotWidth, graphBottomHeight);
 
-    // Labels des axes Y
-    ctx.fillStyle = '#94a3b8';
+    // Labels des axes
+    ctx.fillStyle = '#334155';
     ctx.font = '11px sans-serif';
     ctx.textAlign = 'right';
 
-    // Labels I(t) (mA)
-    const maxI_mA = maxI_scale * 1000;
-    ctx.fillText(`+${(maxI_mA * 0.8).toFixed(1)}`, paddingLeft - 8, currentToY(maxI_scale * 0.8) + 4);
-    ctx.fillText('0', paddingLeft - 8, zeroY_I + 4);
-    ctx.fillText(`-${(maxI_mA * 0.8).toFixed(1)}`, paddingLeft - 8, currentToY(-maxI_scale * 0.8) + 4);
+    // Valeurs I(t)
+    ctx.fillText(`+${(maxI_scale * 0.8).toFixed(2)}`, paddingLeft - 8, currentToY(maxI_scale * 0.8) + 4);
+    ctx.fillText('0,00', paddingLeft - 8, zeroY_I + 4);
+    ctx.fillText(`-${(maxI_scale * 0.8).toFixed(2)}`, paddingLeft - 8, currentToY(-maxI_scale * 0.8) + 4);
 
-    // Titre Graph 1
-    ctx.fillStyle = '#f87171'; // Rouge comme dans la vidéo
+    // Titre Voie 1 : Courant (A) avec carré rouge Exp1
+    ctx.fillStyle = '#b91c1c';
     ctx.font = 'bold 12px sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('Courant  I = f(t)  [mA]', paddingLeft + 10, 28);
+    ctx.fillText('Courant (A) — Exp1  [I = f(t)]', paddingLeft + 12, 28);
 
-    // Labels Uc(t) (V)
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '11px sans-serif';
+    // Valeurs Uc(t)
+    ctx.fillStyle = '#334155';
     ctx.textAlign = 'right';
-    ctx.fillText(`${E.toFixed(1)}V`, paddingLeft - 8, uCToY(E) + 4);
-    ctx.fillText(`${(E * 0.5).toFixed(1)}V`, paddingLeft - 8, uCToY(E * 0.5) + 4);
-    ctx.fillText('0V', paddingLeft - 8, zeroY_Uc + 4);
+    ctx.fillText(`${p.E.toFixed(1)}`, paddingLeft - 8, uCToY(p.E) + 4);
+    ctx.fillText('0', paddingLeft - 8, zeroY_Uc + 4);
 
-    // Titre Graph 2
-    ctx.fillStyle = '#4ade80'; // Vert comme dans la vidéo
+    // Titre Voie 2 : Tension (V) avec losange vert Exp1
+    ctx.fillStyle = '#15803d';
     ctx.font = 'bold 12px sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('Tension  Uc = f(t)  [V]', paddingLeft + 10, graphBottomY + 18);
+    ctx.fillText('Tension (V) — Exp1  [Uc = f(t)]', paddingLeft + 12, graphBottomY + 18);
+
+    // Label horizontal Temps (s)
+    ctx.fillStyle = '#1e293b';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Temps (s)', paddingLeft + plotWidth / 2, zeroY_Uc + 28);
+    ctx.fillText('Temps (s)', paddingLeft + plotWidth / 2, graphTopHeight + 18);
 
     // Asymptote horizontale uC = E
-    if (showAsymptote) {
-      const yAsymptote = uCToY(E);
+    if (p.showAsymptote) {
+      const yAsymptote = uCToY(p.E);
       ctx.setLineDash([4, 4]);
-      ctx.strokeStyle = '#38bdf8';
+      ctx.strokeStyle = '#0284c7';
       ctx.lineWidth = 1.2;
       ctx.beginPath();
       ctx.moveTo(paddingLeft, yAsymptote);
@@ -380,58 +436,55 @@ export const RcExaoSimulator: React.FC = () => {
       ctx.stroke();
       ctx.setLineDash([]);
 
-      ctx.fillStyle = '#38bdf8';
+      ctx.fillStyle = '#0284c7';
       ctx.font = '10px monospace';
       ctx.textAlign = 'right';
-      ctx.fillText(`Asymptote E = ${E.toFixed(1)} V`, paddingLeft + plotWidth - 10, yAsymptote - 4);
+      ctx.fillText(`Asymptote E = ${p.E.toFixed(1)} V`, paddingLeft + plotWidth - 10, yAsymptote - 4);
     }
 
-    // --- REPRÉSENTATION PÉDAGOGIQUE DU BAC : TANGENTE & 63% / 37% ---
-    if (historyRef.current.length > 0) {
-      // Rechercher le dernier point de basculement de l'historique
-      let lastSwitchIndex = 0;
-      for (let k = historyRef.current.length - 1; k > 0; k--) {
-        if (historyRef.current[k].mode !== historyRef.current[k - 1].mode) {
-          lastSwitchIndex = k;
+    // OUTILS BAC : TANGENTE À L'ORIGINE & MÉTHODE DES 63% / 37%
+    const history = historyRef.current;
+    if (history.length > 0) {
+      let lastSwitchIdx = 0;
+      for (let k = history.length - 1; k > 0; k--) {
+        if (history[k].mode !== history[k - 1].mode) {
+          lastSwitchIdx = k;
           break;
         }
       }
 
-      const switchPt = historyRef.current[lastSwitchIndex];
+      const switchPt = history[lastSwitchIdx];
       const isCharging = switchPt.mode === 'charge';
       const t0 = switchPt.t;
-      const tTau = t0 + tau;
+      const tTau = t0 + currentTau;
 
       // 1. Tangente à l'origine
-      if (showTangent && tTau <= tMax) {
+      if (p.showTangent && tTau <= tMax) {
         const x0 = timeToX(t0);
         const xTau = timeToX(tTau);
 
-        ctx.strokeStyle = '#facc15'; // Jaune éclatant
+        ctx.strokeStyle = '#ca8a04';
         ctx.lineWidth = 1.8;
         ctx.setLineDash([5, 3]);
 
         if (isCharging) {
-          // Tangente à la charge : part de (t0, 0) et passe par (t0 + tau, E)
           const y0 = uCToY(0);
-          const yTau = uCToY(E);
+          const yTau = uCToY(p.E);
           ctx.beginPath();
           ctx.moveTo(x0, y0);
           ctx.lineTo(xTau, yTau);
           ctx.stroke();
 
-          // Point d'intersection remarquable (t0 + tau, E)
           ctx.setLineDash([]);
-          ctx.fillStyle = '#facc15';
+          ctx.fillStyle = '#ca8a04';
           ctx.beginPath();
           ctx.arc(xTau, yTau, 4, 0, Math.PI * 2);
           ctx.fill();
 
-          ctx.font = '10px sans-serif';
+          ctx.font = 'bold 10px sans-serif';
           ctx.fillText(`(t₀+τ, E)`, xTau + 6, yTau - 6);
         } else {
-          // Tangente à la décharge : part de (t0, E) et coupe l'axe (u=0) à t0 + tau
-          const y0 = uCToY(E);
+          const y0 = uCToY(p.E);
           const yTau = uCToY(0);
           ctx.beginPath();
           ctx.moveTo(x0, y0);
@@ -439,42 +492,39 @@ export const RcExaoSimulator: React.FC = () => {
           ctx.stroke();
 
           ctx.setLineDash([]);
-          ctx.fillStyle = '#facc15';
+          ctx.fillStyle = '#ca8a04';
           ctx.beginPath();
           ctx.arc(xTau, yTau, 4, 0, Math.PI * 2);
           ctx.fill();
 
-          ctx.font = '10px sans-serif';
+          ctx.font = 'bold 10px sans-serif';
           ctx.fillText(`(t₀+τ, 0)`, xTau + 6, yTau - 6);
         }
         ctx.setLineDash([]);
       }
 
-      // 2. Méthode des 63% (Charge) ou 37% (Décharge)
-      if (showTauLine && tTau <= tMax) {
+      // 2. Méthode 63% / 37%
+      if (p.showTauLine && tTau <= tMax) {
         const xTau = timeToX(tTau);
-        const uTauValue = isCharging ? 0.632 * E : 0.368 * E;
+        const uTauValue = isCharging ? 0.632 * p.E : 0.368 * p.E;
         const yTauVal = uCToY(uTauValue);
 
-        ctx.strokeStyle = '#c084fc'; // Violet
-        ctx.lineWidth = 1.4;
+        ctx.strokeStyle = '#9333ea';
+        ctx.lineWidth = 1.3;
         ctx.setLineDash([3, 3]);
 
-        // Ligne verticale descendante vers l'axe des temps
         ctx.beginPath();
         ctx.moveTo(xTau, graphBottomY);
         ctx.lineTo(xTau, zeroY_Uc);
         ctx.stroke();
 
-        // Ligne horizontale vers l'axe des tensions
         ctx.beginPath();
         ctx.moveTo(paddingLeft, yTauVal);
         ctx.lineTo(xTau, yTauVal);
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // Marqueur rond violet
-        ctx.fillStyle = '#c084fc';
+        ctx.fillStyle = '#9333ea';
         ctx.beginPath();
         ctx.arc(xTau, yTauVal, 4, 0, Math.PI * 2);
         ctx.fill();
@@ -490,12 +540,11 @@ export const RcExaoSimulator: React.FC = () => {
       }
     }
 
-    // --- TRACÉ DES COURBES HISTORIQUES ---
-    const history = historyRef.current;
+    // TRACÉ DES DEUX COURBES SYNCHRONISÉES
     if (history.length > 1) {
-      // 1. Tracé Courbe I(t) en Rouge
+      // 1. Courbe I(t) Rouge
       ctx.beginPath();
-      ctx.strokeStyle = '#ef4444';
+      ctx.strokeStyle = '#dc2626';
       ctx.lineWidth = 2.2;
       ctx.lineJoin = 'round';
       ctx.lineCap = 'round';
@@ -516,9 +565,9 @@ export const RcExaoSimulator: React.FC = () => {
       }
       ctx.stroke();
 
-      // 2. Tracé Courbe Uc(t) en Vert
+      // 2. Courbe Uc(t) Verte
       ctx.beginPath();
-      ctx.strokeStyle = '#22c55e';
+      ctx.strokeStyle = '#16a34a';
       ctx.lineWidth = 2.2;
       ctx.lineJoin = 'round';
       ctx.lineCap = 'round';
@@ -539,38 +588,38 @@ export const RcExaoSimulator: React.FC = () => {
       }
       ctx.stroke();
 
-      // Points traceurs animés en temps réel (Halo et tête de lecture)
+      // Points traceurs de lecture actuels
       const lastPoint = history[history.length - 1];
       const headX = timeToX(lastPoint.t);
       const headY_I = currentToY(lastPoint.i);
       const headY_Uc = uCToY(lastPoint.uC);
 
-      // Traceur I(t)
-      ctx.fillStyle = 'rgba(239, 68, 68, 0.35)';
+      // Tête I(t)
+      ctx.fillStyle = 'rgba(220, 38, 38, 0.3)';
       ctx.beginPath();
-      ctx.arc(headX, headY_I, 7, 0, Math.PI * 2);
+      ctx.arc(headX, headY_I, 8, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = '#ef4444';
+      ctx.fillStyle = '#dc2626';
       ctx.beginPath();
-      ctx.arc(headX, headY_I, 3.5, 0, Math.PI * 2);
+      ctx.arc(headX, headY_I, 4, 0, Math.PI * 2);
       ctx.fill();
 
-      // Traceur Uc(t)
-      ctx.fillStyle = 'rgba(34, 197, 94, 0.35)';
+      // Tête Uc(t)
+      ctx.fillStyle = 'rgba(22, 163, 74, 0.3)';
       ctx.beginPath();
-      ctx.arc(headX, headY_Uc, 7, 0, Math.PI * 2);
+      ctx.arc(headX, headY_Uc, 8, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = '#22c55e';
+      ctx.fillStyle = '#16a34a';
       ctx.beginPath();
-      ctx.arc(headX, headY_Uc, 3.5, 0, Math.PI * 2);
+      ctx.arc(headX, headY_Uc, 4, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Curseur de mesure Interactif (si souris survole le canvas)
+    // Curseur de mesure Interactif
     if (hoverData) {
       const hX = timeToX(hoverData.t);
       if (hX >= paddingLeft && hX <= paddingLeft + plotWidth) {
-        ctx.strokeStyle = '#e2e8f0';
+        ctx.strokeStyle = '#0f172a';
         ctx.lineWidth = 1;
         ctx.setLineDash([2, 2]);
 
@@ -580,27 +629,26 @@ export const RcExaoSimulator: React.FC = () => {
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // Badge d'info au survol
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+        ctx.fillRect(hX + 8, graphTopHeight - 32, 136, 62);
         ctx.strokeStyle = '#475569';
-        ctx.strokeRect(hX + 8, graphTopHeight - 30, 130, 58);
-        ctx.fillRect(hX + 8, graphTopHeight - 30, 130, 58);
+        ctx.strokeRect(hX + 8, graphTopHeight - 32, 136, 62);
 
-        ctx.fillStyle = '#94a3b8';
+        ctx.fillStyle = '#f8fafc';
         ctx.font = '10px monospace';
         ctx.textAlign = 'left';
-        ctx.fillText(`t  = ${hoverData.t.toFixed(3)} s`, hX + 14, graphTopHeight - 14);
+        ctx.fillText(`t  = ${hoverData.t.toFixed(3)} s`, hX + 14, graphTopHeight - 16);
         ctx.fillStyle = '#f87171';
         ctx.fillText(`i  = ${(hoverData.i * 1000).toFixed(2)} mA`, hX + 14, graphTopHeight - 2);
         ctx.fillStyle = '#4ade80';
-        ctx.fillText(`Uc = ${hoverData.uC.toFixed(2)} V`, hX + 14, graphTopHeight + 10);
+        ctx.fillText(`Uc = ${hoverData.uC.toFixed(2)} V`, hX + 14, graphTopHeight + 12);
       }
     }
 
     ctx.restore();
   };
 
-  // Gestion du survol de souris pour le curseur de mesure
+  // Gestion du survol souris
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -611,12 +659,11 @@ export const RcExaoSimulator: React.FC = () => {
     const paddingRight = 24;
     const plotWidth = canvas.clientWidth - paddingLeft - paddingRight;
     const currentTime = simTimeRef.current;
-    const windowSpan = Math.max(16, Math.ceil(currentTime / 6) * 6);
-    const tMax = Math.max(windowSpan, 12);
+    const windowSpan = Math.max(20, Math.ceil((currentTime + 2) / 4) * 4);
+    const tMax = Math.max(windowSpan, 16);
 
     if (mouseX >= paddingLeft && mouseX <= paddingLeft + plotWidth) {
       const tHover = ((mouseX - paddingLeft) / plotWidth) * tMax;
-      // Chercher le point le plus proche dans l'historique
       const history = historyRef.current;
       if (history.length > 0) {
         let closest = history[0];
@@ -639,20 +686,9 @@ export const RcExaoSimulator: React.FC = () => {
     setHoverData(null);
   };
 
-  // Angle de déviation des aiguilles des galvanomètres (-45° à +45°)
-  // Galvanomètre 1 (Courant, zéro central -0.02A à +0.02A)
-  const meterCurrent = instantValues.i;
-  const maxMeterCurrent = Math.max(I0_max * 1.2, 0.020);
-  const currentAngleDeg = Math.min(Math.max((meterCurrent / maxMeterCurrent) * 45, -48), 48);
-
-  // Galvanomètre 2 (Tension, zéro central ou -6V à +6V)
-  const meterVoltage = instantValues.uC;
-  const maxMeterVoltage = E * 1.15;
-  const voltageAngleDeg = Math.min(Math.max((meterVoltage / maxMeterVoltage) * 45, -48), 48);
-
   return (
     <div className="space-y-6 text-[#e3e3e3]">
-      {/* HEADER AVEC TITRE ET BADGES */}
+      {/* HEADER AVEC TITRE ET BADGE D'ÉTAT */}
       <div className="bg-[#1e1f20] p-4 sm:p-5 rounded-2xl border border-[#282a2c] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
@@ -665,8 +701,8 @@ export const RcExaoSimulator: React.FC = () => {
           </div>
           <p className="text-xs text-[#8e918f] max-w-2xl leading-relaxed">
             Reproduction animée et interactive du dispositif d'acquisition informatisée (PASCO Capstone) :
-            visualisation simultanée des courbes <span className="text-rose-400 font-mono font-medium">i(t)</span> et{' '}
-            <span className="text-emerald-400 font-mono font-medium">u_C(t)</span>, galvanomètres à aiguille
+            synchronisation frame-par-frame des courbes <span className="text-rose-400 font-mono font-medium">i(t)</span> et{' '}
+            <span className="text-emerald-400 font-mono font-medium">u_C(t)</span> avec les deux galvanomètres à aiguille
             et exploitation de la constante de temps <span className="text-amber-400 font-mono font-medium">τ = R·C</span>.
           </p>
         </div>
@@ -731,18 +767,17 @@ export const RcExaoSimulator: React.FC = () => {
         </button>
       </div>
 
-      {/* ONGLET 1 : LABORATOIRE EXAO (DISPOSITIF PRINCIPAL) */}
+      {/* ONGLET 1 : STATION EXAO */}
       {activeTab === 'lab' && (
         <div className="space-y-6">
-          {/* SECTION CENTRALE : DOUBLE COURBES EXAO + INSTRUMENTS À AIGUILLE */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-            {/* PANNEAU GAUCHE (7/12) : ÉCRAN D'ACQUISITION EXAO */}
+            {/* PANNEAU GAUCHE : ÉCRAN D'ACQUISITION EXAO */}
             <div className="lg:col-span-8 bg-[#131720] p-4 rounded-2xl border border-[#282a2c] flex flex-col space-y-3">
               <div className="flex items-center justify-between pb-2 border-b border-[#222a38]">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
                   <span className="text-xs font-bold text-white tracking-wide uppercase">
-                    Acquisition Graphique Synchronisée (Interface ExAO)
+                    Graphique d'Acquisition Synchronisée (Interface ExAO)
                   </span>
                 </div>
 
@@ -771,7 +806,7 @@ export const RcExaoSimulator: React.FC = () => {
               </div>
 
               {/* CANVA INTERACTIF */}
-              <div className="relative w-full h-[400px] sm:h-[430px] rounded-xl overflow-hidden border border-[#1e293b] bg-[#0a0d14]">
+              <div className="relative w-full h-[400px] sm:h-[440px] rounded-xl overflow-hidden border border-[#cbd5e1] bg-white shadow-inner">
                 <canvas
                   ref={canvasRef}
                   className="w-full h-full cursor-crosshair block"
@@ -780,186 +815,276 @@ export const RcExaoSimulator: React.FC = () => {
                 />
               </div>
 
-              {/* BARRE D'ÉTAT TEMPORELLE ET VALEURS INSTANTANÉES */}
+              {/* VALEURS INSTANTANÉES SYNCHRONISÉES EN DIRECT */}
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1 text-center text-xs">
                 <div className="bg-[#1a202c] p-2 rounded-xl border border-[#2d3748]">
                   <div className="text-[10px] text-[#8e918f]">Temps écoulé</div>
-                  <div className="font-mono font-bold text-white text-sm">
-                    {instantValues.t.toFixed(2)} s
+                  <div ref={boxTimeRef} className="font-mono font-bold text-white text-sm">
+                    0.00 s
                   </div>
                 </div>
 
                 <div className="bg-[#1a202c] p-2 rounded-xl border border-[#2d3748]">
                   <div className="text-[10px] text-emerald-400">Tension u_C(t)</div>
-                  <div className="font-mono font-bold text-emerald-300 text-sm">
-                    {instantValues.uC.toFixed(2)} V
+                  <div ref={boxUcRef} className="font-mono font-bold text-emerald-300 text-sm">
+                    0.00 V
                   </div>
                 </div>
 
                 <div className="bg-[#1a202c] p-2 rounded-xl border border-[#2d3748]">
                   <div className="text-[10px] text-rose-400">Courant i(t)</div>
-                  <div className="font-mono font-bold text-rose-300 text-sm">
-                    {(instantValues.i * 1000).toFixed(2)} mA
+                  <div ref={boxIRef} className="font-mono font-bold text-rose-300 text-sm">
+                    {(I0_max * 1000).toFixed(2)} mA
                   </div>
                 </div>
 
                 <div className="bg-[#1a202c] p-2 rounded-xl border border-[#2d3748]">
                   <div className="text-[10px] text-amber-400">Charge q(t)</div>
-                  <div className="font-mono font-bold text-amber-300 text-sm">
-                    {(instantValues.q * 1000).toFixed(2)} mC
+                  <div ref={boxQRef} className="font-mono font-bold text-amber-300 text-sm">
+                    0.00 mC
                   </div>
                 </div>
 
                 <div className="bg-[#1a202c] p-2 rounded-xl border border-[#2d3748] col-span-2 sm:col-span-1">
                   <div className="text-[10px] text-sky-400">Énergie ℰ_e</div>
-                  <div className="font-mono font-bold text-sky-300 text-sm">
-                    {instantValues.energy.toFixed(1)} mJ
+                  <div ref={boxEnergyRef} className="font-mono font-bold text-sky-300 text-sm">
+                    0.0 mJ
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* PANNEAU DROIT (4/12) : DEUX GALVANOMÈTRES À AIGUILLE & SCHÉMA DU CIRCUIT */}
+            {/* PANNEAU DROIT : LES DEUX GALVANOMÈTRES IDENTIQUES À LA VIDÉO PASCO */}
             <div className="lg:col-span-4 space-y-4 flex flex-col justify-between">
-              {/* CADRAN 1 : GALVANOMÈTRE DE COURANT (CENTRE ZÉRO) */}
-              <div className="bg-[#1e1f20] p-3.5 rounded-2xl border border-[#282a2c] shadow-md">
-                <div className="flex items-center justify-between pb-1.5 border-b border-[#282a2c]">
+              {/* CADRAN 1 : COURANT (A) — AIGUILLE ROUGE, ZÉRO AU CENTRE */}
+              <div className="bg-white p-3.5 rounded-2xl border-2 border-slate-300 shadow-lg text-slate-900">
+                <div className="flex items-center justify-between pb-1 border-b border-slate-200">
                   <div className="flex items-center gap-1.5">
-                    <Gauge className="w-3.5 h-3.5 text-rose-400" />
-                    <span className="text-xs font-semibold text-white">Galvanomètre : Courant I (A)</span>
+                    <span className="w-2.5 h-2.5 bg-red-600 rounded-sm" />
+                    <span className="text-xs font-bold text-slate-800 tracking-tight">
+                      Courant (A) — Exp1
+                    </span>
                   </div>
-                  <span className="text-[11px] font-mono text-rose-400 font-bold">
-                    {(meterCurrent * 1000).toFixed(1)} mA
+                  <span ref={textCurrentValRef} className="text-xs font-mono font-bold text-red-600">
+                    0.00 mA
                   </span>
                 </div>
 
-                {/* VISUEL SVG DU CADRAN À AIGUILLE */}
-                <div className="relative flex justify-center py-2">
-                  <svg viewBox="0 0 200 110" className="w-48 h-28 drop-shadow">
-                    {/* Fond du cadran */}
+                {/* VISUEL SVG DU GALVANOMÈTRE STYLE PASCO CAPSTONE */}
+                <div className="relative flex justify-center py-1">
+                  <svg viewBox="0 0 200 115" className="w-52 h-32">
+                    {/* Fond blanc du cadran */}
+                    <rect x="0" y="0" width="200" height="115" fill="#ffffff" rx="6" />
+
+                    {/* Arc gradué principal */}
                     <path
-                      d="M 15 95 A 85 85 0 0 1 185 95 Z"
-                      fill="#121824"
-                      stroke="#334155"
-                      strokeWidth="2"
-                    />
-                    {/* Arc gradué */}
-                    <path
-                      d="M 30 95 A 70 70 0 0 1 170 95"
+                      d="M 22 95 A 80 80 0 0 1 178 95"
                       fill="none"
-                      stroke="#475569"
-                      strokeWidth="1.5"
+                      stroke="#1e293b"
+                      strokeWidth="1.8"
                     />
 
-                    {/* Graduations principales (-20mA, -10mA, 0, +10mA, +20mA) */}
-                    <line x1="30" y1="95" x2="22" y2="95" stroke="#ef4444" strokeWidth="2" />
-                    <line x1="100" y1="25" x2="100" y2="18" stroke="#f8fafc" strokeWidth="2" />
-                    <line x1="170" y1="95" x2="178" y2="95" stroke="#ef4444" strokeWidth="2" />
-
-                    {/* Graduations intermédiaires */}
-                    <line x1="51" y1="46" x2="45" y2="40" stroke="#94a3b8" strokeWidth="1.5" />
-                    <line x1="149" y1="46" x2="155" y2="40" stroke="#94a3b8" strokeWidth="1.5" />
-
-                    {/* Valeurs textuelles */}
-                    <text x="100" y="38" textAnchor="middle" fill="#f8fafc" fontSize="9" fontWeight="bold">
+                    {/* Graduation centrale ZÉRO */}
+                    <line x1="100" y1="20" x2="100" y2="12" stroke="#0f172a" strokeWidth="2.5" />
+                    <text x="100" y="32" textAnchor="middle" fill="#0f172a" fontSize="10" fontWeight="bold">
                       0
                     </text>
-                    <text x="35" y="85" textAnchor="middle" fill="#94a3b8" fontSize="8">
-                      -{(maxMeterCurrent * 1000).toFixed(0)}
-                    </text>
-                    <text x="165" y="85" textAnchor="middle" fill="#94a3b8" fontSize="8">
-                      +{(maxMeterCurrent * 1000).toFixed(0)}
-                    </text>
-                    <text x="100" y="60" textAnchor="middle" fill="#64748b" fontSize="8">
-                      mA
+
+                    {/* Graduations positives droite (+0.004, +0.008, +0.012, +0.016, +0.020) */}
+                    <line x1="126" y1="27" x2="130" y2="21" stroke="#0f172a" strokeWidth="1.6" />
+                    <text x="127" y="37" textAnchor="middle" fill="#334155" fontSize="6.5">
+                      0.004
                     </text>
 
-                    {/* Aiguille mobile pivotante */}
-                    <g
-                      transform={`rotate(${currentAngleDeg}, 100, 95)`}
-                      className="transition-transform duration-75 ease-out"
-                    >
-                      <line x1="100" y1="95" x2="100" y2="22" stroke="#ef4444" strokeWidth="2.2" />
-                      <polygon points="100,16 97,25 103,25" fill="#ef4444" />
+                    <line x1="149" y1="46" x2="155" y2="42" stroke="#0f172a" strokeWidth="1.6" />
+                    <text x="146" y="55" textAnchor="middle" fill="#334155" fontSize="6.5">
+                      0.008
+                    </text>
+
+                    <line x1="166" y1="71" x2="173" y2="69" stroke="#0f172a" strokeWidth="1.6" />
+                    <text x="162" y="78" textAnchor="middle" fill="#334155" fontSize="6.5">
+                      0.012
+                    </text>
+
+                    <line x1="174" y1="88" x2="182" y2="88" stroke="#0f172a" strokeWidth="1.6" />
+                    <text x="166" y="94" textAnchor="middle" fill="#334155" fontSize="6.5">
+                      0.016
+                    </text>
+
+                    <line x1="178" y1="95" x2="186" y2="95" stroke="#0f172a" strokeWidth="2" />
+                    <text x="175" y="105" textAnchor="middle" fill="#0f172a" fontSize="7" fontWeight="bold">
+                      0.020
+                    </text>
+
+                    {/* Graduations négatives gauche (-0.004, -0.008, -0.012, -0.016, -0.020) */}
+                    <line x1="74" y1="27" x2="70" y2="21" stroke="#0f172a" strokeWidth="1.6" />
+                    <text x="73" y="37" textAnchor="middle" fill="#334155" fontSize="6.5">
+                      -0.004
+                    </text>
+
+                    <line x1="51" y1="46" x2="45" y2="42" stroke="#0f172a" strokeWidth="1.6" />
+                    <text x="54" y="55" textAnchor="middle" fill="#334155" fontSize="6.5">
+                      -0.008
+                    </text>
+
+                    <line x1="34" y1="71" x2="27" y2="69" stroke="#0f172a" strokeWidth="1.6" />
+                    <text x="38" y="78" textAnchor="middle" fill="#334155" fontSize="6.5">
+                      -0.012
+                    </text>
+
+                    <line x1="26" y1="88" x2="18" y2="88" stroke="#0f172a" strokeWidth="1.6" />
+                    <text x="34" y="94" textAnchor="middle" fill="#334155" fontSize="6.5">
+                      -0.016
+                    </text>
+
+                    <line x1="22" y1="95" x2="14" y2="95" stroke="#0f172a" strokeWidth="2" />
+                    <text x="25" y="105" textAnchor="middle" fill="#0f172a" fontSize="7" fontWeight="bold">
+                      -0.020
+                    </text>
+
+                    {/* Graduation mineures (ticks fins) */}
+                    {[
+                      -60, -52, -45, -37, -30, -22, -15, -7, 7, 15, 22, 30, 37, 45, 52, 60,
+                    ].map((ang) => {
+                      const rad = (ang * Math.PI) / 180;
+                      const x1 = 100 + 77 * Math.sin(rad);
+                      const y1 = 95 - 77 * Math.cos(rad);
+                      const x2 = 100 + 80 * Math.sin(rad);
+                      const y2 = 95 - 80 * Math.cos(rad);
+                      return (
+                        <line
+                          key={ang}
+                          x1={x1}
+                          y1={y1}
+                          x2={x2}
+                          y2={y2}
+                          stroke="#64748b"
+                          strokeWidth="1"
+                        />
+                      );
+                    })}
+
+                    {/* Symbole de l'unité A au pivot */}
+                    <text x="100" y="112" textAnchor="middle" fill="#0f172a" fontSize="13" fontWeight="bold">
+                      A
+                    </text>
+
+                    {/* Aiguille mobile pivotante Rouge (mise à jour directe par ref) */}
+                    <g ref={needleCurrentRef} transform="rotate(0, 100, 95)">
+                      <line x1="100" y1="95" x2="100" y2="18" stroke="#dc2626" strokeWidth="2.4" />
+                      <polygon points="100,12 97.5,20 102.5,20" fill="#dc2626" />
                     </g>
-                    {/* Pivot central métallique */}
-                    <circle cx="100" cy="95" r="5" fill="#e2e8f0" stroke="#0f172a" strokeWidth="2" />
+                    {/* Pivot noir central */}
+                    <circle cx="100" cy="95" r="4.5" fill="#0f172a" />
                   </svg>
                 </div>
               </div>
 
-              {/* CADRAN 2 : VOLTMÈTRE DU CONDENSATEUR */}
-              <div className="bg-[#1e1f20] p-3.5 rounded-2xl border border-[#282a2c] shadow-md">
-                <div className="flex items-center justify-between pb-1.5 border-b border-[#282a2c]">
+              {/* CADRAN 2 : TENSION (V) — AIGUILLE VERTE, ZÉRO AU CENTRE VERTICAL */}
+              <div className="bg-white p-3.5 rounded-2xl border-2 border-slate-300 shadow-lg text-slate-900">
+                <div className="flex items-center justify-between pb-1 border-b border-slate-200">
                   <div className="flex items-center gap-1.5">
-                    <Gauge className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-xs font-semibold text-white">Voltmètre : Tension Uc (V)</span>
+                    <span className="w-2.5 h-2.5 bg-emerald-600 rotate-45 rounded-xs" />
+                    <span className="text-xs font-bold text-slate-800 tracking-tight">
+                      Tension (V) — Exp1
+                    </span>
                   </div>
-                  <span className="text-[11px] font-mono text-emerald-400 font-bold">
-                    {meterVoltage.toFixed(2)} V
+                  <span ref={textVoltageValRef} className="text-xs font-mono font-bold text-emerald-600">
+                    0.00 V
                   </span>
                 </div>
 
-                {/* VISUEL SVG DU CADRAN À AIGUILLE */}
-                <div className="relative flex justify-center py-2">
-                  <svg viewBox="0 0 200 110" className="w-48 h-28 drop-shadow">
-                    {/* Fond du cadran */}
+                {/* VISUEL SVG DU VOLTMÈTRE IDENTIQUE À LA VIDÉO PASCO */}
+                <div className="relative flex justify-center py-1">
+                  <svg viewBox="0 0 200 115" className="w-52 h-32">
+                    {/* Fond blanc du cadran */}
+                    <rect x="0" y="0" width="200" height="115" fill="#ffffff" rx="6" />
+
+                    {/* Arc gradué principal */}
                     <path
-                      d="M 15 95 A 85 85 0 0 1 185 95 Z"
-                      fill="#121824"
-                      stroke="#334155"
-                      strokeWidth="2"
-                    />
-                    {/* Arc gradué */}
-                    <path
-                      d="M 30 95 A 70 70 0 0 1 170 95"
+                      d="M 22 95 A 80 80 0 0 1 178 95"
                       fill="none"
-                      stroke="#475569"
-                      strokeWidth="1.5"
+                      stroke="#1e293b"
+                      strokeWidth="1.8"
                     />
 
-                    {/* Graduations principales (0V à gauche, E/2 au centre, E à droite) */}
-                    <line x1="30" y1="95" x2="22" y2="95" stroke="#22c55e" strokeWidth="2" />
-                    <line x1="100" y1="25" x2="100" y2="18" stroke="#f8fafc" strokeWidth="2" />
-                    <line x1="170" y1="95" x2="178" y2="95" stroke="#22c55e" strokeWidth="2" />
-
-                    {/* Valeurs textuelles */}
-                    <text x="35" y="85" textAnchor="middle" fill="#94a3b8" fontSize="8">
-                      0V
-                    </text>
-                    <text x="100" y="38" textAnchor="middle" fill="#f8fafc" fontSize="9" fontWeight="bold">
-                      {(E * 0.5).toFixed(1)}V
-                    </text>
-                    <text x="165" y="85" textAnchor="middle" fill="#94a3b8" fontSize="8">
-                      {E.toFixed(1)}V
-                    </text>
-                    <text x="100" y="60" textAnchor="middle" fill="#64748b" fontSize="8">
-                      Tension (V)
+                    {/* ZÉRO CENTRAL (12h) */}
+                    <line x1="100" y1="20" x2="100" y2="12" stroke="#0f172a" strokeWidth="2.5" />
+                    <text x="100" y="32" textAnchor="middle" fill="#0f172a" fontSize="11" fontWeight="bold">
+                      0
                     </text>
 
-                    {/* Aiguille mobile pivotante (0V = -45°, E = +45°) */}
-                    {(() => {
-                      const vFraction = Math.min(Math.max(meterVoltage / E, 0), 1);
-                      const voltAngle = -45 + vFraction * 90;
+                    {/* Côté positif droit : +2, +4, +6 V */}
+                    <line x1="130" y1="28" x2="134" y2="22" stroke="#0f172a" strokeWidth="2" />
+                    <text x="127" y="42" textAnchor="middle" fill="#0f172a" fontSize="9" fontWeight="bold">
+                      2
+                    </text>
+
+                    <line x1="156" y1="52" x2="162" y2="48" stroke="#0f172a" strokeWidth="2" />
+                    <text x="148" y="63" textAnchor="middle" fill="#0f172a" fontSize="9" fontWeight="bold">
+                      4
+                    </text>
+
+                    <line x1="174" y1="84" x2="182" y2="82" stroke="#0f172a" strokeWidth="2.5" />
+                    <text x="164" y="93" textAnchor="middle" fill="#0f172a" fontSize="9" fontWeight="bold">
+                      6
+                    </text>
+
+                    {/* Côté négatif gauche : -2, -4, -6 V */}
+                    <line x1="70" y1="28" x2="66" y2="22" stroke="#0f172a" strokeWidth="2" />
+                    <text x="73" y="42" textAnchor="middle" fill="#0f172a" fontSize="9" fontWeight="bold">
+                      -2
+                    </text>
+
+                    <line x1="44" y1="52" x2="38" y2="48" stroke="#0f172a" strokeWidth="2" />
+                    <text x="52" y="63" textAnchor="middle" fill="#0f172a" fontSize="9" fontWeight="bold">
+                      -4
+                    </text>
+
+                    <line x1="26" y1="84" x2="18" y2="82" stroke="#0f172a" strokeWidth="2.5" />
+                    <text x="36" y="93" textAnchor="middle" fill="#0f172a" fontSize="9" fontWeight="bold">
+                      -6
+                    </text>
+
+                    {/* Graduations mineures intermédiaires (1V, 3V, 5V) */}
+                    {[-57, -34, -11, 11, 34, 57].map((ang) => {
+                      const rad = (ang * Math.PI) / 180;
+                      const x1 = 100 + 77 * Math.sin(rad);
+                      const y1 = 95 - 77 * Math.cos(rad);
+                      const x2 = 100 + 80 * Math.sin(rad);
+                      const y2 = 95 - 80 * Math.cos(rad);
                       return (
-                        <g
-                          transform={`rotate(${voltAngle}, 100, 95)`}
-                          className="transition-transform duration-75 ease-out"
-                        >
-                          <line x1="100" y1="95" x2="100" y2="22" stroke="#22c55e" strokeWidth="2.2" />
-                          <polygon points="100,16 97,25 103,25" fill="#22c55e" />
-                        </g>
+                        <line
+                          key={ang}
+                          x1={x1}
+                          y1={y1}
+                          x2={x2}
+                          y2={y2}
+                          stroke="#64748b"
+                          strokeWidth="1.2"
+                        />
                       );
-                    })()}
-                    {/* Pivot central */}
-                    <circle cx="100" cy="95" r="5" fill="#e2e8f0" stroke="#0f172a" strokeWidth="2" />
+                    })}
+
+                    {/* Symbole V au pivot */}
+                    <text x="100" y="112" textAnchor="middle" fill="#0f172a" fontSize="13" fontWeight="bold">
+                      V
+                    </text>
+
+                    {/* Aiguille mobile pivotante Verte (mise à jour directe par ref) */}
+                    <g ref={needleVoltageRef} transform="rotate(0, 100, 95)">
+                      <line x1="100" y1="95" x2="100" y2="18" stroke="#16a34a" strokeWidth="2.4" />
+                      <polygon points="100,12 97.5,20 102.5,20" fill="#16a34a" />
+                    </g>
+                    {/* Pivot noir central */}
+                    <circle cx="100" cy="95" r="4.5" fill="#0f172a" />
                   </svg>
                 </div>
               </div>
 
-              {/* SCHÉMA INTERACTIF DU CIRCUIT RC AVEC INTERRUPTEUR K */}
+              {/* SCHÉMA INTERACTIF DU CIRCUIT RC */}
               <div className="bg-[#1e1f20] p-3.5 rounded-2xl border border-[#282a2c] shadow-md">
-                <div className="flex items-center justify-between pb-2 border-b border-[#282a2c]">
+                <div className="flex items-center justify-between pb-1.5 border-b border-[#282a2c]">
                   <span className="text-xs font-semibold text-white flex items-center gap-1.5">
                     <Zap className="w-3.5 h-3.5 text-amber-400" />
                     Schéma du Circuit RC
@@ -967,33 +1092,30 @@ export const RcExaoSimulator: React.FC = () => {
                   <span className="text-[10px] text-[#8e918f]">Cliquez sur (1) ou (2)</span>
                 </div>
 
-                <div className="relative py-2 flex justify-center">
-                  <svg viewBox="0 0 280 140" className="w-full max-w-[280px] h-32">
-                    {/* Générateur E (gauche) */}
-                    <line x1="30" y1="40" x2="30" y2="110" stroke="#64748b" strokeWidth="2" />
-                    {/* Pôle + */}
-                    <line x1="20" y1="65" x2="40" y2="65" stroke="#ef4444" strokeWidth="2.5" />
-                    {/* Pôle - */}
-                    <line x1="24" y1="85" x2="36" y2="85" stroke="#38bdf8" strokeWidth="2" />
-                    <text x="14" y="62" fill="#ef4444" fontSize="10" fontWeight="bold">
+                <div className="relative py-1 flex justify-center">
+                  <svg viewBox="0 0 280 135" className="w-full max-w-[280px] h-32">
+                    {/* Générateur E */}
+                    <line x1="30" y1="35" x2="30" y2="105" stroke="#64748b" strokeWidth="2" />
+                    <line x1="20" y1="60" x2="40" y2="60" stroke="#ef4444" strokeWidth="2.5" />
+                    <line x1="24" y1="80" x2="36" y2="80" stroke="#38bdf8" strokeWidth="2" />
+                    <text x="14" y="58" fill="#ef4444" fontSize="10" fontWeight="bold">
                       +
                     </text>
-                    <text x="14" y="93" fill="#38bdf8" fontSize="10" fontWeight="bold">
+                    <text x="14" y="88" fill="#38bdf8" fontSize="10" fontWeight="bold">
                       -
                     </text>
-                    <text x="10" y="78" fill="#f8fafc" fontSize="10" fontWeight="bold">
+                    <text x="10" y="73" fill="#f8fafc" fontSize="10" fontWeight="bold">
                       E
                     </text>
 
-                    {/* Ligne haute venant du générateur vers contact 1 */}
-                    <line x1="30" y1="40" x2="80" y2="40" stroke="#64748b" strokeWidth="2" />
+                    {/* Branche vers contact 1 */}
+                    <line x1="30" y1="35" x2="80" y2="35" stroke="#64748b" strokeWidth="2" />
 
-                    {/* Inverseur K (Point central pivot à x=110, y=70) */}
                     {/* Contact 1 (Charge) */}
                     <circle
                       cx="80"
-                      cy="40"
-                      r="4"
+                      cy="35"
+                      r="4.5"
                       fill={switchPosition === 1 ? '#10b981' : '#334155'}
                       stroke="#10b981"
                       strokeWidth="1.5"
@@ -1002,7 +1124,7 @@ export const RcExaoSimulator: React.FC = () => {
                     />
                     <text
                       x="70"
-                      y="32"
+                      y="27"
                       fill={switchPosition === 1 ? '#10b981' : '#94a3b8'}
                       fontSize="9"
                       fontWeight="bold"
@@ -1013,8 +1135,8 @@ export const RcExaoSimulator: React.FC = () => {
                     {/* Contact 2 (Décharge) */}
                     <circle
                       cx="80"
-                      cy="100"
-                      r="4"
+                      cy="95"
+                      r="4.5"
                       fill={switchPosition === 2 ? '#f59e0b' : '#334155'}
                       stroke="#f59e0b"
                       strokeWidth="1.5"
@@ -1023,7 +1145,7 @@ export const RcExaoSimulator: React.FC = () => {
                     />
                     <text
                       x="70"
-                      y="114"
+                      y="110"
                       fill={switchPosition === 2 ? '#f59e0b' : '#94a3b8'}
                       fontSize="9"
                       fontWeight="bold"
@@ -1031,77 +1153,54 @@ export const RcExaoSimulator: React.FC = () => {
                       (2)
                     </text>
 
-                    {/* Ligne basse de retour décharge */}
-                    <line x1="80" y1="100" x2="80" y2="110" stroke="#64748b" strokeWidth="2" />
+                    {/* Ligne basse retour décharge */}
+                    <line x1="80" y1="95" x2="80" y2="105" stroke="#64748b" strokeWidth="2" />
 
                     {/* Couteau de l'interrupteur K */}
                     <line
                       x1="120"
-                      y1="70"
+                      y1="65"
                       x2={switchPosition === 1 ? '82' : '82'}
-                      y2={switchPosition === 1 ? '42' : '98'}
+                      y2={switchPosition === 1 ? '37' : '93'}
                       stroke="#f8fafc"
                       strokeWidth="2.5"
                       strokeLinecap="round"
                     />
-                    <circle cx="120" cy="70" r="3.5" fill="#f8fafc" />
-                    <text x="108" y="62" fill="#f8fafc" fontSize="10" fontWeight="bold">
+                    <circle cx="120" cy="65" r="3.5" fill="#f8fafc" />
+                    <text x="108" y="58" fill="#f8fafc" fontSize="10" fontWeight="bold">
                       K
                     </text>
 
-                    {/* Branche principale vers Conducteur ohmique R */}
-                    <line x1="120" y1="70" x2="160" y2="70" stroke="#64748b" strokeWidth="2" />
+                    {/* Branche vers R */}
+                    <line x1="120" y1="65" x2="160" y2="65" stroke="#64748b" strokeWidth="2" />
 
                     {/* Résistance R */}
                     <rect
                       x="160"
-                      y="60"
+                      y="55"
                       width="35"
                       height="20"
                       fill="#1e293b"
                       stroke="#94a3b8"
                       strokeWidth="1.5"
                     />
-                    <text x="172" y="74" fill="#f8fafc" fontSize="9" fontWeight="bold">
+                    <text x="172" y="69" fill="#f8fafc" fontSize="9" fontWeight="bold">
                       R
                     </text>
 
-                    <line x1="195" y1="70" x2="225" y2="70" stroke="#64748b" strokeWidth="2" />
+                    <line x1="195" y1="65" x2="225" y2="65" stroke="#64748b" strokeWidth="2" />
 
                     {/* Condensateur C */}
-                    <line x1="225" y1="52" x2="225" y2="88" stroke="#38bdf8" strokeWidth="2.5" />
-                    <line x1="233" y1="52" x2="233" y2="88" stroke="#38bdf8" strokeWidth="2.5" />
-                    <text x="240" y="74" fill="#38bdf8" fontSize="10" fontWeight="bold">
+                    <line x1="225" y1="48" x2="225" y2="82" stroke="#38bdf8" strokeWidth="2.5" />
+                    <line x1="233" y1="48" x2="233" y2="82" stroke="#38bdf8" strokeWidth="2.5" />
+                    <text x="240" y="69" fill="#38bdf8" fontSize="10" fontWeight="bold">
                       C
                     </text>
 
-                    {/* Fil de retour commun vers le bas */}
-                    <line x1="233" y1="70" x2="260" y2="70" stroke="#64748b" strokeWidth="2" />
-                    <line x1="260" y1="70" x2="260" y2="110" stroke="#64748b" strokeWidth="2" />
-                    <line x1="30" y1="110" x2="260" y2="110" stroke="#64748b" strokeWidth="2" />
-
-                    {/* Flèche du sens du courant si i != 0 */}
-                    {Math.abs(instantValues.i) > 0.0002 && (
-                      <g className="animate-pulse">
-                        <polygon
-                          points={
-                            instantValues.i > 0
-                              ? '145,67 153,70 145,73' // vers la droite (charge)
-                              : '153,67 145,70 153,73' // vers la gauche (décharge)
-                          }
-                          fill={instantValues.i > 0 ? '#ef4444' : '#f59e0b'}
-                        />
-                        <text
-                          x="142"
-                          y="56"
-                          fill={instantValues.i > 0 ? '#ef4444' : '#f59e0b'}
-                          fontSize="8"
-                          fontWeight="bold"
-                        >
-                          i
-                        </text>
-                      </g>
-                    )}
+                    {/* Ligne commune de retour */}
+                    <line x1="233" y1="65" x2="260" y2="65" stroke="#64748b" strokeWidth="2" />
+                    <line x1="260" y1="65" x2="260" y2="105" stroke="#64748b" strokeWidth="2" />
+                    <line x1="30" y1="105" x2="260" y2="105" stroke="#64748b" strokeWidth="2" />
                   </svg>
                 </div>
               </div>
@@ -1110,7 +1209,7 @@ export const RcExaoSimulator: React.FC = () => {
 
           {/* SECTION COMMANDES & RÉGLAGES DES PARAMÈTRES PHYSIQUES */}
           <div className="bg-[#1e1f20] p-4 sm:p-5 rounded-2xl border border-[#282a2c] space-y-4">
-            {/* BARRE SUPÉRIEURE DE CONTRÔLE */}
+            {/* BARRE DE CONTRÔLE */}
             <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#282a2c]">
               <div className="flex items-center gap-2">
                 <button
@@ -1135,7 +1234,7 @@ export const RcExaoSimulator: React.FC = () => {
                 </button>
               </div>
 
-              {/* SÉLECTEUR MANUEL OU AUTOMATIQUE DU COMMUTATEUR K */}
+              {/* SÉLECTEUR MANUEL / AUTO DU COMMUTATEUR K */}
               <div className="flex items-center gap-2">
                 <span className="text-xs text-[#8e918f] hidden sm:inline">Mode Interrupteur :</span>
                 <div className="flex bg-[#121824] p-1 rounded-xl border border-[#2d3748] text-xs">
@@ -1173,7 +1272,7 @@ export const RcExaoSimulator: React.FC = () => {
                         : 'text-[#8e918f] hover:text-white'
                     }`}
                   >
-                    Auto-Cyclique (Vidéo)
+                    Auto-Cyclique (Vidéo PASCO)
                   </button>
                 </div>
               </div>
@@ -1198,9 +1297,9 @@ export const RcExaoSimulator: React.FC = () => {
               </div>
             </div>
 
-            {/* CURSEURS DES PARAMÈTRES DU CIRCUIT (E, R, C) */}
+            {/* CURSEURS DES PARAMÈTRES (E, R, C) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-1">
-              {/* SLIDER E (Tension du générateur) */}
+              {/* SLIDER E */}
               <div className="space-y-1.5 bg-[#17191b] p-3 rounded-xl border border-[#282a2c]">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-white flex items-center gap-1.5">
@@ -1225,7 +1324,7 @@ export const RcExaoSimulator: React.FC = () => {
                 </div>
               </div>
 
-              {/* SLIDER R (Résistance) */}
+              {/* SLIDER R */}
               <div className="space-y-1.5 bg-[#17191b] p-3 rounded-xl border border-[#282a2c]">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-white flex items-center gap-1.5">
@@ -1250,7 +1349,7 @@ export const RcExaoSimulator: React.FC = () => {
                 </div>
               </div>
 
-              {/* SLIDER C (Capacité) */}
+              {/* SLIDER C */}
               <div className="space-y-1.5 bg-[#17191b] p-3 rounded-xl border border-[#282a2c]">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-white flex items-center gap-1.5">
@@ -1276,7 +1375,7 @@ export const RcExaoSimulator: React.FC = () => {
               </div>
             </div>
 
-            {/* GRILLE DES RÉSULTATS THÉORIQUES DU BAC */}
+            {/* GRILLE DES RÉSULTATS THÉORIQUES */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 bg-[#131720] rounded-xl border border-[#222a38] text-xs">
               <div className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-amber-400 shrink-0" />
@@ -1301,7 +1400,7 @@ export const RcExaoSimulator: React.FC = () => {
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                 <div>
-                  <div className="text-[10px] text-[#8e918f]">Durée du régime transitoire (5τ)</div>
+                  <div className="text-[10px] text-[#8e918f]">Régime permanent atteint (5τ)</div>
                   <div className="font-mono font-bold text-emerald-300">
                     Δt_perm ≈ {(5 * tau).toFixed(2)} s (charge à 99.3%)
                   </div>
@@ -1316,7 +1415,7 @@ export const RcExaoSimulator: React.FC = () => {
       {activeTab === 'equations' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* CARTE 1 : ÉQUATION DIFFÉRENTIELLE DE LA CHARGE */}
+            {/* CARTE 1 : CHARGE */}
             <div className="bg-[#1e1f20] p-5 rounded-2xl border border-[#282a2c] space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-[#282a2c]">
                 <span className="w-3 h-3 rounded-full bg-emerald-400" />
@@ -1325,17 +1424,14 @@ export const RcExaoSimulator: React.FC = () => {
 
               <div className="text-xs text-[#c4c7c5] space-y-3 leading-relaxed">
                 <p>
-                  En convention récepteur pour le condensateur et le conducteur ohmique, la loi d'additivité des
-                  tensions s'écrit :
+                  En convention récepteur, la loi d'additivité des tensions s'écrit :
                 </p>
                 <div className="p-3 bg-[#131720] rounded-xl border border-[#222a38] text-center">
                   <MathView content="u_R(t) + u_C(t) = E" block />
                 </div>
 
                 <p>
-                  D'après la loi d'Ohm, <MathView content="u_R = R \cdot i" /> et la relation fondamentale du
-                  condensateur <MathView content="q = C \cdot u_C" /> avec <MathView content="i = \frac{dq}{dt} = C \frac{du_C}{dt}" />.
-                  On obtient l'équation différentielle linéaire du 1er ordre :
+                  Avec <MathView content="u_R = R \cdot i" /> et <MathView content="i = C \frac{du_C}{dt}" />, on obtient :
                 </p>
 
                 <div className="p-3 bg-[#131720] rounded-xl border border-emerald-500/30 text-emerald-300 text-center">
@@ -1348,7 +1444,7 @@ export const RcExaoSimulator: React.FC = () => {
                 </div>
 
                 <p>
-                  L'intensité du courant en découle directement par dérivation :
+                  Intensité du courant par dérivation :
                 </p>
                 <div className="p-3 bg-[#131720] rounded-xl border border-[#222a38] text-center text-rose-300">
                   <MathView content="i(t) = C \frac{du_C}{dt} = \frac{E}{R} e^{-t/\tau} = I_0 e^{-t/\tau}" block />
@@ -1356,7 +1452,7 @@ export const RcExaoSimulator: React.FC = () => {
               </div>
             </div>
 
-            {/* CARTE 2 : ÉQUATION DIFFÉRENTIELLE DE LA DÉCHARGE */}
+            {/* CARTE 2 : DÉCHARGE */}
             <div className="bg-[#1e1f20] p-5 rounded-2xl border border-[#282a2c] space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-[#282a2c]">
                 <span className="w-3 h-3 rounded-full bg-amber-400" />
@@ -1365,14 +1461,14 @@ export const RcExaoSimulator: React.FC = () => {
 
               <div className="text-xs text-[#c4c7c5] space-y-3 leading-relaxed">
                 <p>
-                  En basculant l'interrupteur en position (2), le générateur est exclu du circuit :
+                  En position (2), le générateur est exclu du circuit :
                 </p>
                 <div className="p-3 bg-[#131720] rounded-xl border border-[#222a38] text-center">
                   <MathView content="u_R(t) + u_C(t) = 0" block />
                 </div>
 
                 <p>
-                  En remplaçant <MathView content="u_R = RC \frac{du_C}{dt}" />, on obtient l'équation sans second membre :
+                  D'où l'équation sans second membre :
                 </p>
 
                 <div className="p-3 bg-[#131720] rounded-xl border border-amber-500/30 text-amber-300 text-center">
@@ -1385,7 +1481,7 @@ export const RcExaoSimulator: React.FC = () => {
                 </div>
 
                 <p>
-                  Expression de l'intensité du courant de décharge (le signe négatif explique la déviation à gauche sur le galvanomètre) :
+                  Intensité du courant de décharge (le signe négatif explique la déviation à gauche sur le galvanomètre) :
                 </p>
                 <div className="p-3 bg-[#131720] rounded-xl border border-[#222a38] text-center text-rose-300">
                   <MathView content="i(t) = C \frac{du_C}{dt} = -\frac{E}{R} e^{-t/\tau} = -I_0 e^{-t/\tau}" block />
@@ -1394,19 +1490,14 @@ export const RcExaoSimulator: React.FC = () => {
             </div>
           </div>
 
-          {/* CARTE 3 : ANALYSE DIMENSIONNELLE DE TAU */}
+          {/* CARTE 3 : ANALYSE DIMENSIONNELLE */}
           <div className="bg-[#1e1f20] p-5 rounded-2xl border border-[#282a2c] space-y-3">
             <div className="flex items-center gap-2 pb-2 border-b border-[#282a2c]">
               <Sparkles className="w-4 h-4 text-purple-400" />
-              <h3 className="font-bold text-white text-sm">3. Analyse dimensionnelle : Pourquoi τ = RC a la dimension d'un temps ?</h3>
+              <h3 className="font-bold text-white text-sm">3. Analyse dimensionnelle de τ = RC</h3>
             </div>
 
             <div className="text-xs text-[#c4c7c5] space-y-3 leading-relaxed">
-              <p>
-                Démontrer que <MathView content="\tau = R \cdot C" /> est homogène à un temps est une question classique et incontournable
-                au Baccalauréat National :
-              </p>
-
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-3 bg-[#131720] rounded-xl border border-[#222a38] space-y-2">
                   <div className="font-semibold text-white">Dimension de la résistance R :</div>
@@ -1430,27 +1521,21 @@ export const RcExaoSimulator: React.FC = () => {
         </div>
       )}
 
-      {/* ONGLET 3 : MÉTHODES DU NATIONAL & PIÈGES COURANTS */}
+      {/* ONGLET 3 : MÉTHODES ET PIÈGES BAC */}
       {activeTab === 'course' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* PIÈGE 1 : DISCONTINUITÉ DE i(t) VS CONTINUITÉ DE uC(t) */}
             <div className="bg-[#1e1f20] p-4 rounded-2xl border border-rose-500/30 space-y-2">
               <div className="flex items-center gap-2 text-rose-400 font-bold text-xs uppercase tracking-wider">
                 <AlertTriangle className="w-4 h-4" />
                 Piège n°1 : Continuité de la tension vs Discontinuité du courant
               </div>
               <p className="text-xs text-[#c4c7c5] leading-relaxed">
-                Le condensateur emmagasine de l'énergie sous forme électrostatique :
-                <MathView content="\mathcal{E}_e = \frac{1}{2} C u_C^2" />. L'énergie ne pouvant varier instantanément (puissance infinie
-                impossible), <strong>la tension u_C(t) est obligatoirement une fonction continue du temps :</strong>
-                <MathView content="u_C(0^+) = u_C(0^-) = 0" />.
-                En revanche, <strong>l'intensité du courant i(t) subit un saut brusque</strong> de 0 à <MathView content="I_0 = E/R" />
-                à la fermeture de l'interrupteur !
+                Le condensateur emmagasine de l'énergie : <MathView content="\mathcal{E}_e = \frac{1}{2} C u_C^2" />. L'énergie ne pouvant varier instantanément, <strong>la tension u_C(t) est obligatoirement continue :</strong> <MathView content="u_C(0^+) = u_C(0^-) = 0" />.
+                En revanche, <strong>l'intensité du courant i(t) subit un saut brusque</strong> de 0 à <MathView content="I_0 = E/R" /> (à la charge) ou de 0 à <MathView content="-I_0" /> (à la décharge) !
               </p>
             </div>
 
-            {/* PIÈGE 2 : TANGENTE À LA DÉCHARGE */}
             <div className="bg-[#1e1f20] p-4 rounded-2xl border border-amber-500/30 space-y-2">
               <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider">
                 <AlertTriangle className="w-4 h-4" />
@@ -1458,12 +1543,11 @@ export const RcExaoSimulator: React.FC = () => {
               </div>
               <p className="text-xs text-[#c4c7c5] leading-relaxed">
                 À la charge, la tangente à l'origine à t=0 coupe <strong>l'asymptote horizontale u_C = E</strong> à l'instant <MathView content="t = \tau" />.
-                Mais attention : <strong>à la décharge</strong>, l'asymptote est la droite <MathView content="u_C = 0" /> (l'axe des abscisses).
-                La tangente à l'origine coupe donc <strong>l'axe des temps (u=0)</strong> exactement à <MathView content="t = \tau" /> !
+                À la décharge, l'asymptote est la droite <MathView content="u_C = 0" />.
+                La tangente à l'origine coupe donc <strong>l'axe des abscisses (u=0)</strong> exactement à <MathView content="t = \tau" /> !
               </p>
             </div>
 
-            {/* MÉTHODE 1 : MÉTHODE DES 63% ET 37% */}
             <div className="bg-[#1e1f20] p-4 rounded-2xl border border-emerald-500/30 space-y-2">
               <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider">
                 <CheckCircle2 className="w-4 h-4" />
@@ -1471,23 +1555,19 @@ export const RcExaoSimulator: React.FC = () => {
               </div>
               <p className="text-xs text-[#c4c7c5] leading-relaxed">
                 À la charge : pour <MathView content="t = \tau" />, <MathView content="u_C(\tau) = E(1 - e^{-1}) \approx 0.632 \cdot E" />.
-                Il suffit de calculer 0.632 × E, de repérer cette ordonnée sur la courbe, et de lire l'abscisse correspondante qui est τ.
                 À la décharge : pour <MathView content="t = \tau" />, <MathView content="u_C(\tau) = E \cdot e^{-1} \approx 0.368 \cdot E" /> (37% de E).
               </p>
             </div>
 
-            {/* MÉTHODE 2 : BILAN ÉNERGÉTIQUE ET RENDEMENT */}
             <div className="bg-[#1e1f20] p-4 rounded-2xl border border-sky-500/30 space-y-2">
               <div className="flex items-center gap-2 text-sky-400 font-bold text-xs uppercase tracking-wider">
                 <CheckCircle2 className="w-4 h-4" />
                 Méthode n°2 : Énergie fournie vs Énergie stockée
               </div>
               <p className="text-xs text-[#c4c7c5] leading-relaxed">
-                Lors de la charge complète, le générateur fournit une énergie totale :
-                <MathView content="\mathcal{E}_g = \int_0^\infty E \cdot i(t) dt = C \cdot E^2" />.
-                L'énergie finale emmagasinée dans le condensateur est :
-                <MathView content="\mathcal{E}_e = \frac{1}{2} C E^2" />.
-                Exactement la moitié (<MathView content="50\%" />) de l'énergie fournie est toujours dissipée par effet Joule dans le conducteur ohmique !
+                Lors de la charge complète, le générateur fournit : <MathView content="\mathcal{E}_g = C \cdot E^2" />.
+                L'énergie finale emmagasinée dans le condensateur est : <MathView content="\mathcal{E}_e = \frac{1}{2} C E^2" />.
+                Exactement la moitié (<MathView content="50\%" />) de l'énergie fournie est dissipée sous forme de chaleur par effet Joule dans le conducteur ohmique.
               </p>
             </div>
           </div>
