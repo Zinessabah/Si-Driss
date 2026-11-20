@@ -147,14 +147,22 @@ export function parseExamQuery(query: string): ParsedExamQuery {
   // 5. Détection de requêtes de cours, définitions, formules, pièges ou cadre de référence
   const isTheoryOrDefinitionOrTrap = /\b(definition|definir|cadre\s*(?:de)?\s*reference|cours|formule|resume|piege|pieges|c'est\s*quoi|qu'est[- ]ce\s*que|que\s*signifie|sens\s*physique|enonce\s*(?:de\s*la)?\s*loi)\b/i.test(q);
 
-  // Demande explicite d'ouverture d'un sujet, d'une annale ou d'un exercice d'examen
-  const isExplicitExamPaperRequest = /\b(sujet|annale|epreuve|exercice\s*(?:d'examen|du\s*national|du\s*bac)|resoudre\s*(?:le|l'|un)?\s*(?:sujet|epreuve|examen|annale)|affiche\s*(?:le|l'|un)?\s*(?:sujet|epreuve|examen|exercice|annale))\b/i.test(q);
+  // Demande explicite d'ouverture d'un sujet, d'une annale ou d'un exercice d'examen officiel du National
+  // IMPORTANT : Les termes génériques isolés ("sujet", "epreuve", "exercice") seuls NE DOIVENT PAS suffire,
+  // car l'élève les emploie couramment pour son propre devoir ou un exercice uploadé.
+  const hasNationalOrExamQualifier = /\b(national|nationaux|officiel|officielle|annale|annales|du\s*bac|d'examen)\b/i.test(q);
+  const isExplicitExamPaperRequest =
+    (/\b(?:sujet|epreuve|annale|examen)\s+(?:du\s*national|d'examen|du\s*bac|officiel)\b/i.test(q) ||
+     /\b(?:exercice\s+(?:du\s*national|du\s*bac|d'examen\s*national))\b/i.test(q) ||
+     /\b(?:examen\s+national|bac\s+national|annale\s+du\s+bac)\b/i.test(q) ||
+     (/\b(?:affiche|ouvre|montre|consulter|voir|resoudre)\s+(?:le|l'|un)?\s*(?:sujet|epreuve|examen|annale)\b/i.test(q) && hasNationalOrExamQualifier));
 
   // Une requête est qualifiée d'examen (recherche d'un PDF d'annale officiel) uniquement si :
   // - Elle n'est PAS une requête de définition / théorie / piège / cadre sans année explicite,
-  // - ET qu'elle contient SOIT une année d'examen explicite (ex: 2015, 2023),
-  //   SOIT une demande explicite d'épreuve/sujet/annale (ex: "affiche un exercice du national", "sujet de bac").
-  const isExamQuery = !isTheoryOrDefinitionOrTrap && !!(year || isExplicitExamPaperRequest);
+  // - ET qu'elle contient SOIT une année d'examen explicite accompagnée d'une qualification d'examen (ex: "National 2015", "SN 2023", "Bac 2026"),
+  //   SOIT une demande explicite d'épreuve/sujet/annale nationale (ex: "affiche un exercice des ondes du national").
+  const hasExplicitExamYear = Boolean(year && (hasNationalOrExamQualifier || session || /\b(bac|session)\b/i.test(q)));
+  const isExamQuery = !isTheoryOrDefinitionOrTrap && (hasExplicitExamYear || isExplicitExamPaperRequest);
 
   return { isExamQuery, year, session, topic, exerciseNumber };
 }
@@ -806,9 +814,15 @@ function extractExamMetaFromFilename(fileName: string): { year: number | null; s
   return { year, session };
 }
 
+export interface SearchLocalDocumentsOptions {
+  hasUserAttachments?: boolean;
+  explicitExamRequested?: boolean;
+}
+
 export async function searchLocalDocumentsDetailed(
   query: string,
-  branch: string = 'PC'
+  branch: string = 'PC',
+  options?: SearchLocalDocumentsOptions
 ): Promise<{ contextText: string; officialSource?: OfficialSourceRef; isScannedPdf?: boolean }> {
   try {
     await refreshDocumentsCache();
@@ -817,10 +831,15 @@ export async function searchLocalDocumentsDetailed(
     const branchUpper = (branch || 'PC').toUpperCase() as 'PC' | 'SM';
     const parsed = parseExamQuery(query);
 
+    // Si l'élève a joint ses propres documents/exercices ou photos et n'a pas explicitement
+    // réclamé l'ouverture d'un sujet officiel du Bac en texte, NE PAS forcer l'ouverture
+    // d'un PDF officiel externe (ex: 2026_SN_SM.pdf) : la priorité absolue est accordée à son énoncé uploadé !
+    const shouldSkipExamSource = Boolean(options?.hasUserAttachments && !options?.explicitExamRequested);
+
     // 1. ROUTE PRIORITAIRE : EXAMEN NATIONAL DU BACCALAURÉAT
     // Si la requête concerne une épreuve nationale (année, session, ou mot-clé examen/national),
     // on identifie le document officiel cible dans la filière de l'élève (PC ou SM)
-    if (parsed.isExamQuery) {
+    if (parsed.isExamQuery && !shouldSkipExamSource) {
       let bestDoc: CachedDoc | null = null;
       let bestScore = 0;
 
@@ -835,18 +854,22 @@ export async function searchLocalDocumentsDetailed(
         const isNonExamRef = /cadre[-_ ]?(?:de[-_ ]?)?reference|cours/i.test(normName);
 
         if (parsed.year) {
+          // CORRESPONDANCE STRICTE SUR L'ANNÉE : le fichier DOIT contenir l'année demandée
+          if (!normName.includes(String(parsed.year))) {
+            continue;
+          }
+
           const meta = extractExamMetaFromFilename(doc.name);
           const text = readDocumentFullText(doc);
           const cleanLen = text.replace(/^--\s*\d+\s+of\s+\d+\s*--$/gm, '').trim().length;
-          let docScore = 0;
-          if (normName.includes(String(parsed.year))) docScore += 60;
+          let docScore = 60; // Score de base pour l'année exacte trouvée
           if (parsed.session && meta.session === parsed.session) {
-            docScore += 45;
+            docScore += 40;
           } else if (!parsed.session && meta.session === 'SN') {
-            docScore += 4;
+            docScore += 5;
           }
-          if (cleanLen >= 300) docScore += 20;
-          if (text.includes(SCIENTIFIC_VISION_MARKER)) docScore += 8;
+          if (cleanLen >= 300) docScore += 15;
+          if (text.includes(SCIENTIFIC_VISION_MARKER)) docScore += 10;
           if (normName.includes(branchUpper.toLowerCase())) docScore += 10;
           if (isPdf) docScore += 5;
 
@@ -856,20 +879,34 @@ export async function searchLocalDocumentsDetailed(
           }
         } else if (isPdf && !isNonExamRef && /(?:^|[_\-\s])(20\d\d|sn\d*|sr\d*)/i.test(normName)) {
           // Aucune année précisée (ex: "affiche un exercice des ondes du national") :
-          // sélectionner un vrai sujet national PDF lisible contenant le thème demandé.
+          // EXIGE impérativement un thème ou un numéro d'exercice demandé,
+          // ET vérifie qu'il existe réellement dans le sujet national cible !
+          if (!parsed.topic && !parsed.exerciseNumber) {
+            continue;
+          }
+
           const meta = extractExamMetaFromFilename(doc.name);
           const text = readDocumentFullText(doc);
           const cleanLen = text.replace(/^--\s*\d+\s+of\s+\d+\s*--$/gm, '').trim().length;
-          let docScore = 10;
-          if (cleanLen >= 300) docScore += 40;
-          if (text.includes(SCIENTIFIC_VISION_MARKER)) docScore += 15;
-          if (parsed.session && meta.session === parsed.session) docScore += 25;
-          else if (!parsed.session && meta.session === 'SN') docScore += 8;
+          let docScore = 0;
+          let matched = false;
+
           if (parsed.topic && extractExamExercise(text, parsed.topic).matchedSection) {
-            docScore += 30;
+            docScore += 60;
+            matched = true;
           } else if (parsed.exerciseNumber && extractExamExercise(text, null, parsed.exerciseNumber).matchedSection) {
-            docScore += 20;
+            docScore += 50;
+            matched = true;
           }
+
+          if (!matched) {
+            continue; // Si le thème demandé n'existe pas dans ce sujet, on ignore ce document
+          }
+
+          if (cleanLen >= 300) docScore += 15;
+          if (text.includes(SCIENTIFIC_VISION_MARKER)) docScore += 10;
+          if (parsed.session && meta.session === parsed.session) docScore += 15;
+          else if (!parsed.session && meta.session === 'SN') docScore += 5;
           if (meta.year) {
             docScore += Math.max(0, (meta.year - 2008) * 0.25);
           }
@@ -881,8 +918,8 @@ export async function searchLocalDocumentsDetailed(
         }
       }
 
-      // Si un document officiel national est identifié
-      if (bestDoc && bestScore >= 50) {
+      // Si un document officiel national est identifié avec un score de pertinence suffisant (>= 60)
+      if (bestDoc && bestScore >= 60) {
         const fullContent = readDocumentFullText(bestDoc);
         const { exerciseText, visualText, rawStart, rawEnd, matchedSection } = extractExamExercise(
           fullContent,

@@ -293,8 +293,24 @@ router.post('/chat/stream', async (req, res) => {
     }
 
     const enrichedMessages = await enrichPdfAttachments(messages);
+    const lastUserMessage = [...enrichedMessages].reverse().find((m) => m.role === 'user');
+    const hasUserAttachments = enrichedMessages.some(
+      (m) => m.role === 'user' && Array.isArray(m.attachments) && m.attachments.length > 0
+    );
+    const lastUserText = lastUserMessage?.content || '';
+    const explicitExamRequested =
+      /\b(20[012]\d)\b/.test(lastUserText) &&
+      /\b(national|annale|epreuve|officiel|sn|sr)\b/i.test(lastUserText);
+
     const searchTerms = buildPersistentSearchTerms(enrichedMessages);
-    const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(searchTerms, branch);
+    const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(
+      searchTerms,
+      branch,
+      {
+        hasUserAttachments,
+        explicitExamRequested,
+      }
+    );
     const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context, {
       hasOfficialPdf: Boolean(officialSource?.isPdf),
       isScannedPdf,
@@ -361,8 +377,24 @@ router.post('/chat', async (req, res) => {
     }
 
     const enrichedMessages = await enrichPdfAttachments(messages);
+    const lastUserMessage = [...enrichedMessages].reverse().find((m) => m.role === 'user');
+    const hasUserAttachments = enrichedMessages.some(
+      (m) => m.role === 'user' && Array.isArray(m.attachments) && m.attachments.length > 0
+    );
+    const lastUserText = lastUserMessage?.content || '';
+    const explicitExamRequested =
+      /\b(20[012]\d)\b/.test(lastUserText) &&
+      /\b(national|annale|epreuve|officiel|sn|sr)\b/i.test(lastUserText);
+
     const searchTerms = buildPersistentSearchTerms(enrichedMessages);
-    const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(searchTerms, branch);
+    const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(
+      searchTerms,
+      branch,
+      {
+        hasUserAttachments,
+        explicitExamRequested,
+      }
+    );
     const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context, {
       hasOfficialPdf: Boolean(officialSource?.isPdf),
       isScannedPdf,

@@ -1339,6 +1339,27 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                           <div className="text-[10px] text-[#8e918f]">Prendre une photo de l'énoncé</div>
                         </div>
                       </button>
+
+                      {/* Option 4: Exercices du Bac */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsAddMenuOpen(false);
+                          setIsExercisePickerOpen(true);
+                        }}
+                        className="w-full text-left p-2 rounded-xl hover:bg-[#282a2c] text-[#e3e3e3] transition flex items-center gap-2.5 group"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-amber-500/15 flex items-center justify-center text-amber-400 group-hover:scale-105 transition-transform shrink-0">
+                          <GraduationCap className="w-4 h-4" />
+                        </div>
+                        <div className="text-xs">
+                          <div className="font-medium text-white flex items-center gap-1.5">
+                            Exercices du Bac
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold tracking-wide">ANNALES</span>
+                          </div>
+                          <div className="text-[10px] text-[#8e918f]">Banque d'exercices officiels types</div>
+                        </div>
+                      </button>
                     </div>
                   )}
                 </div>
