@@ -606,21 +606,38 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     setIsFormulaMenuOpen(false);
     setLoading(true);
 
-    // (H9) Seul le DERNIER message utilisateur transporte ses pièces jointes vers
-    // l'API : l'historique complet (avec ses images base64) n'est pas renvoyé à
-    // chaque requête — payloads divisés d'autant, quotas mémoire préservés.
-    let lastUserMsgIndex = -1;
-    for (let i = newMessages.length - 1; i >= 0; i--) {
-      if (newMessages[i].role === 'user') {
-        lastUserMsgIndex = i;
-        break;
+    // (M13) Préservation continue du contexte documentaire et multimodal :
+    // On conserve les pièces jointes (documents PDF, énoncés, images d'exercices) pour TOUS les messages
+    // de la session afin que le modèle IA garde l'énoncé complet dans sa fenêtre de contexte
+    // au fil de toutes les questions successives de l'élève (au lieu de les perdre dès la 2ème question).
+    const lastUserMsgIndex = newMessages.length - 1;
+    const messagesForApi = newMessages.map((m, idx) => {
+      if (!m.attachments || m.attachments.length === 0) {
+        return { role: m.role, content: m.content };
       }
-    }
-    const messagesForApi = newMessages.map((m, idx) =>
-      idx === lastUserMsgIndex
-        ? { role: m.role, content: m.content, attachments: m.attachments }
-        : { role: m.role, content: m.content }
-    );
+
+      const isCurrentTurn = idx === lastUserMsgIndex;
+      const cleanAttachments = m.attachments.map((att) => {
+        // Pour les PDF dont le texte extrait est déjà disponible, transmettre le texte extrait
+        // sur les anciens tours suffit largement et allège les requêtes.
+        if (!isCurrentTurn && att.text && att.mimeType === 'application/pdf') {
+          return {
+            name: att.name,
+            type: att.type,
+            mimeType: att.mimeType,
+            text: att.text,
+            size: att.size,
+          };
+        }
+        return att;
+      });
+
+      return {
+        role: m.role,
+        content: m.content,
+        attachments: cleanAttachments,
+      };
+    });
 
     const assistantMsgId = String(Date.now() + 1);
     const controller = new AbortController();

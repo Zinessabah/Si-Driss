@@ -449,7 +449,9 @@ export default function App() {
                 <DocumentManager
                   onAskQuestionAboutDoc={(docName, content) =>
                     pushChatPrompt(
-                      `Si Driss, analyse et explique-moi les notions clés du document "${docName}" (${isSM ? 'Filière SM' : 'Filière PC'}) : ${content ? content.slice(0, 300) : ''}`
+                      content
+                        ? `Si Driss, voici le document "${docName}" (${isSM ? 'Filière SM' : 'Filière PC'}) :\n\n"""\n${content.slice(0, 12000)}\n"""\n\nPeux-tu m'analyser ce document et m'expliquer ses points clés pour le National ?`
+                        : `Si Driss, analyse et explique-moi les notions clés du document "${docName}" (${isSM ? 'Filière SM' : 'Filière PC'}).`
                     )
                   }
                 />

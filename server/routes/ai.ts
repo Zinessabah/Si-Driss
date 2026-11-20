@@ -61,6 +61,51 @@ async function enrichPdfAttachments(messages: ClientMessage[]): Promise<ClientMe
 }
 
 /**
+ * Construit les termes de recherche documentaire pour le RAG en préservant
+ * les pièces jointes, les documents et les références mentionnés tout au long de la session,
+ * même lorsque le dernier message utilisateur est une courte relance (ex: "Et la question 2 ?").
+ */
+function buildPersistentSearchTerms(enrichedMessages: ClientMessage[]): string {
+  const userMessages = enrichedMessages.filter((m) => m && m.role === 'user');
+  if (userMessages.length === 0) return '';
+
+  const lastUser = userMessages[userMessages.length - 1];
+  let searchTerms = lastUser?.content || '';
+
+  // Intègre les noms et extraits des pièces jointes de TOUTE la session
+  for (const uMsg of userMessages) {
+    if (Array.isArray(uMsg.attachments)) {
+      for (const att of uMsg.attachments) {
+        if (att?.name && !searchTerms.includes(att.name)) {
+          searchTerms += ' ' + att.name;
+        }
+        if (att?.text && !searchTerms.includes(att.text.slice(0, 50))) {
+          searchTerms += ' ' + att.text.slice(0, 300);
+        }
+      }
+    }
+  }
+
+  // Si la discussion comporte plusieurs tours et que la dernière question est courte,
+  // enrichit avec les noms d'épreuves/documents ou l'énoncé du début de discussion
+  if (userMessages.length > 1) {
+    const priorText = userMessages.slice(0, -1).map((m) => m.content).join(' ');
+    const docMatch = priorText.match(/(?:SN|SR|PC|SM)?[-_ ]?20\d\d[-_ ]?(?:SN|SR|PC|SM)?(?:\.pdf)?|[A-Za-z0-9_-]+\.pdf/gi);
+    if (docMatch) {
+      for (const dm of docMatch) {
+        if (!searchTerms.toLowerCase().includes(dm.toLowerCase())) {
+          searchTerms += ' ' + dm;
+        }
+      }
+    } else if (searchTerms.trim().length < 80) {
+      searchTerms = `${userMessages[0].content.slice(0, 150)} ${searchTerms}`;
+    }
+  }
+
+  return searchTerms;
+}
+
+/**
  * Extrait le JSON même si le fournisseur ajoute du texte ou des balises markdown autour.
  */
 function parseLlmJsonObject(raw: string): any {
@@ -248,14 +293,7 @@ router.post('/chat/stream', async (req, res) => {
     }
 
     const enrichedMessages = await enrichPdfAttachments(messages);
-    const lastUser = [...enrichedMessages].reverse().find((m) => m.role === 'user');
-    let searchTerms = lastUser?.content || '';
-    if (lastUser?.attachments && Array.isArray(lastUser.attachments)) {
-      for (const att of lastUser.attachments) {
-        if (att.name) searchTerms += ' ' + att.name;
-        if (att.text) searchTerms += ' ' + att.text.slice(0, 200);
-      }
-    }
+    const searchTerms = buildPersistentSearchTerms(enrichedMessages);
     const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(searchTerms, branch);
     const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context, {
       hasOfficialPdf: Boolean(officialSource?.isPdf),
@@ -323,14 +361,7 @@ router.post('/chat', async (req, res) => {
     }
 
     const enrichedMessages = await enrichPdfAttachments(messages);
-    const lastUser = [...enrichedMessages].reverse().find((m) => m.role === 'user');
-    let searchTerms = lastUser?.content || '';
-    if (lastUser?.attachments && Array.isArray(lastUser.attachments)) {
-      for (const att of lastUser.attachments) {
-        if (att.name) searchTerms += ' ' + att.name;
-        if (att.text) searchTerms += ' ' + att.text.slice(0, 200);
-      }
-    }
+    const searchTerms = buildPersistentSearchTerms(enrichedMessages);
     const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(searchTerms, branch);
     const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context, {
       hasOfficialPdf: Boolean(officialSource?.isPdf),
