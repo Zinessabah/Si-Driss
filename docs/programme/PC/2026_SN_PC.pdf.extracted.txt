@@ -1,0 +1,422 @@
+اﻟ	ﻤ	ﻤ	ﻠ	ﻜ	ﺔ	اﻟ	ﻤ	ﻐ	ﺮﺑﻴ	ﺔ
+و	زار	ة	اﻟﺘﺮﺑﻴ	ﺔ	اﻟ	ﻮ	ﻃ	ﻨﻴ	ﺔ
+واﻟﺘ	ﻌ	ﻠﻴ	ﻢ	ا	ﻷ	و	ﻟ	ﻲ	واﻟﺮﻳﺎ	ﺿ	ﺔ
+ⵜⴰⴳⵍⴷⵉⵜ ⵏ ⵍⵎⵖⵔⵉⴱ
+ⵜⴰⵎⴰⵡⴰⵙⵜ ⵏ ⵓⵙⴳⵎⵉ ⴰⵏⴰⵎⵓⵔ
+ⴷ ⵓⵙⵙⵍⵎⴷ ⴰⵎⵣⵡⴰⵔⵓ ⴷ ⵜⵓⵏⵏⵓⵏⵜ
+اﻟ	ﻤ	ﺮ	ﻛ	ﺰ	اﻟ	ﻮ	ﻃ	ﻨ	ﻲ	ﻟﻠﺘ	ﻘ	ﻮ	ﻳ	ﻢ	وا	ﻻ	ﻣ	ﺘ	ﺤ	ﺎﻧﺎ	ت
+ا	ال	م	ت	ح	ا	ن	ا	ل	و	ط	ن	ي	ا	ل	م	و	ح	د	ل	ل	ب	ك	ا	ل	و	ر	ي	ا
+ا	ل	م	س	ا	ل	ك	ا	ل	د	و	ل	ي	ة
+ا	ل	د	و	ر	ة	ا	ل	ع	ا	د	ي	ة	6	2	0	2 – ا	ل	م	و	ض	و	ع –
+ا	ل	ص	ف	ح	ة
+1
+9
+∗I
+β NS 28F	HHHHHHHHHHHHHHHHHHHH-HHH
+ا	ل	م	ا	د	ة	ا	ل	ف	ي	ز	ي	ا	ء	و	ا	ل	ك	ي	م	ي	ا	ء	م	د	ة	ا	ال	ن	ج	ا	ز	3h
+ا	ل	ش	ع	ب	ة	ش	ع	ب	ة	ا	ل	ع	ل	و	م	ا	ل	ف	ي	ز	ي	ا	ئ	ي	ة	-	خ	ي	ا	ر	ف	ر	ن	س	ي	ة	ا	ل	م	ع	ا	م	ل	7
+L’usage de la calculatrice scientifique non programmable est
+autorisé.
+On donnera les expressions littérales avant de passer aux applications
+numériques.
+Les exercices peuvent être traités selon l’ordre choisi par le candidat.
+Le sujet comporte quatre exercices: un exercice de chimie et trois exercices de physique.
+Exercice 1 (7 points) :
+- Partie I: Étude d’une solution aqueuse d’acide butanoïque ;
+- Partie II: Étude de la réaction de l’acide butanoïque avec le méthanol.
+Exercice 2 (2,5 points):
+- Désintégration d’un radioélément.
+Exercice 3 (5 points) :
+- Réponse d’un dipôle RL à un échelon de tension ;
+- Transmission et réception d’un signal.
+Exercice 4 (5,5 points) :
+- Partie I: Saut sans parachute ;
+- Partie II: Étude d’un système oscillant.
+Www.AdrarPhysic.Fr
+
+-- 1 of 9 --
+
+βا	ال	م	ت	ح	ا	ن	ا	ل	و	ط	ن	ي	ا	ل	م	و	ح	د	ل	ل	ب	ك	ا	ل	و	ر	ي	ا	ـ	ا	ل	د	و	ر	ة	ا	ل	ع	ا	د	ي	ة	6	2	0	2	ـ	ا	ل	م	و	ض	و	ع
+م	ا	د	ة	:	ال	ف	ي	ز	ي	ا	ء	و	ال	ك	ي	م	ي	ا	ء	-	ش	ع	ب	ة	ال	ع	ل	و	م	ال	ف	ي	ز	ي	ائ	ي	ة	-	خ	ي	ا	ر	ف	ر	ن	س	ي	ةNS 28F
+ا	ل	ص	ف	ح	ة
+2
+9
+Exercice 1 : Chimie (7 points)
+L’acide butanoïque est utilisé dans l’industrie alimentaire pour ses propriétés aromatisantes,
+en parfumerie et en cosmétique pour ses bienfaits sur la peau. Il possède des propriétés anti-
+inflammatoires.
+On se propose dans cet exercice d’étudier une :
+- solution aqueuse d’acide butanoïque ;
+- réaction de l’acide butanoïque avec le méthanol.
+1- Réaction de l’acide butanoïque avec l’eau
+On prépare une solution aqueuse SA d’acide butanoïque C3H7COOH, de volume V et de con-
+centration CA = 5, 40.10−3 mol.L−1. La mesure de son pH donne : pH = 3, 55.
+1-1- Écrire l’équation de la réaction de l’acide butanoïque avec l’eau. (0.5 pt)
+1-2-
+1-2-1- Écrire l’expression de la constante d’acidité KA associée à l’équation de la réaction de l’acide
+butanoïque avec l’eau. (0.25 pt)
+1-2-2- Montrer que KA = 10−2pH
+CA − 10−pH et vérifier que le pKA du couple C3H7COOH(aq) / C3H7COO–
+(aq)
+est pKA ' 4, 81. (0.75 pt)
+1-3- Justifier que la réaction de l’acide butanoïque avec l’eau est limitée. (0.75 pt)
+2- Réaction de l’acide butanoïque avec le méthanol
+La réaction de l’acide butanoïque avec le méthanol CH3OH permet d’obtenir en plus de l’eau,
+un composé organique E caractérisé par son odeur et son goût agréables.
+2-1- Écrire, en utilisant les formules semi-développées, l’équation modélisant la réaction entre l’acide
+butanoïque et le méthanol. Nommer le composé E. (1 pt)
+2-2- Pour synthétiser le composé E, on prépare 10 tubes à essais et on introduit à un instant t = 0
+dans chacun d’eux n0 = 0, 10 mol de l’acide butanoïque et n0 = 0, 10 mol du méthanol avec
+quelques gouttes d’acide sulfurique concentré. On trempe les tubes dans un bain marie à la
+température constante θ.
+L’évolution de la réaction est suivie par dosage, à
+des instants bien déterminés, de l’acide butanoïque
+restant dans chaque tube à essai. A chaque instant
+on retire un tube du bain marie, on le trempe dans
+l’eau glacée, puis on dose l’acide restant par une
+solution d’hydroxyde de sodium Na+
+(aq) + HO–
+(aq) de
+concentration Cb = 2,0 mol.L−1. Pour chaque tube
+on détermine le volume VBE d’hydroxyde de sodium
+versé pour atteindre l’équivalence.
+Les résultats obtenus ont permis de tracer la courbe
+de la figure représentant l’évolution temporelle de
+nac la quantité de matière de l’acide butanoïque
+restant. Lors du dosage on ne considère que la réac-
+tion entre l’hydroxyde de sodium et l’acide restant.
+t(min)
+nac(mmol)
+0
+33
+20
+30
+Www.AdrarPhysic.Fr
+
+-- 2 of 9 --
+
+βا	ال	م	ت	ح	ا	ن	ا	ل	و	ط	ن	ي	ا	ل	م	و	ح	د	ل	ل	ب	ك	ا	ل	و	ر	ي	ا	ـ	ا	ل	د	و	ر	ة	ا	ل	ع	ا	د	ي	ة	6	2	0	2	ـ	ا	ل	م	و	ض	و	ع
+م	ا	د	ة	:	ال	ف	ي	ز	ي	ا	ء	و	ال	ك	ي	م	ي	ا	ء	-	ش	ع	ب	ة	ال	ع	ل	و	م	ال	ف	ي	ز	ي	ائ	ي	ة	-	خ	ي	ا	ر	ف	ر	ن	س	ي	ةNS 28F
+ا	ل	ص	ف	ح	ة
+3
+9
+2-2-1- Écrire l’équation de la réaction de dosage de l’acide butanoïque restant par la solution d’hy-
+droxyde de sodium. (0.5 pt)
+2-2-2- On prend la valeur du produit ionique de l’eau Ke = 10−14. Calculer la constante d’équilibre
+K associée à la réaction de dosage. (0.75 pt)
+2-2-3- Déterminer, en se basant sur la courbe de la figure, le volume VBE de la solution d’hydroxyde
+de sodium nécessaire pour doser l’acide butanoïque restant à l’instant t = 30 min. (0.75 pt)
+2-3- Déterminer, en utilisant la courbe de la figure, la valeur de t1/2 le temps de demi-réaction de la
+réaction entre l’acide butanoïque et le méthanol dans les conditions de l’expérience. (0.75 pt)
+2-4- Répondre par vrai ou faux, en justifiant, à l’affirmation suivante: « Le rôle de l’acide sulfurique
+est de diminuer t1/2 le temps de demi-réaction. » (0.5 pt)
+2-5- Calculer le rendement de la réaction de la synthèse de E. (0.5 pt)
+Exercice 2 : Désintégration du soufre 35 (2,5 points)
+Le soufre 35 est un isotope radioactif du soufre. Il est utilisé en recherche médicale et biologique.
+Ses caractéristiques sont déterminantes pour le traitement des déchets contenant du soufre 35.
+On a un échantillon de soufre 35 de masse initiale m0 à un instant t = 0.
+Le soufre 35
+16S est radioactif β−. Il se désintègre en donnant le noyau A
+ZY et une particule A’
+Z’e.
+Données:
+- Extrait de la classification périodique des éléments chimiques:
+13Al 14Si 15P 16S 17Cl 18Ar
+- Masses: m(35
+16S) = 34, 96027 u ; m(A
+ZY) = 34, 95954 u ; m(A′
+Z′e) = 5, 48560.10−4 u ;
+- 1 u = 931, 5 MeV.c−2.
+1- Écrire l’équation de désintégration d’un noyau de soufre 35
+16S en identifiant A’
+Z’e et A
+ZY. (0.75 pt)
+2- Calculer, en unité MeV, Elib l’énergie libérée lors de la désintégration d’un noyau de soufre 35.
+(0.5 pt)
+3- La courbe de la figure suivante représente l’évolution temporelle de l’activité de l’échantillon.
+Les déchets à vie très courtes (VTC) sont caractérisés par une demi-vie t1/2 inférieure à 100
+jours. Ils sont stockés pendant une durée suffisante pour que leur activité décroisse avant leur
+élimination comme déchets ordinaires.
+Justifier, en se basant sur la courbe de la figure, que le soufre 35 est un déchet à vie très courte
+(VTC). (0.5 pt)
+Www.AdrarPhysic.Fr
+
+-- 3 of 9 --
+
+βا	ال	م	ت	ح	ا	ن	ا	ل	و	ط	ن	ي	ا	ل	م	و	ح	د	ل	ل	ب	ك	ا	ل	و	ر	ي	ا	ـ	ا	ل	د	و	ر	ة	ا	ل	ع	ا	د	ي	ة	6	2	0	2	ـ	ا	ل	م	و	ض	و	ع
+م	ا	د	ة	:	ال	ف	ي	ز	ي	ا	ء	و	ال	ك	ي	م	ي	ا	ء	-	ش	ع	ب	ة	ال	ع	ل	و	م	ال	ف	ي	ز	ي	ائ	ي	ة	-	خ	ي	ا	ر	ف	ر	ن	س	ي	ةNS 28F
+ا	ل	ص	ف	ح	ة
+4
+9
+t(jour)
+a(×1016Bq)
+0 100
+2
+4- On considère qu’un échantillon de soufre 35 peut être traité comme un déchet ordinaire si son
+activité est inférieure à 108 Bq.
+En prenant t1/2 = 87 jours la demi-vie du soufre 35, trouver l’instant td où l’échantillon devient
+un déchet ordinaire. (0.75 pt)
+Exercice 3 : Électricité (5 points)
+Les parties I et II sont indépendantes.
+On se propose, dans la partie I de cet exercice, de déterminer quelques grandeurs caractéristiques
+des éléments d’un circuit électrique, en étudiant la réponse d’un dipôle RL à un échelon de
+tension. On étudiera dans la partie II, la transmission et la réception d’un signal.
+Partie I : Réponse d’un dipôle RL à un échelon de tension
+Le montage de la figure 1 comporte un générateur idéal de
+tension de f.é.m. E, un conducteur ohmique de résistance R,
+une bobine d’inductance L et de résistance r et un interrupteur
+K. Les valeurs de E, R et L sont ajustables.
+À un instant choisi comme origine des dates (t = 0), on
+ferme K. Un système d’acquisition adéquat a permis d’obtenir
+les courbes représentant l’évolution temporelle de la tension
+uR aux bornes du conducteur ohmique (figure 2) selon les
+valeurs de E, R et L indiquées dans le tableau ci-dessous.
+(T ) représente la tangente à la courbe (b) au point d’abscisse
+t = 0.
+E
+i K
+(L, r)
+R
+uR
+Figure 1
+E (V) R (Ω) L (H)
+Expérience (1) 9 80 L1
+Expérience (2) 4,5 80 L2
+Expérience (3) 6,4 150 L3
+Www.AdrarPhysic.Fr
+
+-- 4 of 9 --
+
+βا	ال	م	ت	ح	ا	ن	ا	ل	و	ط	ن	ي	ا	ل	م	و	ح	د	ل	ل	ب	ك	ا	ل	و	ر	ي	ا	ـ	ا	ل	د	و	ر	ة	ا	ل	ع	ا	د	ي	ة	6	2	0	2	ـ	ا	ل	م	و	ض	و	ع
+م	ا	د	ة	:	ال	ف	ي	ز	ي	ا	ء	و	ال	ك	ي	م	ي	ا	ء	-	ش	ع	ب	ة	ال	ع	ل	و	م	ال	ف	ي	ز	ي	ائ	ي	ة	-	خ	ي	ا	ر	ف	ر	ن	س	ي	ةNS 28F
+ا	ل	ص	ف	ح	ة
+5
+9
+t (ms)
+uR(V)
+0 1.25 2.5
+2
+4
+(a)
+(b)
+(c)
+Figure 2
+1- Montrer que l’équation différentielle vérifiée par la tension uR s’écrit: duR
+dt + (R + r)
+L uR = RE
+L .
+(0.75 pt)
+2- Déduire l’expression de uRp la tension aux bornes du conducteur ohmique en régime permanent
+en fonction des paramètres du circuit. (0.5 pt)
+3- Sachant que la courbe (b) correspond à l’expérience (3):
+3.1- Déterminer r et L3. (0.5 pt)
+3.2- Calculer l’énergie magnétique emmagasinée dans la bobine en régime permanent pour cette
+expérience. (0.5 pt)
+4- Indiquer, en justifiant, la courbe qui correspond à l’expérience (1). (0.5 pt)
+Partie II : Transmission et réception d’un signal
+Le montage de la figure 3 permet d’obtenir un signal mod-
+ulé en amplitude et de le transmettre à travers une an-
+tenne.
+L’expression de la tension us(t) associée à ce signal mod-
+ulé en amplitude s’écrit:
+us(t) = A [1 + m. cos(2πf.t)] . cos (2πF.t)
+avec f la fréquence du signal informatif, F la fréquence de
+la porteuse, m le taux de modulation et A une constante
+positive.
+X S
+E1
+E2
+u1(t)
+u2(t) us(t)
+Figure 3
+Le circuit du schéma de la figure 4 permet la réception, la sélection du signal modulé ainsi que
+sa démodulation.
+Www.AdrarPhysic.Fr
+
+-- 5 of 9 --
+
+βا	ال	م	ت	ح	ا	ن	ا	ل	و	ط	ن	ي	ا	ل	م	و	ح	د	ل	ل	ب	ك	ا	ل	و	ر	ي	ا	ـ	ا	ل	د	و	ر	ة	ا	ل	ع	ا	د	ي	ة	6	2	0	2	ـ	ا	ل	م	و	ض	و	ع
+م	ا	د	ة	:	ال	ف	ي	ز	ي	ا	ء	و	ال	ك	ي	م	ي	ا	ء	-	ش	ع	ب	ة	ال	ع	ل	و	م	ال	ف	ي	ز	ي	ائ	ي	ة	-	خ	ي	ا	ر	ف	ر	ن	س	ي	ةNS 28F
+ا	ل	ص	ف	ح	ة
+6
+9
+L0 C
+A D Q C1
+T
+M
+R C’ R1
+Figure 4
+Les oscillogrammes de la figure 5 visualisés correspondent aux tensions uAM , uQM et uT M avec
+M étant la masse du circuit.
+0
+(a)
+0.4ms
+1V
+0
+(b)
+0.4ms
+1V
+0
+(c)
+0.4ms
+1V
+Figure 5
+1- Identifier l’oscillogramme correspondant à la tension uAM et déterminer la fréquence F . (0.75
+pt)
+2- Trouver C0 la valeur à laquelle il faut ajuster la capacité C pour sélectionner le signal de
+fréquence F sachant que L0 = 2 mH (on prend π2 = 10). (0.5 pt)
+3- Indiquer en justifiant l’oscillogramme correspondant à la tension obtenue après la détection de
+l’enveloppe. (0.5 pt)
+4- Déterminer m le taux de modulation. (0.5 pt)
+Exercice 4 : Mécanique (5,5 points)
+Les deux parties sont indépendantes
+Partie I : Saut sans parachute
+Le 30 juillet 2016, un cascadeur accomplit un saut à une altitude H = 7620 m du sol sans
+parachute ou combinaison qui peut l’aider. Pour éviter sa collision au sol, un filet de réception
+a été fixé à une altitude h = 70 m du sol. Le cascadeur a été guidé vers le filet par des
+parachutistes. Après sa chute, il a atteint rapidement une vitesse limite de 200 km.h−1.
+Www.AdrarPhysic.Fr
+
+-- 6 of 9 --
+
+βا	ال	م	ت	ح	ا	ن	ا	ل	و	ط	ن	ي	ا	ل	م	و	ح	د	ل	ل	ب	ك	ا	ل	و	ر	ي	ا	ـ	ا	ل	د	و	ر	ة	ا	ل	ع	ا	د	ي	ة	6	2	0	2	ـ	ا	ل	م	و	ض	و	ع
+م	ا	د	ة	:	ال	ف	ي	ز	ي	ا	ء	و	ال	ك	ي	م	ي	ا	ء	-	ش	ع	ب	ة	ال	ع	ل	و	م	ال	ف	ي	ز	ي	ائ	ي	ة	-	خ	ي	ا	ر	ف	ر	ن	س	ي	ةNS 28F
+ا	ل	ص	ف	ح	ة
+7
+9
+On modélise le cascadeur par un corps (S) de masse m et
+de centre d’inertie G qui réalise un saut vertical. L’étude
+du mouvement de (S) s’effectue dans un repère R(O, −	→
+k )
+lié à un référentiel terrestre supposé galiléen. On repère,
+à chaque instant t la position de G par sa cote z sur l’axe
+vertical (O, −	→
+k ) orienté vers le bas (figure 1).
+À l’instant t = 0, on considère que la cote de G et sa
+vitesse sont nulles.
+On néglige la poussée d’Archimède devant les autres
+forces.
+H
+Filet de réception
+h z
+O
+−	→
+k
+G
+(S)
+Figure 1
+On étudie le mouvement du cascadeur dans les deux cas suivants :
+- Les frottements avec l’air sont négligeables (chute libre);
+- Les frottements ne sont pas négligeables.
+Données :
+- Intensité de la pesanteur supposée constante: g = 9, 8 m.s−2 ;
+- Masse du cascadeur et de son équipement: m = 80 kg.
+1- Cas 1 : Chute libre
+Le corps solide (S) est en mouvement de chute libre.
+1-1- En appliquant la deuxième loi de Newton, établir z(t) l’équation horaire du mouvement de G.
+(0.5 pt)
+1-2- Vérifier que la durée de la chute jusqu’à l’arrivé au filet est: tf ' 39, 25 s. (0.5 pt)
+1-3- Calculer, en unité km.h−1, la valeur de la vitesse vf à l’instant tf . Déduire si ce modèle explique
+la réalité du saut du cascadeur. (0.75 pt)
+2- Cas 2 : Frottements non négligeables
+Dans ce deuxième cas, le cascadeur est soumis
+en plus de son poids −	→
+P à la force de frottement
+fluide modélisée par −	→
+f = −μv2−	→
+k , avec μ une
+constante positive et v la vitesse de G à un in-
+stant t.
+La courbe de la figure 2 représente les variations
+de dvz
+dt en fonction de v2
+z le carré de la vitesse
+de G. v2
+z (m2.s−2)
+dvz
+dt (m.s−2)
+800 1600
+2
+4
+0
+Figure 2
+2-1- En appliquant la deuxième loi de Newton, montrer que l’équation différentielle vérifiée par la
+vitesse vz de G s’écrit: dvz
+dt + μ
+mv2
+z = g. (0.75 pt)
+
+-- 7 of 9 --
+
+βا	ال	م	ت	ح	ا	ن	ا	ل	و	ط	ن	ي	ا	ل	م	و	ح	د	ل	ل	ب	ك	ا	ل	و	ر	ي	ا	ـ	ا	ل	د	و	ر	ة	ا	ل	ع	ا	د	ي	ة	6	2	0	2	ـ	ا	ل	م	و	ض	و	ع
+م	ا	د	ة	:	ال	ف	ي	ز	ي	ا	ء	و	ال	ك	ي	م	ي	ا	ء	-	ش	ع	ب	ة	ال	ع	ل	و	م	ال	ف	ي	ز	ي	ائ	ي	ة	-	خ	ي	ا	ر	ف	ر	ن	س	ي	ةNS 28F
+ا	ل	ص	ف	ح	ة
+8
+9
+2-2- En exploitant la courbe de la figure 2, déterminer la valeur de v` la vitesse limite du mouvement
+de G. Déduire que μ ' 0, 25 S.I.. (0.75 pt)
+2-3- Dire en justifiant si ce modèle explique la réalité du saut du cascadeur. (0.5 pt)
+2-4- Pour résoudre l’équation différentielle montrée dans la question 2-1, on peut utiliser une méth-
+ode de résolution numérique itérative: la méthode d’Euler.
+En utilisant la méthode d’Euler, déterminer les vitesses vz1 et vz2 indiquées dans le tableau
+suivant : (0.5 pt)
+ti (s) t0 = 0 t1 = 0, 5 t2 = 1
+vzi (m.s−1) 0 vz1 vz2
+azi = dvz
+dt (m.s−2) az0 = 9, 8 az1 az2
+Partie II : Étude d’un système oscillant
+Cette partie a pour but l’étude énergétique d’un système oscillant (solide - ressort). Le pendule
+élastique étudié est composé d’un solide (S) de centre d’inertie G et de masse m, lié à l’une des
+extrémités d’un ressort à spires non jointives, de masse négligeable et de raideur K. L’autre
+extrémité du ressort est liée à un support fixe.
+On néglige les frottements et on étudie le mou-
+vement de G dans un repère R(O, −	→
+i ) lié à un
+référentiel terrestre supposé galiléen. On repère
+la position de G à un instant t par son ab-
+scisse x. À l’équilibre l’abscisse de G est nulle
+(figure 3).
+(S)
+G
+x x	O
+−	→
+i
+Figure 3
+On choisit le plan horizontal passant par G comme
+référence de l’énergie potentielle de pesanteur (Epp = 0)
+et l’état dans lequel le ressort n’est pas déformé comme
+référence de l’énergie potentielle élastique (Epe = 0).
+On écarte (S) de sa position d’équilibre dans le sens
+positif d’une distance Xm = 2 cm et on le lâche sans
+vitesse initiale à un instant choisi comme origine des
+dates (t = 0).
+À l’aide d’un système d’acquisition adéquat, on a obtenu
+les courbes représentant les variations temporelles de l’én-
+ergie potentielle élastique Epe(t) et l’énergie cinétique
+Ec(t) du pendule (Figure 4).
+t (s)
+Energies (mJ)
+1.25
+0,1	0
+C1 C2
+Figure 4
+1- Associer, en justifiant, la courbe correspondant à l’énergie Ec(t). (0.5 pt)
+2- Déterminer Em la valeur de l’énergie mécanique du système oscillant et déduire
+celle de K. (0.5 pt)
+Www.AdrarPhysic.Fr
+
+-- 8 of 9 --
+
+βا	ال	م	ت	ح	ا	ن	ا	ل	و	ط	ن	ي	ا	ل	م	و	ح	د	ل	ل	ب	ك	ا	ل	و	ر	ي	ا	ـ	ا	ل	د	و	ر	ة	ا	ل	ع	ا	د	ي	ة	6	2	0	2	ـ	ا	ل	م	و	ض	و	ع
+م	ا	د	ة	:	ال	ف	ي	ز	ي	ا	ء	و	ال	ك	ي	م	ي	ا	ء	-	ش	ع	ب	ة	ال	ع	ل	و	م	ال	ف	ي	ز	ي	ائ	ي	ة	-	خ	ي	ا	ر	ف	ر	ن	س	ي	ةNS 28F
+ا	ل	ص	ف	ح	ة
+9
+9
+3- Déterminer la valeur de v1 la vitesse de G à l’instant t1 = T0
+2 , avec T0 la période propre du
+système oscillant. (0.25 pt)
+Typesetted by Pr. Mohammed BOUZAID
+Www.AdrarPhysic.Fr
+
+-- 9 of 9 --
+

@@ -1,0 +1,498 @@
+ﺍﻟﻤﻤﻠ	ﻜ	ﺔ	ﺍﻟﻤ	ﻐ	ﺮﺑﻴﺔ
+ﻭ	ﺯﺍﺭ	ﺓ	ﺍﻟﺘﺮﺑﻴﺔ	ﺍﻟﻮ	ﻃ	ﻨﻴﺔ
+ﻭﺍﻟﺘﻌﻠﻴ	ﻢ	ﺍ	ﻷ	ﻭﻟ	ﻲ	ﻭﺍﻟﺮﻳﺎ	ﺿ	ﺔ
+ⵜⴰⴳⵍⴷⵉⵜ ⵏ ⵍⵎⵖⵔⵉⴱ
+ⵜⴰⵎⴰⵡⴰⵙⵜ ⵏ ⵓⵙⴳⵎⵉ ⴰⵏⴰⵎⵓⵔ
+ⴷ ⵓⵙⵙⵍⵎⴷ ⴰⵎⵣⵡⴰⵔⵓ ⴷ ⵜⵓⵏⵏⵓⵏⵜ
+ﺍﻟﻤﺮ	ﻛ	ﺰ	ﺍﻟﻮ	ﻃ	ﻨ	ﻲ	ﻟﻠﺘﻘﻮﻳﻢ	ﻭﺍ	ﻻ	ﻣﺘ	ﺤ	ﺎﻧﺎ	ﺕ
+ﺍ	ل	إ	م	ت	ح	ا	ن	ﺍ	ل	و	ط	ن	ي	ﺍ	لم	و	ح	د	ل	ل	ب	ك	ال	و	ﺭ	ي	ا
+ﺍلم	س	ال	ك	ﺍل	د	و	لي	ة
+ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2 – ﺍلم	و	ض	و	ﻉ –
+ﺍل	ص	ف	ح	ة
+1
+10
+∗I
+β NS 30F	HHHHHHHHHHHHHHHHHHHH-HHH
+ﺍلما	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	م	د	ﺓ	ﺍ	ل	ا	ن	جا	ﺯ	4h
+ﺍل	ش	ع	ب	ة	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍل	ر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة	ﺍلم	ع	ا	م	ل	7
+L’usage de la calculatrice scientifique non programmable est autorisé.
+La formule littérale doit être donnée avant l’application numérique et le
+résultat accompagné de son unité.
+Les exercices peuvent être traités séparément selon le choix du candidat(e).
+Le sujet comporte quatre exercices: un exercice de chimie et trois exercices de physique.
+Exercice 1 (7 points) :
+- Partie 1: Détermination de la classe d’un alcool;
+- Partie 2: Etude d’une solution aqueuse d’un indicateur coloré.
+Exercice 2 (2,75 points):
+- La datation de l’âge de la Terre.
+Exercice 3 (5 points) :
+- Partie 1: Etude énergétique de la charge et de la décharge d’un condensateur;
+- Partie 2: Modulation d’amplitude et réception d’un signal modulé.
+Exercice 4 (5,25 points) :
+- Mouvement d’un système oscillant.
+Www.AdrarPhysic.Fr
+
+-- 1 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+2
+10
+Exercice 1 : Chimie (7 points)
+Les parties 1 et 2 sont indépendantes.
+Partie 1: Détermination de la classe d’un alcool
+On réalise une réaction d’estérification en utilisant un mélange équimolaire contenant un volume
+V1 = 14, 3 mL d’acide éthanoïque CH3COOH de densité d1 = 1, 05 et un volume V2 = 19, 2 mL
+d’un alcool A de formule brute C3H8O. On note S le mélange obtenu.
+L’alcool de formule brute C3H8O possède deux isomères:
+- propan-1-ol qui est un alcool de classe primaire de formule semi-développée :
+CH3 CH2 CH2 OH
+- propan-2-ol qui est un alcool de classe secondaire de formule semi-développée :
+CH3 CH
+OH
+CH3
+La constante d’équilibre K associée à la réaction d’estérification dépend de la classe de l’alcool
+utilisé :
+- pour l’alcool primaire : K = 4;
+- pour l’alcool secondaire : K = 2, 25.
+Cette partie vise à déterminer la classe de l’alcool A.
+Données :
+- Les masses molaires: M (C) = 12 g.mol−1; M (O) = 16 g.mol−1; M (H) = 1 g.mol−1;
+- La masse volumique de l’eau: ρe = 1 g.mL−1.
+On prépare 10 tubes à essai propres et secs, puis on introduit dans chaque tube un volume
+V = 3, 35 mL du mélange S. On place, à t0 = 0, les dix tubes dans un bain marie où la
+température est constante.
+Pour déterminer la composition du mélange
+à un instant t dans un tube, on le retire
+du bain marie, on le refroidit avec de l’eau
+glacée et on dose l’acide éthanoïque restant
+avec une solution aqueuse d’hydroxyde de
+sodium Na+
+(aq) +HO−
+(aq) de concentration molaire
+CB = 1 mol.L−1.
+On obtient l’équivalence pour un volume VBE
+de la solution d’hydroxyde de sodium versé.
+La courbe de la figure 1 représente l’évolution
+temporelle du volume VBE : VBE = f (t).
+t (heure)
+VBE (mL)
+10 20	0
+5
+10
+Figure 1
+Www.AdrarPhysic.Fr
+
+-- 2 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+3
+10
+1- Ecrire l’équation modélisant la réaction du dosage. (0.25pt)
+2- Montrer que la quantité de matière nE d’ester formée dans le mélange S à un instant t
+s’écrit : nE (t) = d1.ρe.V1
+M (C2H4O2) − 10CB .VBE (t). (0.5pt)
+3- Calculer nE (tf ) la quantité de matière de l’ester formé à l’état final. (0.5pt)
+4- Montrer que: VBE (t1/2) = VBE (t0) + VBE (tf )
+2 avec t1/2 le temps de demi réaction. Déduire la
+valeur de t1/2. (0.75pt)
+5- Déterminer la classe de l’alcool A utilisé. (0.5pt)
+6- Ecrire, en utilisant les formules semi développées, l’équation de la réaction d’estérification
+étudiée. (0.5pt)
+7- Choisir parmi les procédés suivants, celui qui permet d’améliorer le rendement de cette réaction.
+(0.25pt)
+a- On utilise un catalyseur approprié.
+b- On élimine l’eau au fur et à mesure de sa formation.
+c- On utilise un excès d’eau.
+d- On élève la température du bain marie.
+Partie 2: Etude d’une solution aqueuse d’un indicateur coloré
+Le bleu de bromothymol, souvent noté B.B.T, est un acide selon Bronsted, sa formule brute est
+C27H28Br2O5S sa solution aqueuse change de teinte en fonction du pH, elle est jaune lorsque le
+pH ≤ 6, 0 et bleue si pH ≥ 7, 6.
+On représente dans ce qui suit sa forme acide par HIn et sa forme basique par In– .
+La mesure du pH d’une solution aqueuse S de cet indicateur coloré donne: pH = 6
+Données:
+- Toutes les mesures sont effectuées à 25◦C;
+- Le produit ionique de l’eau: Ke = 10−14;
+- Les conductivités molaires ioniques:
+· λ(NH4+) = 7, 35 mS.m2.mol−1 ;
+· λ(HO−) = 19, 83 mS.m2.mol−1.
+Www.AdrarPhysic.Fr
+
+-- 3 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+4
+10
+1- Ecrire l’équation chimique modélisant la
+réaction entre l’indicateur coloré HIn(aq) et
+l’eau. (0.25pt)
+2- La figure 2 représente la courbe de dis-
+tribution de la forme acide du couple
+HIn/In−.
+On définit la proportion de l’acide HIn(aq)
+dans une solution aqueuse par:
+p(HIn) = [HIn]éq
+[In−]éq + [HIn]éq
+. pH
+p(HIn)
+4 5 6
+0
+0.2
+Figure 2
+2.1- Montrer que τ le taux d’avancement final de la réaction s’écrit: τ = 1 − p(HIn). Déterminer
+sa valeur dans la solution S. (0.75pt)
+2.2- Trouver, à l’aide de la courbe, la valeur de la constante pKA du couple HIn/In−. (0.5pt)
+2.3- Déterminer pmax(HIn) la proportion maximale de l’acide pour que la solution prenne la teinte
+de la forme basique. (0.5pt)
+3- On ajoute quelques gouttes de cet indicateur coloré à une solution aqueuse d’ammoniac NH3 de
+concentration molaire CB = 10−2 mol.L−1 et de conductivité σ = 11, 36 mS.m−1. On néglige
+l’influence des ions H3O(aq)+ et des ions In−(aq) sur la conductivité de la solution.
+3.1- Calculer τ ′ le taux d’avancement finale de la réaction de l’ammoniac avec l’eau. (0.5pt)
+3.2- Exprimer la constante d’acidité KA du couple NH4+/NH3 en fonction de CB , Ke et τ ′. Vérifier
+que pKA ' 9, 25. (0.75pt)
+3.3- Déterminer la teinte de la solution obtenue. (0.5pt)
+Exercice 2 : La datation de l’âge de la Terre (2,75 points)
+L’uranium, métal lourd et radioactif, est principalement utilisé comme combustible dans les
+réacteurs nucléaires pour produire l’électricité. Il est naturellement présent dans la croute
+terrestre sous formes de deux isotopes principaux:
+- l’uranium 238 qui est faiblement radioactif, sa proportion actuelle en masse est 99,29%;
+- l’uranium 235 est un élément radioactif et fissile, sa proportion actuelle en masse est 0,71%.
+On modélise le bilan des désintégrations des deux isotopes par les équations:
+235
+92U → 207
+82Pb + x4
+2He + y 0
+−1e
+238
+92U → 206
+82Pb + 84
+2He + 6 0
+−1e
+Dans une étude théorique visant à estimer l’âge de la Terre, un chercheur pose l’hypothèse
+suivante : « les deux isotopes se trouvaient en nombres égaux (N0(238
+92U) = N0(235
+92U)) dans la
+Www.AdrarPhysic.Fr
+
+-- 4 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+5
+10
+Terre à l’instant de sa formation (t0 = 0) ».
+Les courbes de la figure 1 représentent
+l’évolution au cours du temps du nombre
+de noyaux dans un échantillon contenant le
+même nombre initial N0 de noyaux d’ura-
+nium 238 et de noyaux d’uranium 235. On
+désigne par:
+- N (238
+92U): le nombre de noyaux 238
+92U dans
+l’échantillon à un instant t et m1 leur
+masse.
+- N (235
+92U): le nombre de noyaux 235
+92U dans
+l’échantillon à un instant t et m2 leur
+masse.
+t(109an)
+N (t)
+0 0,35 0,7
+(b)
+(a)
+Figure 1
+Données:
+- La constante radioactive de l’uranium 238: λ1 = 1, 55 × 10−10 an−1;
+- La masse molaire de l’uranium 238: M1 = 238 g.mol−1;
+- La masse molaire de l’uranium 235: M2 = 235 g.mol−1;
+- L’énergie de liaison du noyau du plomb 206: El2 = 1600, 4 MeV;
+- L’âge de la terre est: 4, 5.109 an;
+- 1u = 931, 5 MeV.c−2;
+- Les masses:
+Noyau ou particules 1
+1p 1
+0n 238
+92U
+Masse en u 1,0073 1,0087 238,0508
+1- Calculer l’énergie de liaison E`1 du noyau de l’uranium 238 et déduire le noyau le plus stable
+parmi les noyaux 238
+92U et 206
+82Pb. (0.5pt)
+2- Déterminer la valeur de x et celle de y. (0.5pt)
+3- Montrer que la courbe (a) correspond à l’évolution temporelle de N (238
+92U). (0.5pt)
+4- Déterminer, en an−1, la constante radioactive λ2 de l’uranium 235. (0.5pt)
+5- Ecrire l’expression du rapport N (235
+92U)
+N (238
+92U) en fonction de λ1, λ2 et le temps t. (0.25pt)
+6- Déterminer, selon le chercheur, l’âge tT de la Terre. Conclure à propos de son hypothèse.
+(0.5pt)
+Www.AdrarPhysic.Fr
+
+-- 5 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+6
+10
+Exercice 3 : Electricité (5 points)
+Les parties 1 et 2 sont indépendantes.
+Partie 1: Etude énergétique de la charge et de la décharge d’un condensateur.
+Pour étudier la charge d’un condensateur et sa décharge dans un dipôle D, on réalise le montage
+expérimental de la figure 1 qui se compose de :
+- un générateur idéal de courant électrique qui débite un courant d’intensité constante
+I = 200 mA;
+- un conducteur ohmique de résistance R1;
+- un condensateur de capacité C initialement déchargé;
+- un dipôle D modélisé par un conducteur ohmique de résistance R qui ne fonctionne normalement
+que si la tension uD entre ses bornes est telle que: uD ≥ Uf = 8, 95 V;
+- un interrupteur K.
+1- Charge du condensateur
+A un instant pris comme origine des dates t = 0, on bascule l’interrupteur K en position 1.
+L’étude expérimentale a permis d’obtenir la courbe de la figure 2 représentant l’évolution
+temporelle de l’énergie électrique Ee(t) emmagasinée dans le condensateur lors de sa charge.
+1
+I
+uD
+2
+uC
+K
+R1
+D
+Figure 1
+t2(s2)
+Ee(10−2J)
+0 0.5 1
+2
+4
+Figure 2
+1.1- Montrer que C = 0, 5 F. (0.5pt)
+1.2- Trouver la durée ∆t nécessaire pour que la tension entre les bornes du condensateur atteigne
+la valeur U0 = 20 V. (0.5pt)
+2- Décharge du condensateur
+Www.AdrarPhysic.Fr
+
+-- 6 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+7
+10
+Lorsque la tension uC prend la valeur U0, on
+bascule l’interrupteur K en position 2 à un in-
+stant pris comme nouvelle origine des dates
+t = 0.
+La courbe de la figure 3 représente l’évolution au
+cours du temps de l’énergie électrique emmagas-
+inée dans le condensateur lors de sa décharge.
+t(s)
+Ee(J)
+0 2 4
+40
+13.5
+Figure 3
+2.1- Etablir l’équation différentielle vérifiée par la tension uC (t). (0.25pt)
+2.2- Déduire que l’équation différentielle vérifiée par Ee(t) l’énergie électrique emmagasinée dans le
+condensateur s’écrit: dEe
+dt + 2
+τ .Ee = 0. Avec τ la constante du temps du dipôle RC. (0.25pt)
+2.3- La solution de cette équation différentielle s’écrit: Ee(t) = A.e−αt. Trouver l’expression de A
+et celle de α en fonction des paramètres du circuit et U0. (0.5pt)
+2.4- Calculer Ee(τ ) l’énergie électrique emmagasinée dans le condensateur à l’instant t = τ . En
+déduire la valeur de R. (0.5pt)
+2.5- Trouver ∆t la durée du fonctionnement normal du dipôle D. (0.5pt)
+Partie 2: Modulation d’amplitude et réception d’un signal modulé
+Afin de réaliser la modulation d’amplitude,
+on utilise le circuit intégré multiplieur X.
+(Figure 4).
+On applique à l’entrée:
+- E1 une tension sinusoïdale porteuse :
+u1(t) = 6 cos(2π.104.t);
+- E2 une tension u2(t) = s(t) + U0 avec
+U0 la tension continue de décalage, et
+s(t) = Sm cos(2π.f.t) la tension modulante.
+(f  104 Hz)
+X S
+E1
+E2
+u1(t)
+u2(t) us(t)
+Figure 4
+On obtient à la sortie S du multiplieur la tension modulée en amplitude uS (t) telle que:
+uS (t) = K.u1(t).u2(t), K étant une constante positive qui caractérise le multiplieur.
+Www.AdrarPhysic.Fr
+
+-- 7 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+8
+10
+1- L’amplitude du signal modulé peut s’écrire sous
+la forme : usm(t) = α.s(t) + β. Déterminer l’ex-
+pression de la constante α et celle de β. (0.5pt)
+2- Pour vérifier la qualité de la modulation, on
+représente à l’aide d’un système d’acquisition
+approprié les variations de l’amplitude usm(t)
+en fonction du signal modulant s(t). (Figure 5)
+2.1- Trouver la valeur de K et celle de U0. (0.5pt)
+2.2- Calculer m le taux de modulation et conclure.
+(0.5pt)
+s(V)
+usm(V)
+0	-2 -1 1 2
+1
+2
+Figure 5
+3- Pour une bonne réception du signal modulé, on utilise un circuit bouchon (circuit sélectif) formé
+d’une bobine, d’inductance L0 = 60 mH et de résistance négligeable, et de deux condensateurs,
+montés en série, de capacité respectives C0 = 10 nF et C1. Déterminer la valeur de C1. (0.5pt)
+Exercice 4 : La mécanique (5,25 points)
+Mouvement d’un système oscillant
+La résonance mécanique peut apparaître lorsqu’un système oscillant est soumis à une excitation
+par un autre système. L’étude des oscillations libres d’un système mécanique permet de com-
+prendre à quelles conditions ce système peut entrer en état de résonance et comment contrôler
+ses oscillations.
+Soit le système oscillant constitué de :
+- un ressort à spires non jointives de masse nég-
+ligeable et de raideur K dont l’une des ex-
+trémités est attachée à un support;
+- un solide S de masse m et de centre d’inertie G;
+- une poulie, de rayon R et de moment d’iner-
+tie J∆ par rapport à l’axe (∆), susceptible de
+tourner sans frottement autour de l’axe hori-
+zontal (∆) passant par son centre I. z
+I
+θ
++
+O
+−	→
+k
+(S)
+Figure 1
+L’extrémité libre du ressort et le solide S sont reliés par un fil inextensible, de masse négligeable
+et passant sans glissement dans la gorge de la poulie (figure 1). On étudie le mouvement du
+système dans un référentiel terrestre considéré comme galiléen. À l’équilibre, le centre d’inertie
+G du solide est confondu avec O l’origine du repère R(O; −	→
+k )
+Données :
+- L’intensité de pesanteur: g = 10 m.s−2;
+Www.AdrarPhysic.Fr
+
+-- 8 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+9
+10
+- La masse de (S) : m = 100 g;
+- Le rayon de la poulie: R = 2 cm.
+1- Montrer que l’expression de ∆`0 l’allongement du ressort à l’équilibre s’écrit: ∆`0 = m.g
+K .
+(0.5pt)
+2- On écarte S de sa position d’équilibre, verticalement vers le bas, d’une distance d = 2 cm et
+on le lâche sans vitesse initiale à un instant pris comme origine des dates t = 0.
+On repère, à un instant t, la position de G par
+sa coordonnée z dans le repère R(O; −	→
+k ) et la
+position de la poulie par l’abscisse angulaire θ.
+Une étude expérimentale permet de tracer la
+courbe de la figure 2 représentant l’évolution de
+z en fonction de t.
+t(s)
+z(cm)
+0.2 0.4
+-1
+0
+1
+Figure 2
+2.1- Montrer que l’équation différentielle vérifiée par z s’écrit: ¨z + K.R2
+J∆ + m.R2 z = 0. (0.75pt)
+2.2- La solution de cette équation différentielle s’écrit sous la forme: z(t) = A. cos
+(2π
+T0
+t + ϕ
+)
+, A
+étant l’amplitude des oscillations et ϕ la phase à t = 0.
+2.2.1- Déterminer la valeur de ϕ et celle de A. (0.5pt)
+2.2.2- Trouver l’expression de la période propre T0 des oscillations. (0.5pt)
+3- Montrer que l’intensité Tmax de la tension maximale du fil appliquée sur (S) s’écrit:
+Tmax = m(g + 4π2.d
+T 2
+0
+). Calculer sa valeur. (0.5pt)
+4- On considère l’état où le ressort n’est pas déformé comme état de référence de l’énergie poten-
+tielle élastique (Epe = 0) et le plan horizontal passant par O, la position de G à l’équilibre,
+comme plan de référence de l’énergie potentielle de pesanteur (Epp = 0).
+Www.AdrarPhysic.Fr
+
+-- 9 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+10
+10
+L’énergie potentielle de la poulie est
+Ep0 = cte et l’expression de son énergie
+cinétique s’écrit: EC (P ) = 1
+2J∆. ˙θ2 Avec
+˙θ la vitesse angulaire instantanée de la
+poulie.
+La courbe de la figure 3 représente la varia-
+tion de EP l’énergie potentielle du système
+en fonction de z. z(cm)
+Ep(mJ)
+-1 0 1
+108
+116
+Figure 3
+4.1- Montrer que l’expression de l’énergie potentielle du système oscillant s’écrit:
+Ep = 1
+2K.(z2 + ∆`2
+0) + Ep0. (0.75pt)
+4.2- En utilisant les courbes des figures 2 et 3, déterminer la valeur de K et vérifier
+que J∆ ' 2,5.10−5 kg.m2. (0.5pt)
+4.3- En exploitant la conservation de l’énergie mécanique du système, calculer v1 la vitesse de G à
+l’instant t1 = 0,3 s. (0.75pt)
+5- On remplace le solide S par un autre solide S′ de masse m′. Un excitateur impose à ce nouveau
+système des oscillations de fréquence Fe = 3 Hz.
+Déterminer la valeur de m′ pour que le système soit en état de résonance mécanique. (0.5pt)
+Typesetted by Pr. Mohammed BOUZAID
+Www.AdrarPhysic.Fr
+
+-- 10 of 10 --
+

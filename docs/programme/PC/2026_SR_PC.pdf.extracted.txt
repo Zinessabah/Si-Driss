@@ -1,0 +1,373 @@
+ﺍﻟﻤﻤﻠ	ﻜ	ﺔ	ﺍﻟﻤ	ﻐ	ﺮﺑﻴﺔ
+ﻭ	ﺯﺍﺭ	ﺓ	ﺍﻟﺘﺮﺑﻴﺔ	ﺍﻟﻮ	ﻃ	ﻨﻴﺔ
+ﻭﺍﻟﺘﻌﻠﻴ	ﻢ	ﺍ	ﻷ	ﻭﻟ	ﻲ	ﻭﺍﻟﺮﻳﺎ	ﺿ	ﺔ
+ⵜⴰⴳⵍⴷⵉⵜ ⵏ ⵍⵎⵖⵔⵉⴱ
+ⵜⴰⵎⴰⵡⴰⵙⵜ ⵏ ⵓⵙⴳⵎⵉ ⴰⵏⴰⵎⵓⵔ
+ⴷ ⵓⵙⵙⵍⵎⴷ ⴰⵎⵣⵡⴰⵔⵓ ⴷ ⵜⵓⵏⵏⵓⵏⵜ
+ﺍﻟﻤﺮ	ﻛ	ﺰ	ﺍﻟﻮ	ﻃ	ﻨ	ﻲ	ﻟﻠﺘﻘﻮﻳﻢ	ﻭﺍ	ﻻ	ﻣﺘ	ﺤ	ﺎﻧﺎ	ﺕ
+ﺍ	ل	إ	م	ت	ح	ا	ن	ﺍ	ل	و	ط	ن	ي	ﺍ	لم	و	ح	د	ل	ل	ب	ك	ال	و	ﺭ	ي	ا
+ﺍلم	س	ال	ك	ﺍل	د	و	لي	ة
+ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2 – ﺍلم	و	ض	و	ﻉ –
+ﺍل	ص	ف	ح	ة
+1
+8
+∗I
+β RS 28F	HHHHHHHHHHHHHHHHHHHH-HHH
+ﺍلما	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	م	د	ﺓ	ﺍ	ل	ا	ن	جا	ﺯ	3h
+ﺍل	ش	ع	ب	ة	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍل	ف	ي	ز	يا	ئي	ة	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة	ﺍلم	ع	ا	م	ل	7
+L’usage de la calculatrice scientifique non programmable est autorisé.
+La formule littérale doit être donnée avant l’application numérique et le
+résultat accompagné de son unité.
+Les exercices peuvent être traités séparément selon le choix du candidat(e).
+Le sujet comporte quatre exercices : un exercice de chimie et trois exercices de physique
+Exercice 1 (7 points) :
+- Partie I: Nickelage d’une lame d’aluminium ;
+- Partie II: Étude de quelques réactions d’un acide AH.
+Exercice 2 (2.5 points):
+- Étude d’une transformation nucléaire.
+Exercice 3 (5 points) :
+- Charge d’un condensateur ;
+- Réception d’un signal modulé en amplitude.
+Exercice 4 (5.5 points) :
+- Partie I: Chute verticale d’une balle ;
+- Partie II: Mouvement d’un système oscillant.
+Www.AdrarPhysic.Fr
+
+-- 1 of 8 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍل	ف	ي	ز	يا	ئي	ة	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+RS 28F
+ﺍل	ص	ف	ح	ة
+2
+8
+Exercice 1 : Chimie (7 points)
+Les parties I et II sont indépendantes.
+Partie I : Nickelage d’une lame d’aluminium
+Pour protéger l’aluminium contre la formation d’une couche d’alumine, on peut le recouvrir par
+un métal, tel que le nickel Ni.
+Données:
+- Le couple: Ni2+
+(aq) / Ni(s) ;
+- Le faraday: 1 F = 9, 65 · 104 C · mol−1 ;
+- Masse molaire du nickel: M (Ni) = 58, 7 g ·
+mol−1.
+Par électrolyse, on veut recouvrir d’une façon
+uniforme une lame carrée d’aluminium, de sur-
+face totale s = 50 cm2, par une couche de nickel
+d’épaisseur e pendant une durée ∆t = 25 min.
+G
++
+K
+−
+A
+Electrode en
+nickel
+Lame en
+aluminium
+Solution aqueuse de sulfate
+de nickel (Ni2+
+(aq) + SO42−(aq))
+Figure 1
+Pour cela on réalise le montage représenté sur le schéma de la figure 1. On ferme le circuit à
+l’instant t = 0. Lors de cette électrolyse l’intensité du courant débité est considérée constante
+I = 100 mA.
+1- En se basant sur la polarité du générateur, écrire l’équation de la réaction qui se produit au
+niveau de la lame d’aluminium. (0.5 pt)
+2- Déduire le rôle de la lame d’aluminium (anode ou cathode). (0.5 pt)
+3- Montrer que l’expression de m(Ni) la masse du nickel déposé sur la lame d’aluminium pendant
+la durée ∆t est: m(Ni) = I · ∆t · M (Ni)
+2F . Calculer sa valeur. (0.75 pt)
+4- Calculer la valeur de l’épaisseur e, sachant que la masse volumique du nickel est:
+ρ = 8, 9 g · cm−3. (0.5 pt)
+Partie II : Étude de quelques réactions d’un acide AH
+On prépare une solution aqueuse S0 d’un acide AH de concentration molaire C0.
+A un volume de la solution S0 on ajoute successivement des volumes d’eau distillée puis
+on mesure à chaque ajout le pH de la solution obtenue et on détermine sa concentration
+molaire CA.
+Les résultats obtenus ont permis de tracer la courbe de la figure 2 représentant les variations
+du pH en fonction de − log CA : pH = f (− log CA).
+1- Ecrire l’équation de la réaction de l’acide AH avec l’eau. (0.5 pt)
+2- Exprimer le taux d’avancement final de la réaction en fonction de pH et CA. (0.5 pt)
+3- En exploitant la courbe de la figure 2:
+Www.AdrarPhysic.Fr
+
+-- 2 of 8 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍل	ف	ي	ز	يا	ئي	ة	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+RS 28F
+ﺍل	ص	ف	ح	ة
+3
+8
+− log CA
+pH
+1 1,25 1,5
+2
+2,5
+2,9
+3
+Figure 2
+3.1- Vérifier, pour une solution de l’acide AH de pH = 2, 9, que CA = 10−2 mol · L−1. (0.5 pt)
+3.2- Calculer les taux d’avancement final de la réaction τ1 et τ2 respectivement pour des solutions
+de l’acide AH de pH1 = 2, 9 et pH2 = 3, 15. (0.75 pt)
+3.3- Déduire l’effet de la dilution sur le taux d’avancement final de la réaction. (0.5 pt)
+4-
+4.1- En utilisant l’expression de la constante d’acidité KA en considérant que la réaction de AH avec
+l’eau est très limitée
+([AH(aq)
+]
+éq ≈ CA
+)
+, montrer que l’expression du pH s’écrit:
+pH = a log CA + b avec a = −1
+2 et b = 1
+2pKA. (0.75 pt)
+4.2- En exploitant la courbe de la figure 2, déterminer la valeur du pKA du couple AH(aq) / A−
+(aq) et
+identifier l’acide AH parmi les acides des couples indiqués dans le tableau suivant : (0.75 pt)
+Couple acide/base CH3COOH / CH3COO– HCOOH / HCOO– NH4+ / NH3
+pKA 4,8 3,75 9,2
+4.3- Pour une solution de l’acide AH de concentration molaire CA = 10−2 mol · L−1, déterminer,
+parmi les espèces AH et A– , l’espèce prédominante dans cette solution. (0.5 pt)
+Exercice 2 : Transformations nucléaires (2,5 points)
+Dans cet exercice on se propose d’étudier la transformation nucléaire suivante:
+235
+92U + 1
+0n −−→ 95
+40Zr + 138
+52Te + x 1
+0n.
+Données :
+- Masse molaire : M (235U) = 235 g · mol−1;
+- Les masses : m(138
+52Te) = 137, 92922 u, mp = 1, 00727 u, mn = 1, 00866 u;
+- Énergies de liaisons : E`(95
+40Zr) = 800, 214 MeV; E`(235
+92U) = 1735, 7 MeV;
+Www.AdrarPhysic.Fr
+
+-- 3 of 8 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍل	ف	ي	ز	يا	ئي	ة	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+RS 28F
+ﺍل	ص	ف	ح	ة
+4
+8
+- 1 u = 931, 49 MeV · c−2, NA = 6, 02 · 1023 mol−1;
+- 1 MeV = 1, 60 · 10−13 J.
+1- Donner la composition du noyau de tellure 138: 138
+52Te. (0.5 pt)
+2- Déterminer la valeur de x indiqué dans l’équation. (0.5 pt)
+3- Vérifier que la valeur de l’énergie de liaison du noyau de tellure 138 est E`(138
+52Te) = 1111, 8 MeV.
+(0.5 pt)
+4- Justifier que le noyau 95
+40Zr est plus stable que le noyau 138
+52Te. (0.5 pt)
+5- Pour cette transformation, calculer, en unité joule, |∆E| l’énergie libérée lors de la fission d’une
+masse m = 1 kg d’uranium 235. (0.5 pt)
+EXERCICE 3 : Électricité (5 points)
+Dans les circuits intégrés, les amplificateurs et les appareils d’émission et de réception des ondes
+on trouve plusieurs composantes électroniques telles que les condensateurs, les conducteurs
+ohmiques, les bobines...
+On se propose dans cet exercice:
+- de déterminer certains paramètres d’un circuit à travers la charge d’un condensateur;
+- d’étudier un circuit simplifié de la réception et de la démodulation d’un signal modulé en
+amplitude.
+1- Charge d’un condensateur
+On réalise le circuit électrique schématisé sur la figure 1
+comportant:
+- un générateur idéal de tension E;
+- un conducteur ohmique de résistance R0 = 100 kΩ;
+- un condensateur de capacité C0 initialement déchargé;
+- un interrupteur K.
+A un instant choisi comme origine des dates (t = 0), on ferme
+l’interrupteur K.
+E
+i K
+C0	uC
+R0
+uR
+Figure 1
+1.1- Etablir l’équation différentielle vérifiée par uc la tension aux bornes du condensateur. (0.5 pt)
+1.2- La solution de cette équation différentielle s’écrit: uc(t) = E(1 − e− t
+τ ) avec τ la constante du
+temps du dipôle RC. Trouver l’expression de τ . (0.5 pt)
+1.3- Montrer que l’expression de uR(t) la tension aux bornes du conducteur ohmique s’écrit:
+uR(t) = E · e− t
+τ . (0.5 pt)
+1.4- Déduire l’expression de ln(uR) en fonction de E, τ et t. (0.25 pt)
+1.5- Un système d’acquisition informatisé adéquat a permis d’obtenir la courbe représentant
+Www.AdrarPhysic.Fr
+
+-- 4 of 8 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍل	ف	ي	ز	يا	ئي	ة	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+RS 28F
+ﺍل	ص	ف	ح	ة
+5
+8
+l’évolution temporelle de ln(uR) (Figure 2).
+En exploitant cette courbe, déduire la valeur de E et vérifier que C0 = 2, 5 nF. (0.75 pt)
+t (10−5s)
+ln(uR)
+0 25 50
+0,5
+1
+Figure 2
+1.6- Déterminer Ee l’énergie électrique emmagasinée dans le condensateur à l’instant t = 55 · 10−5 s.
+(0.5 pt)
+2- Réception d’un signal modulé en amplitude
+Le montage de la figure 3 consiste à la réception, à la sélection et à la démodulation d’un signal
+modulé en amplitude. Le condensateur de capacité C0 précédemment utilisé est monté avec
+une bobine d’inductance L0 = 1 mH et de résistance négligeable. (Figure 3)
+Antenne
+L0 C0 u1(t)
+D C1
+M
+C R u2(t) R2 u3(t)
+Figure 3
+2.1- Choisir l’affirmation juste parmi les affirmations suivantes : (0.5 pt)
+A La fréquence de u1(t) est celle de la tension modulante.
+B u2(t) est la tension modulée.
+C u3(t) est la tension démodulée.
+D Le circuit de la partie encadrée en pointillés dans la figure 3 joue le rôle d’un filtre
+passe-bas.
+2.2- Calculer F la fréquence du signal sélectionné. (0.75 pt)
+Www.AdrarPhysic.Fr
+
+-- 5 of 8 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍل	ف	ي	ز	يا	ئي	ة	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+RS 28F
+ﺍل	ص	ف	ح	ة
+6
+8
+2.3- La courbe de la figure 4 correspond à la tension u3(t).
+La valeur de R étant R = 10 kΩ et on dispose de trois condensateurs de capacités: 120 nF,
+100 nF et 50 nF.
+Indiquer, en justifiant, parmi les valeurs des capacités ci-dessus, celle qui permet d’avoir une
+bonne détection d’enveloppe. (0.75 pt)
+0,4 ms
+Figure 4
+Exercice 4 : Mécanique (5,5 points)
+Les parties I et II sont indépendantes :
+Partie I: Chute verticale d’une balle
+On lâche à partir d’un point O sans vitesse initiale à l’instant t = 0,
+une balle de tennis de table modélisée par un corps (S) de masse m et
+de centre d’inertie G (Figure 1).
+La balle est soumise à deux forces:
+- Son poids −	→
+P ;
+- la force de frottement −	→
+f . On admet que son intensité est f = μv2, avec
+μ une constante positive et −	→v = vz
+−	→
+k le vecteur vitesse de G.
+On note que la poussée d’Archimède est négligeable devant le poids de
+la balle.
+On étudie le mouvement de G dans un repère (O, −	→
+k ) lié à un référentiel
+terrestre supposé galiléen.
+z
+O
+−	→
+k
+(S)
+Figure 1
+Données:
+- Intensité de la pesanteur: g = 10 m · s−2;
+- m = 2, 45 g.
+Www.AdrarPhysic.Fr
+
+-- 6 of 8 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍل	ف	ي	ز	يا	ئي	ة	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+RS 28F
+ﺍل	ص	ف	ح	ة
+7
+8
+L’exploitation d’un enregistrement vidéo du mouvement de G à l’aide d’un logiciel adéquat a
+permis d’obtenir la vitesse limite de G : vz,`im = 7, 00 m · s−1.
+1- Montrer que l’équation différentielle vérifiée par la vitesse vz de G s’écrit:
+dvz
+dt + μ
+mv2
+z = g. (0.5 pt)
+2- Déduire l’expression de vz`im en fonction de μ, m et g et vérifier que μ = 5 · 10−4 kg · m−1.
+(0.75 pt)
+3- Déterminer, en utilisant la méthode d’Euler, vz (t2) la valeur approchée de la vitesse de G à la
+date t2 = t1 + 0, 07 s sachant que vz (t1) = 5, 50 m · s−1. (0.75 pt)
+Partie II: Mouvement d’un système oscillant
+Un pendule élastique est constitué d’un solide
+(S), de masse m = 0, 25 kg, de centre d’inertie
+G et d’un ressort à spires non jointives de masse
+négligeable et de raideur k. Le solide (S) est
+attaché à l’une des extrémités du ressort, tandis
+que l’autre extrémité est attachée à un support
+fixe (Figure 2).
+(S)
+G
+x′ x	O −	→
+i
+Figure 2
+On étudie le mouvement de G dans un repère (O, −	→
+i ) lié à un référentiel terrestre supposé
+galiléen.
+On repère la position de G à un instant t par l’abscisse x sur l’axe (O, −	→
+i ). A l’équilibre,
+l’abscisse de G est nulle (Figure 2).
+On écarte le solide, dans le sens positif, de sa position
+d’équilibre d’une distance Xm = 2 cm, puis on le
+lâche sans vitesse initiale à un instant choisi comme
+origine des dates t0 = 0. Le solide (S) effectue alors
+un mouvement oscillatoire sans frottement.
+On choisit le plan horizontal passant par G comme
+référence de l’énergie potentielle de pesanteur Epp
+(Epp = 0) et l’état où G est à la position d’équili-
+bre (x = 0) comme référence de l’énergie potentielle
+élastique Epe (Epe = 0).
+Epe(mJ)
+x2(cm2)
+0 1 2
+2
+4
+Figure 3
+La courbe de la figure 3 représente les variations de l’énergie potentielle élastique Epe du système
+oscillant en fonction de x2.
+1- Exprimer Epe en fonction de k et de x. (0.5 pt)
+2- En exploitant la courbe de la figure 3, déterminer la valeur de k la raideur du ressort. En
+déduire alors la valeur de T0 la période propre du système oscillant. (1 pt)
+
+-- 7 of 8 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍ	ل	ا	س	ت	د	ﺭ	ﺍ	ك	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍل	ف	ي	ز	يا	ئي	ة	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+RS 28F
+ﺍل	ص	ف	ح	ة
+8
+8
+3- Déterminer la valeur de Em l’énergie mécanique du système oscillant. (0.5 pt)
+4- Déduire la valeur algébrique vx de la vitesse de G lors de son passage pour la première fois par
+la position d’abscisse x = Xm
+2 . (0.75 pt)
+5- Déterminer le travail de la force de rappel lorsque G se déplace de la position d’abscisse x = 0
+à la position d’abscisse x = Xm
+2 . (0.75 pt)
+Typesetted by Pr. Mohammed BOUZAID
+Www.AdrarPhysic.Fr
+
+-- 8 of 8 --
+

@@ -1,0 +1,541 @@
+ﺍﻟﻤﻤﻠ	ﻜ	ﺔ	ﺍﻟﻤ	ﻐ	ﺮﺑﻴﺔ
+ﻭ	ﺯﺍﺭ	ﺓ	ﺍﻟﺘﺮﺑﻴﺔ	ﺍﻟﻮ	ﻃ	ﻨﻴﺔ
+ﻭﺍﻟﺘﻌﻠﻴ	ﻢ	ﺍ	ﻷ	ﻭﻟ	ﻲ	ﻭﺍﻟﺮﻳﺎ	ﺿ	ﺔ
+ⵜⴰⴳⵍⴷⵉⵜ ⵏ ⵍⵎⵖⵔⵉⴱ
+ⵜⴰⵎⴰⵡⴰⵙⵜ ⵏ ⵓⵙⴳⵎⵉ ⴰⵏⴰⵎⵓⵔ
+ⴷ ⵓⵙⵙⵍⵎⴷ ⴰⵎⵣⵡⴰⵔⵓ ⴷ ⵜⵓⵏⵏⵓⵏⵜ
+ﺍﻟﻤﺮ	ﻛ	ﺰ	ﺍﻟﻮ	ﻃ	ﻨ	ﻲ	ﻟﻠﺘﻘﻮﻳﻢ	ﻭﺍ	ﻻ	ﻣﺘ	ﺤ	ﺎﻧﺎ	ﺕ
+ﺍ	ل	إ	م	ت	ح	ا	ن	ﺍ	ل	و	ط	ن	ي	ﺍ	لم	و	ح	د	ل	ل	ب	ك	ال	و	ﺭ	ي	ا
+ﺍلم	س	ال	ك	ﺍل	د	و	لي	ة
+ﺍل	د	و	ﺭ	ﺓ	ﺍل	ع	ا	ﺩ	ي	ة	6	2	0	2 – ﺍلم	و	ض	و	ﻉ –
+ﺍل	ص	ف	ح	ة
+1
+10
+∗I
+β NS 30F	HHHHHHHHHHHHHHHHHHHH-HHH
+ﺍلما	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	م	د	ﺓ	ﺍ	ل	ا	ن	جا	ﺯ	4h
+ﺍل	ش	ع	ب	ة	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍل	ر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة	ﺍلم	ع	ا	م	ل	7
+L’usage de la calculatrice scientifique non programmable est autorisé.
+La formule littérale doit être donnée avant l’application numérique et le
+résultat accompagné de son unité.
+Les exercices peuvent être traités séparément selon le choix du candidat(e).
+Le sujet comporte cinq exercices :
+Exercice 1 - Chimie (7 points) :
+- Partie 1: Étude d’une solution aqueuse d’acide éthanoïque et sa réaction avec
+l’ammoniac ;
+- Partie 2: Synthèse du dihydrogène gazeux.
+Exercice 2 - Les transformations nucléaires (1,75 points) :
+- La radioactivité du potassium.
+Exercice 3 - Les ondes (1,75points) :
+- Utilisation des ultrasons pour vérifier la qualité d’une huile.
+Exercice 4 - Electricité (4,25 points) :
+- Partie 1: Détermination des caractéristiques d’une bobine et d’un condensateur ;
+- Partie 2: Oscillateur RLC en régime sinusoïdal forcé.
+Exercice 5 - Mécanique (5,25 points) :
+- Partie 1: Mouvement d’un ballon de basket ;
+- Partie 2: Mouvement d’un système mécanique.
+Www.AdrarPhysic.Fr
+
+-- 1 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍل	ع	ا	ﺩ	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+2
+10
+Exercice 1 : Chimie (7 points)
+Les parties 1 et 2 sont indépendantes.
+Partie 1 : Étude d’une solution aqueuse d’acide éthanoïque et sa réaction avec
+l’ammoniac
+L’acide éthanoïque, également connu sous le nom d’acide acétique, est un acide organique de
+formule chimique CH3COOH. Il est incolore, liquide dans les conditions ordinaires et a une
+odeur piquante.
+On se propose dans cette partie de déterminer la constante d’acidité KA du couple
+CH3COOH/CH3COO– , et l’exploiter dans la réaction de l’acide éthanoïque avec l’ammoniac
+NH3.
+On prépare une solution aqueuse S1 d’acide éthanoïque de concentration molaire
+C1 = 10−2 mol · L−1.
+1- Ecrire l’équation chimique modélisant la réaction de l’acide éthanoïque avec l’eau. (0,25pt)
+2- Trouver l’expression de la constante d’acidité KA en fonction de C1 et τ1 le taux d’avancement
+final de la réaction. (0,5pt)
+3- On dilue un volume V1 de la solution S1 en lui ajoutant un volume Ve d’eau distillée, on obtient
+ainsi une solution S2 de concentration C2.
+Soit τ le taux d’avancement final de la réaction dans la solution S2.
+3.1- Dans le cas où τ  1, τ s’écrit sous la forme suivante : τ 2 = α · Ve + β. Déterminer l’expression
+de α et celle de β. (0,5pt)
+3.2- La courbe de la figure 1 représente les variations de τ 2 en fonction du volume Ve de l’eau ajouté
+dans le cas où τ  1 :
+Ve(mL)
+τ 2(10−3)
+0 10 20
+1.59
+3.18
+3.2.1- En utilisant la courbe de la figure 1, trouver la valeur du pH1 de la solution S1. (0.5pt)
+3.2.2- En utilisant la courbe de la figure 1, vérifier que KA ≈ 1, 59 · 10−5 et déterminer la valeur de
+V1. (0.75pt)
+4- On prend un volume V2 = 15 mL de la solution S1 et on lui ajoute un volume Ve d’eau distillée,
+on obtient une solution S3, de concentration C3, de pH3 = 3, 85 et dont le coefficient de dilution
+est n = C1
+C3
+.
+Www.AdrarPhysic.Fr
+
+-- 2 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍل	ع	ا	ﺩ	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+3
+10
+4.1- Montrer que : n = KA · C1 · 102pH3
+1 + KA · 10pH3 . Calculer sa valeur. (0,5pt)
+4.2- Déduire la valeur de C3 et celle de Ve. (0,5pt)
+5- On mélange un volume V de la solution S1 avec le même volume V d’une solution aqueuse S
+d’ammoniac de concentration molaire C = C1.
+Données :
+- pKA(NH4+/NH3) = pKA1 = 9, 2 ;
+- pKA(CH3COOH/CH3COO−) = pKA.
+5.1- Ecrire l’équation chimique modélisant la réaction de l’acide éthanoïque avec l’ammoniac. (0,25pt)
+5.2- Montrer que le pH du mélange réactionnel à l’équilibre s’écrit : pH = 1
+2(pKA +pKA1). (0,5pt)
+5.3- Déterminer l’espèce chimique prédominante, dans la solution, pour chaque couple intervenant
+dans la réaction. (0,5pt)
+Partie 2 : Synthèse du dihydrogène gazeux
+Le gaz dihydrogène est utilisé dans la synthèse de plusieurs substances chimiques et entre dans
+la production de l’énergie électrique. On peut le synthétiser industriellement par électrolyse de
+l’eau ou d’autres solutions alcalines.
+On s’intéresse dans cette partie à l’électrolyse d’une saumure, c’est-à-dire d’une solution aqueuse
+concentrée de chlorure de sodium Na+
+(aq) + C`−
+(aq) de pH0 = 7 et de volume V = 0, 5 L.
+La figure 2 représente le schéma simplifié du dispositif expérimental.
+E1 E2
++ −
+Dégagement
+gazeux Dégagement
+gazeux
+Saumure
+Figure 2
+Données :
+- Constante de Faraday : 1F = 9, 65 · 104 C · mol−1 ;
+- Le produit ionique de l’eau : Ke = 10−14 ;
+- Les couples ox/red intervenant : C`2/C`− ; H2O/H2 ;
+Www.AdrarPhysic.Fr
+
+-- 3 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍل	ع	ا	ﺩ	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+4
+10
+- Le volume molaire dans les conditions de l’expérience : Vm = 24, 8 L · mol−1 ;
+- E1 et E2 sont deux électrodes inattaquables ;
+- Au cours de l’électrolyse le pH du mélange réactionnel augmente.
+1- Identifier, en justifiant, l’anode parmi les électrodes E1 et E2. 0,5pt
+2- On obtient un dégagement gazeux au niveau de chaque électrode. Ecrire l’équation de la
+réaction qui se produit au niveau de la cathode. 0,5pt
+3- Pour une intensité du courant I = 1 A et une durée de fonctionnement ∆t = 10 min :
+3.1- Montrer que l’expression du volume du dihydrogène produit s’écrit : V (H2) = I · Vm · ∆t
+2F .
+Calculer sa valeur. 0,75pt
+3.2- Calculer le pH de la solution obtenue. 0,5pt
+Exercice 2 : La radioactivité du potassium (1,75 points)
+Le potassium existe dans la nature sous forme de trois isotopes 39
+19K, 40
+19K et 41
+19K. Seul le
+potassium 40
+19K est radioactif. Il se désintègre en deux noyaux selon deux voies : 89% se
+transforme en noyaux de Calcium 40
+20Ca et 11% en noyaux d’argon 40
+18Ar.
+Le corps humain est le siège de milliers de désintégrations en une seconde en raison de la
+présence des noyaux de carbone et de potassium. Ce dernier est le responsable de plus de la
+moitié des rayonnements. Le corps d’un homme de masse 70 kg contient environ m = 16 mg de
+potassium 40, dont la majeure partie se trouve dans les muscles.
+Le but de cet exercice est d’étudier la désintégration du noyau de potassium 40 dans le corps
+humain.
+Données :
+- M (40K) = 40 g · mol−1 ;
+- NA = 6, 02 · 1023 mol−1 ;
+- t1/2(40
+19K) = 1, 25 · 109 an ;
+- 1 an = 365, 25 jour.
+1- Ecrire l’équation de la désintégration du noyau 40
+19K en
+noyau 40
+20Ca. (0,25pt)
+2- La figure 1 représente le diagramme énergétique de la
+désintégration précédente avec :
+- A
+Z X : la particule émise lors de la désintégration ;
+- E1 = 331, 614 MeV ;
+- E2 = 332, 441 MeV ;
+- E3 = −0, 782 MeV.
+Energie
+40
+20Ca +A
+Z X
+40
+19K
+19 protons + 21 neutrons
+E1
+19 protons + 21 neutrons	E3
+E2
+Figure 1	Figure 1
+Www.AdrarPhysic.Fr
+
+-- 4 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍل	ع	ا	ﺩ	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+5
+10
+En exploitant ce diagramme :
+2.1- Comparer l’énergie de liaison par nucléon du noyau 40
+19K à celle du noyau 40
+20Ca et déduire le
+noyau le plus stable. (0,5pt)
+2.2- Déterminer la transformation à laquelle correspond l’énergie E3. (0,25pt)
+2.3- Montrer que l’expression de E l’énergie libérée par seconde dans le corps d’une personne de
+masse 70 kg par la désintégration du potassium 40 en calcium 40 s’écrit :
+E = 0, 89 · ln(2) · m · NA · (E2 − E1 − E3)
+M (40K) · t1/2
+Calculer sa valeur. (0,75)
+EXERCICE 3 : Utilisation des ultrasons pour vérifier la qualité
+d’une huile d’olive (1,75 points)
+La célérité des ondes ultrasonores dans une huile
+végétale permet de vérifier la pureté de cette huile.
+La valeur de la célérité vh des ultrasons dans une
+huile d’olive de bonne qualité se situe entre 1595 m ·
+s−1 et 1600 m · s−1.
+On effectue le protocole, schématisé sur la figure 1,
+de vérification de la qualité d’un échantillon d’huile
+d’olive commerciale.
+E R
+La sonde
+Huile
+Systeme d’acquisition
+Figure 1
+La sonde, jouant le rôle d’un émetteur et d’un récep-
+teur, émet à l’instant t = 0 un signal ultrasonore de
+courte durée dans la direction perpendiculaire à la
+surface libre de l’huile d’olive. Une partie de ce sig-
+nal est réfléchie au niveau de la surface libre, tandis
+que la deuxième partie se propage dans l’huile pour
+subir une réflexion au niveau du fond de l’huile.
+On visualise à l’aide d’un système d’acquisition infor-
+matisé le signal émis par l’émetteur E et les signaux
+réfléchis reçus par le récepteur R (Figure 2).
+Amplitude
+t
+0
+P0
+t1
+P1
+t2
+P2
+Figure 2
+Données :
+- La profondeur de l’huile d’olive commerciale dans le bécher : h = 10 cm ;
+- La distance entre la sonde et la surface libre de l’huile : d = 20 cm ;
+- t1 = 1168, 79 μs ; t2 = 1293, 90 μs.
+1- Choisir la proposition juste parmi les propositions suivantes : (0,5pt)
+a- L’onde ultrasonore se propage dans le vide avec la célérité v = 340 m · s−1.
+b- L’onde ultrasonore est une onde électromagnétique.
+Www.AdrarPhysic.Fr
+
+-- 5 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍل	ع	ا	ﺩ	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+6
+10
+c- Le retard temporel entre l’émission de l’onde par E et sa réception après réflexion au fond de
+l’huile est τ = t2 − t1.
+d- On peut réaliser le phénomène de diffraction avec des ondes ultrasonores.
+2- Exprimer va la célérité des ultrasons dans l’air en fonction de t1 et d. Calculer sa valeur.
+(0,5pt)
+3- Vérifier la qualité de l’huile d’olive étudiée. (0.75pt)
+Exercice 4 : Electricité (4,25 points)
+Les parties 1 et 2 sont indépendantes :
+Partie 1 : Détermination des caractéristiques d’une bobine et d’un condensateur
+Les bobines et les condensateurs sont utilisés dans la fabrication de nombreux appareils élec-
+triques et électroniques que nous utilisons dans notre vie quotidienne.
+Pour déterminer l’inductance L, la résistance r d’une bobine et la capacité C d’un condensateur,
+on réalise le montage expérimental schématisé sur la figure 1 comportant :
+- un générateur idéal de tension de force electromotrice
+E = 6 V ;
+- un conducteur ohmique de résistance R = 50 Ω ;
+- une bobine d’inductance L et de résistance r ;
+- un condensateur de capacité C initialement déchargé ;
+- les interrupteurs K1, K2 et K3.
+E
+R
+uR
+(L, r)
+C
+K1 K3
+K2
+Figure 1
+1- Détermination des caractéristiques de la bobine :
+Pour déterminer l’inductance L et la résistance r de la
+bobine, on ferme, à un instant choisi comme origine des
+dates (t = 0), les interrupteurs K1 et K3 (K2 étant ou-
+vert). Un système d’acquisition informatisé adéquat a
+permis de tracer la courbe duR
+dt = f (uR), uR étant la
+tension aux bornes du conducteur ohmique (Figure 2).
+1.1- Montrer que l’équation différentielle vérifiée par la
+tension uR s’écrit : duR
+dt = −R + r
+L · uR + R · E
+L . (0,5pt)
+1.2- En exploitant la courbe de la figure 2, vérifier que
+L = 60 mH et trouver la valeur de r. (0,5pt)
+uR(V)
+duR
+dt (103V · s−1)
+0 1.25 2.5
+1.25
+2.5
+Figure 2
+2- Les oscillations électriques libres dans le circuit RLC série :
+Www.AdrarPhysic.Fr
+
+-- 6 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍل	ع	ا	ﺩ	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+7
+10
+On ferme les interrupteurs K1 et K2 (K3
+étant ouvert), le condensateur se charge
+totalement sous la tension E, puis on ou-
+vre l’interrupteur K1. A un instant choisi
+comme nouvelle origine des dates (t = 0)
+on ferme K3.
+On visualise, à l’aide d’un disposi-
+tif adéquat, l’évolution de la tension
+uC (t) aux bornes du condensateur en
+fonction du temps, (T) étant la tan-
+gente à la courbe au point d’abscisse
+t1 = 4, 8 ms. (Figure 3)
+t (ms)
+uC (V)
+(T)
+0 2 4 6
+-4
+-2
+2
+4
+Figure 2
+2.1- Etablir l’équation différentielle vérifiée par la tension uC . (0,5pt)
+2.2- En assimilant la pseudo-période à la période propre du circuit, calculer la valeur de la capacité
+C. (0,25pt)
+2.3- Montrer que l’énergie totale stockée dans le circuit RLC à un instant t s’écrit sous la forme :
+ET (t) = 1
+2C
+[
+u2
+C + L · C ·
+(duC
+dt
+)2]
+. (0,25pt)
+2.4- Calculer ∆ET , la variation de l’énergie totale du circuit entre les instants t = 0 et t1 = 4, 8 ms,
+puis expliquer ce résultat. (0.75pt)
+2.5- On monte en série avec la bobine, le conducteur ohmique et le condensateur chargé initialement,
+un générateur délivrant une tension ug(t) = 60 · i(t).
+Choisir la proposition juste parmi les propositions suivantes : (0.5pt)
+a- le régime des oscillations obtenues est apériodique.
+b- l’énergie électrique emmagasinée dans le condensateur est constante au cours du temps.
+c- l’énergie totale emmagasinée dans le dipôle RLC est constante au cours du temps.
+d- l’énergie dissipée par effet Joule dans le circuit est nulle.
+Partie 2 : Oscillateur RLC en régime sinusoïdal forcé
+On réalise le montage expérimental schématisé dans la
+figure 4 comportant :
+- un condensateur de capacité C = 120 nF ;
+- une bobine d’inductance L = 2, 5 mH et de résistance
+négligeable ;
+- un conducteur ohmique de résistance R ;
+- un générateur GBF délivrant une tension alternative si-
+nusoïdale de fréquence N variable et d’amplitude con-
+stante Um = 100 V.
+R L C
+A
+GBF
+Figure 4
+Www.AdrarPhysic.Fr
+
+-- 7 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍل	ع	ا	ﺩ	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+8
+10
+Pour une fréquence N0, la valeur efficace de l’intensité du courant est maximale : I0 ' 1, 41 A.
+Pour les fréquences N1 = 6, 54 kHz et N2, cette intensité devient : Ief f ' 1 A.
+1- Déterminer N0. (0,25pt)
+2- Vérifier que N1 et N2 délimitent la bande passante à -3dB. (0,25pt)
+3- Déterminer la valeur de N2 sachant que la valeur du facteur de qualité de ce circuit est :
+Q = 1, 44. (0,25pt)
+4- Calculer la valeur de R. (0,25pt)
+Exercice 4 : La mécanique (5,25 points)
+Les parties 1 et 2 sont indépendantes :
+Partie 1 : Mouvement d’un ballon de basket-ball
+Lors d’un match de basket-ball, pour marquer un panier, un joueur doit faire passer le centre
+G du ballon par le centre C de l’arceau situé dans un plan horizontal à une hauteur h = 3, 05 m
+du sol.
+D’un point A de l’axe (O; #–
+k ) situé à une hauteur H = 2 m de la surface de la Terre, un
+basketteur, sans adversaire, lance le ballon à un instant pris comme origine des dates (t = 0),
+avec une vitesse #–v 0 contenue dans le plan (O; #–
+i ; #–
+k ) et faisant un angle α = 45◦ avec un plan
+horizontal. Le plan (O; #–
+i ; #–
+k ) est un plan vertical contenant les points A et C. (Figure 1)
+On étudie le mouvement du centre G du ballon dans
+un référentiel terrestre supposé galiléen et on repère
+à tout instant sa position par les coordonnées x et z
+dans le repère R(O; #–
+i ; #–
+k ).
+On néglige les actions de l’air.
+Données :
+- L’intensité de pesanteur : g = 9, 8 m · s−2 ;
+- Le rayon du ballon : R = 12, 4 cm.
+O
+x
+#–
+i
+z
+#–
+k
+A
+−	→v0
+α
+H
+h
+C
+L’arceau
+Figure 1
+1- Etablir l’équation littérale de la trajectoire du centre G du ballon. (0,5pt)
+2- Les verticales passant par A et C sont distantes de D = 6, 75 m. Trouver la valeur de v0 pour
+que le panier soit réussi. (0,5pt)
+3- Calculer la durée du trajet effectué par le centre G du point A au point C. (0,5pt)
+4- Voulant faire dévier le ballon, un adversaire, situé à d = 0, 90 m du tireur, saute verticalement
+en levant les bras. La hauteur, par rapport au sol, atteinte par les bouts de ses doigts à l’instant
+où le ballon passe au-dessus de sa tête est : H′ = 2, 70 m.
+Vérifier si le panier est réussi. (0,5pt)
+Www.AdrarPhysic.Fr
+
+-- 8 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍل	ع	ا	ﺩ	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+9
+10
+Partie 2 : Mouvement d’un système mécanique
+On étudie, dans cette partie, le mouvement d’un oscillateur mécanique horizontal modélisé par
+un système (solide-ressort) constitué d’un solide (S) de masse m = 100 g de centre d’inertie G
+et d’un ressort à spires non jointives de masse négligeable et de raideur K = 400 N · m−1.
+On fixe l’une des extrémités du ressort à un support et on accroche à l’autre extrémité le solide
+(S) qui peut glisser sans frottements sur le plan horizontal (P ).
+On étudie le mouvement de G dans un repère R(O; #–
+i ) lié à un référentiel terrestre considéré
+galiléen.
+On repère la position de G à un instant t par son abscisse
+x sur l’axe (O; #–
+i ). A l’équilibre, l’abscisse de G est nulle
+(Figure 2).
+On prend g = 10 m · s−2 et π2 = 10.
+(P)
+G
+(S)
+X	O #–
+i x
+Figure 2
+1- On comprime le ressort à partir de la position d’équilibre de (S) d’une distance a = 5 cm et on
+le libère sans vitesse initiale à un instant considéré comme origine des dates (t = 0).
+1.1- En appliquant la deuxième loi de Newton, établir l’équation différentielle vérifiée par l’abscisse
+x du centre G. (0,25pt)
+1.2- La solution de l’équation différentielle s’écrit : x(t) = Xm · cos(2πN0 · t + ϕ), N0 étant la
+fréquence propre de l’oscillateur. Déterminer la valeur de N0 et celle de ϕ. (0,5pt)
+1.3- Déterminer la valeur de la vitesse v1 de G lors de son premier passage par la position d’équilibre.
+(0,25pt)
+2- On comprime à nouveau le ressort à partir de la position d’équilibre de (S) d’une distance
+a = 5 cm, puis on place contre le solide (S) un solide (S’) de centre d’inertie G’ et de masse
+m′ = 200 g (Figure 3).
+(P)
+G
+G′
+(S)
+(S’)
+X	O #–
+i
+C D
+Figure 3
+On libère le système {ressort, (S), (S’)} sans vitesse initiale à un instant considéré comme
+nouvelle origine des dates t = 0.
+Tant que (S’) reste en contact avec (S), ils ont le même mouvement.
+2.1- Le solide (S’) se sépare de (S) lors de son premier passage par la position d’équilibre. Expliquer.
+(0,25pt)
+2.2- Trouver l’expression de v′
+0 la vitesse de G’ à l’instant où (S’) se sépare de (S) en fonction de a,
+m′, m et K. (0,25pt)
+2.3- Entre les positions C et D, (S’) glisse avec frottements sur le plan (P). (Figure 3)
+On note #–
+RT et #–
+RN respectivement les composantes tangentielle et normale de l’action du plan
+(P) sur (S’), avec RT = μ · RN . Le coefficient de frottement solide est μ = 0, 5.
+2.3.1- Déterminer, en utilisant la deuxième loi de Newton, l’intensité RT . (0,5pt)
+Www.AdrarPhysic.Fr
+
+-- 9 of 10 --
+
+β
+ﺍ	ل	ا	م	ت	ح	ا	ن	ﺍل	و	ط	ن	ي	ﺍلم	و	ح	د	للب	ك	ال	و	ﺭ	يا	ـ	ﺍل	د	و	ﺭ	ﺓ	ﺍل	ع	ا	ﺩ	ي	ة	6	2	0	2	ـ	ﺍلم	و	ض	و	ﻉ
+م	ا	ﺩ	ﺓ	ﺍل	ف	ي	ز	يا	ﺀ	و	ﺍلـ	ك	ي	م	يا	ﺀ	-	ش	ع	ب	ة	ﺍل	ع	ل	و	م	ﺍلر	يا	ض	ي	ة	(	ﺃ	)	و	(	ﺏ	)	-	خ	يا	ﺭ	ف	ر	ن	س	ي	ة
+NS 30F
+ﺍل	ص	ف	ح	ة
+10
+10
+2.3.2- Etablir l’équation horaire du mouvement de G’ dans le repère R′(C; #–
+i ). On prend comme
+nouvelle origine des dates t = 0, l’instant où G’ passe par C avec la vitesse vC = v′
+0. (0,5pt)
+2.3.3- Soient d = CD et a′ la distance avec laquelle on doit comprimer le ressort pour que G’ arrive
+en D avec une vitesse nulle.
+Montrer que l’expression de a′ s’écrit : a′ =
+√2RT · d · (m + m′)
+K · m′ .
+Calculer a′ sachant que d = 45 cm. (0,75pt)
+Typesetted by Pr. Mohammed BOUZAID
+Www.AdrarPhysic.Fr
+
+-- 10 of 10 --
+
