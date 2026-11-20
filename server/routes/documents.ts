@@ -65,14 +65,18 @@ function resolveDocumentFilePath(nameOrRelativePath: string): string | null {
     return resolved;
   }
 
-  // 2. Recherche par nom de base dans les sous-dossiers PC/SM (examens, series, cours, cadres) ou racine
+  // 2. Recherche par nom de base dans les sous-dossiers PC/SM (examens, series/enonces, series/corriges, cours, cadres) ou racine
   const baseName = path.basename(clean);
   const candidates = [
     path.join(DOCS_DIR, 'PC', 'examens', baseName),
+    path.join(DOCS_DIR, 'PC', 'series', 'enonces', baseName),
+    path.join(DOCS_DIR, 'PC', 'series', 'corriges', baseName),
     path.join(DOCS_DIR, 'PC', 'series', baseName),
     path.join(DOCS_DIR, 'PC', 'cours', baseName),
     path.join(DOCS_DIR, 'PC', 'cadres', baseName),
     path.join(DOCS_DIR, 'SM', 'examens', baseName),
+    path.join(DOCS_DIR, 'SM', 'series', 'enonces', baseName),
+    path.join(DOCS_DIR, 'SM', 'series', 'corriges', baseName),
     path.join(DOCS_DIR, 'SM', 'series', baseName),
     path.join(DOCS_DIR, 'SM', 'cours', baseName),
     path.join(DOCS_DIR, 'SM', 'cadres', baseName),

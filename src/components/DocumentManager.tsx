@@ -113,7 +113,7 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
   const [officialDocs, setOfficialDocs] = useState<DriveDoc[]>([]);
   const [isSyncingOfficial, setIsSyncingOfficial] = useState<boolean>(false);
   const [showOfficialList, setShowOfficialList] = useState<boolean>(false);
-  const [officialCategoryFilter, setOfficialCategoryFilter] = useState<'all' | 'examens' | 'series' | 'cours' | 'cadres'>('all');
+  const [officialCategoryFilter, setOfficialCategoryFilter] = useState<'all' | 'examens' | 'series' | 'corriges' | 'cours' | 'cadres'>('all');
 
   const importLocalFileInputRef = useRef<HTMLInputElement | null>(null);
   const localFileInputRef = useRef<HTMLInputElement | null>(null);
@@ -663,7 +663,8 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
                 {[
                   { id: 'all', label: 'Tous', count: officialDocs.length },
                   { id: 'examens', label: 'Examens Nationaux', count: officialDocs.filter((d) => d.category === 'examens').length },
-                  { id: 'series', label: 'Séries d\'exercices', count: officialDocs.filter((d) => d.category === 'series').length },
+                  { id: 'series', label: 'Séries (Énoncés)', count: officialDocs.filter((d) => d.category === 'series').length },
+                  { id: 'corriges', label: 'Corrigés & Solutions', count: officialDocs.filter((d) => d.category === 'corriges').length },
                   { id: 'cours', label: 'Cours & Fiches', count: officialDocs.filter((d) => d.category === 'cours').length },
                   { id: 'cadres', label: 'Cadres de Référence', count: officialDocs.filter((d) => d.category === 'cadres').length },
                 ].map((cat) => (
@@ -710,7 +711,12 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
                         )}
                         {doc.category === 'series' && (
                           <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/20 text-[9px] font-semibold shrink-0">
-                            Série
+                            Énoncé
+                          </span>
+                        )}
+                        {doc.category === 'corriges' && (
+                          <span className="px-1.5 py-0.2 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/20 text-[9px] font-semibold shrink-0">
+                            Corrigé
                           </span>
                         )}
                         {doc.category === 'cours' && (

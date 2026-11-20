@@ -17,7 +17,7 @@ interface CachedDocSection {
 
 export type DocumentBranch = 'PC' | 'SM' | 'ALL';
 
-export type DocumentCategory = 'examens' | 'series' | 'cours' | 'cadres' | 'autre';
+export type DocumentCategory = 'examens' | 'series' | 'corriges' | 'cours' | 'cadres' | 'autre';
 
 interface CachedDoc {
   name: string;
@@ -560,20 +560,42 @@ function resolveDocumentBranch(relativePath: string, fileName: string): Document
 
 /**
  * Détermine la catégorie d'un document selon son sous-dossier ou son nom.
- * Catégories : 'examens' | 'series' | 'cours' | 'cadres' | 'autre'
+ * Catégories : 'examens' | 'series' | 'corriges' | 'cours' | 'cadres' | 'autre'
  */
 export function resolveDocumentCategory(relativePath: string, fileName: string): DocumentCategory {
   const normPath = relativePath.replace(/\\/g, '/').toLowerCase();
+  const normName = fileName.toLowerCase();
+
+  // 1. Corrigés et solutions (dossier corriges/ ou motif corrige/solution)
+  if (
+    normPath.includes('/corriges/') ||
+    normPath.startsWith('corriges/') ||
+    /(?:^|[_\-\s])(corrige|solution|reponses)(?:[_\-\s.]|$)/i.test(normName)
+  ) {
+    return 'corriges';
+  }
+
+  // 2. Énoncés de séries d'exercices ou devoirs (dossier enonces/ ou series/)
+  if (
+    normPath.includes('/enonces/') ||
+    normPath.startsWith('enonces/') ||
+    normPath.includes('/series/') ||
+    normPath.startsWith('series/') ||
+    /(?:^|[_\-\s])(serie|enonce|devoir)(?:[_\-\s.]|$)/i.test(normName)
+  ) {
+    return 'series';
+  }
+
+  // 3. Autres sous-dossiers explicites
   if (normPath.includes('/examens/') || normPath.startsWith('examens/')) return 'examens';
-  if (normPath.includes('/series/') || normPath.startsWith('series/')) return 'series';
   if (normPath.includes('/cours/') || normPath.startsWith('cours/')) return 'cours';
   if (normPath.includes('/cadres/') || normPath.startsWith('cadres/')) return 'cadres';
 
-  const normName = fileName.toLowerCase();
+  // 4. Motifs dans le nom de fichier (fallback)
   if (/cadre[-_ ]?(?:de[-_ ]?)?reference/i.test(normName)) return 'cadres';
   if (/cours/i.test(normName)) return 'cours';
   if (/(?:^|[_\-\s])(20\d\d|sn\d*|sr\d*)/i.test(normName)) return 'examens';
-  if (/serie|devoir/i.test(normName)) return 'series';
+
   return 'autre';
 }
 
@@ -1086,9 +1108,18 @@ export async function searchLocalDocumentsDetailed(
               score += 35;
             }
           }
+          let header = `[Cadre Officiel 2BAC ${branchUpper} - ${doc.name}]`;
+          if (doc.category === 'corriges') {
+            header = `[CORRIGÉ / SOLUTION OFFICIELLE DU PROFESSEUR - DOCUMENT CONFIDENTIEL DE CONTRÔLE 2BAC ${branchUpper} - ${doc.name}]`;
+          } else if (doc.category === 'series') {
+            header = `[SÉRIE D'EXERCICES OFFICIELLE 2BAC ${branchUpper} - ${doc.name}]`;
+          } else if (doc.category === 'cours') {
+            header = `[COURS DU PROGRAMME 2BAC ${branchUpper} - ${doc.name}]`;
+          }
+
           matchedSnippets.push({
             score,
-            text: `[Cadre Officiel 2BAC ${branchUpper} - ${doc.name}]\n${sec.raw}`,
+            text: `${header}\n${sec.raw}`,
           });
         }
       }

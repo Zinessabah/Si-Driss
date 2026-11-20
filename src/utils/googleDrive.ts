@@ -21,7 +21,7 @@ export interface DriveDoc {
   downloadUrl?: string;
   branch: 'PC' | 'SM';
   relativePath?: string;
-  category?: 'examens' | 'series' | 'cours' | 'cadres' | 'autre';
+  category?: 'examens' | 'series' | 'corriges' | 'cours' | 'cadres' | 'autre';
   preview?: string;
   hasVisuals?: boolean;
 }
