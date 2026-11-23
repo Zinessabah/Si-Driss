@@ -61,7 +61,7 @@ function migrateLegacyGeminiKey(): void {
     if (!cleaned) return;
     localStorage.setItem(
       NEW_STORAGE_KEY,
-      JSON.stringify({ provider: 'gemini', apiKey: cleaned, model: 'gemini-3.5-flash-lite', baseUrl: '' })
+      JSON.stringify({ provider: 'gemini', apiKey: cleaned, model: 'gemini-2.5-flash', baseUrl: '' })
     );
   } catch {
     /* stockage indisponible */
@@ -124,46 +124,66 @@ function getInitialConfig(): AIProviderConfig {
     if (stored) {
       const parsed = JSON.parse(stored);
       if (parsed && parsed.provider) {
-        // Modèles Gemini retirés ou d'une génération antérieure → modèle rapide par défaut.
-        // gemini-3.8-flash et gemini-flash-latest sont des IDs publics ACTUELS et valides (M6).
-        const deprecatedGemini = new Set([
-          'gemini-2.5-flash',
-          'gemini-2.5-pro',
-          'gemini-2.5-flash-lite',
-          'gemini-2.0-flash',
-          'gemini-2.0-flash-lite',
-          'gemini-1.5-flash',
-          'gemini-1.5-pro',
+        // Hallucinated or non-existent Gemini models remapped to standard 2.5 Flash
+        const invalidGemini = new Set([
+          'gemini-3.5-flash-lite',
+          'gemini-3.8-flash',
+          'gemini-3.6-flash',
+          'gemini-3.1-flash-lite',
+          'gemini-3-flash-preview',
         ]);
-        // Anciens noms DeepSeek (ère V3/R1) → catalogue actuel V4
-        const legacyDeepSeek: Record<string, string> = {
-          'deepseek-chat': 'deepseek-flash',
-          'deepseek-reasoner': 'deepseek-flash',
+        // Hallucinated DeepSeek names remapped to real models
+        const deprecatedDeepSeek: Record<string, string> = {
+          'deepseek-flash': 'deepseek-chat',
+          'deepseek-v4-pro': 'deepseek-reasoner',
         };
+
         let effectiveModel = parsed.model || getProviderDef(parsed.provider).defaultModel;
-        if (parsed.provider === 'gemini' && deprecatedGemini.has(effectiveModel)) {
-          effectiveModel = 'gemini-3.5-flash-lite';
-        } else if (parsed.provider === 'deepseek' && legacyDeepSeek[effectiveModel]) {
-          effectiveModel = legacyDeepSeek[effectiveModel];
+        let changed = false;
+
+        if (parsed.provider === 'gemini') {
+          if (invalidGemini.has(effectiveModel) || !effectiveModel.startsWith('gemini-')) {
+            effectiveModel = 'gemini-2.5-flash';
+            changed = true;
+          }
+        } else if (parsed.provider === 'deepseek') {
+          if (deprecatedDeepSeek[effectiveModel]) {
+            effectiveModel = deprecatedDeepSeek[effectiveModel];
+            changed = true;
+          } else if (effectiveModel !== 'deepseek-chat' && effectiveModel !== 'deepseek-reasoner') {
+            effectiveModel = 'deepseek-chat';
+            changed = true;
+          }
+        } else if (parsed.provider === 'openrouter' && effectiveModel === 'google/gemini-3.8-flash') {
+          effectiveModel = 'google/gemini-2.5-flash';
+          changed = true;
         }
-        return {
+
+        const newConfig: AIProviderConfig = {
           provider: parsed.provider,
           apiKey: sanitizeKeyString(parsed.apiKey || ''),
           model: effectiveModel,
           baseUrl: parsed.baseUrl || getProviderDef(parsed.provider).defaultBaseUrl || '',
         };
+
+        if (changed) {
+          try {
+            localStorage.setItem(NEW_STORAGE_KEY, JSON.stringify(newConfig));
+          } catch {}
+        }
+
+        return newConfig;
       }
     }
-
   } catch (err) {
     console.warn('Erreur lecture configuration IA locale:', err);
   }
 
-  // Default to Gemini with recommended fast model (gemini-3.5-flash-lite)
+  // Default to Gemini with recommended fast model (gemini-2.5-flash)
   return {
     provider: 'gemini',
     apiKey: '',
-    model: 'gemini-3.5-flash-lite',
+    model: 'gemini-2.5-flash',
     baseUrl: '',
   };
 }

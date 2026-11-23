@@ -50,9 +50,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
   const [selectedProvider, setSelectedProvider] = useState<AIProviderId>(config.provider || 'gemini');
   const [apiKeyInput, setApiKeyInput] = useState<string>(config.apiKey || '');
   const [selectedModel, setSelectedModel] = useState<string>(
-    config.model === 'gemini-2.5-flash' || config.model === 'gemini-3.8-flash'
-      ? 'gemini-3.5-flash-lite'
-      : config.model || 'gemini-3.5-flash-lite'
+    config.model || getProviderDef(config.provider || 'gemini').defaultModel
   );
   const [customModelInput, setCustomModelInput] = useState<string>('');
   const [isCustomModelActive, setIsCustomModelActive] = useState<boolean>(false);

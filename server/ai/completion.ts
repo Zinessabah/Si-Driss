@@ -150,18 +150,15 @@ async function fetchWithTransientRetry(
 
 /**
  * DeepSeek API specifics (api-docs.deepseek.com):
- * - temperature is clamped/ignored (thinking: 0.95–1.0; non-thinking: fixed 1.0) → don't send it
- * - thinking mode is ON by default (effort high); reasoning_effort=none disables it
- * - reasoning deltas stream as `reasoning_content` (ignored by our parser — only `content` is forwarded)
+ * - deepseek-chat supports standard OpenAI parameters.
+ * - deepseek-reasoner does NOT support temperature, top_p, etc. (must be stripped).
+ * - reasoning deltas stream as `reasoning_content` while final answer streams as `content`.
  */
 function applyDeepSeekParams(reqBody: any, config: ResolvedAIConfig): void {
   if (config.provider !== 'deepseek') return;
-  delete reqBody.temperature;
-  if (config.reasoningEffort) {
-    reqBody.reasoning_effort = config.reasoningEffort;
-    if (config.reasoningEffort === 'none') {
-      reqBody.thinking = { type: 'disabled' };
-    }
+  if (config.model === 'deepseek-reasoner') {
+    delete reqBody.temperature;
+    delete reqBody.top_p;
   }
 }
 

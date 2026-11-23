@@ -23,13 +23,13 @@ export function sanitizeApiKey(raw: string): string {
 }
 
 export const DEFAULT_MODELS: Record<SupportedProvider, string> = {
-  gemini: 'gemini-3.5-flash-lite',
+  gemini: 'gemini-2.5-flash',
   groq: 'llama-3.3-70b-versatile',
   openai: 'gpt-4o-mini',
   anthropic: 'claude-3-5-haiku-20241022',
-  deepseek: 'deepseek-flash',
+  deepseek: 'deepseek-chat',
   mistral: 'mistral-small-latest',
-  openrouter: 'google/gemini-3.8-flash',
+  openrouter: 'google/gemini-2.5-flash',
   custom: 'llama3.3',
 };
 
@@ -44,35 +44,28 @@ export const DEFAULT_BASE_URLS: Partial<Record<SupportedProvider, string>> = {
   custom: process.env.OLLAMA_BASE_URL || 'http://localhost:11434/v1',
 };
 
-// Legacy DeepSeek model names (V3/R1 era) remapped to the current catalog
+// Remap legacy / hallucinated DeepSeek model names to the official models (deepseek-chat / deepseek-reasoner)
 export const LEGACY_DEEPSEEK_MODELS: Record<string, string> = {
-  'deepseek-chat': 'deepseek-flash',
-  'deepseek-reasoner': 'deepseek-flash',
+  'deepseek-flash': 'deepseek-chat',
+  'deepseek-v4-pro': 'deepseek-reasoner',
 };
 
 const DEEPSEEK_REASONING_EFFORTS = new Set(['none', 'low', 'high', 'max', 'minimal', 'medium', 'xhigh']);
 
-// Fallback models for Gemini — stable public IDs verified against
-// ai.google.dev/gemini-api/docs/models (sub-second responsive models prioritized).
+// Fallback models for Gemini — stable public IDs verified against Google AI Studio
 export const GEMINI_FAST_MODELS = [
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
+];
+
+// Hallucinated or retired Gemini models silently rewritten to the standard default.
+const INVALID_OR_HALLUCINATED_GEMINI_MODELS = new Set([
   'gemini-3.5-flash-lite',
   'gemini-3.8-flash',
   'gemini-3.6-flash',
   'gemini-3.1-flash-lite',
-  'gemini-flash-latest',
-];
-
-// Retired or previous-generation Gemini models, silently rewritten to the fast default.
-// NOTE: gemini-3.8-flash and gemini-flash-latest are CURRENT stable public IDs and
-// must NOT be listed here (M6 : réconcilier blocklist et catalogue officiel).
-const DEPRECATED_OR_SLOW_GEMINI_MODELS = new Set([
-  'gemini-2.5-flash',
-  'gemini-2.5-pro',
-  'gemini-2.5-flash-lite',
-  'gemini-2.0-flash',
-  'gemini-2.0-flash-lite',
-  'gemini-1.5-flash',
-  'gemini-1.5-pro',
+  'gemini-3-flash-preview',
 ]);
 
 export interface ResolvedAIConfig {
@@ -171,13 +164,20 @@ export function resolveAIConfig(req: Request): ResolvedAIConfig {
   // Model
   const headerModel = (req.headers['x-ai-model'] as string) || '';
   const bodyModel = (req.body?.model as string) || '';
-  let model = headerModel || bodyModel || process.env.AI_MODEL || DEFAULT_MODELS[provider] || 'gemini-3.5-flash-lite';
-  if (provider === 'gemini' && (DEPRECATED_OR_SLOW_GEMINI_MODELS.has(model) || !model.startsWith('gemini-'))) {
-    model = 'gemini-3.5-flash-lite';
+  let model = headerModel || bodyModel || process.env.AI_MODEL || DEFAULT_MODELS[provider] || 'gemini-2.5-flash';
+  if (provider === 'gemini' && (INVALID_OR_HALLUCINATED_GEMINI_MODELS.has(model) || !model.startsWith('gemini-'))) {
+    model = 'gemini-2.5-flash';
   }
-  // Remap retired DeepSeek model names (V3/R1 era) to the current catalog
-  if (provider === 'deepseek' && LEGACY_DEEPSEEK_MODELS[model]) {
-    model = LEGACY_DEEPSEEK_MODELS[model];
+  // Remap retired / hallucinated DeepSeek model names (deepseek-flash -> deepseek-chat, deepseek-v4-pro -> deepseek-reasoner)
+  if (provider === 'deepseek') {
+    if (LEGACY_DEEPSEEK_MODELS[model]) {
+      model = LEGACY_DEEPSEEK_MODELS[model];
+    } else if (model !== 'deepseek-chat' && model !== 'deepseek-reasoner') {
+      model = 'deepseek-chat';
+    }
+  }
+  if (provider === 'openrouter' && model === 'google/gemini-3.8-flash') {
+    model = 'google/gemini-2.5-flash';
   }
 
   // DeepSeek thinking-mode effort control (header/body/env), validated against the API vocabulary
