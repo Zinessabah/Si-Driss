@@ -6,11 +6,25 @@ export function createAdminRouter(): Router {
   const router = Router();
 
   // Middleware CORS dédié aux routes d'administration
-  // Permet au dashboard externe (ouvert depuis file:// ou un domaine admin) de requêter l'API
+  // Autorise uniquement l'origine de l'application elle-même et les dashboards locaux (file://)
+  // Rejecter les requêtes cross-origin non autorisées (protection CSRF / abus métriques)
+  const ALLOWED_ADMIN_ORIGINS = new Set([
+    'https://si-driss.onrender.com',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+  ]);
+
   router.use('/admin', (req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    const origin = req.headers.origin || '';
+    // Autoriser : même origine (pas d'Origin header), file:// (Origin = 'null'), ou liste blanche
+    if (!origin || origin === 'null' || ALLOWED_ADMIN_ORIGINS.has(origin)) {
+      if (origin) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+      }
+    }
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-token, x-access-token');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Vary', 'Origin');
     if (req.method === 'OPTIONS') {
       return res.sendStatus(204);
     }
