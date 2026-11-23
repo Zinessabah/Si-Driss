@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { requireAdmin } from '../security';
-import { getAggregatedMetrics, recordSimulationEvent } from '../metrics';
+import { getAggregatedMetrics, recordSimulationEvent, resetMetrics, seedDemoMetrics } from '../metrics';
 
 export function createAdminRouter(): Router {
   const router = Router();
@@ -31,6 +31,22 @@ export function createAdminRouter(): Router {
     } catch (err: any) {
       console.error('[Admin] Erreur lors de la récupération des métriques:', err);
       return res.status(500).json({ error: 'Erreur interne de télémétrie.' });
+    }
+  });
+
+  /**
+   * POST /api/admin/metrics/reset
+   * Réinitialise les compteurs à 0 (ou restaure la démo si seedDemo=true).
+   * Protégé par x-admin-token.
+   */
+  router.post('/admin/metrics/reset', requireAdmin, (req, res) => {
+    try {
+      const seedDemo = Boolean(req.body?.seedDemo);
+      const metrics = seedDemo ? seedDemoMetrics() : resetMetrics(true);
+      return res.json({ ok: true, metrics: getAggregatedMetrics() });
+    } catch (err: any) {
+      console.error('[Admin] Erreur lors de la réinitialisation des métriques:', err);
+      return res.status(500).json({ error: 'Erreur lors de la réinitialisation.' });
     }
   });
 

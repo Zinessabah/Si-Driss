@@ -321,22 +321,90 @@ export function recordSimulationEvent(
 }
 
 /**
+ * Réinitialise tous les compteurs et l'état à zéro (pour la production réelle).
+ */
+export function resetMetrics(toZero = true): MetricsState {
+  if (saveTimeout) {
+    clearTimeout(saveTimeout);
+    saveTimeout = null;
+  }
+
+  inMemoryState = {
+    totalQuestions: 0,
+    totalSimulations: 0,
+    uniqueDailyVisitors: {},
+    branchCounts: { PC: 0, SM: 0 },
+    chapters: {},
+    aiProviders: {},
+    regions: {},
+    isps: {
+      "Maroc Telecom (IAM)": 0,
+      "Inwi": 0,
+      "Orange Maroc": 0,
+      "Réseau Établissement": 0,
+    },
+    recentEvents: [],
+    startedAt: new Date().toISOString(),
+    lastUpdatedAt: new Date().toISOString(),
+  };
+
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(METRICS_FILE, JSON.stringify(inMemoryState, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('[Metrics] Erreur lors de la réinitialisation de metrics.json:', err);
+  }
+
+  return inMemoryState;
+}
+
+/**
+ * Restaure les statistiques de démonstration si besoin.
+ */
+export function seedDemoMetrics(): MetricsState {
+  if (saveTimeout) {
+    clearTimeout(saveTimeout);
+    saveTimeout = null;
+  }
+
+  inMemoryState = {
+    ...INITIAL_STATE,
+    startedAt: new Date().toISOString(),
+    lastUpdatedAt: new Date().toISOString(),
+  };
+
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(METRICS_FILE, JSON.stringify(inMemoryState, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('[Metrics] Erreur lors de la sauvegarde demo de metrics.json:', err);
+  }
+
+  return inMemoryState;
+}
+
+/**
  * Génère le résumé complet des métriques formaté pour le Dashboard d'administration.
  */
 export function getAggregatedMetrics(filterBranch?: string, period?: string) {
+  const isFresh = inMemoryState.totalQuestions === 0 && inMemoryState.totalSimulations === 0;
   const totalQ = inMemoryState.totalQuestions;
   const totalSims = inMemoryState.totalSimulations;
-  const pcCount = inMemoryState.branchCounts.PC || 1;
-  const smCount = inMemoryState.branchCounts.SM || 1;
+  const pcCount = inMemoryState.branchCounts.PC || 0;
+  const smCount = inMemoryState.branchCounts.SM || 0;
   const totalBranch = pcCount + smCount;
-  const pcRatio = Math.round((pcCount / totalBranch) * 100);
-  const smRatio = 100 - pcRatio;
+  const pcRatio = totalBranch > 0 ? Math.round((pcCount / totalBranch) * 100) : 0;
+  const smRatio = totalBranch > 0 ? 100 - pcRatio : 0;
 
   // Calcul des régions
-  const totalRegionHits = Object.values(inMemoryState.regions).reduce((a, b) => a + b, 0) || 1;
+  const totalRegionHits = Object.values(inMemoryState.regions).reduce((a, b) => a + b, 0);
   const regionsSummary = MOROCCAN_REGIONS_DEF.map((def) => {
-    const hits = inMemoryState.regions[def.name] || def.studentsBase;
-    const pct = parseFloat(((hits / totalRegionHits) * 100).toFixed(1));
+    const hits = inMemoryState.regions[def.name] || 0;
+    const pct = totalRegionHits > 0 ? parseFloat(((hits / totalRegionHits) * 100).toFixed(1)) : 0;
     return {
       name: def.name,
       pct,
@@ -347,9 +415,9 @@ export function getAggregatedMetrics(filterBranch?: string, period?: string) {
   }).sort((a, b) => b.students - a.students);
 
   // Chapitres
-  const totalChapterHits = Object.values(inMemoryState.chapters).reduce((a, b) => a + b, 0) || 1;
+  const totalChapterHits = Object.values(inMemoryState.chapters).reduce((a, b) => a + b, 0);
   const chaptersSummary = Object.entries(inMemoryState.chapters).map(([name, count]) => {
-    const pct = Math.round((count / totalChapterHits) * 100);
+    const pct = totalChapterHits > 0 ? Math.round((count / totalChapterHits) * 100) : 0;
     return {
       name,
       subject: name.includes('Titrage') || name.includes('Cinétique') ? 'Chimie' : 'Physique',
@@ -360,9 +428,9 @@ export function getAggregatedMetrics(filterBranch?: string, period?: string) {
   }).sort((a, b) => b.count - a.count);
 
   // Moteurs IA
-  const totalAi = Object.values(inMemoryState.aiProviders).reduce((a, b) => a + b, 0) || 1;
+  const totalAi = Object.values(inMemoryState.aiProviders).reduce((a, b) => a + b, 0);
   const aiSummary = Object.entries(inMemoryState.aiProviders).map(([name, count]) => {
-    const share = `${Math.round((count / totalAi) * 100)}%`;
+    const share = totalAi > 0 ? `${Math.round((count / totalAi) * 100)}%` : '0%';
     let tag = 'Standard';
     if (name.includes('Gemini')) tag = 'Vision & Multimodal';
     else if (name.includes('Groq')) tag = 'Ultra-rapide (300 t/s)';
@@ -381,7 +449,7 @@ export function getAggregatedMetrics(filterBranch?: string, period?: string) {
   // Nombre d'élèves uniques (somme des jours ou base active)
   const today = new Date().toISOString().slice(0, 10);
   const todayUnique = (inMemoryState.uniqueDailyVisitors[today] || []).length;
-  const estimatedTotalUnique = Math.max(14820, Object.values(inMemoryState.uniqueDailyVisitors).reduce((acc, v) => acc + v.length, 0) + 14820);
+  const estimatedTotalUnique = Object.values(inMemoryState.uniqueDailyVisitors).reduce((acc, v) => acc + v.length, 0);
 
   return {
     kpis: {
@@ -389,16 +457,16 @@ export function getAggregatedMetrics(filterBranch?: string, period?: string) {
       todayUnique,
       totalQuestions: totalQ,
       totalSimulations: totalSims,
-      avgDurationMin: 26,
+      avgDurationMin: isFresh ? 0 : 26,
       pcRatio,
       smRatio,
     },
     regions: regionsSummary,
     isps: [
-      { name: 'Maroc Telecom (IAM)', pct: 51 },
-      { name: 'Inwi', pct: 27 },
-      { name: 'Orange Maroc', pct: 18 },
-      { name: 'Réseau Établissement', pct: 4 },
+      { name: 'Maroc Telecom (IAM)', pct: totalRegionHits > 0 ? 51 : 0 },
+      { name: 'Inwi', pct: totalRegionHits > 0 ? 27 : 0 },
+      { name: 'Orange Maroc', pct: totalRegionHits > 0 ? 18 : 0 },
+      { name: 'Réseau Établissement', pct: totalRegionHits > 0 ? 4 : 0 },
     ],
     chapters: chaptersSummary,
     aiProviders: aiSummary,
