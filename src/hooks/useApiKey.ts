@@ -132,10 +132,10 @@ function getInitialConfig(): AIProviderConfig {
           'gemini-3.1-flash-lite',
           'gemini-3-flash-preview',
         ]);
-        // Hallucinated DeepSeek names remapped to real models
-        const deprecatedDeepSeek: Record<string, string> = {
-          'deepseek-flash': 'deepseek-chat',
-          'deepseek-v4-pro': 'deepseek-reasoner',
+        // Legacy DeepSeek names remapped to current V4 lineup
+        const legacyDeepSeek: Record<string, string> = {
+          'deepseek-chat': 'deepseek-flash',
+          'deepseek-reasoner': 'deepseek-v4-pro',
         };
 
         let effectiveModel = parsed.model || getProviderDef(parsed.provider).defaultModel;
@@ -147,11 +147,11 @@ function getInitialConfig(): AIProviderConfig {
             changed = true;
           }
         } else if (parsed.provider === 'deepseek') {
-          if (deprecatedDeepSeek[effectiveModel]) {
-            effectiveModel = deprecatedDeepSeek[effectiveModel];
+          if (legacyDeepSeek[effectiveModel]) {
+            effectiveModel = legacyDeepSeek[effectiveModel];
             changed = true;
-          } else if (effectiveModel !== 'deepseek-chat' && effectiveModel !== 'deepseek-reasoner') {
-            effectiveModel = 'deepseek-chat';
+          } else if (effectiveModel !== 'deepseek-flash' && effectiveModel !== 'deepseek-v4-pro') {
+            effectiveModel = 'deepseek-flash';
             changed = true;
           }
         } else if (parsed.provider === 'openrouter' && effectiveModel === 'google/gemini-3.8-flash') {

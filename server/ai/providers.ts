@@ -27,7 +27,7 @@ export const DEFAULT_MODELS: Record<SupportedProvider, string> = {
   groq: 'llama-3.3-70b-versatile',
   openai: 'gpt-4o-mini',
   anthropic: 'claude-3-5-haiku-20241022',
-  deepseek: 'deepseek-chat',
+  deepseek: 'deepseek-flash',
   mistral: 'mistral-small-latest',
   openrouter: 'google/gemini-2.5-flash',
   custom: 'llama3.3',
@@ -44,10 +44,10 @@ export const DEFAULT_BASE_URLS: Partial<Record<SupportedProvider, string>> = {
   custom: process.env.OLLAMA_BASE_URL || 'http://localhost:11434/v1',
 };
 
-// Remap legacy / hallucinated DeepSeek model names to the official models (deepseek-chat / deepseek-reasoner)
+// Remap legacy DeepSeek V3/R1 model names to current V4 generation models
 export const LEGACY_DEEPSEEK_MODELS: Record<string, string> = {
-  'deepseek-flash': 'deepseek-chat',
-  'deepseek-v4-pro': 'deepseek-reasoner',
+  'deepseek-chat': 'deepseek-flash',
+  'deepseek-reasoner': 'deepseek-v4-pro',
 };
 
 const DEEPSEEK_REASONING_EFFORTS = new Set(['none', 'low', 'high', 'max', 'minimal', 'medium', 'xhigh']);
@@ -168,12 +168,12 @@ export function resolveAIConfig(req: Request): ResolvedAIConfig {
   if (provider === 'gemini' && (INVALID_OR_HALLUCINATED_GEMINI_MODELS.has(model) || !model.startsWith('gemini-'))) {
     model = 'gemini-2.5-flash';
   }
-  // Remap retired / hallucinated DeepSeek model names (deepseek-flash -> deepseek-chat, deepseek-v4-pro -> deepseek-reasoner)
+  // Remap retired DeepSeek V3/R1 models (deepseek-chat -> deepseek-flash, deepseek-reasoner -> deepseek-v4-pro)
   if (provider === 'deepseek') {
     if (LEGACY_DEEPSEEK_MODELS[model]) {
       model = LEGACY_DEEPSEEK_MODELS[model];
-    } else if (model !== 'deepseek-chat' && model !== 'deepseek-reasoner') {
-      model = 'deepseek-chat';
+    } else if (model !== 'deepseek-flash' && model !== 'deepseek-v4-pro') {
+      model = 'deepseek-flash';
     }
   }
   if (provider === 'openrouter' && model === 'google/gemini-3.8-flash') {

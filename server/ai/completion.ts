@@ -150,15 +150,16 @@ async function fetchWithTransientRetry(
 
 /**
  * DeepSeek API specifics (api-docs.deepseek.com):
- * - deepseek-chat supports standard OpenAI parameters.
- * - deepseek-reasoner does NOT support temperature, top_p, etc. (must be stripped).
+ * - deepseek-flash supports thinking mode (extra parameter thinking: { type: 'disabled' } / { type: 'enabled' })
  * - reasoning deltas stream as `reasoning_content` while final answer streams as `content`.
  */
 function applyDeepSeekParams(reqBody: any, config: ResolvedAIConfig): void {
   if (config.provider !== 'deepseek') return;
-  if (config.model === 'deepseek-reasoner') {
-    delete reqBody.temperature;
-    delete reqBody.top_p;
+  if (config.reasoningEffort) {
+    reqBody.reasoning_effort = config.reasoningEffort;
+    if (config.reasoningEffort === 'none') {
+      reqBody.thinking = { type: 'disabled' };
+    }
   }
 }
 

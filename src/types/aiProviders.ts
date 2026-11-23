@@ -119,10 +119,10 @@ export const AI_PROVIDERS: ProviderDefinition[] = [
   {
     id: 'deepseek',
     name: 'DeepSeek',
-    tagline: 'DeepSeek officiel : performances de pointe et prix imbattable',
+    tagline: 'DeepSeek V4 officiel : mode Thinking, précision STEM et prix imbattable',
     badge: 'Performant & Économique',
     badgeColor: 'blue',
-    defaultModel: 'deepseek-chat',
+    defaultModel: 'deepseek-flash',
     defaultBaseUrl: 'https://api.deepseek.com',
     keyHelp: 'Clé issue de platform.deepseek.com.',
     keyUrl: 'https://platform.deepseek.com/api_keys',
@@ -130,8 +130,8 @@ export const AI_PROVIDERS: ProviderDefinition[] = [
     requiresKey: true,
     freeTier: false,
     models: [
-      { id: 'deepseek-chat', name: 'DeepSeek Chat (V3)', tag: 'Recommandé', description: 'Modèle DeepSeek-V3 ultra-rapide, précis et économique' },
-      { id: 'deepseek-reasoner', name: 'DeepSeek Reasoner (R1)', tag: 'Raisonnement R1', description: 'Chaîne de pensée détaillée pas-à-pas pour les démonstrations difficiles' },
+      { id: 'deepseek-flash', name: 'DeepSeek Flash (V4.1)', tag: 'Recommandé', description: 'Rapide, multimodal et précis — avec mode Thinking activé' },
+      { id: 'deepseek-v4-pro', name: 'DeepSeek V4 Pro', tag: 'Raisonnement Élite', description: 'Démonstrations complètes pas-à-pas pour les problèmes difficiles' },
     ],
   },
   {
