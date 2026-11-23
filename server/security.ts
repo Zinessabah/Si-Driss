@@ -66,7 +66,7 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction) {
     }
     return next();
   }
-  const provided = String(req.headers['x-admin-token'] || '');
+  const provided = String(req.headers['x-admin-token'] || '').trim().replace(/^["'`]+|["'`]+$/g, '');
   if (safeTokenEqual(provided, ADMIN_TOKEN)) return next();
   return res.status(401).json({ error: 'Jeton administrateur requis (en-tête x-admin-token).' });
 }

@@ -28,7 +28,7 @@ if (!fs.existsSync(DOCS_DIR)) {
 export const ACCESS_TOKEN = (process.env.SI_DRISS_ACCESS_TOKEN || '').trim();
 
 /** Jeton admin requis pour téléverser/supprimer des documents du programme. */
-export const ADMIN_TOKEN = (process.env.ADMIN_TOKEN || '').trim();
+export const ADMIN_TOKEN = (process.env.ADMIN_TOKEN || '').trim().replace(/^["'`]+|["'`]+$/g, '');
 
 /** Liens ou identifiants des 2 dossiers Google Drive publics officiels (PC & SM) */
 export const GOOGLE_DRIVE_FOLDER_PC = (process.env.GOOGLE_DRIVE_FOLDER_PC || '').trim();
