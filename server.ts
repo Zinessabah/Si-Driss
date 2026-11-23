@@ -7,6 +7,7 @@ import { PORT, ROOT_DIR, DOCS_DIR } from './server/config';
 import { apiLimiter, accessGate } from './server/security';
 import { createAiRouter } from './server/routes/ai';
 import { createDocumentsRouter } from './server/routes/documents';
+import { createAdminRouter } from './server/routes/admin';
 
 // NOTE (Architecture) : ce fichier n'est plus qu'un point d'entrée. La logique vit
 // dans server/ : config (env), security (rate limit + jetons), ai/ (fournisseurs,
@@ -29,6 +30,7 @@ app.use('/api/', accessGate);
 // Routes API
 app.use('/api', createAiRouter());
 app.use('/api', createDocumentsRouter());
+app.use('/api', createAdminRouter());
 
 // Toute route /api/* inconnue doit répondre en JSON 404 — jamais la SPA en 200.
 app.use('/api', (_req, res) => {

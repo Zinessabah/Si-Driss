@@ -21,7 +21,7 @@ export const apiLimiter = rateLimit({
   limit: 300,
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => req.path === '/documents/sync/status' || req.path === '/rag/status' || req.path === '/ai-status',
+  skip: (req) => req.path === '/documents/sync/status' || req.path === '/rag/status' || req.path === '/ai-status' || req.path.startsWith('/admin'),
   message: RATE_LIMIT_MSG,
 });
 
@@ -45,7 +45,7 @@ export const documentMutationLimiter = rateLimit({
  * de statut) exigent l'en-tête x-access-token quand SI_DRISS_ACCESS_TOKEN est défini. */
 export function accessGate(req: Request, res: Response, next: NextFunction) {
   if (!ACCESS_TOKEN) return next();
-  if (req.path === '/ai-status') return next();
+  if (req.path === '/ai-status' || req.path.startsWith('/admin')) return next();
   const provided = String(req.headers['x-access-token'] || '');
   if (safeTokenEqual(provided, ACCESS_TOKEN)) return next();
   return res.status(401).json({

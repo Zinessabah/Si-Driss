@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { validateKeyLimiter } from '../security';
+import { recordChatEvent } from '../metrics';
 import {
   DEFAULT_BASE_URLS,
   DEFAULT_MODELS,
@@ -316,6 +317,16 @@ router.post('/chat/stream', async (req, res) => {
       isScannedPdf,
     });
 
+    // Enregistrement télémétrique anonymisé pour le dashboard admin
+    recordChatEvent(req, {
+      branch,
+      provider: aiConfig.provider,
+      model: aiConfig.model,
+      userText: lastUserText,
+      mode,
+      ragStatus: officialSource?.isPdf ? 'Document Officiel' : matchedDocs ? 'RAG Indexé' : 'Conforme Cadre',
+    });
+
     // Setup SSE headers
     res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
     res.setHeader('Cache-Control', 'no-cache, no-transform');
@@ -398,6 +409,16 @@ router.post('/chat', async (req, res) => {
     const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context, {
       hasOfficialPdf: Boolean(officialSource?.isPdf),
       isScannedPdf,
+    });
+
+    // Enregistrement télémétrique anonymisé pour le dashboard admin
+    recordChatEvent(req, {
+      branch,
+      provider: aiConfig.provider,
+      model: aiConfig.model,
+      userText: lastUserText,
+      mode,
+      ragStatus: officialSource?.isPdf ? 'Document Officiel' : matchedDocs ? 'RAG Indexé' : 'Conforme Cadre',
     });
 
     const { text, model } = await generateUnifiedCompletion(aiConfig, enrichedMessages, fullInstruction, false);
