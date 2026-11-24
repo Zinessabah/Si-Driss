@@ -156,11 +156,11 @@ export async function extractVisualDataFromPdfDetailed(
   const ai = new GoogleGenAI({
     apiKey: cleanKey,
     httpOptions: {
-      headers: { 'User-Agent': 'si-driss-universal' },
+      headers: { 'User-Agent': 'aistudio-build' },
     },
   });
 
-  const candidateModels = Array.from(new Set([...GEMINI_FAST_MODELS, 'gemini-flash-latest']));
+  const candidateModels = Array.from(new Set(GEMINI_FAST_MODELS));
   let retried429 = false;
   let lastTransientMsg = '';
 
@@ -187,7 +187,7 @@ export async function extractVisualDataFromPdfDetailed(
           },
         ],
         config: {
-          temperature: 0.1,
+          ...(!model.startsWith('gemini-4-') ? { temperature: 0.1 } : {}),
           abortSignal: AbortSignal.timeout(VISION_REQUEST_TIMEOUT_MS),
         },
       });

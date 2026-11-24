@@ -23,13 +23,13 @@ export function sanitizeApiKey(raw: string): string {
 }
 
 export const DEFAULT_MODELS: Record<SupportedProvider, string> = {
-  gemini: 'gemini-2.5-flash',
+  gemini: 'gemini-4-hydrogen',
   groq: 'llama-3.3-70b-versatile',
   openai: 'gpt-4o-mini',
   anthropic: 'claude-3-5-haiku-20241022',
   deepseek: 'deepseek-flash',
   mistral: 'mistral-small-latest',
-  openrouter: 'google/gemini-2.5-flash',
+  openrouter: 'google/gemini-3.8-flash',
   custom: 'llama3.3',
 };
 
@@ -52,20 +52,25 @@ export const LEGACY_DEEPSEEK_MODELS: Record<string, string> = {
 
 const DEEPSEEK_REASONING_EFFORTS = new Set(['none', 'low', 'high', 'max', 'minimal', 'medium', 'xhigh']);
 
-// Fallback models for Gemini — stable public IDs verified against Google AI Studio
+// Fallback models for Gemini — active public IDs (free-tier compatible)
 export const GEMINI_FAST_MODELS = [
-  'gemini-2.5-flash',
-  'gemini-2.0-flash',
-  'gemini-1.5-flash',
+  'gemini-4-hydrogen',
+  'gemini-3.8-flash',
+  'gemini-3.1-flash-lite',
 ];
 
-// Hallucinated or retired Gemini models silently rewritten to the standard default.
-const INVALID_OR_HALLUCINATED_GEMINI_MODELS = new Set([
-  'gemini-3.5-flash-lite',
-  'gemini-3.8-flash',
-  'gemini-3.6-flash',
-  'gemini-3.1-flash-lite',
-  'gemini-3-flash-preview',
+// Retired or unsupported Gemini models silently rewritten to the active default.
+const RETIRED_GEMINI_MODELS = new Set([
+  'gemini-2.5-flash',
+  'gemini-2.5-pro',
+  'gemini-2.5-flash-lite',
+  'gemini-2.0-flash',
+  'gemini-2.0-pro',
+  'gemini-2.0-flash-lite',
+  'gemini-2.0-flash-thinking',
+  'gemini-1.5-flash',
+  'gemini-1.5-pro',
+  'gemini-pro',
 ]);
 
 export interface ResolvedAIConfig {
@@ -164,9 +169,9 @@ export function resolveAIConfig(req: Request): ResolvedAIConfig {
   // Model
   const headerModel = (req.headers['x-ai-model'] as string) || '';
   const bodyModel = (req.body?.model as string) || '';
-  let model = headerModel || bodyModel || process.env.AI_MODEL || DEFAULT_MODELS[provider] || 'gemini-2.5-flash';
-  if (provider === 'gemini' && (INVALID_OR_HALLUCINATED_GEMINI_MODELS.has(model) || !model.startsWith('gemini-'))) {
-    model = 'gemini-2.5-flash';
+  let model = headerModel || bodyModel || process.env.AI_MODEL || DEFAULT_MODELS[provider] || 'gemini-4-hydrogen';
+  if (provider === 'gemini' && (RETIRED_GEMINI_MODELS.has(model) || !model.startsWith('gemini-'))) {
+    model = 'gemini-4-hydrogen';
   }
   // Remap retired DeepSeek V3/R1 models (deepseek-chat -> deepseek-flash, deepseek-reasoner -> deepseek-v4-pro)
   if (provider === 'deepseek') {
@@ -176,8 +181,8 @@ export function resolveAIConfig(req: Request): ResolvedAIConfig {
       model = 'deepseek-flash';
     }
   }
-  if (provider === 'openrouter' && model === 'google/gemini-3.8-flash') {
-    model = 'google/gemini-2.5-flash';
+  if (provider === 'openrouter' && model === 'google/gemini-2.5-flash') {
+    model = 'google/gemini-3.8-flash';
   }
 
   // DeepSeek thinking-mode effort control (header/body/env), validated against the API vocabulary

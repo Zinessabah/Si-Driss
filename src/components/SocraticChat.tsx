@@ -750,7 +750,13 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                   accumulated += parsed.text;
                   flushStreamedContent();
                 } else if (parsed.error) {
-                  accumulated = `⚠️ *Note du professeur* : ${parsed.error}`;
+                  let friendlyErr = String(parsed.error);
+                  if (friendlyErr.includes('503') || friendlyErr.includes('UNAVAILABLE') || friendlyErr.includes('high demand')) {
+                    friendlyErr = "Les serveurs de l'IA connaissent une forte affluence temporaire (Erreur 503). Veuillez patienter quelques secondes puis relancer votre question, lah yerdi 3lik !";
+                  } else if (friendlyErr.includes('429') || friendlyErr.includes('RESOURCE_EXHAUSTED')) {
+                    friendlyErr = "Limite de requêtes atteinte temporairement (Erreur 429). Patientez une minute avant de poser votre prochaine question.";
+                  }
+                  accumulated = `⚠️ *Note du professeur* : ${friendlyErr}`;
                   flushStreamedContent();
                 }
               } catch {}

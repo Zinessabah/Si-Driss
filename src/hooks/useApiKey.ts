@@ -61,7 +61,7 @@ function migrateLegacyGeminiKey(): void {
     if (!cleaned) return;
     localStorage.setItem(
       NEW_STORAGE_KEY,
-      JSON.stringify({ provider: 'gemini', apiKey: cleaned, model: 'gemini-2.5-flash', baseUrl: '' })
+      JSON.stringify({ provider: 'gemini', apiKey: cleaned, model: 'gemini-4-hydrogen', baseUrl: '' })
     );
   } catch {
     /* stockage indisponible */
@@ -124,13 +124,18 @@ function getInitialConfig(): AIProviderConfig {
     if (stored) {
       const parsed = JSON.parse(stored);
       if (parsed && parsed.provider) {
-        // Hallucinated or non-existent Gemini models remapped to standard 2.5 Flash
-        const invalidGemini = new Set([
-          'gemini-3.5-flash-lite',
-          'gemini-3.8-flash',
-          'gemini-3.6-flash',
-          'gemini-3.1-flash-lite',
-          'gemini-3-flash-preview',
+        // Retired Gemini models remapped automatically to active Gemini 4 Flash (Hydrogen)
+        const retiredGemini = new Set([
+          'gemini-2.5-flash',
+          'gemini-2.5-pro',
+          'gemini-2.5-flash-lite',
+          'gemini-2.0-flash',
+          'gemini-2.0-pro',
+          'gemini-2.0-flash-lite',
+          'gemini-2.0-flash-thinking',
+          'gemini-1.5-flash',
+          'gemini-1.5-pro',
+          'gemini-pro',
         ]);
         // Legacy DeepSeek names remapped to current V4 lineup
         const legacyDeepSeek: Record<string, string> = {
@@ -142,8 +147,8 @@ function getInitialConfig(): AIProviderConfig {
         let changed = false;
 
         if (parsed.provider === 'gemini') {
-          if (invalidGemini.has(effectiveModel) || !effectiveModel.startsWith('gemini-')) {
-            effectiveModel = 'gemini-2.5-flash';
+          if (retiredGemini.has(effectiveModel) || !effectiveModel.startsWith('gemini-')) {
+            effectiveModel = 'gemini-4-hydrogen';
             changed = true;
           }
         } else if (parsed.provider === 'deepseek') {
@@ -154,8 +159,8 @@ function getInitialConfig(): AIProviderConfig {
             effectiveModel = 'deepseek-flash';
             changed = true;
           }
-        } else if (parsed.provider === 'openrouter' && effectiveModel === 'google/gemini-3.8-flash') {
-          effectiveModel = 'google/gemini-2.5-flash';
+        } else if (parsed.provider === 'openrouter' && effectiveModel === 'google/gemini-2.5-flash') {
+          effectiveModel = 'google/gemini-3.8-flash';
           changed = true;
         }
 
@@ -179,11 +184,11 @@ function getInitialConfig(): AIProviderConfig {
     console.warn('Erreur lecture configuration IA locale:', err);
   }
 
-  // Default to Gemini with recommended fast model (gemini-2.5-flash)
+  // Default to Gemini with active fast model (gemini-4-hydrogen)
   return {
     provider: 'gemini',
     apiKey: '',
-    model: 'gemini-2.5-flash',
+    model: 'gemini-4-hydrogen',
     baseUrl: '',
   };
 }

@@ -185,7 +185,7 @@ export async function streamUnifiedChat(
     const ai = new GoogleGenAI({
       apiKey,
       httpOptions: {
-        headers: { 'User-Agent': 'si-driss-universal' },
+        headers: { 'User-Agent': 'aistudio-build' },
       },
     });
 
@@ -197,7 +197,7 @@ export async function streamUnifiedChat(
           contents,
           config: {
             systemInstruction,
-            temperature: 0.1,
+            ...(!mod.startsWith('gemini-4-') ? { temperature: 0.1 } : {}),
             abortSignal: upstreamSignal,
           },
         }),
@@ -333,7 +333,7 @@ export async function generateUnifiedCompletion(
     const ai = new GoogleGenAI({
       apiKey,
       httpOptions: {
-        headers: { 'User-Agent': 'si-driss-universal' },
+        headers: { 'User-Agent': 'aistudio-build' },
       },
     });
 
@@ -345,7 +345,7 @@ export async function generateUnifiedCompletion(
           contents,
           config: {
             systemInstruction,
-            temperature: 0.1,
+            ...(!mod.startsWith('gemini-4-') ? { temperature: 0.1 } : {}),
             responseMimeType: jsonMode ? 'application/json' : undefined,
           },
         }),
