@@ -4,6 +4,7 @@ import { ApiKeyStatusBadge } from './components/ApiKeyStatusBadge';
 import { PWAInstallButton } from './components/PWAInstallButton';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import { AndroidInstallModal } from './components/AndroidInstallModal';
+import { CloudUpdateBanner } from './components/CloudUpdateBanner';
 import { ChapterInfo } from './data/curriculum';
 import { TrapItem } from './data/pitfalls';
 import { useBranch } from './hooks/useBranch';
@@ -259,6 +260,9 @@ export default function App() {
             </div>
           </div>
         </header>
+
+        {/* Cloud Update Synchronization Banner */}
+        <CloudUpdateBanner />
 
         {/* CONTENT STAGE */}
         <main className="flex-1 flex flex-col overflow-hidden relative">

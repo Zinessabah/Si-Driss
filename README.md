@@ -40,11 +40,13 @@ npm install
 # 3. (Optionnel) Créer le fichier .env
 cp .env.example .env
 
-# 4. Lancer le serveur en mode développement
-npm run dev
+# 4. Lancer le serveur (via le script tout-en-un ou npm)
+./start.sh
+# ou : npm run dev
 ```
 
-L'application s'ouvre directement sur **`http://localhost:3000`** !
+L'application s'ouvre directement sur **`http://localhost:3000`** !  
+*À chaque lancement, l'application effectue un contrôle automatique de synchronisation avec le serveur Cloud de référence (`si-driss.onrender.com`) et propose une mise à jour instantanée si une version plus récente est disponible.*
 
 ---
 

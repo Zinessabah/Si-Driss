@@ -53,6 +53,43 @@ fi
 NPM_VERSION=$(npm -v)
 echo -e "${GREEN}✓ npm détecté : v${NPM_VERSION}${NC}"
 
+# 2.5. Contrôle de synchronisation avec le serveur Cloud (si-driss.onrender.com)
+echo -e "${BLUE}☁️  Contrôle de synchronisation avec le Cloud (si-driss.onrender.com)...${NC}"
+CLOUD_API="https://si-driss.onrender.com/api/version"
+LOCAL_COMMIT=""
+if command -v git >/dev/null 2>&1 && [ -d ".git" ]; then
+  LOCAL_COMMIT=$(git rev-parse --short HEAD 2>/dev/null || true)
+fi
+
+CLOUD_INFO=$(curl -s --connect-timeout 2 -m 4 "$CLOUD_API" 2>/dev/null || true)
+if [ -n "$CLOUD_INFO" ] && echo "$CLOUD_INFO" | grep -q '"commit"'; then
+  CLOUD_COMMIT=$(echo "$CLOUD_INFO" | grep -o '"commit":"[^"]*"' | cut -d'"' -f4 | cut -c1-7)
+  CLOUD_DATE=$(echo "$CLOUD_INFO" | grep -o '"commitDate":"[^"]*"' | cut -d'"' -f4)
+  
+  if [ -n "$LOCAL_COMMIT" ] && [ -n "$CLOUD_COMMIT" ]; then
+    if [ "$LOCAL_COMMIT" = "$CLOUD_COMMIT" ]; then
+      echo -e "${GREEN}✓ Code local à jour et synchronisé avec le Cloud (commit ${LOCAL_COMMIT}).${NC}"
+    else
+      echo -e "${YELLOW}⚡ Une mise à jour est disponible sur le serveur Cloud !${NC}"
+      echo -e "   • Local : ${BOLD}${LOCAL_COMMIT}${NC}"
+      echo -e "   • Cloud : ${BOLD}${CLOUD_COMMIT}${NC} (${CLOUD_DATE})"
+      printf "👉 Voulez-vous synchroniser votre code local maintenant (git pull) ? (O/n) : "
+      read -t 10 -r do_update || do_update="O"
+      echo ""
+      if [[ "$do_update" =~ ^[OoYy]$ ]] || [ -z "$do_update" ]; then
+        echo -e "${BLUE}📥 Téléchargement de la dernière version...${NC}"
+        git pull origin main || echo -e "${YELLOW}⚠️ Impossible d'exécuter git pull automatiquement.${NC}"
+        npm install --prefer-offline --no-audit || true
+        echo -e "${GREEN}✓ Synchronisation terminée.${NC}"
+      else
+        echo -e "${YELLOW}Poursuite du démarrage avec la version locale actuelle.${NC}"
+      fi
+    fi
+  fi
+else
+  echo -e "${CYAN}ℹ️  Serveur cloud en attente ou hors-ligne (démarrage en mode autonome).${NC}"
+fi
+
 # 3. Vérification du fichier de configuration .env
 if [ ! -f ".env" ]; then
   if [ -f ".env.example" ]; then

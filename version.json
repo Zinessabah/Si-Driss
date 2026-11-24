@@ -1,0 +1,7 @@
+{
+  "version": "2.2.0",
+  "commit": "252bc18",
+  "commitDate": "2026-11-24T11:44:07Z",
+  "commitMessage": "fix(build): synchroniser package-lock.json sans résidus firebase et inclure les extractions RAG",
+  "buildTime": "2026-11-24T12:05:33.053Z"
+}

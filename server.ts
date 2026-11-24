@@ -8,6 +8,7 @@ import { apiLimiter, accessGate } from './server/security';
 import { createAiRouter } from './server/routes/ai';
 import { createDocumentsRouter } from './server/routes/documents';
 import { createAdminRouter } from './server/routes/admin';
+import { createVersionRouter } from './server/routes/version';
 
 // NOTE (Architecture) : ce fichier n'est plus qu'un point d'entrée. La logique vit
 // dans server/ : config (env), security (rate limit + jetons), ai/ (fournisseurs,
@@ -31,6 +32,7 @@ app.use('/api/', accessGate);
 app.use('/api', createAiRouter());
 app.use('/api', createDocumentsRouter());
 app.use('/api', createAdminRouter());
+app.use('/api', createVersionRouter());
 
 // Toute route /api/* inconnue doit répondre en JSON 404 — jamais la SPA en 200.
 app.use('/api', (_req, res) => {
@@ -81,6 +83,24 @@ async function startServer() {
     }).catch((err) => {
       console.warn('[DriveAutoSync] Impossible de démarrer le planificateur:', err);
     });
+
+    // Contrôle automatique de version locale vs Cloud (si-driss.onrender.com)
+    import('./server/version').then(async ({ checkCloudVersion, isCloudEnvironment }) => {
+      if (!isCloudEnvironment()) {
+        const check = await checkCloudVersion();
+        if (check.cloudReachable) {
+          if (check.upToDate) {
+            console.log(`☁️  Cloud Sync : Code local synchronisé avec si-driss.onrender.com (commit ${check.localCommit})`);
+          } else {
+            console.log(`⚠️  Cloud Sync : Mise à jour disponible sur le Cloud !`);
+            console.log(`    Local: ${check.localCommit} | Cloud: ${check.cloudCommit}`);
+            console.log(`    Pour mettre à jour : tapez 'git pull origin main' ou mettez à jour depuis l'interface.`);
+          }
+        } else {
+          console.log(`☁️  Cloud Sync : Serveur cloud non joignable (mode 100% local autonome).`);
+        }
+      }
+    }).catch(() => {});
   });
 }
 
