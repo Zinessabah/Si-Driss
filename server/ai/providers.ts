@@ -26,10 +26,10 @@ export const DEFAULT_MODELS: Record<SupportedProvider, string> = {
   gemini: 'gemini-4-hydrogen',
   groq: 'llama-3.3-70b-versatile',
   openai: 'gpt-4o-mini',
-  anthropic: 'claude-3-5-haiku-20241022',
+  anthropic: 'claude-3-7-sonnet-20250219',
   deepseek: 'deepseek-flash',
   mistral: 'mistral-small-latest',
-  openrouter: 'google/gemini-3.8-flash',
+  openrouter: 'google/gemini-4-carbon',
   custom: 'llama3.3',
 };
 
@@ -55,8 +55,11 @@ const DEEPSEEK_REASONING_EFFORTS = new Set(['none', 'low', 'high', 'max', 'minim
 // Fallback models for Gemini — active public IDs (free-tier compatible)
 export const GEMINI_FAST_MODELS = [
   'gemini-4-hydrogen',
+  'gemini-4-carbon',
   'gemini-3.8-flash',
+  'gemini-3.5-flash-lite',
   'gemini-3.1-flash-lite',
+  'gemini-flash-latest',
 ];
 
 // Retired or unsupported Gemini models silently rewritten to the active default.
