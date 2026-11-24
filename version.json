@@ -1,7 +1,7 @@
 {
   "version": "2.2.0",
-  "commit": "252bc18",
-  "commitDate": "2026-11-24T11:44:07Z",
-  "commitMessage": "fix(build): synchroniser package-lock.json sans résidus firebase et inclure les extractions RAG",
-  "buildTime": "2026-11-24T12:05:33.053Z"
+  "commit": "c7b7d9e",
+  "commitDate": "2026-11-24T12:05:48Z",
+  "commitMessage": "feat(sync): verification automatique de version locale vs serveur cloud si-driss.onrender.com",
+  "buildTime": "2026-11-24T12:39:31.716Z"
 }
