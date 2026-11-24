@@ -1,0 +1,135 @@
+1
+D. Zinessabah
+Série d’exercices sur le dipôle RC
+Exercice 1 :
+À l’aide d’un générateur de courant délivrant une intensité
+de courant constante I=12μA, on charge un condensateur de
+capacité C. Le graphe ci-contre représente la variation de la
+tension uc(t) aux bornes du condensateur en fonction du
+temps. Déterminer la valeur de C.
+Exercice 2 :
+Partie I :
+1. On réalise le montage suivant ci-contre :
+A l’instant t=0, on bascule l’interrupteur K à la position 1, le
+condensateur initialement déchargé se charge complétement
+après une durée très courte.
+1.1. Par application de la loi d’additivité des tensions,
+déterminer les équations différentielles que vérifient
+charge q(t), la tension uc(t), le courant i(t) et la
+tension uR(t).
+1.2. La solution des équations différentielles précédentes
+s’écrit sous la forme suivante : 𝐴. 𝑒−𝑡
+𝑚 + 𝐵, où A, B et
+m sont des constantes à déterminer pour chaque équation différentielle.
+1.3. Tracer, de façon qualitative, l’allure des courbes uc(t), q(t), i(t) et uR(t).
+À un instant t’ considéré comme origine des temps, on bascule l’interrupteur K vers la position 2. Le
+condensateur se décharge complétement pendant une durée très courte. Refaire les questions 1.1, 1.2 et
+1.3.
+Partie II :
+1. Monter que la constante du temps τ=R.C à une dimension temporelle.
+2. Montrer que 𝑡½ = 𝜏. 𝑙𝑛(2), où 𝑡½ est la durée nécessaire pour que la tension aux bornes du
+condensateur soit 𝐸
+2.
+3. Montrer que, lors de la charge ou la décharge d’un condensateur le régime permanent est atteint à
+l’instant t ≈ 5τ.
+Exercice 3 :
+Pour déterminer la capacité d’un condensateur
+on réalise le montage de la figure 1 qui est
+formé des éléments suivants :
+• Un générateur idéal de tension de force
+électromotrice E.
+• Un conducteur ohmique de résistance R.
+• Un condensateur déchargé de capacité C
+et un interrupteur K et des fils de
+connexions.
+
+-- 1 of 4 --
+
+2
+D. Zinessabah
+A l’instant t=0 on ferme l’interrupteur K et on suit par un dispositif convenable les variations de la
+tension appliquée aux bornes du condensateur en fonction du temps et on obtient la figure 2.
+1. Représenter sur la figure 1 dans la convention récepteur les tensions 𝒖C et 𝒖𝑹.
+2. Déterminer l’équation différentielle vérifié par la tension aux bornes du condensateur .
+3. Trouver les expressions de A et τ pour que l’expression 𝑢𝐶 = 𝐴 (1 − 𝑒−𝑡
+𝜏) soit solution de
+l’équation différentielle.
+4. Déterminer l’expression de la charge
+q et de l’intensité du courant i
+5. Par l’analyse dimensionnelle montrer que τ a une dimension temporelle.
+6. Trouver τ graphiquement et montrer que C=1mF.
+7. Calculer l’énergie électrique Ee stockée dans le condensateur dans le régime permanent.
+Exercice 4 :
+1. Les téléphones portables contiennent des résistors, des condensateurs, …. Cet exercice vise à
+déterminer la capacité d’un condensateur.
+On réalise un montage qui permet de charger un condensateur par
+un générateur idéal de force électromotrice E et de le décharger
+dans un conducteur ohmique de résistance R=2KΩ.
+Reproduire le montage expérimental.
+2. Montrer que l’équation différentielle lors de la décharge
+du condensateur est : 𝜏 𝑑𝑢𝑐
+𝑑𝑡 + 𝑢𝑐 = 0 en précisant l’expression
+de τ.
+3. Vérifier que l’équation 𝑢𝑐 = 𝐸. 𝑒−𝑡
+𝜏 est une solution de
+l’équation différentielle.
+4. Un logiciel approprié permet de tracer le graphe ci-contre
+de la fonction 𝑓(𝑡) = 𝑙𝑛(𝑢𝑐).
+4.1. Montrer que 𝑙𝑛(𝑢𝑐) = − 1
+𝜏 𝑡 + 𝑙𝑛(𝐸).
+4.2. Déterminer les valeurs de E et τ.
+4.3. Calculer la valeur de la capacité C.
+Exercice 5 :
+La minuterie est utilisée pour contrôler la consommation d’énergie dans les immeubles. C’est un appareil
+qui permet d’éteindre automatiquement les lampes des escaliers et couloirs après une durée
+préalablement ajustable.
+On vise à étudier le principe de fonctionnement d’une minuterie.
+La figure 1, représente une partie d’un circuit simplifié d’une minuterie, constitué de :
+• Un générateur idéal de tension, de force électromotrice E.
+• Un interrupteur K.
+
+-- 2 of 4 --
+
+3
+D. Zinessabah
+• Un conducteur ohmique de résistance R.
+• Un condensateur de capacité C.
+• Un bouton poussoir P qui joue le rôle d'un interrupteur. (Il est fermé seulement quand on
+appuie dessus).
+• Un composant électronique qui permet l'allumage de la lampe L tant que la tension uC aux
+bornes du condensateur est inférieure ou égale à une tension limite US.
+On admet que l’intensité du courant électrique à l’entrée du composant électronique reste nulle à
+tout instant.
+1. Étude du circuit RC :
+A l'instant initial (t = 0 s), le condensateur est déchargé. On ferme l'interrupteur K, le bouton poussoir
+P est relâché (Figure 1), le condensateur se charge progressivement à l’aide du générateur. On
+visualise l’évolution de la tension uC(t) aux bornes du condensateur à l’aide d’une interface
+informatique convenable.
+1-1- Montrer que la tension uC vérifie l'équation différentielle : 𝑢𝐶 + 𝑑𝑢𝐶
+𝑑𝑡 = 𝐸.
+1-2- Déterminer les expressions de A et τ, pour que l’équation horaire : 𝐴(1 − 𝑒−𝑡
+𝜏 ) soit solution
+de l’équation différentielle précédente.
+1-3- À l'aide d'une analyse dimensionnelle, montrer que τ est homogène à un temps.
+1-4- La figure 2, représente les variations de uC(t). Déterminer graphiquement les valeurs de A et
+τ, et déduire la valeur de la résistance R, sachant que la capacité du condensateur est :
+C=220μF.
+Figure 2
+2. Détermination de la durée de fonctionnement de la minuterie:
+La durée nécessaire pour qu’un habitant d’un l’immeuble arrive à la porte de sa
+maison est Δt = 80 s.
+2-1- Soit tS la date à laquelle la tension uC atteint la valeur limite US , exprimer tS en fonction de E,
+τ et US.
+2-2- Sachant que US = 15V, montrer que la lampe L s’éteint avant que l’habitant de l’immeuble
+n’arrive chez soi.
+2-3- Déterminer la valeur limite RS de la résistance du conducteur ohmique qui permettra à
+l’habitant d’arriver chez soi avant que la lampe s’éteigne. (On considère que les valeurs de C,
+E et US reste inchangées).
+
+-- 3 of 4 --
+
+4
+D. Zinessabah
+
+-- 4 of 4 --
+

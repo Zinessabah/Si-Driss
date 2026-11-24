@@ -1,0 +1,567 @@
+
+
+
+PROF :Zakaryae Chriki
+Matière: Physique
+Résumé N:6
+Niveaux: SM PC SVT
+Dipôôole RC
+1
+Dipôle RC : association série d’un conducteur ohmique de résistance R et d’un condensateur de capacité C
+1. Condensateur :
+Description.
+Un condensateur est un dipôle constitué de deux armatures métalliques parallèles,
+placées à des potentiels différents et séparées par un isolant ou un diélectrique.
+Relation charge-tension.
+La charge d’un condensateur, notée q, est liée à la tension U par la relation :
+q = C.U Avec :
+C : capacité du condensateur (F)
+q : charge du condensateur (C)
+U : tension (V)
+Capacité d’un condensateur :
+- Le coefficient de proportionnalité C est appelé capacité du condensateur.
+- Son unité est le Farad (F)
+- Autres unités du Farad
+Millifarad Microfarad Nanofarad Picofarad
+1mF=10-3F 1μF=10-6F 1nF=10-9F 1pF=10-12F
+Expression de l’intensité.
+Par définition, l’intensité du courant traversant un condensateur est la variation de la charge q au cours du
+temps.
+En adoptant la convention réceptrice pour ce dipôle, on obtient :
+Courant continu Courant variable
+𗐀 = Q
+Δt
+𱠀 = dq
+dt
+avec q=C.Uc d’où 𱠀 = 𕰀.ୢ ୙ ౙୢ
+୲
+2. Sens conventionnel du courant :
+Le sens positif (Conventionnel) du courant est toujours vers l’armature positive.
+3. Association des condensateurs :
+Association en parallèle
+2	+ C	1	C= C
+La capacité équivalente C du condensateur équivalent de l’association en parallèle de deux condensateurs est égale à la somme
+de leurs capacités C1 et C2.
+NB :
+st la	e	capacité	montés en parallèle, de	n	…C	3	, C	2	, C	1	C	capacités	de	s	condensateur	e plusieurs	d	équivalente C	La capacité
+i	C = ΣC	:	somme des capacités de chaque condensateur
+Interet de l’association :
+à la	ure	l’association en parallèle des condensateurs est d’obtenir une capacité équivalente supérie	: L’intérêt de	2	+ C	1	C= C
+2	C > C	et	1	C > C	.	plus grande d’entre elles
+Association en série :
+B
+i C1
+uAB
+C2
+A i B	Ceq
+uAB
+A
+u2	u1
+i
+C2
+uAB
+C1
+B A i B	Ceq
+uAB
+A
+
+-- 1 of 8 --
+
+2
+La capacité équivalente C du condensateur équivalent de l’association en série de deux condensateurs de capacités C1 et C2
+est telle que ૚
+۱ = ૚
+۱૚
++ ૚
+۱૛
+et 𕰀 = େభ.େమ
+େభ+େమ
+NB :
+La capacité équivalente C du condensateur équivalent de l’association en série des condensateurs de capacités C1, C2, C3 …Cn,
+montés en série, vérifie la relation : ଵ
+େ = ∑ ଵ
+େi
+= ଵ
+େభ
++ ଵ
+େమ
++ ଵ
+େయ
++ ⋯ … + ଵ
+େ౤
+Interet de l’association :
+𕰀 = େభ.େమ
+େభ+େమ
+: L’intérêt de l’association en parallèle des condensateurs est d’obtenir une capacité équivalente inferieure à la plus
+petite d’entre elles. C < C1 et C < C2
+4. Charge d’un condensateur :
+Montage de la charge :
+Equation différentielle :
+En appliquant la loi d’additivité des tensions UR + UC = E et les transitions 𚐀ୖ 𕀀 = 𕀀𙠀. 𱠀𕀀 = 𕀀𙠀. dq
+dt = 𕀀𙠀. 𕰀. d𚐀ୡ
+dt
+τn aboutit à l’équation différentielle vérifié par une variable donnée
+Variable la tension du condensateur Uc: ܃܋ + 𕀀۱ .܀. ܃܌܋
+ܜ܌ = ۳
+Variable la charge q: ܙ
+۱ + 𕀀܀. ܙ܌
+ܜ܌ = ۳ Ou ܙ + 𕀀۱ .܀. ܙ܌
+ܜ܌ = ۳. ۱
+Equation horaire :
+On considère Uc(t) comme variable et la solution de l’équation différentielle ܋܃ሺܜሻ 𕀀 = 𕀀ۯ. ܍−𕀀ܜ
+ૌ 𕀀 + 𕀀۰
+ Pour déterminer les constantes A ,B et ĸ , on remplace la solution et sa dérivée première dans
+l’équation différentielle
+𚐀cሺtሻ 𕀀 = 𕀀𕐀. e−𕀀t
+τ 𕀀 + 𕀀𕠀 et ሻܜሺ܋܃܌
+࢚ࢊ 𕀀 = 𕀀ۯ. ቀ− ૚
+󢐀ቁ . ܍−𕀀ܜ
+ૌ = − ۯ
+󢐀 ܍ .−𕀀ܜ
+ૌ𕀀𕀀
+𚐀ୡ + 𕀀𙠀. 𕰀.ୢ ୙ ౙୢ
+୲ = 𖐀 : équation différentielle vérifiée par Uc
+𕐀. e−𕀀t
+τ 𕀀 + 𕀀𕠀 + 𕀀𙠀. 𕰀. ቀ− ۯ
+󢐀 ܍ .−𕀀ܜ
+ૌቁ = 𖐀 et 𕐀. e−𕀀t
+τ 𕀀 + 𕀀𕠀 − 𕀀𙠀. 𕰀. 𕐀. ଵ
+τ . e−𕀀t
+τ = 𖐀
+donc ܍ .ۯ−𕀀ܜ
+ૌ 𕀀ቀ૚ − ۱ .܀. ૚
+ૌቁ + ۰ = ۳
+Par Egalité de deux fonctions polynomiales, l’équation est exacte si : B = E et ሺ૚ − ۱ .܀. ૚
+ૌሻ = ૙ d’où τ = R.C
+ Déterminer la constante A par les conditions initiales :
+à t=0 la tension Uc(0)= 0 , on remplace dans l’équation horaire et on obtient : ܋܃ሺܜሻ 𕀀 = 𕀀ۯ. ܍−𕀀ܜ
+ૌ 𕀀 + 𕀀۰
+0 = A.e0 + B = A + B , A + B = 0 et A= -B = -E
+Conclusion : A=-E , B=E et Ĳ = R.C alors ܍ .ۯሻ = 𕀀ܜሺ܋܃𕀀−𕀀ܜ
+ૌ 𕀀 + 𕀀۰ = −۳. ܍−𕀀ܜ
+ૌ 𕀀 + 𕀀۳ = 𕀀۳. ሺ૚ − ܍−𕀀ܜ
+ૌሻ
+NB :
+Souvent la solution est 𚐀cሺtሻ = 𕐀. ሺͳ − e−𕀀t
+τሻ dont la dérivée première estୢ ୙ୡ ሺ୲ሻୢ
+୲ = 𕐀. ቀ— ଵ
+τቁ . e−𕀀t
+τ = 𕐀. ቀ𕀀ଵ
+τቁ . e−𕀀t
+τ = ୅
+τ . e−𕀀t
+τ
+E
+R
+i(t)
+C
+K
+R2
+uc(t)
+uR(t)
+1 2	Interrupteur K sur la position (1)
+
+-- 2 of 8 --
+
+3
+t(ms)
+uC(V)
+u(t) = E
+E
+régime transitoire
+régime stationnaire
+La representation de :	uC = f (t)
+Mathématiquement la courbe qui représente uC = f (t) est la suivante tel
+que à t = 0 on a uC(0) = 0 et quand t 7 −→ ∞ on a uc = E , pratiquement
+on considère t > 5τ on a uC(∞) = E
+La courbe présente deux régime :
+Un régime transitoire : la tension uc(t) varie au cours du temps .
+Un régime stationnaire ou régime permanent où uC(t) reste constante et
+égale à E
+D’après l’équation des dimensions , on a [τ] = [R].[C]
+d’autre part [R] = [U]
+[I] et [C] = [I]
+[U] .[t] donc [τ] = [t]
+La grandeur τ a une dimension temporelle , son unité dans SI est le
+seconde (s) .
+Première méthode :
+On utilise la solution de l’équation différentielle :
+uC(t = τ) = E(1 − e−1) = 0, 63E
+τ est l’abscisse qui correspond à l’ordonnée 0, 63E
+Deuxième méthode : utilisation de la tangente à la courbe à l’instant
+t=0 .
+τ t(ms)
+uC(V)
+u(t) = E	T
+E
+0.63E
+τ	Unité de la constante du temps :
+i(t)
+On sait que l’intensité du courant de charge : i(t) = C duC
+dt tel que
+duC
+dt = E
+R1C e−t/τ
+donc : i(t) = CE
+R1C .e−t/τ
+i(t) = E
+R1
+e−t/τ
+tel que E/R1 représente l’intensité de courant à l’instant t = 0 c’est à
+dire à t = 0 on a uC = 0 donc E = R1.I0 i.e I0 = E
+R1
+i(t) = I0e−t/τ
+t(ms)
+i(mA)
+I0
+τ
+Expression de l'intensité du courant de chrage	: :
+5. Décharge d’un condensateur :
+Montage de la charge :
+Interrupteur K sur la position (2)
+Equation différentielle :
+En appliquant la loi d’additivité des tensions UR + UC = 0 et les transitions
+𚐀ୖ 𕀀 = 𕀀𙠀. 𱠀𕀀 = 𕀀𙠀. dq
+dt = 𕀀𙠀. 𕰀. d𚐀ୡ
+dt
+τn aboutit à l’équation différentielle vérifié par une variable donnée
+Variable Uc:
+܃܋ + 𕀀۱ .܀. ܃܌܋
+ܜ܌ = ૙
+Variable q: ܙ
+۱ + 𕀀܀. ܙ܌
+ܜ܌ = ૙ Ou ܙ + 𕀀۱ .܀. ܙ܌
+ܜ܌ = ૙
+E
+R
+i(t)
+C
+K
+R
+i(t)
+uc(t)
+uR(t)
+figure 4
+1 2
+τ	Dètermanition de la constante du temps :
+
+-- 3 of 8 --
+
+4
+Equation horaire :
+On considère Uc(t) comme variable et la solution de l’équation différentielle ܋܃ሺܜሻ 𕀀 = 𕀀ۯ. ܍−𕀀ܜ
+ૌ 𕀀 + 𕀀۰
+ Pour déterminer les constantes A ,B et ĸ , on remplace la solution et sa dérivée première dans
+l’équation différentielle
+𚐀cሺtሻ 𕀀 = 𕀀𕐀. e−𕀀t
+τ 𕀀 + 𕀀𕠀 et ሻܜሺ܋܃܌
+࢚ࢊ 𕀀 = 𕀀ۯ. ቀ− ૚
+󢐀ቁ . ܍−𕀀ܜ
+ૌ = − ۯ
+󢐀 ܍ .−𕀀ܜ
+ૌ𕀀𕀀
+𕐀. e−𕀀t
+τ 𕀀 + 𕀀𕠀 + 𕀀𙠀. 𕰀. ቀ− ۯ
+󢐀 ܍ .−𕀀ܜ
+ૌቁ = Ͳ et 𕐀. e−𕀀t
+τ 𕀀 + 𕀀𕠀 − 𕀀𙠀. 𕰀. 𕐀. ଵ
+τ . e−𕀀t
+τ = Ͳ donc ܍ .ۯ−𕀀ܜ
+ૌ 𕀀ቀ૚ − ۱ .܀. ૚
+ૌቁ + ۰ = ૙
+Par Egalité de deux fonctions polynomiales, l’équation est exacte si : B = 0 et ሺ૚ − ۱ .܀. ૚
+ૌሻ = ૙ d’où τ = R.C
+ Déterminer la constante A par les conditions initiales :
+à t=0 la tension Uc(0)= E , on remplace dans l’équation horaire et on obtient : ܋܃ሺܜሻ 𕀀 = 𕀀ۯ. ܍−𕀀ܜ
+ૌ 𕀀 + 𕀀۰
+E = A.e0 + B = A + B , E=A + B et A= E vu que B=0
+Conclusion : A=E , B=0 et Ĳ = R.C alors 𕀀 ܍ .ۯሻ = 𕀀ܜሺ܋܃𕀀−𕀀ܜ
+ૌ 𕀀 + 𕀀۰ = ۳. ܍−𕀀ܜ
+ૌ 𕀀 + 𕀀૙ = 𕀀۳. ܍−𕀀ܜ
+ૌ
+𚐀ୡ + 𕀀𙠀. 𕰀.ୢ ୙ ౙୢ
+୲ = Ͳ : équation différentielle vérifiée par Uc
+La representation de :	uC = f (t)
+Mathématiquement la courbe qui représente uC = f (t) est la suivante tel
+que à t = 0 on a uC(0) = E et quand t 7 −→ ∞ on a uc = 0 , pratiquement
+on considère t > 5τ on a uC(∞) = 0
+t(ms)
+uC(V)
+E
+0.37E
+τ
+f. l’influence de
+τ
+sur la durée de la décharge
+On suppose que τ1 > τ2 , on ob-tient la représentation graphique
+suivante : Quelle est l’influence de τ sur la décharge du condensateur
+dans le dipôle RC
+t(ms)
+uC(V)
+R1 = 100Ω, C1 = 220μF
+R2 = 100Ω, C2 = 150μF
+(2)
+(1)
+τ	Dètermanition de la constante du temps :
+Première méthode :
+On utilise la solution de l’équation
+différentielle :
+uC(t = τ) = Ee−1) = 0, 37E
+uC(V)
+Deuxième méthode : utilisation de la tangente à la courbe à l’instant
+t=0 . On a :
+i(t)	Expression de l'intensité du courant de chrage	: :
+On a uC(t) = Ee−t/τ
+d’après la loi d’additivité des tensions : uR = −uC(t) i.e : uR(t) = −Ee−t/τ et puisque uR = Ri(t) c’est à dire i(t) = − E
+R e−t/τ
+L’énergie électrique stockée par un condensateur est :
+Ee = 1
+2 C.u2
+C = 1
+2 . q2
+C
+Ee s’exprime en joule (J) avec C en farad (F), uC en volt (V) et q en
+coulomb (C) .
+5. Energie électrique stockée dans un condensateur.
+NB :
+- Ĳ = R.C : Constante de temps et est homogène à un temps
+- Conditions initiales (à t=0) :
+Charge d’un condensateur : Uc(0) = 0 , q(0) = 0 , 𗐀ሺͲሻ = 𗐀଴ = 𖐀
+𙠀
+Décharge d’un condensateur : Uc(0) = E , q(0) = C.E , 𗐀ሺͲሻ = −𕀀𗐀଴ = −𕀀 𖐀
+𙠀
+6. L'influence de sur la durée de la décharge
+
+-- 4 of 8 --
+
+5
+On envisage le circuit suivant constitué d'un conducteur ohmique de résistance R et d'un condensateur de
+capacité C.
+ i l'intensité du courant à l'instant t. Cette intensité a été
+comptée positivement au cours de la charge du condensateur,
+ qA la charge de l'armature A du condensateur à l'instant t.
+B	A
+C
+R
+uR
+uC
+À l' instant t = 0, le condensateur est chargé sous la tension U0 = 10 V.
+On notera :
+ uC la tension aux bornes du condensateur à l'instant t, et l'on a uC(0) = U0
+ uR la tension aux bornes du conducteur ohmique à l'instant t,
+1. ÉTABLISSEMENT DE L'EQUATION DIFFERENTIELLE LORS DE LA DECHARGE
+1.1 Quelle relation lie uR et uC ?
+1.2 Rappeler la relation qui lie la charge qA de l'armature A à la tension uC.
+1.3 Quel est le signe de i ? Établir la relation liant l'intensité i du courant à la tension uC.
+1.4 Montrer que l'équation différentielle régissant l'évolution de uC peut s'écrire :
+ uC + C	du
+dt = 0 où  est une constante non nulle. Donner alors l'expression de  en fonction de R et C.
+2. SOLUTION DE L'ÉQUATION DIFFÉRENTIELLE
+Une solution de l'équation différentielle peut s'écrire uC = Ae –t où A et  sont deux constantes positives
+non nulles.
+2.1 En utilisant l'équation différentielle, montrer que  = 1
+RC .
+2.2 Déterminer la valeur de A.
+2.3 Indiquer parmi les courbes 1 et 2 données ci-après, celle qui peut représenter uC. Justifier la réponse.
+3. INTENSITÉ DU COURANT
+3.1 En utilisant les résultats précédents, montrer que i =
+t
+RC	0	U e
+R
+ 
+	 
+	 	
+ .
+3.2 Déterminer la valeur I0 de i à t = 0.
+3.3
+3.4
+Calculer la valeur de i pour t = 0,50 s.
+3.5
+Déterminer la valeur de uC à la même date.
+Le condensateur est-il déchargé ? Justifier la réponse.
+4. ÉNERGIE EMMAGASINÉE DANS LE CONDENSATEUR
+4.1 Rappeler l'expression de l'énergie emmagasinée dans le condensateur du montage étudié en fonction de
+sa capacité et de la tension uC à ses bornes, puis en fonction de sa capacité et de la charge qA de son
+armature A.
+4.2 On remplace ce condensateur par un autre condensateur de capacité C' supérieure à C. Ce
+condensateur est chargé sous la même tension U0. L'énergie emmagasinée dans ce condensateur est-elle
+supérieure à la précédente ?
+EXERCICE 1
+
+-- 5 of 8 --
+
+6
+L'objet de cet exercice est d'étudier le principe de fonctionnement d'une minuterie
+permettant d'éteindre une lampe automatiquement au bout d'une durée t0 réglable.
+Le montage du circuit électrique est constitué :
+- d'un générateur idéal de tension, de force électromotrice E = 25V. - d'un interrupteur K.
+- d'un conducteur ohmique de résistance R. - d'un condensateur de capacité C.
+- d'un bouton poussoir P qui joue le rôle d'un interrupteur: il est fermé seulement
+quand on appuie dessus.
+d'un composant électronique M qui permet l'allumage de la lampe L tant que la tension aux
+bornes du condensateur est inférieure à une tension limite, caractéristique du composant,
+notée U  (dans tout l'exercice on fixera U à une valeur constante égale à 20 V).
+Le composant électronique M possède une alimentation électrique propre (non représentée
+sur le schéma) qui lui fournit l'énergie nécessaire à l'allumage de la lampe.
+De ce fait, on admettra que le composant électronique M ne perturbe pas le fonctionnement
+du circuit RC, c'est-à-dire que la tension aux bornes du condensateur est identique que
+M soit présent ou non dans le circuit.
+M L
+D
+B
+A
+K
+R
+E
+C	P
++
+– uC
+I - Étude du circuit RC
+A l'instant initial (t = 0 s), le condensateur est déchargé. On ferme l'interrupteur K, le bouton poussoir P
+est relâché (voir schéma ci-dessus).
+1. On souhaite visualiser les variations de la tension uC aux bornes du condensateur en fonction du temps
+à l'aide d'un oscilloscope à mémoire. Indiquer les branchements à réaliser
+2. Montrer que l'équation différentielle donnant les variations de la tension uC(t) aux bornes
+du condensateur en fonction du temps est de la forme : uc(t) + RC dt
+)	t	(	duc = E
+3. a) En vérifiant que la fonction du temps uc(t) = A (1 - e-t/) est solution de l'équation différentielle
+précédente montrer que A = E et que  = RC.
+b) Quelle est la valeur de uC en régime permanent ?
+c) Quel est le nom donné à la constante  ?A l'aide d'une analyse dimensionnelle, donner l'unité de la constante .
+4. La représentation graphique de la fonction uC(t) est donnée dans la figure 2
+Faire apparaître sur ce graphe sans aucune justification :
+ la tension E,
+ la constante  ,
+ les régimes permanent et transitoire.
+5. Calculer la valeur de la constante 
+pour R = 200k  et C = 200 μF.
+Figure 2
+EXERCICE 2
+
+-- 6 of 8 --
+
+.
+6. a) Donner l'expression littérale de la date t0 à laquelle la tension aux bornes du
+condensateur atteint la valeur limite U  en fonction de U  , E et . (t0 est la durée
+d'allumage de la lampe).
+b) Calculer la valeur de t0
+7. Quel(s) paramètre(s) du montage peut-on modifier sans changer le générateur afin d'augmenter la
+durée d'allumage de la lampe ?
+En fixant C = 200 μF quelle valeur doit-on donner à la résistance R pour obtenir une
+constante de temps d'une minute ?
+8. On appuie sur le bouton poussoir. Que vaut la tension aux bornes du condensateur ?
+La comparer à U  . Que se passe-t-il pour la lampe dans les cas suivants :
+a) la lampe est déjà allumée ? b) la lampe est éteinte ?
+1. Etude de la charge d'un condensateur par un générateur idéal du courant
+Pour étudier la charge du condensateur, le professeur réalise le montage de la figure (1) constitué des
+éléments suivants:
+- un générateur idéal de courant qui alimente le circuit par un courant électrique d'intensité constante
+-5
+0	I = 2.10 A;
+- un conducteur ohmique de résistance 0	R ; - un condensateur de capacité C; - un interrupteur K.
+À 0t = 0 , le professeur ferme l'interrupteur K et suit à l'aide d'un dispositif convenable, les variations
+de la tension ( )	C	u t aux bornes du condensateur. La figure (2) représente la courbe obtenue.
+Figure 1
+1.1. En exploitant la courbe, déterminer l'expression de la tension ( )	C	u t .
+1.2. Montrer que C = 1 μF .
+2. Etude de la réponse d'un dipôle RC à un échelon de tension descendant
+Pour s'assurer de la valeur de la capacité C trouvée précédemment, le professeur réalise le montage de
+la figure (3) constitué des éléments suivants :
+- un générateur idéal de tension de force électromotrice E ; - un conducteur ohmique de résistance 3
+R= 2.10 Ω ;
+- le condensateur précédent de capacité C; - un interrupteur K à double position.
+Le professeur charge totalement le condensateur en plaçant l'interrupteur en position (1), et puis il le
+bascule en position (2) à l'instant 0t = 0 . Il suit à l'aide d'un dispositif convenable les variations de la
+tension ( )	c	u t aux bornes du condensateur. La figure (4) représente la courbe obtenue .
+Figure 3 0 2
+2 t(ms)
+( )	C	u V
+Figure 4
+Figure 2
+EXERCICE 3
+7
+
+-- 7 of 8 --
+
+Figure 1
+K
+b	(L, r )
+(2)
+i
+E
+R
+C
+(1)
+c	u
+r
+0
+Figure 2
+2
+4
+0,6 1,2
+t(ms)
+uC(V) (T)
+Pour cela, on réalise le circuit électrique schématisé sur la figure 1 qui comporte :
+- un générateur de tension de f.e.m. E ;
+- deux conducteurs ohmiques de résistance r = 20Ω et R ;
+- une bobine (b) d’inductance L et de résistance b	r ;
+- un condensateur de capacité C initialement déchargé ;
+- un interrupteur K à double position.
+1- Etude du dipôle RC lors de la charge du condensateur
+A un instant de date t 0	 , on place l’interrupteur K en
+position (1) . Un système d’acquisition informatisé permet de tracer la courbe d’évolution de la
+tension C	u (t) . La droite (T) représente la tangente à la courbe à la date t=0. (figure 2)
+1.1. Etablir l’équation différentielle vérifiée par C	u (t) .
+1.2. Trouver les expressions de A et de  , pour que
+t
+- τ
+c	u (t) = A.(1-e ) soit solution de cette équation
+différentielle.
+1.3. L’intensité du courant électrique s’écrit sous forme 0
+t
+- τ	i(t)=I .e .
+Trouver l’expression de 0	I en fonction de E, r et R.
+1.4. En exploitant la courbe de la figure 2 :
+1.4.1. Trouver la valeur de la résistance R sachant que 0 0, 20	I  A.
+1.4.2. Déterminer la valeur de  .
+1.4.3. Vérifier que la capacité du condensateur est C=10μF .
+2.2. La solution de cette équation différentielle est de la forme
+t
+- τ
+C	u (t)= A.e . Déterminer les
+expressions de A et
+ en fonction des paramètres du circuit.
+2.3. Déterminer graphiquement la valeur de
+ . Vérifier la valeur de C trouvée dans la question 1.2.
+2.1. Établir l'équation différentielle vérifiée par la tension ( )	C	u t au cours de la décharge du
+condensateur.
+On réalise le montage électrique représenté dans la figure 1 qui est constitué d’un générateur
+idéal de tension continue de force électromotrice E= 12V ,d’un condensateur de capacité C non
+chargé, conducteur ohmique (D1) de résistance R1 et d’un interrupteur K.
+1- Réponse du dipôle RC à un échelon de tension ascendant
+A la date t=0 , on met l’interrupteur à la position 1 , un courant électrique passe alors dans le
+circuit ,son intensité i varie au cours du temps comme le montre la figure 2 .
+C
+1.1- Montrer que l’équation différentielle que vérifie
+l’intensité du courant i s’écrit sous la forme :
+1
+di 1 .i 0
+dt R .C
++ = .
+1.2- la solution de cette équation différentielle
+s’écrit sous la forme i(t)=A.e-l.t
+.	Déterminer l’expression de chacune des deux
+constantes A et l en fonction des paramètres du circuit .
+1.3- Déterminer la valeur de la résistance R1 .
+Vérifier que C=6,3μF . Figure2
+0
+0,5mA
+38ms
+t (ms)
+i (mA)
+EXERCICE 4
+EXERCICE 5
+8
+
+-- 8 of 8 --
+

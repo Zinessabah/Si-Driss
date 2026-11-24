@@ -1,0 +1,306 @@
+Noyaux, masse et énergie
+COURS
+D. ZINESSABAH | Eco Plus | 2020/2021
+
+-- 1 of 7 --
+
+PAGE 1
+I- Relation d’équivalence masse-énergie
+1. Relation d’Einstein
+➢ En 1905 Albert Einstein postulat l'équivalence entre la masse et l'énergie :
+Tout système de masse m au repos, possède une énergie E, appelée énergie de
+masse, tel que : E=m.c2
+E : énergie de masse en joule (J)
+c = 2,99792458.108m.s-1 ≈ 3.108m.s-1: la célérité de la lumière dans le vide.
+Application : Calculer l’énergie de masse du proton. On donne la masse du
+proton mp = 1,2726.10-27Kg.
+Réponse :
+➢ A une variation de masse Δm d’un système au repos correspond une
+variation ΔE d’énergie de masse telle que : ΔE = Δm.c2
+• Si Δm < 0 alors ΔE < 0 : dans ce cas, le système libère de l’énergie au
+milieu extérieur.
+• Si Δm > 0 alors ΔE > 0 : dans ce cas, le système gagne de l’énergie du
+milieu extérieur.
+2. L’unité de masse atomique (uma)
+En physique nucléaire, l’unité convenable de la masse s’appelle unité de masse
+atomique symbolisée par u ; elle représente 1
+12 de la masse d’un atome de carbone
+𝐶	6
+12 .
+1𝑢 = 𝑚( 𝐶)	6
+12
+12 = 𝑀( 𝐶	6
+12 )
+12. 𝑁𝐴
+= 12. 10−3
+12.6,02214076. 1023 = 1,66054. 10−27Kg
+𝑁𝐴 : La constante d’Avogadro en mol-1.
+𝑚( 𝐶)	6
+12 : La masse d’un atome du carbone 12 en Kg.
+𝑀( 𝐶	6
+12 ) : La masse molaire du carbone 12 en Kg.mol-1.
+Application : Convertir les masses suivantes en unité de masse atomique.
+Masse du proton : 𝑚𝑝 = 1,6726. 10−27𝐾𝑔
+Masse du neutron : 𝑚𝑛 = 1,6750. 10−27𝐾𝑔
+Masse de l’électron : 𝑚𝑒− = 9,109. 10−31𝐾𝑔
+3. L’unité de l’énergie : L’électronvolt (ev)
+
+-- 2 of 7 --
+
+PAGE 2
+Le joule est l’unité de l’énergie dans le système international, mais ne
+convient pas aux situations microscopiques. Au lieu du joule, on utilise l’unité
+électronvolt (ev) et ses multiples.
+1ev = 1,60218.10-19J
+1Kev = 103ev
+1Mev = 106ev = 1,60218.10-13J.
+Application : Calculer en joule et Mev l’énergie de masse d’une unité de masse
+atomique.
+II- Energie de liaison
+1. Défaut de masse
+➢ Application :
+a. Calculer ∑ 𝑚𝑝,𝑛 la masse de la somme des nucléons, pris isolés, constituants
+le noyau 𝐻𝑒	2
+4 .
+On donne la masse du proton 𝑚𝑝 = 1,00728𝑢 et la masse du neutron
+𝑚𝑛 = 1,00866𝑢
+b. Comparer ∑ 𝑚𝑝,𝑛 avec la masse du noyau 𝐻𝑒	2
+4 .
+On donne 𝑚( 𝐻𝑒)	2
+4 = 4,00153𝑢
+➢ Définition : Le défaut de masse ∆𝑚( 𝑋	𝑍
+𝐴 ) d’un noyau 𝑋	𝑍
+𝐴 est la différence entre la
+masse des nucléons isolés et au repos et la masse du noyau au repos.
+∆𝑚( 𝑋	𝑍
+𝐴 ) = 𝑍. 𝑚𝑝𝑟𝑜𝑡𝑜𝑛 + (𝐴 − 𝑍)𝑚𝑛𝑒𝑢𝑡𝑟𝑜𝑛 − 𝑚( 𝑋	𝑍
+𝐴 )
+∆𝑚( 𝑋	𝑍
+𝐴 ) est toujours positive.
+2. Energie de liaison
+➢ L'énergie de liaison 𝐸𝑙 d'un noyau 𝑋	𝑍
+𝐴 est l'énergie
+qu'il faut fournir à ce noyau au repos pour le
+dissocier en ses nucléons isolés, également au
+repos.
+𝐸𝑙 = ∆𝑚( 𝑋	𝑍
+𝐴 ). 𝐶2 = [𝑍. 𝑚𝑝𝑟𝑜𝑡𝑜𝑛 + (𝐴 − 𝑍)𝑚𝑛𝑒𝑢𝑡𝑟𝑜𝑛 − 𝑚( 𝑋	𝑍
+𝐴 )]. 𝑐2
+
+-- 3 of 7 --
+
+PAGE 3
+➢ L’énergie de liaison est toujours positive 𝐸𝑙 > 0.
+➢ Application : Calculer le défaut de masse du noyau 𝐻𝑒	2
+4 en u, puis son
+énergie de liaison en Mev.
+3. Energie de liaison par nucléon
+➢ On définit l'énergie de liaison par nucléon par la relation suivante: E = 𝐸𝑙
+𝐴
+L’unité de E est Mev/nucléon.
+➢ E informe sur la stabilité du noyau : Un noyau est d'autant plus stable que
+son énergie de liaison par nucléon est grande.
+Application 1 : Calculer l’énergie de liaison par nucléon du noyau 𝐻𝑒	2
+4 .
+➢ Application 2 : On considère les deux isotopes du plomb 𝑃𝑏	82
+208 et 𝑃𝑏	82
+212 .
+Calculer l’énergie de liaison par nucléon pour chaque isotope et en déduire
+le plus stable.
+On donne : 𝑚( 𝑃𝑏) = 207,93162𝑢	82
+208 ; 𝑚( 𝑃𝑏) = 211,94751𝑢	82
+212 ; 1𝑢 =
+931,5𝑀𝑒𝑣/𝑐2 ; 𝑚𝑝 = 1,00728𝑢 ; 𝑚𝑛 = 1,00866𝑢.
+4. La courbe (diagramme) d’Aston
+➢ La courbe d’Aston permet de comparer la
+stabilité des différents noyaux atomiques.
+➢ Cette courbe est la représentation de − 𝐸𝑙
+𝐴
+en fonction du nombre de masse A.
+➢ On distingue trois zones sur cette courbe :
+• A ≤ 20 : Les noyaux légers instables (E est
+petite). Ces noyaux peuvent fusionner
+
+-- 4 of 7 --
+
+PAGE 4
+pour donner des noyaux plus lourds placés plus bas dans le diagramme :
+c’est la réaction de fusion nucléaire.
+• Les noyaux stables 20 < A < 190 sont ceux qui ont une énergie de liaison
+par nucléon d’environ 8 MeV/nucléon. Par exemple Le fer 𝐹𝑒	26
+56 est le plus
+stable de tous les nucléides.
+• A > 190 : Les noyaux lourds instables peuvent se briser en noyaux légers
+appartenant aux zones stables : c’est la réaction de fission nucléaire.
+III- La fission et la fusion nucléaires
+1. La fusion nucléaire
+a. Définition
+La fusion nucléaire est la formation d’un noyau
+lourd à partir de deux noyaux légers.
+La fusion est une réaction nucléaire provoquée qui
+libère de l’énergie.
+b. Exemples
+𝐻	1
+2 + 𝐻	1
+3 → 𝐻𝑒	2
+4 + 𝑛	0
+1
+2. La fission nucléaire
+a. Définition
+La fission est une réaction nucléaire
+provoquée, qui libère de l’énergie, dans
+laquelle un noyau lourd dit fissile, est scindé
+en deux noyaux plus légers.
+b. Exemples
+𝑈	92
+235 + 𝑛	0
+1 → 𝐵𝑎	56
+144 + 𝐾𝑟	36
+89 + 3 𝑛	0
+1
+Remarque : La bombe nucléaire repose sur la
+fission nucléaire enchainée non contrôlée.
+Alors que la bombe à hydrogène repose sur la fusion nucléaire.
+IV- Bilan énergétique d’une réaction nucléaire
+1. Cas général
+➢ Considérons une transformation nucléaire symbolisée par l’équation
+suivante : 𝑋1	𝑍1
+𝐴1 + 𝑋2	𝑍2
+𝐴2 → 𝑋3	𝑍3
+𝐴3 + 𝑋4	𝑍4
+𝐴4
+Lorsqu’on réalise le bilan énergétique d’une réaction nucléaire consiste à
+comparer l’énergie de masse du système nucléaire avant et après la réaction.
+Une réaction nucléaire avec perte de masse cède de l’énergie vers le milieu
+extérieur.
+Le bilan énergétique de cette transformation est :
+∆𝐸 = (∑ 𝑚𝑝𝑟𝑜𝑑𝑢𝑖𝑡𝑠 − ∑ 𝑚𝑟é𝑎𝑐𝑡𝑖𝑓𝑠). 𝑐2 = ∆𝑚. 𝑐2
+∆𝐸 = ∆𝑚. 𝑐2 = [𝑚( 𝑋4	𝑍4
+𝐴4 ) + 𝑚( 𝑋3	𝑍3
+𝐴3 ) − (𝑚( 𝑋2	𝑍2
+𝐴2 ) + 𝑚( 𝑋1	𝑍1
+𝐴1 ))] . 𝑐2
+Ou :
+
+-- 5 of 7 --
+
+PAGE 5
+∆𝐸 = ∑ 𝐸𝑙 𝑟é𝑎𝑐𝑡𝑖𝑓𝑠 − ∑ 𝐸𝑙 𝑝𝑟𝑜𝑑𝑢𝑖𝑡𝑠
+∆𝐸 = 𝐸𝑙( 𝑋1	𝑍1
+𝐴1 ) + 𝐸𝑙( 𝑋2	𝑍2
+𝐴2 ) − (𝐸𝑙( 𝑋3	𝑍3
+𝐴3 ) + 𝐸𝑙( 𝑋4	𝑍4
+𝐴4 ))
+Diagramme d’énergie de la transformation nucléaire :
+𝑋1	𝑍1
+𝐴1 + 𝑋2	𝑍2
+𝐴2 → 𝑋3	𝑍3
+𝐴3 + 𝑋4	𝑍4
+𝐴4
+➢ Au cours d’une transformation nucléaire spontanée ou de fission ou de
+fusion, la variation d’énergie du système nucléaire est négative ∆𝐸 < 0. Le
+système libère de l’énergie vers le milieu extérieur.
+➢ L’énergie reçut par le système extérieur est positive. Elle est appelée
+énergie libérée par le système nucléaire : 𝐸𝑙𝑖𝑏é𝑟é𝑒 = |∆𝐸|
+2. Bilan énergétique des transformations nucléaires spontanées.
+a. Bilan énergétique de la transformation α.
+L’équation de la désintégration α : 𝑋	𝑍
+𝐴 → 𝑌	𝑍−2
+𝐴−4 + 𝐻𝑒	2
+4
+ΔE = [𝑚( 𝑌	𝑍−2
+𝐴−4 ) + 𝑚( 𝐻𝑒	2
+4 ) − m( 𝑋	𝑍
+𝐴 )]. 𝑐2 ou ΔE = 𝐸𝑙( 𝑋)	𝑍
+𝐴 − (𝐸𝑙( 𝐻𝑒	2
+4 ) +
+𝐸𝑙( 𝑌	𝑍−2
+𝐴−4 ))
+b. Bilan énergétique de la transformation β-
+L’équation de la désintégration β- : 𝑋	𝑍
+𝐴 → 𝑌	𝑍+1
+𝐴 + 𝑒	−1
+0
+ΔE = [𝑚( 𝑌	𝑍+1
+𝐴 ) + 𝑚( 𝑒	−1
+0 ) − m( 𝑋	𝑍
+𝐴 )]. 𝑐2 ou ΔE = (𝐸𝑙( 𝑋)	𝑍
+𝐴 − 𝐸𝑙( 𝑌	𝑍+1
+𝐴 )
+c. Bilan énergétique de la transformation β+
+L’équation de la désintégration β+ : 𝑋	𝑍
+𝐴 → 𝑌	𝑍−1
+𝐴 + 𝑒	+1
+0
+ΔE = [𝑚( 𝑌	𝑍−1
+𝐴 ) + 𝑚( 𝑒	+1
+0 ) − m( 𝑋	𝑍
+𝐴 )]. 𝑐2 ou ΔE = (𝐸𝑙( 𝑋)	𝑍
+𝐴 − 𝐸𝑙( 𝑌	𝑍−1
+𝐴 )
+3. Applications :
+Exercice 1 :
+Le radium 𝑅𝑎	88
+226 subit une désintégration α, il se transforme en radon 𝑅𝑛.
+a. Écrire l’équation de cette désintégration.
+b. Calculer l’énergie nucléaire libérée par cette transformation nucléaire.
+c. Tracer le diagramme d’énergie de cette transformation.
+On donne les masses suivantes :
+𝑚( 𝑅𝑎	88
+226 ) = 225,977𝑢 ; 𝑚(𝑅𝑛) = 221,9702𝑢 ; 𝑚(𝛼) = 4,0015𝑢 ; 𝑚𝑝𝑟𝑜𝑡𝑜𝑛 =
+1,00728𝑢 ; 𝑚𝑛𝑒𝑢𝑡𝑟𝑜𝑛 = 1,00866𝑢.
+1𝑢 = 931,5𝑀𝑒𝑣/𝑐2
+
+-- 6 of 7 --
+
+PAGE 6
+Exercice 2 :
+1. Le noyau cobalt 𝐶𝑜	27
+60 subit une radiation β-, écrire l’équation de cette
+transformation nucléaire. Comment expliquer l’augmentation du nombre de
+charge ?
+2. Calculer l’énergie de liaison du noyau 𝐶𝑜	27
+60 .
+3. Calculer l’énergie libérée de cette transformation nucléaire.
+4. On dispose de 10mg de 𝐶𝑜	27
+60 , à l’instant t=0, calculer le nombre de noyaux N0 de
+𝐶𝑜	27
+60 à cet instant.
+5. Après 2,7 années, le nombre de noyaux restant du 𝐶𝑜	27
+60 est 0,7N0. Déterminer la
+période radioactive t½ du cobalt 𝐶𝑜	27
+60 .
+On donne : 𝑚( 𝑒	−1
+0 ) = 5,486. 10−4𝑢 ; 𝑚𝑝 = 1,00727𝑢 ;
+𝑚𝑛 = 1,008665𝑢 ; 𝑚( 𝑁𝑖	28
+60 ) = 59,915𝑢 ; 𝑚( 𝐶𝑜) = 59,91901𝑢	27
+60 ;
+1𝑢 = 931,5𝑀𝑒𝑣/𝑐2 ; 𝑀(𝐶𝑜) = 60𝑔. 𝑚𝑜𝑙−1 ; 𝑁𝐴 = 6,023. 1023𝑚𝑜𝑙−1
+Exercice 3 :
+Le nucléide neptunium 𝑁𝑝	93
+239 subit une radiation β-, il se transforme en
+plutonium 𝑃𝑢	𝑍
+𝐴 .
+1. Écrire l’équation de la désintégration en précisant A et Z.
+2. Calculer, en Mev, l’énergie libérée par cette transformation nucléaire.
+3. On dispose d’une masse m0, à l’instant t0=0, d’un échantillon radioactif de
+𝑁𝑝	93
+239 . Montrer que, à un instant t, 𝜆. 𝑡 = 𝑙𝑛(𝑚0
+𝑚 ) avec m la masse de
+l’échantillon 𝑁𝑝	93
+239 à cet instant et λ la constante radioactive de 𝑁𝑝	93
+239 .
+4. Le graphe en dessous représente la variation de 𝑙𝑛(𝑚0
+𝑚 ) en fonction du
+temps.
+4.1. Déterminer, graphiquement λ.
+4.2. En déduire la période radioactive t½ du 𝑁𝑝	93
+239 .
+4.3. Préciser la durée nécessaire pour que la masse m0 se désintègre à 99%.
+On donne 𝑚( 𝑁𝑝	93
+239 ) = 239,07668𝑢 ; 𝑚( 𝑃𝑢	𝑍
+𝐴 ) = 239,00063𝑢 ;
+𝑚(𝛽−) = 0,00055𝑢 ; 1𝑢 = 931,5𝑀𝑒𝑣/𝑐2
+
+-- 7 of 7 --
+

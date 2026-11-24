@@ -1,0 +1,111 @@
+1
+D. Zinessabah 2PC
+Série 2 : Les ondes mécaniques progressives périodiques
+Exercice 1 :
+À l’aide d’un microphone, on visualise sur la voie A d’un oscilloscope le son émis par
+un instrument de musique. On obtient la courbe ci-dessous :
+Les réglages de l’oscilloscope sont :
+-Sensibilité de la voie A : 100 𝑚𝑉⁄𝑑𝑖𝑣
+-Balayage : 0,5 𝑚𝑠⁄𝑑𝑖𝑣
+1- Déterminer la fréquence du son.
+2- Déduire la longueur d’onde sachant que la
+célérité du son est 340 𝑚.𝑠-1.
+Exercice 2 :
+
+-- 1 of 4 --
+
+2
+D. Zinessabah 2PC
+Exercice 3 :
+Une corde soumise à un vibreur est photographiée à l’instant 𝑡 = 0,060 𝑠, le vibreur ayant
+commencé à fonctionner à l’instant 𝑡 = 0.
+La célérité des ondes le long de la corde est ∨= 2,0 𝑚⁄𝑠.
+1- Calculer la fréquence 𝑓 et la longueur d’onde 𝜆 de l’onde.
+2- Au début du fonctionnement, le vibreur s’est-il déplacé vers le haut ou vers le bas ?
+3- Représenter l’aspect de la corde à l’instant 𝑡′ = 0,08 𝑠.
+Exercice 4 :
+Pour étudier la propagation des ondes mécaniques à la surface de I 'eau, on utilise une
+cuve à ondes. Le but de cette partie de I 'exercice est de déterminer quelques grandeurs
+caractéristiques d 'une onde mécanique.
+A l'aide d'un vibreur d'une cuve à ondes, on crée en un point S de la surface libre de l'eau
+une onde progressive sinusoïdale de fréquence N = 20 Hz. Cette onde se propage à t=0 à
+partir du point S, sans amortissement et sans réflexion.
+La figure ci-contre représente une coupe, dans un plan
+vertical, d'une partie de la surface de l'eau à l'instant de
+date t1.
+1. L'onde qui se propage à la surface de l'eau est-elle
+transversale ou longitudinale? Justifier.
+2. Déterminer la longueur d'onde de l'onde étudiée.
+3. Déduire la célérité V de l'onde à la surface de l'eau.
+4. Le point M, situé à la distance d=SM du point S, est le front de l'onde à l'instant de date
+Tl. Exprimer le retard temporel τ du mouvement de M par rapport au mouvement de S, en
+fonction de la période T de l'onde. Calculer τ .
+Exercice 5 :
+Détermination de la célérité d’une onde ultrasonore dans un liquide.
+Les ondes mécaniques se propagent seulement dans un milieu matériel, et leur célérité
+(vitesse de propagation) croit avec la densité du milieu où elles se propagent.
+Pour déterminer la valeur approximative de la célérité Vip d’une onde ultrasonore dans le
+pétrole liquide, on réalise l’expérience suivante:
+Dans une cuve contenant du pétrole, on fixe à l’une de ses extrémités deux émetteurs E1 et
+E2 qui sont reliés à un générateur GBF. A l’instant t0 = 0, les deux émetteurs émettent
+chacun une onde ultrasonore, une se propage dans l’air et l’autre dans le pétrole. A l’autre
+extrémité de la cuve, on place deux récepteurs R1 et R2, l’un dans l’air et l’autre dans le
+pétrole. Les récepteurs sont à une distance L des émetteurs (Voir figure 1).
+
+-- 2 of 4 --
+
+3
+D. Zinessabah 2PC
+On visualise sur l’écran d’un oscilloscope les deux signaux reçus par R1 et R2 (Voir
+figure 2).
+Données :
+-les deux ondes parcourent la même distance L =1,84 m ;
+-la célérité des ultrasons dans l’air : Vair =  m s−
+- la sensibilité horizontale de l’oscilloscope: 2 ms.div-1
+1. Les ondes ultrasonores, sont-elles longitudinales ou transversales ? justifier.
+2. En exploitant la figure 2, déterminer la valeur du retard temporel
+ entre les deux ondes
+reçues.
+3. Montrer que l’expression de  s’écrit sous la forme: 𝜏 = 𝐿. ( 1
+𝑉𝑎𝑖𝑟
+− 1
+𝑉𝑝
+)
+4. Trouver la valeur approchée de la célérité Vp .
+Exercice 6 :
+Donnée: g= 10N.Kg-1
+On étudie la propagation de l’onde de tsunami dans une partie de l’océan de profondeur
+constante h = 6000m.
+1. Justifier que les ondes qui se propagent à la surface de l’océan sont transversales.
+2. Calculer la célérité des ondes dans cette partie de l’océan.
+3. Sachant que la durée qui sépare le passage de deux crêtes consécutives en un point est
+T=18min, calculer la longueur λ.
+4. Dans le cas où (λ>>h), la fréquence des ondes du tsunami reste constante pendant leur
+propagation vers les côtes. Comment varie la longueur d’onde λ de ces ondes
+lorsqu’elles s’approchent vers les côtes ? Justifier votre
+réponse.
+5. Le tsunami passe près de deux iles A et B séparées par un
+détroit de largeur d=100km. On suppose que la
+profondeur près des iles est constante et que les ondes du
+tsunami sont rectilignes de longueur d’onde λ=120 km.
+(Voir figure ci-contre)
+Les tremblements de terre dont les épicentres se trouvent dans la mer provoquent souvent le phénomène
+connu sous le nom de tsunami. Les vagues du tsunami se propagent vers les côtes avec une grande
+énergie destructives.
+On modélise les vagues du tsunami par des ondes mécaniques progressives périodiques qui se propagent
+à la célérité v qui varie selon la profondeur h de l’océan et l’intensité de pesanteur g suivant la relation
+𝑣 = √𝑔. ℎ dans des faibles profondeurs par rapport à la longueur d’onde λ (λ>>h).
+
+-- 3 of 4 --
+
+4
+D. Zinessabah 2PC
+5.1 Est-ce que la diffraction des ondes est possible lorsqu’elles franchissent le détroit ?
+Justifier.
+5.2 Dans le cas de l’affirmative :
+5.2.1 Donner en justifiant votre réponse la longueur de diffracté .
+5.2.2 Calculer l’écart angulaire θ de la diffraction.
+Exercice 7 :
+
+-- 4 of 4 --
+

@@ -1,0 +1,78 @@
+D. ZINESSABAH 2PC PAGE 1
+Série 1 : Les ondes mécanique progressives
+Exercice 1 :
+On considère une corde élastique suffisamment longue. À un instant choisi comme origine des dates t0=0s,
+on excite l’extrémité S de la corde et on obtient ainsi une perturbation se propageant de gauche à droite d’une
+célérité notée v. (Voir la figure)
+1. Cette onde est-elle longitudinale ou transversale ? Justifier.
+2. Représenter sur la figure le point B
+représentant le front d’onde.
+3. L’image de la figure est prise à la date
+t1=100ms, calculer la célérité de propagation de
+l’onde mécanique.
+4. Déterminer la valeur du retard temporaire τ du
+point A par rapport à la source de l’onde S ?
+5. Quelle est la longueur de la perturbation ?
+Quelle est sa durée ?
+Exercice 2 :
+A l’instant t0=0, considéré comme origine des dates, on crée une perturbation au point S d’une corde.
+La figure ci-dessous représente l’image de la corde à l’instant t1=2,4s. Les M1 , P1 et N1 représentent
+respectivement le front de l’onde, son arrière et son amplitude maximale.
+1. Définir l’onde mécanique progressive et préciser si l’onde propagé est transversale ou longitudinale.
+2. Calculer la célérité v de l’onde mécanique.
+3. Quelle est la durée Δt du mouvement d’un point de la corde ?
+4. Déterminer à l’instant t1 les points qui se dirigeront vers le haut et les points qui se dirigeront vers le
+bas.
+5. Représenter graphiquement l’aspect de la corde à l’instant t2=3,08s.
+6. On considère un point Q de la corde se trouvant à droite de M1 distancé de 5m :
+a. A quel instant le point Q commence son mouvement ?
+b. A quel instant le point Q termine son mouvement ?
+Exercice 3 :
+On donne la formule de la célérité de propagation d’une onde le long d’une corde : 𝑣 = √𝑇
+𝜇
+T : représente la tension de la corde en N.
+x(m)	M1
+N1
+P1
+S
+
+-- 1 of 2 --
+
+D. ZINESSABAH 2PC PAGE 2
+μ : représente la masse linéique de la corde en Kg.m-1.
+Une corde de masse m=1kg et de longueur L=10m est attirée par une force d’intensité T= 2,5N.
+1. Calculer la célérité de propagation de l’onde le long de la corde.
+2. Quelle est la valeur de la célérité si on double la tension de la corde ?
+3. Calculer la durée que fait l’onde pour parcourir toute la corde dans les deux cas.
+Exercice 4 :
+Lors d’une échographie d’un fœtus, la sonde posée sur le ventre de la mère (voir schéma ci-dessous) émet et
+reçoit des signaux ultrasonores.
+L’ordinateur calcule la durée Δt mis par le signal émis pour faire un aller jusqu’au fœtus et un retour jusqu’au
+récepteur.
+La célérité v de propagation des ondes ultrasonores dans le corps humain est
+v=1500 m.s-1.
+La sonde orientée vers la tête du fœtus reçoit un premier signal avec un décalage
+Δt1=3,0.10-5s après l’émission, et un deuxième signal avec Δt2=7,0.10-5s.
+1- Calculer la distance d1 entre la sonde et la paroi la plus proche de la tête du
+fœtus.
+2- Calculer la distance d2 entre la sonde et la paroi la plus éloigné de la tête du
+fœtus.
+3- Déduire le diamètre d de la tête du fœtus en cm.
+Exercice 5 :
+Lors d’un orage, un promeneur voit en premier l’éclaire d’une foudre tombée sur une colline. Après Δt=14,7s il
+entend le bruit du tonnerre. Calculer la distance entre la position du promeneur et le lieu où est tombé la
+foudre.
+On donne : la célérité du son dans l’air Vair=340m.s-1 et la célérité de la lumière C=3.108m.s-1.
+Exercice 6 :
+Dans un bassin d’essais, une source sonore 𝑺 émet un bruit
+intense qui se propage dans l’air et dans l’eau. Le bruit est reçu
+par deux récepteurs sonores : 𝑹𝟏 placé dans l’air et 𝑹𝟐 situé
+dans l’eau.(Voir figure ci-contre)
+On donne : la célérité V du son dans l’air et dans l’eau : 𝑽𝒂𝒊𝒓=𝟑𝟒𝟎 𝒎.𝒔-𝟏 , 𝑽𝒆𝒂𝒖 = 𝟏, 𝟓 𝒌𝒎.𝒔-𝟏.
+1- Quel est le récepteur qui, le premier, détecte le bruit produit par la source?
+2- On note t la durée séparant la détection du bruit par les récepteurs R1 et R2, exprimer la distance d
+séparant la source des récepteurs en fonction de la durée t et des célérités Vair et Veau .
+3- Calculer la valeur de d pour t=0,5s.
+
+-- 2 of 2 --
+

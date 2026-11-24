@@ -1,0 +1,230 @@
+Propagation des ondes lumineuses
+Cours
+D. Zinessabah | Eco Plus | 2019/2020
+
+-- 1 of 8 --
+
+PAGE 1
+I. Mise en évidence du phénomène de la diffraction.
+1. Rappel :
+La diffraction est une caractéristique des ondes. Ce phénomène se révèle à chaque fois
+une onde passe à travers une ouverture de taille comparable à la longueur d'onde (a ≤
+λ).
+2. Activité expérimentale. Vidéo : Diffraction
+• La fente fine de largeur a et le petit trou circulaire se trouvent à une distance D
+de l’écran.
+• Le rayon laser rouge à une longueur d’onde λ = 633nm.
+• On observe sur l’écran les formes suivantes :
+Fente fine verticale : Trou circulaire :
+On observe des taches claires espacées par
+taches sombres dans un sens
+perpendiculaire par rapport à la direction
+de la fente.
+Remarque : On observe le même
+phénomène de la diffraction en remplaçant
+la fente par un fil très fin.
+On observe des taches claires
+circulaires espacées par des taches
+circulaires sombres.
+
+-- 2 of 8 --
+
+PAGE 2
+Dans les deux cas :
+• La luminosité des taches diminue en s’éloignant de la tache centrale.
+• La largeur de la tache centrale augmente avec la diminution de la dimension du trou
+ou de la fente.
+• La largeur de la tache centrale diminue en changeant la couleur de la lumière du laser
+du rouge vers le bleu.
+• Le phénomène de la diffraction de la lumière apparait lorsque la lumière traversent une
+ouverture de largeur a tel que 10λ<a<100λ.
+3. Conclusion :
+Les deux expériences montrent que :
+• La non-validité du principe de la propagation rectiligne de la lumière.
+Propagation rectiligne de la lumière Diffraction de la lumière
+• La lumière est de nature ondulatoire. Elle se propage dans les milieux
+transparents et dans le vide.
+4. Etude de la diffraction d’un faisceau de laser à travers une fente.
+a. La formule géométrique :
+𝑡𝑎𝑛(𝜃) = 𝐿
+2𝐷
+• Puisque l’angle θ est très petit (θ << ) alors tan(θ) ≈ θ
+𝜃 = 𝐿
+2𝐷
+Où la distance D et la longueur L sont en mètre (m) et θ en radian (rad).
+L’angle θ est appelé l’écart angulaire.
+b. La formule expérimentale :
+
+-- 3 of 8 --
+
+PAGE 3
+On utilise plusieurs fentes de différentes tailles de largeurs, et on mesure pour
+charque largeur a de la fente la largeur L de la tache centrale sur l’écran distancé de
+la fente de D=1,77m.
+Le laser utilisé est de couleur rouge et de longueur d’onde λ=633nm.
+𝑎 (nm) 380 250 110 90
+L (mm) 5,5 8,5 20 25
+θ (10-3.rad) 1,55 2,4 5,65 7,06
+1
+𝑎 (103 .m-1) 2,6 4 9,09 11,1
+Remarque : Pour calculer θ on utilise la formule
+𝜃 = 𝐿
+2𝐷
+• Tracée de la courbe θ = f(1
+𝑎)
+• Déduction
+La courbe a l’allure d’une droite dont l’équation est sous la forme : 𝜃 = 𝑘. 1
+𝑎
+avec k est le coefficient directeur de la droite.
+Calcul de k :
+𝑘 = 5,65.10−3−1,55.10−3
+9,09.103−2,6.103 = 6,4. 10−7𝑚 = 640𝑛𝑚
+En comparant k avec la longueur d’onde λ du rayon laser rouge utilisé, on
+constate que k ≈ λ :
+𝜃 = 𝜆
+𝑎
+𝜃 = 𝐿
+2𝐷 = 𝜆
+𝑎
+II. L’onde lumineuse et ses caractéristiques.
+1. L’onde lumineuse
+L’onde lumineuse est une onde électromagnétique transversale qui résulte de
+l’oscillation couplée d’un champ électrique et d’un champ magnétique.
+
+-- 4 of 8 --
+
+PAGE 4
+2. La lumière
+monochromatique et la lumière blanche.
+a. La lumière monochromatique
+Chaque lumière monochromatique est caractérisée par son fréquence ν. Celui-
+ci est indépendant du milieu de propagation et ne change pas lors du passage
+de la lumière monochromatique d’un milieu de propagation vers un autre.
+𝜆 = 𝑉
+𝜈
+o λ : La longueur d’onde de la lumière monochromatique dans un milieu
+de propagation en mètre (m).
+o 𝑉 : La célérité de la lumière dans un milieu donné.
+o 𝜈 : La fréquence de la lumière monochromatique
+Remarque : Si le milieu de propagation est le vide, on remplace V par 𝐶 :
+𝜆 = 𝐶
+𝜈
+o 𝐶 : Est la célérité de la lumière dans le vide, sa valeur est
+𝐶 = 3.108𝑚. 𝑠−1.
+b. La lumière blanche (polychromatique)
+La lumière blanche ou la lumière visible s’interprète comme étant la
+superposition de lumières monochromatiques. Vidéo : Disque de Newton
+c. La célérité de la lumière dans un milieu transparent et indice
+de réfraction.
+• La célérité de la lumière dans le vide C=3.108 m.s-1 est la plus grande, mais elle
+diminue dans les autres milieux de propagations (C>Vmilieu).
+Exemples : Veau=2,25.108m.s-1 Vverre=2.108m.s-1 Vair ≈ 3.108m.s-1
+• On définit l’indice de réfraction n d’un milieu transparent par rapport au vide
+par la relation suivante :
+𝑛𝑚𝑖𝑙𝑖𝑒𝑢 = 𝐶
+𝑉𝑚𝑖𝑙𝑖𝑒𝑢
+On note que l’indice de réfraction n’a pas d’unité et 𝑛𝑚𝑖𝑙𝑖𝑒𝑢 ≥ 1.
+• Exemples :
+o 𝑛𝑣𝑒𝑟𝑟𝑒 = 3.108
+2.108 = 1,5
+o 𝑛𝑒𝑎𝑢 = 3.108
+2,25.108 = 1,33
+
+-- 5 of 8 --
+
+PAGE 5
+o 𝑛𝑎𝑖𝑟 ≈ 3.108
+3.108 = 1
+d. L’indice de réfraction et la longueur de la lumière
+monochromatique.
+o Longueur d’onde de la lumière monochromatique dans le vide :
+𝜆0 = 𝐶
+𝜈 ⇒ 𝐶 = 𝜆0. ν
+o Longueur d’onde de la lumière monochromatique dans un milieu donnée
+:
+𝜆 = 𝑉
+𝜈 ⇒ 𝑉 = λ. ν
+o L’indice de réfraction n du milieu par rapport au vide :
+𝑛 = 𝐶
+𝑉 = 𝜆0. ν
+λ. ν = 𝜆0
+𝜆
+𝑛 = 𝐶
+𝑉 = 𝜆0
+𝜆
+III. Dispersion de l’onde lumineuse.
+1. Rappel de la deuxième loi de Descartes de la réfraction.
+SI : Le rayon incident.
+IR : Le rayon réfracté.
+i1 : L’angle d’incidence.
+i2 : L’angle de réfraction.
+I : Le point d’incidence.
+NN’ : La normale à la surface de
+réfraction.
+La deuxième loi de Descartes de la
+réfraction :
+𝑛1. sin (𝑖1) = 𝑛2. sin (𝑖2)
+Exemple : Milieu 1 : air ⇒n1 = 1
+Milieu 2 : eau ⇒ n2 = 1,33
+sin(i1) = 1,33.sin(i2)
+2. Dispersion de la lumière par un prisme.
+a. Le prisme.
+Un prisme est un milieu transparent d’indice n, limité par deux dioptres
+plans faisant un angle A entre eux (angle au sommet du prisme). La face
+opposée à l’angle A est appelée la base du prisme.
+
+-- 6 of 8 --
+
+PAGE 6
+b. Trajectoire d’un rayon lumineux monochromatique à travers
+un prisme.
+Lors de la traversée de chacun de ces dioptres, le rayon lumineux obéit aux lois
+de Descartes comme indiqué sur la figure ci-dessus. On remarque que le rayon
+lumineux émergé se dirige vers la base du prisme.
+i : L’angle d’incidence sur le dioptre 1.
+r : L’angle de réfraction sur le dioptre 1.
+r’ : L’angle d’incidence sur le dioptre 2.
+i’ : L’angle de réfraction sur le dioptre 2.
+A : L’angle du prisme.
+D : L’angle de déviation du rayon lumineux.
+Les formules du prisme :
+c. Dispersion de la lumière à l’aide d’un prisme. Vidéo : Dispersion de
+la lumière blanche
+• A la sortie du prisme la lumière blanche se décompose lumières de couleurs de l’arc en
+ciel. Cette décomposition est appelée phénomène de la dispersion.
+• L’ensemble de ces couleurs (radiations) est appelé spectre de la lumière blanche. On
+remarque la continuité du ce spectre.
+• La lumière blanche est composée de plusieurs lumières monochromatiques : on dit
+qu’elle est polychromatique.
+• On remarque la déviation de la lumière bleue à la sortie du prisme est grande que celle
+de la lumière rouge. On déduit que les deux lumières n’ont le même indice de réfraction
+n.
+sin(𝑖) = 𝑛. sin(𝑟)
+𝑠𝑖𝑛(𝑖’) = 𝑛. 𝑠𝑖𝑛(𝑟’)
+𝐴 = 𝑟 + 𝑟’
+𝐷 = 𝑖 + 𝑖’ − 𝐴
+
+-- 7 of 8 --
+
+PAGE 7
+𝑛𝑟𝑜𝑢𝑔𝑒 ≠ 𝑛𝑏𝑙𝑒𝑢𝑒
+⇒ 𝐶
+𝑉𝑟𝑜𝑢𝑔𝑒
+≠ 𝐶
+𝑉𝑏𝑙𝑢𝑒
+⇒ 𝑉𝑟𝑜𝑢𝑔𝑒 ≠ 𝑉𝑏𝑙𝑢𝑒
+• Conclusion : Le verre constituant le prisme est un milieu dispersif parce que la vitesse
+de l’onde lumineuse dépond de la coloration de la radiation : c’est-à-dire de sa
+fréquence.
+Couleur de la
+radiation
+Rouge Bleu Violet
+Longueur
+d’onde en nm
+768 486 434
+L’indice de
+réfraction n
+1,618 1,641 1,652
+
+-- 8 of 8 --
+

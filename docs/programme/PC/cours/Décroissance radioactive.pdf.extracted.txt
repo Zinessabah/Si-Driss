@@ -1,0 +1,468 @@
+D. ZINESSABAH PAGE 0
+Décroissance radioactive
+COURS
+D. Zinessabah | Eco Plus | 2020/2021
+
+-- 1 of 10 --
+
+D. ZINESSABAH PAGE 1
+I. Rappels :
+1. Composition et représentation d’un noyau d’atome.
+➢ Le noyau de l’atome est constitué de nucléons : les protons et les neutrons.
+➢ Le proton est une particule chargée positivement q(p) = +e = +1,6.10-19C. e est appelé la
+charge élémentaire.
+La masse du proton m(p)=1,6726.10-27Kg.
+➢ Le neutron est une particule électriquement neutre q(n) = 0.
+La masse du neutron m(n) = 1,6750.10-27Kg.
+➢ Le noyau d’un atome associé à un élément chimique X est représenté par le symbole 𝑋	𝑍
+𝐴 .
+Z est le nombre de protons appelé nombre de charge ou numéro atomique.
+A est le nombre de nucléons appelé nombre de masse : A =Z+N où
+N est le nombre de neutrons.
+➢ Exemples : 𝐻	1
+1 ; 𝐶	6
+12 ; 𝐶𝑙	17
+35 ; 𝑈	92
+235
+2. Les nucléides
+On appelle nucléide l'ensemble des noyaux identiques ayant même nombre de masse A et
+même nombre de charge Z.
+Exemple : 𝑁	7
+14 ; 𝐶	6
+14 ; 𝐶𝑙	17
+35 ; 𝐶𝑙	17
+37 : Cette exemple représente 4 nucléides dont 2 nucléides
+appartiennent à l’élément chimique chlore.
+3. Les isotopes
+➢ Les isotopes d’un élément chimique c’est l’ensemble des nucléides qui possèdent le même
+nombre de protons (même Z) mais diffèrent du nombre de neutrons (diffèrent de A).
+Exemples : - Les isotopes de l’hydrogène : 𝐻	1
+1 ; 𝐻	1
+2 ; 𝐻	1
+3
+- Les isotopes du carbone : 𝐶	6
+12 ; 𝐶	6
+13 ; 𝐶	6
+14
+➢ L’abondance naturelle 𝜽𝒊 d’un isotope i de masse 𝒎𝒊 dans un mélange d’isotopes de masse
+𝒎, est le pourcentage en masse de cet isotope dans ce mélange tel que : 𝒎 = ∑ 𝒎𝒊.𝜽𝒊 .
+Exemple : 𝜃 𝑈	92
+238 = 99,276% ; 𝜃 𝑈	92
+235 = 0,718% ; 𝜃 𝑈	92
+234 = 0,006%
+4. La densité de la matière nucléaire.
+On modélise le noyau d’un atome par une sphère de rayon r qui varie avec le nombre de
+masse A selon l’expression : 𝑟 = 𝑟0. 𝐴⅓ avec r0= 1,2.10-15m le rayon du noyau d’hydrogène.
+
+-- 2 of 10 --
+
+D. ZINESSABAH PAGE 2
+Déduction : Un cube d’arête de 1cm3 contient plus de 200 millions tonnes matière nucléaire, par
+conséquent la matière nucléaire est extrêmement dense.
+II. La radioactivité et transformations nucléaires.
+1. Définition
+➢ La radioactivité une désintégration naturelle, spontanée et imprévisible d’un noyau instable
+en un autre plus stable avec émission d’une ou plusieurs rayonnements (α, β ou γ).
+➢ Les désintégrations radioactives sont :
+• Aléatoires : impossible d’en prévoir l’instant.
+• Spontanées : sans intervention extérieure.
+• Inéluctables : impossible d’empêcher le processus quel que soit les paramètres
+physiques (pression, température ...) ou chimiques (liaisons ou réactions).
+2. Diagramme (N,Z) : Diagramme de Segré.
+➢ Le diagramme de Segré regroupe tous
+les noyaux stables et les noyaux
+radioactifs (instables)
+➢ Chaque petite case représente un
+nucléide.
+➢ Tous les isotopes d’un élément
+chimique se trouvent sur la même
+droite parallèle à l’axe des neutrons N.
+➢ Le diagramme (N,Z) possède plusieurs
+zones, dont une centrale (en rouge),
+appelée vallée de stabilité qui
+correspond aux noyaux stables.
+• Jusqu’à Z=20, la vallée de stabilité
+contient la droite N=Z : ce sont les
+noyaux légers.
+• Pour Z>20 la vallée de stabilité
+s’éloigne de la droite N=Z : les
+noyaux contiennent plus de neutrons
+que de protons.
+➢ Tous les noyaux se trouvant hors
+de la vallée de stabilité sont
+instables. On distingue trois zones :
+• Les noyaux lourdes (en vert) : il se désintègrent en émettant des noyaux d’hélium 𝐻𝑒	2
+4
+appelés particules α.
+• Les noyaux se trouvant aux dessus de la vallée de stabilité (en bleu) : ils ont un excès de
+neutrons, ils se désintègrent en émettant des électrons appelés particules β-.
+• Les noyaux se trouvant en dessous de la vallée de stabilité (en jaune) : ils ont un excès de
+protons, ils se désintègrent en émettant des positrons appelés particules β+.
+3. Transformations nucléaires spontanées.
+a. Lois de conservation (Lois de SODDY).
+Considérons, dans le cas général, la transformation nucléaire suivante :
+
+-- 3 of 10 --
+
+D. ZINESSABAH PAGE 3
+𝑋	𝑍
+𝐴 → 𝑌	𝑍2
+𝐴1 + 𝑃	𝑍2
+𝐴2
+𝑋	𝑍
+𝐴 : le noyau père radioactif.
+𝑌	𝑍2
+𝐴1 : le noyau fils .
+𝑃	𝑍2
+𝐴2 : la particule émise par la désintégration.
+Lors des transformations nucléaires, il y a conservation du nombre de charge Z et du nombre
+de nucléons A.
+𝐴 = 𝐴1 + 𝐴2
+𝑍 = 𝑍1 + 𝑍2
+b. Les différents types d’émissions radioactives
+1.b. Radioactivité α
+𝑋	𝑍
+𝐴 → 𝑌	𝑍−2
+𝐴−4 + 𝐻𝑒	2
+4
+Exemple : 𝑈	92
+238 → 𝑌	90
+234 + 𝐻𝑒	2
+4
+La radioactivité α concerne les noyaux lourds dont le
+nombre de masse A > 200.
+Représentation de la radioactivité sur le diagramme
+(N,Z) : (voir figure ci-contre).
+2.b. Radioactivité β-
+𝑋	𝑍
+𝐴 → 𝑌	𝑍+1
+𝐴 + 𝑒	−1
+0
+Exemple : 𝐶	6
+14 → 𝑁	7
+14 + 𝑒	−1
+0
+Mécanisme de la transformation : La radioactivité β- est due à la transformation d'un
+neutron en un proton dans le noyau: 𝑛	0
+1 → 𝑝	1
+1 + 𝑒	−1
+0
+La radioactivité β- concerne les noyaux qui ont un excès
+de neutrons.
+Représentation de la radioactivité β- sur le diagramme
+(N,Z) : (voir figure ci-contre).
+3.b. Radioactivité β+
+𝑋	𝑍
+𝐴 → 𝑌	𝑍−1
+𝐴 + 𝑒	+1
+0
+Exemple : 𝑃	15
+30 → 𝑆𝑖	14
+30 + 𝑒	1
+0
+Mécanisme de la transformation : La radioactivité β+ est due à la transformation d'un
+proton en un neutron dans le noyau: 𝑝	1
+1 → 𝑛	0
+1 + 𝑒	1
+0
+La radioactivité β+ concerne les noyaux artificiels qui ont un excès de protons.
+Représentation de la radioactivité β+ sur le diagramme
+(N,Z) : (voir figure ci-contre).
+4.b. Radioactivité γ
+Les noyaux fils issues de la désintégration α, β- et β+
+peuvent être dans un état énergétique supérieur à l’état
+fondamental. On dit que ces noyaux fils sont excités.
+Pour distinguer les noyaux excités des autres noyaux on
+utilise cette notation : 𝑋∗
+𝑍
+𝐴
+𝑋∗
+𝑍
+𝐴 → 𝑋	𝑍
+𝐴 + 𝛾	0
+0
+Exemple : 𝑁	7
+16 → 𝑂∗
+8
+16 + 𝑒	−1
+0
+𝑂∗
+8
+16 → 𝑂	8
+16 + 𝛾
+Le noyau excité perd son excès d’énergie par émission d’ondes électromagnétiques de
+longueur d’onde inferieur à 1pm : c’est la radioactivité γ.
+
+-- 4 of 10 --
+
+D. ZINESSABAH PAGE 4
+4. Familles radioactives
+Une famille radioactive est une suite
+de nucléides descendant d'un même
+noyau père par une suite de
+désintégrations successives jusqu'à
+l'obtention d'un noyau stable.
+Exemples de familles radioactives
+naturelles descendant des noyaux
+suivants : 𝑈	92
+238 ; 𝑈	92
+235 ; 𝑁𝑝	98
+237 ; 𝑇ℎ	90
+232
+II. Loi de décroissance radioactive.
+1. Sa formule
+La désintégration des noyaux radioactifs au niveau microscopique est aléatoire, mais au
+niveau macroscopique le nombre moyen N(t) de noyaux restants, à un instant t, dans un
+échantillon radioactif suit une loi déterminée sa formule est : 𝑁(𝑡) = 𝑁0. 𝑒−𝜆.𝑡
+𝑁0 : est le nombre de noyaux radioactifs présents à l’instant t=0.
+λ : est une constante qui caractérise le noyau
+radioactif appelée constante radioactive, son
+unité (s-1).
+2. La constante de temps τ
+• On définit la constante de temps par la
+relation suivante : 𝜏 = 1
+𝜆 , son unité (s). Ce
+qui en résulte : 𝑁(𝑡) = 𝑁0. 𝑒−𝑡
+𝜏
+• On peut déterminer τ graphiquement en
+traçant la tangente à la courbe N=f(t) , à
+l’instant t=0. Elle coupe l’axe des
+abscisses au point t=τ (voir figure).
+• On peut déterminer τ par application de
+la loi de décroissance radioactive 𝑁(𝑡) = 𝑁0. 𝑒−𝑡
+𝜏
+t=τ 𝑁(𝜏) = 𝑁0. 𝑒−𝜏
+𝜏
+𝑁(𝜏) = 𝑁0. 𝑒−1
+𝑁(𝜏) = 𝑁0
+𝑒 = 0,37𝑁0
+A l’instant t=τ , 63% des noyaux radioactifs se sont désintégrés et reste 37% de
+l’échantillon initial.
+3. Demi-vie t½
+• La demi-vie t½ , ou période radioactive, d’un nucléide radioactif est la durée correspondant à
+la désintégration de la moitié des noyaux radioactifs initialement présents dans un
+échantillon. Elle s’exprime en (s).
+
+-- 5 of 10 --
+
+D. ZINESSABAH PAGE 5
+t= t½ 𝑁(𝑡½) = 𝑁0
+2
+𝑁(𝑡½) = 𝑁0. 𝑒−𝜆.𝑡½ = 𝑁0
+2
+𝑒−𝜆.𝑡½ = 1
+2
+𝑙𝑛(𝑒−𝜆.𝑡½ ) = 𝑙𝑛 (1
+2)
+−𝜆. 𝑡½ = 𝑙𝑛(1) − 𝑙𝑛(2)
+−𝜆. 𝑡½ = − 𝑙𝑛(2)
+𝑡½ = 𝑙𝑛(2)
+𝜆 = 𝜏. 𝑙𝑛(2)
+• Exemples de périodes radioactives
+𝑡½( 𝑈	92
+238 ) = 4,5. 109 𝑎𝑛𝑠 ; 𝑡½( 𝐶	6
+14 ) = 5600 𝑎𝑛𝑠 ; 𝑡½( 𝐶𝑜	27
+137 ) = 30 𝑎𝑛𝑠
+𝑡½( 𝐼	53
+131 ) = 8,1 𝑗𝑜𝑢𝑟𝑠 ; 𝑡½( 𝑃𝑜	84
+212 ) = 3. 10−7 𝑠
+4. Activité d’un échantillon radioactif
+L’activité
+𝒂(
+𝒕) d’un échantillon radioactif est le nombre de désintégrations de noyaux
+radioactifs par seconde.
+L’expression de l’activité est : 𝑎(𝑡) = − 𝑑𝑁(𝑡)
+𝑑𝑡
+𝑁(𝑡) = 𝑁0. 𝑒−𝜆.𝑡
+𝑎(𝑡) = −𝑁0. 𝑑(𝑒−𝜆.𝑡)
+𝑑𝑡
+𝑎(𝑡) = −𝑁0. (−𝜆. 𝑒−𝜆.𝑡)
+𝑎(𝑡) = 𝑁0. 𝜆. 𝑒−𝜆.𝑡
+𝑎(𝑡) = 𝜆. 𝑁(𝑡)
+A t=0 𝑎0 = 𝜆. 𝑁0
+𝑎(𝑡) = 𝑎0. 𝑒−𝜆.𝑡
+➢ L’unité de l’activité, dans le système international, est le Becquerel (Bq). Un Bq
+correspond à une désintégration par seconde.
+➢ Une autre unité de l’activité appelée Curie (Ci). 1 Ci = 3,7.1010 Bq.
+➢ On mesure l’activité d’une source radioactive à l’aide des compteurs. Le plus connue
+des compteurs est compteur de Geiger.
+➢ Exemples d’activités de quelques sources radioactives :
+Source Activité en Bq
+1 litre d’eau minérale 10
+1 Kg de poissons 100
+Une personne de 70Kg 104
+1 Kg de plutonium 2.109
+5. Différentes formes de la loi de décroissance radioactive
+Les différentes formes de la loi de décroissance radioactive :
+➢ En fonction du nombre de nucléides : 𝑁(𝑡) = 𝑁0. 𝑒−𝜆.𝑡
+➢ En fonction de l’activité : 𝑎(𝑡) = 𝑎0. 𝑒−𝜆.𝑡
+➢ En fonction de la masse : 𝑚(𝑡) = 𝑚0. 𝑒−𝜆.𝑡
+➢ En fonction de la quantité de matière : 𝑛(𝑡) = 𝑛0. 𝑒−𝜆.𝑡
+➢ En fonction de la concentration : 𝐶(𝑡) = 𝐶0. 𝑒−𝜆.𝑡
+
+-- 6 of 10 --
+
+D. ZINESSABAH PAGE 6
+II. La datation par la radioactivité
+La technique de datation par radioactivité repose sur la comparaison de la mesure de l’activité
+actuelle de l’échantillon à celle d’un autre échantillon témoin de même nature.
+1. Datation avec le carbone 14
+Le carbone 14 à une radioactivité β-. Sa répartition dans l’atmosphère et dans les êtres vivants
+est homogène. A la mort de l’être vivant le carbone 14 n’est plus renouvelé. Sa teneur décroit
+d’une façon exponentielle selon la loi de décroissance radioactive : 𝑎(𝑡) = 𝑎0. 𝑒−𝜆.𝑡
+Équation de la désintégration : 𝐶	6
+14 ⟶ 𝑁	7
+14 + 𝑒	−1
+0
+𝑎(𝑡)
+𝑎0
+= 𝑒−𝜆.𝑡
+𝑙𝑛 (𝑎(𝑡)
+𝑎0
+) = 𝑙𝑛(𝑒−𝜆.𝑡)
+𝑙𝑛 (𝑎(𝑡)
+𝑎0
+) = −𝜆. 𝑡
+𝑡 = − 1
+𝜆 𝑙𝑛 (𝑎(𝑡)
+𝑎0
+) = −𝜏. 𝑙𝑛 (𝑎(𝑡)
+𝑎0
+)
+𝑡 = 1
+𝜆 𝑙𝑛 ( 𝑎0
+𝑎(𝑡)) = 𝜏. 𝑙𝑛 ( 𝑎0
+𝑎(𝑡))
+On a montré que : 𝑡½ = 𝑙𝑛(2)
+𝜆 = 𝜏. 𝑙𝑛(2)
+Donc : 𝑡 = 𝑡½
+𝑙𝑛(2) 𝑙𝑛 ( 𝑎0
+𝑎(𝑡))
+Demi-vie du 𝐶	6
+14 est 𝑡½ = 5600 𝑎𝑛𝑠
+2. La datation avec d’autres nucléides
+La datation avec le carbone 14 n’est plus précise si l’échantillon à dater a plus de 40 mille ans,
+dû au faible teneur en carbone 14. Dans ce cas on utilise d’autres nucléides ayant des périodes
+radioactives plus grandes comme 𝑈	92
+238 par exemple.
+𝑡½( 𝑈	92
+238 ) = 4,5. 109 𝑎𝑛𝑠
+L’utilisation du l’uranium 𝑈	92
+238 a permit d’estimer la date de la formation de la terre à 4,5
+milliards années.
+
+-- 7 of 10 --
+
+D. ZINESSABAH PAGE 7
+
+-- 8 of 10 --
+
+D. ZINESSABAH PAGE 8
+Série d’exercices : la décroissance radioactive
+Exercice 1 :
+On résume le bilan nucléaire de la famille de l’uranium 235 comme suit :
+𝑈	92
+235 → 𝑃𝑏	82
+207 + 𝑥 𝐻𝑒	2
+4 + 𝑦𝛽−
+1. Préciser les valeurs de x et y
+2. Calculer le nombre de noyaux de 𝑈	92
+235 présents dans un échantillon d’uranium 235 de
+masse m0 = 0,5 Kg.
+3. Déterminer le nombre de noyaux de 𝑈	92
+235 restants après 800 millions d’années.
+4. Calculer le nombre de noyaux 𝑃𝑏	82
+207 formés après cette durée.
+5. En déduire la masse de 𝑃𝑏	82
+207 formé.
+On donne : 𝑀( 𝑃	82
+207 𝑏) = 207𝑔. 𝑚𝑜𝑙−1 ; 𝑀( 𝑈)	92
+235 = 235𝑔. 𝑚𝑜𝑙−1
+𝑡½( 𝑈)	92
+235 = 8,5. 108𝑎𝑛𝑠 ; 𝑁𝐴 = 6,02. 1023𝑚𝑜𝑙−1
+Exercice 2 :
+A l’instant t=0, Un échantillon de sodium 𝑁𝑎	11
+24 a une
+masse m0. Le graphe ci-contre montre la variation de la
+masse restante de l’échantillon en fonction du temps :
+m=f(t).
+1. Préciser la valeur de m0 puis en déduire N0 le
+nombre de noyaux de l’échantillon à l’instant t=0.
+2. Définir la demi-vie 𝑡½ d’un nucléide radioactif et
+donner la relation entre sa constante de
+radioactivité λ et 𝑡½.
+3. Préciser les valeurs de 𝑡½ et λ.
+4. Déterminer, graphiquement, la masse du sodium désintégrée à l’instant t=30 heures.
+5. Confirmer le résultat de la question 4 par une autre méthode.
+6. Déterminer la durée nécessaire pour que la masse m0 se désintègre à 99%.
+7. Calculer l’activité a0 de l’échantillon de sodium de masse m0.
+8. Déterminer l’instant où l’activité de l’échantillon soit égale à a=1,28.104Bq.
+9. Le nucléide 𝑁𝑎	11
+24 à une radioactivité β-, écrire l’équation de la désintégration du
+sodium et expliquer le mécanisme de cette désintégration.
+On donne : 𝑁𝐴 = 6,02. 1023𝑚𝑜𝑙−1 ; 𝑀( 𝑁𝑎	11
+24 ) = 24𝑔. 𝑚𝑜𝑙−1
+Exercice 3 :
+Le nucléide du polonium 𝑃𝑜	84
+210 se désintègre en nucléide 𝑃𝑏	82
+206 .
+1. Donner la composition du nucléide 𝑃𝑜	84
+210 .
+2. Écrire l’équation de désintégration et préciser son type.
+3. La mesure de l’activité d’un échantillon de 𝑃𝑜	84
+210 aux instants t0=0 et t1=90 jours ont
+donné, respectivement, les valeurs a0=1,26.1021Bq et a1=8.1020Bq.
+3.1. Déterminer la demi-vie 𝑡½ du nucléide 𝑃𝑜	84
+210 en unité de jour.
+3.2. Calculer les nombres N0 et N1 de noyaux de 𝑃𝑜	84
+210 respectivement aux instants t0 et t1.
+3.3. Quelle est la durée nécessaire pour que l’échantillon de 𝑃𝑜	84
+210 se désintègre à 90%.
+Exercice 4 :
+On résume le bilan nucléaire de la famille de l’uranium 238 comme suit :
+𝑈	92
+238 → 𝑃𝑏	82
+206 + 𝑥𝛼 + 𝑦𝛽−
+1. Par application des lois de Soddy, préciser les valeurs de x et y.
+
+-- 9 of 10 --
+
+D. ZINESSABAH PAGE 9
+2. Le rapport l’uranium 238 𝑈	92
+238 et du plomb 206 𝑃𝑏	82
+206 dans les roches minérales varie
+selon la date de formation de ces roches.
+On accepte que, au cours du temps, le plomb 206 𝑃𝑏	82
+206 présent les roches minérales
+provient que de la désintégration de l’uranium 238.
+On considère une roche minérale très ancienne. Il contient à la date de sa formation
+(t=0) un nombre N0 de noyaux 𝑈	92
+238 . Une étude de cette roche, à un instant t, a permit
+de connaitre la masse de l’uranium 𝑚( 𝑈) = 10𝑔	92
+238 et la masse du plomb 𝑚( 𝑃𝑏	82
+206 ) =
+10𝑚𝑔.
+2.1. Calculer le nombre de noyaux 𝑃𝑏	82
+206 présents dans 10mg de plomb 206.
+2.2. En déduire le nombre de noyaux 𝑈	92
+238 désintégrés.
+2.3. Calculer N0.
+2.4. Déterminer a0 l’activité radioactive à l’instant t=0.
+2.5. Calculer la masse des particules α émises à l’instant t.
+2.6. Monter que la date de la roche minérale s’écrive sous la forme suivante :
+𝑡 = 𝑡½
+𝑙𝑛(2) 𝑙𝑛(1 + 𝑚( 𝑃𝑏	82
+206 ).𝑀(𝑈)
+𝑚( 𝑈	92
+238 ).𝑀(𝑃𝑏))
+2.7. Calculer t.
+On donne :
+Les masses molaires : M(U)=238g.mol-1 , M(Pb)=206g.mol-1.
+M(α)=4g.mol-1.
+La constante d’Avogadro NA=6,02.1023mol-1.
+La demi-vie de 𝑈	92
+238 : 𝑡½( 𝑈)	92
+238 = 4,5. 109𝑎𝑛𝑠
+
+-- 10 of 10 --
+

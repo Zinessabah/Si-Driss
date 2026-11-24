@@ -1,0 +1,147 @@
+© Tous droits réservés Studyrama 2006
+PHYSIQUE 	Série S	Nº : 36004
+Fiche téléchargée sur www.studyrama.com 	
+Fiche Exercices
+► Exercice n°1
+On considère la réaction nucléaire suivante d’équation :
+136C + 42He → 168O + 10n
+1) De quel type de réaction s’agit-il ?
+2) Déterminer l’énergie libérée par la réaction.
+Données ::
+El(C) = 7,6 MeV / nucléon ; El(O) = 8,0 meV / nucléon ; El(He) = 7,1MeV / nucléon.
+► Exercice n°2
+L’uranium est constitué de deux isotopes 23592U et 23892U.
+1) Quel est l’isotope le plus fissible ?
+2) Déterminer l’énergie libérée par 1 g d’uranium 23592U sachant que la réaction produit en moyenne 160 MeV.
+Donnée :
+NA = 6,02 × 1023 mol-1
+► Exercice n°3
+On considère la réaction nucléaire d’équation :
+A1Z1X1 + A2Z2X2 → A3Z3X3 + A4Z4X4
+L’énergie de cette réaction est définie par :
+∆E = [ E1(X1) + E1(X2)] - [E1(X3) + E1(X4)]
+Exprimer ∆E en fonction de m(X1), m(X2), m(X3) et m(X4)
+► Exercice n°4
+La transformation de 1 g d’hydrogène en hélium 4 selon la réaction :
+4 (11H) → 42He + 2 (01e)
+s’accompagne de la libération de 4,1 × 1032 eV.
+1) Exprimer l’énergie libérée en joules (J) puis en kilowattheures (kWh).
+2) Calculer l’énergie libérée par la réaction : résultats en MeV.
+Données :
+1 W = 1 J.s-1 ; NA = 6,02 × 1023 mol-1
+Thème : Réactions nucléaires
+Fiche 4 : Énergie du noyau
+
+-- 1 of 4 --
+
+© Tous droits réservés Studyrama 2006
+PHYSIQUE 	Série S	Nº : 36004
+Fiche téléchargée sur www.studyrama.com 	2
+Fiche Exercices
+► Exercice n°5
+On considère la réaction de fission nucléaire d’équation : 23592U + 10n → 14054Xe + 9538Sr + 2 (10n).
+Déterminer l’énergie de réaction ∆E et en déduire le caractère (exothermique, endothermique ou athermique) de cette réaction.
+Données :
+Masse de 23592U = 234,9935 u	9935 u	35 u ; masse de 14054Xe = 139,8920 u	8920 u	20 u ;
+Masse de 9538Sr = 93,8945 u ; masse de 10n = 1,0087 u ;
+1 u correspond à 931,5 MeV.
+► Exercice n°6
+On considère la réaction de fission nucléaire d’équation :
+23592U + 10n → 14857La + 8535Br + 3 (10n).
+1) Déterminer l’énergie de réaction ∆E pour 1 mole de noyau fissionné.
+2) Comparer cette énergie à l’énergie de combustion du carbone (-390 kJ.mol-1).
+Données :
+El (23592U) =1 785,89 MeV ; El (14857La) = 1 210,21 MeV ; El = (8535Br) = 733,81 MeV.
+► Exercice n°7
+On considère trois noyaux de bore : 85B, 105B et 115B présentant les caractéristiques suivantes :
+- pour le noyau de 85B : énergie de liaison par nucléon = 3,76 MeV ;
+- pour le noyau de 105B : masse du noyau = 9,326 MeV / c2 ;
+- pour le noyau de 115B : défaut de masse = 75,06 MeV / c2.
+Classer ces trois noyaux par ordre de stabilité croissant.
+Données :
+mP = 938,26 MeV / c2 ; mN = 939,55 MeV / c2
+► Exercice n°8
+On considère les réactions nucléaires d’équations :
+(1) : 126C + 11H → 11H + A1Z1X1
+(2) : A1Z1X1→ A2Z2X2 + 01e
+(3) : A2Z2X2 + 11H → A3Z3X3
+(4) : A3Z3X3 + 11H → A48O
+(5) : A48O → 157N + 01e
+1) Identifier tous les noyaux inconnus et le nombre de masse A4.
+2) Préciser pour chaque réaction s’il s’agit d’une fission ou d’une fusion.
+Données :
+Z(C) = 6 ; Z(N) = 7 ; Z (O) = 8
+
+-- 2 of 4 --
+
+© Tous droits réservés Studyrama 2006
+PHYSIQUE 	Série S	Nº : 36004
+Fiche téléchargée sur www.studyrama.com 	
+Fiche Exercices
+► Exercice n°9
+Soit un noyau AZX avec A >> 4 et Z >> 2.
+On considère les réactions nucléaires d’équations :
+(1) : AZX → A-1Z-1Y + 11H
+(2) : AZX → A-4Z-2Y + 42He
+1) Montrer que la réaction (1) n’est possible que si El (A, Z) << El (A-1, Z-1)
+Montrer également que la réaction (2) n’est possible que si El (A, Z) << El (A-4, Z-2) + El (4, 2)
+2) Un noyau de 23892U peut-il émettre spontanément un proton ? une particule α ?
+Données :
+El (42He) = 28,303 MeV ; El (23791Pa) = 1 797,148 MeV ;
+El (23490Th ) = 1 780,390 MeV ; El (23892U) = 1 804,171 MeV.
+► Exercice n°10
+1) Calculer la perte de masse du Soleil liée à la réaction nucléaire d’équation : 4 (11H) → 42He + 2 (01e)
+2) Calculer la perte de masse du Soleil par unité de temps.
+Données :
+MSoleil = 2 ¥ 1030 kg ; m(H) = 1,007284 u ; m(He) = 4,001502 u ;
+m(e) = 5,486 ¥ 10-4 u ; puissance totale rayonnée par le Soleil : P = 3,7 ¥ 1026 W ;
+1 u correspond à 931,5 MeV ; NA = 6,02 ¥ 1023 mol-1.
+► Exercice n°11
+1) La demie-vie du carbone 146C est de 5 590 années. Un échantillon de bois trouvé dans une grotte préhistorique donne 212
+désintégrations par minute. Un même échantillon contenant la même masse de carbone et préparé à partir d’un jeune bois donne
+1 350 désintégrations par minute.
+Quel est l’âge du bois ancien ?
+2) Dans les êtres vivants, le rapport r = nombre d’atomes de carbone 14 / nombre d’atomes de carbone 12 est égal à 10-12. Après
+leur mort, ce rapport décroît et atteint pour un cas d’étude la valeur 0,25 × 10-12.
+Combien de temps s’est écoulé depuis la mort de l’être vivant ?
+3) La demi-vie du potassium 4019K vaut 1,5 × 109 années.
+Calculer sa constante radioactive.
+4) Pour déterminer l’âge des cailloux lunaires rapportés par les astronautes, on mesure les quantités relatives de potassium 4019K
+et de son produit par décomposition, l’argon 4018Ar.
+Un échantillon de 1 g de cailloux lunaires contient 8,2 × 10-3 cm3 d’argon et 1,66 g de potassium.
+Déterminer l’âge des cailloux.
+Données :
+VM = 22,4 L.mol-1 ; NA = 6,02 ×1023 mol-1
+► Exercice n°12
+Un noyau d’uranium 23592U bombardé par un neutron 10n donne du xénon 14054Xe et du strontium Sr dont le nombre de masse est
+de 94.
+
+-- 3 of 4 --
+
+© Tous droits réservés Studyrama 2006
+PHYSIQUE 	Série S	Nº : 36004
+Fiche téléchargée sur www.studyrama.com 	
+Fiche Exercices
+1) Ecrire l’équation-bilan correspondant à cette réaction nucléaire sachant qu’il se forme des neutrons.
+2) Calculer en MeV l’énergie fournie par la réaction nucléaire.
+3) On utilise de l’uranium enrichi en 23592U. Une partie du combustible 23592U se retrouve après consommation dans le réacteur
+nucléaire. Les étapes sont les suivantes :
+• un noyau 23592U subit une fission qui libère des neutrons ;
+• un noyau 23892U capte un de ces neutron ;
+• le noyau obtenu subit une désintégration β− ;
+• le nouveau noyau subit une désintégration β− ;
+• enfin, le dernier noyau obtenu subit une désintégration α.
+Ecrire la suite des quatre dernières réactions nucléaires et vérifier que 23592U se reforme.
+4) Les réactions nucléaires qui se produisent dans le Soleil libèrent une énergie de 3 × 1031 J par jour.
+On considère que toute l’énergie solaire a pour origine la fusion de l’hydrogène. L’énergie libérée lors d’une réaction élémentaire
+est de 25,7 MeV. Chaque réaction élémentaire produit un noyau 42He.
+Calculer la diminution de masse du Soleil en une journée puis en une année et estimer la durée de vie probable du Soleil.
+5) Calculer la masse d’hélium produite dans l’astre en une journée.
+Données : énergies de liaison par nucléon :
+7,5 MeV pour l’uranium ; 8,2 MeV pour le xénon ; 8,5 MeV pour le strontium.
+Z(Np) = 93 avec Np = neptunium ; Z(Pu) = 94 avec Pu = plutonium.
+MSoleil = 2 × 1030 kg ; MHe = 4 g.mol-1
+c = 3 × 108 m.s-1 ; 1 an ≈ 365 jours
+
+-- 4 of 4 --
+

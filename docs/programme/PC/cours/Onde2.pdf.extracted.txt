@@ -1,0 +1,199 @@
+Ondes mécanique progressives
+périodiques
+COURS
+D. Zinessabah | Eco Plus | 2019/2020
+
+-- 1 of 8 --
+
+D. ZINESSABAH PAGE 1
+I. Onde mécanique progressive périodique.
+1. Activité 1.
+➢ L’onde émis du diapason est une onde mécanique progressive
+périodique sinusoïdale. (Photo 1)
+➢ L’onde émis de la flute est une onde mécanique progressive périodique.
+(Photo 2)
+➢ On peut calculer la période T en utilisant la relation suivante : 𝑇 = 𝑆ℎ. 𝑥
+- 𝑆ℎ : La sensibilité horizontale indiquée par la base de temps de
+l’oscilloscope.
+- 𝑥 : le nombre de divisions qu’occupe une période.
+2. Définition de l’onde progressive périodique.
+Une onde progressive est dite périodique si l’évolution temporelle de chaque
+point du milieu de propagation est périodique.
+3. La période temporelle. Simulation : Onde périodique sinusoïdale
+La période temporelle T d’une onde mécanique
+progressive périodique est la petite durée au bout de
+laquelle la perturbation se reproduit identique à elle-
+même.
+La relation entre la fréquence 𝑁 et la période T :
+𝑁 = 1
+𝑇
+T en seconde (s) et N en hertz (Hz).
+4. Activité 2 Vidéo 1 , Vidéo 2 : Stroboscopie
+On utilise une corde élastique tendue verticalement
+par un corps suspendu comme l'indique la figure ci-
+contre. La corde est attachée en S au bout d'une lame
+vibrante dont le mouvement est entretenu par un
+électro-aimant alimenté par un courant alternatif.
+Photo 1 : Visualisation de l’onde sonore émit du diapason. Photo 2 : Visualisation d’une
+onde sonore émit d’une flute.
+
+-- 2 of 8 --
+
+D. ZINESSABAH PAGE 2
+y
+Lorsque la lame vibre à la fréquence N = 100 Hz, la corde apparait floue, ce
+qui prouve que tous les points de la corde se trouvent dans un état vibratoire.
+On éclaire La corde avec un stroboscope réglé aux fréquences suivantes :
+Ns= 100 Hz, 99 Hz et 101 Hz on constate :
+➢ Pour Ns=N=100 Hz : La corde apparait immobile sous forme d’une
+courbe sinusoïdale.
+➢ Pour une fréquence Ns=99 Hz : la corde apparait en mouvement
+ralenti vers le sens de propagation réel de l’onde.
+➢ Pour une fréquence Ns=101 Hz : la corde apparait en mouvement
+ralenti dans le sens opposé de la propagation de l’onde.
+5. La période spatiale λ. (Longueur d’onde)
+La période spatiale λ d’une onde mécanique progressive périodique est la
+distance parcourue par l’onde pendant une période temporelle.
+λ = 𝑣. 𝑇 = 𝑣
+𝑁
+λ : longueur d’onde en m.
+𝑣 : la célérité de l’onde en m/s.
+𝑇 : la période temporelle en s.
+𝑁 : la fréquence en Hz.
+6. Comparaison du mouvement de deux points du milieu de propagation :
+Aspect de la corde vibrante à un instant t :
+- Deux points M1 et M2 d'un milieu vibrent en phase si la distance d
+qui les séparent est égale à un nombre entier naturel k de longueurs
+d'onde λ. 𝑑 = 𝑀1𝑀2 = 𝑘. 𝜆
+Exemple : les points M1 , M2 et M3 vibrent en phase.
+- Deux points M1 et M2 d'un milieu vibrent en opposition de phase si
+la distance d qui les séparent est un nombre impair de la demi-
+longueur d'onde λ. 𝑑 = 𝑀1𝑀2 = (2𝑘 + 1). 𝜆
+2
+Exemple : M1 et M’1 vibrent en opposition de phase.
+7. Exercice d’application :
+On branche le bout d’une corde à un vibreur S de fréquence N. La figure, si
+dessous, représente l’aspect de la corde à l’instant t=0,05 s.
+1- Préciser la longueur d’onde λ et calculer sa célérité de propagation.
+2- En déduire la fréquence du vibreur.
+3- Comparer le mouvement de M1 et M2.
+On donne SM1=12 cm et SM2=18cm.
+x
+𝜆
+2λ M3
+M’2
+M2
+M’1
+M1
+
+-- 3 of 8 --
+
+D. ZINESSABAH PAGE 3
+4- Représenter la forme de la corde à l’instant t’=0,035 s.
+5- On éclaire la corde à l’aide d’un stroboscope. Qu’observe-t-on si la
+fréquence du stroboscope est Ns=51 Hz ?
+y(cm)
+2
+S 0 2 4 6 8 10 x(cm)
+8. Réponse
+
+-- 4 of 8 --
+
+D. ZINESSABAH PAGE 4
+II. Onde mécanique sonore.
+1. Activité.
+M1 M2
+GBF
+On réalise le montage si dessus.
+Sur l’écran de l’oscilloscope, on observe les
+sinusoïdes suivantes selon la position du microphone
+M2. (M1 fixe).
+➢ Lorsque les deux microphones sont placés
+côte à côte, nous observons deux
+sinusoïdes en phase de même amplitude et
+de même période.
+➢ Lorsque on éloigne le microphone M2 de M1
+horizontalement d’une distance d, les deux
+sinusoïdes ne sont plus en phase.
+
+-- 5 of 8 --
+
+D. ZINESSABAH PAGE 5
+➢ Lorsque la distance qui sépare les deux
+microphones est égale à λ (longueur d’onde
+sonore) les deux sinusoïdes sont à nouveau en
+phase.
+➢ Si on continue d’éloigner M2 de M1 de k.λ (k
+entier naturel) les sinusoïdes restent en
+phase.
+2. Application :
+1- Calculer la période de l’onde sonore sachant que la
+sensibilité horizontale indiqué par la base du temps de
+l’oscilloscope est Sh = 0,1 ms.
+2- Les deux sinusoïdes sont en phase pour la première fois à la
+distance 10,2 cm et à 20,4 cm pour la deuxième fois ; en
+déduire la longueur d’onde sonore.
+3- Calculer la vitesse du son.
+3. Réponse :
+
+-- 6 of 8 --
+
+D. ZINESSABAH PAGE 6
+III. Phénomène de diffraction des ondes mécaniques
+progressive.
+1. L’onde mécanique progressive circulaire et rectiligne. Vidéo : Cuve à onde
+A l’aide d’une cuve à ondes, on crée des ondes
+circulaires et des ondes rectilignes.
+2. Diffraction d’une onde mécanique à l’aide d’une ouverture. Vidéo : Diffraction
+La diffraction est un phénomène qui caractérise les ondes, il se produit
+lorsque l'onde passe à travers une ouverture de taille comparable à la longueur
+d'onde (a ≤ λ).
+- Si a > λ on dit que l’onde est diaphragmée. (Fig. a).
+- Si a ≤ λ on dit que l’onde est diffractée. (Fig. b).
+Ondes circulaires Ondes rectilignes
+
+-- 7 of 8 --
+
+D. ZINESSABAH PAGE 7
+- L’onde diffractée et l’onde incidente ont la même fréquence, même
+célérité et même λ.
+- La diffraction est d’autant plus marquée que l’ouverture est petite.
+- Le phénomène de la diffraction révèle la nature ondulatoire de
+toute perturbation qui se propage.
+3. Exercice d’application
+Les ondes sonores audibles par l’oreille humaine ont une fréquence
+comprise entre 20Hz et 20kHz. Au-delà de 20kHz il s'agit d'ultrasons qui ne
+peuvent pas être entendus par l’homme, certains animaux comme les chauves-
+souris, les dauphins ou les baleines sont capable de les percevoir.
+1- Sachant que la célérité des ondes sonores dans l’air est égale à 340m.s−1
+dans les conditions ordinaires de la température, déterminer le domaine de
+longueur d’onde des ondes sonores audibles par l’oreille humaine.
+2- Nous dirigeons, vers une fente, une onde ultrasonore de fréquence 24kHz.
+2-1 Quelle est la célérité des ondes ultrasons dans l’air ?
+2-2 Calculer l’ordre de grandeur de la largeur d’une fente qui permet de
+mettre en évidence le phénomène de diffraction.
+2-3 Sur cette même fente, on dirige une onde ultrasonore de fréquence
+2MHz
+le phénomène de diffraction est-il mis en évidence ? Justifier.
+4. Réponse :
+IV. Phénomène de la dispersion.
+1. Activité
+Sur la surface d’eau d’une cave à onde, on crée des ondes progressives
+circulaires à l’aide d’un vibreur à fréquence variable. Pour chaque fréquence N
+on mesure la longueur d’onde λ et on calcule la vitesse de propagation de
+l’onde circulaire.
+Compléter le tableau suivant et conclure.
+N(Hz) 20 25 30 35
+4 λ(m) 4 3,6 3,2 2,8
+λ(m) 1 0,9 0,8 0,7
+V(m.s-1) 20 22,5 24 24,5
+On conclut que la vitesse de propagation de l’onde progressive à la surface
+de l’eau dépend de la fréquence de la source : on dit que le milieu de
+propagation est dispersif.
+2. Définition
+Un milieu est dit dispersif si la célérité des ondes progressives dépend de
+leur fréquence.
+Remarque : L’air est un milieu non dispersif pour les ondes sonores.
+
+-- 8 of 8 --
+

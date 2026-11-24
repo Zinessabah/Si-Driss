@@ -1,0 +1,146 @@
+Les ondes mécaniques
+progressives
+COURS
+D. Zinessabah | Eco Plus | 2019/2020
+
+-- 1 of 4 --
+
+PAGE 1
+I. L’onde mécanique.
+1. Activités expérimentales
+a. Activité 1 Vidéo : perturbation transversale et longitudinale
+Secouons verticalement l’extrémité d’une corde tendue
+horizontalement
+t=0
+Perturbation
+t=t1
+Direction et sens de la propagation
+t=t2
+Direction et sens de la perturbation
+b. Activité 2
+On tend horizontalement un ressort long. On comprime quelques
+spires puis on les relâche.
+t=0
+t=t1
+t=t2
+Direction et sens de la propagation
+c. Activité 3
+On laisse tomber une petite
+pierre à la surface de l’eau.
+Perturbation
+Le point P est au repos
+P est en mouvement
+P revient au repos
+S
+Source de
+perturbation
+Corde
+
+-- 2 of 4 --
+
+PAGE 2
+2. Définition d’une perturbation
+Une perturbation est une modification locale et temporaire d’une ou plusieurs
+propriétés physiques d’un milieu de propagation.
+3. Définition d’une onde mécanique progressive.
+On appelle onde mécanique progressive,
+le phénomène de propagation d’une
+perturbation de proche en proche dans un
+milieu élastique.
+Lors de la propagation d’une onde il n’y a
+pas de transport de matière mais transport
+de l’énergie.
+4. Différents types d’ondes mécaniques.
+II.
+1.
+2.
+t1 S
+M1
+d
+t2>t1
+a. L’onde transversale.
+Une onde est dite transversale quand la direction de la perturbation 	est
+perpendiculaire à la direction de propagation.
+Exemple 	: 	- 	Onde le long d’une corde.
+- Onde à la surface de l’eau.
+b. L’onde longitudinale.
+Une onde est longitudinale quand la direction de la perturbation 	est
+parallèle à la la direction de propagation.
+Exemple 	: 	- 	Onde 	le long d’un ressort.
+Propriétés générales des ondes mécaniques.
+Dimension d’onde.
+Une onde se propage, à partir de la source, dans toutes les directions 	qui lui
+sont offertes. 	On distingue 	trois types de dimensions 	:
+➢ L’onde mécanique unidimensionnelle 	: 	C’est l’onde qui se propage
+selon une seule direction.
+Exemple 	: 	Propagation de l’onde le long d’une corde 	ou le long
+d’un ressort.
+➢ L’onde mécanique bidimensionnelle 	: 	C’est l’onde qui se propage
+suivant 	deux directions. 	(C’est-à-dire suivant un plan).
+Exemple 	: 	Onde à la surface de l’eau.
+➢ L’onde 	mécanique tridimensionnelle 	: C’est l’onde 	qui se propage
+suivant trois 	directions. (C’est-à-dire 	dans l’espace).
+Exemple 	: 	Propagation de l’onde sonore.
+L’onde sonore est une onde 	mécanique longitudinale
+tridimensionnelle qui 	ne 	se propage 	pas dans le vide mais se
+propage 	dans les milieux matériels (solides, liquides, gazeux)
+grâce à des 	compressions- 	dilatations 	du milieu matériel.
+Célérité 	de propagation d’une onde. 	M1
+M2
+
+-- 3 of 4 --
+
+PAGE 3
+La célérité d’une onde mécanique qui se propage dans un milieu homogène
+est donnée par la relation suivante :
+𝑣 = 𝑀1𝑀2
+𝑡2 − 𝑡1
+= 𝑑
+∆𝑡
+𝑣 : la célérité en (m/s).
+𝑑 : la distance parcourue par l’onde en (m).
+∆𝑡 : la durée du parcours de l’onde en (s).
+3. Le retard temporaire τ.
+➢ Tout point M du milieu de propagation répète le même mouvement
+de la source S avec un retard temporaire τ : (m)
+𝜏 = 𝑆𝑀
+𝑣
+(s) (m/s)
+Example : Le point M2 répète le mouvement du point M1 avec un
+retard temporaire :
+𝜏 = 𝑀1𝑀2
+𝑣
+➢ La relation entre l’élongation 𝑦𝑀 d’un point M du milieu de
+propagation et celle de la source 𝑦𝑆 est :
+𝑦𝑀(𝑡) = 𝑦𝑆(𝑡 − 𝜏)
+𝑦𝑆(𝑡) = 𝑦𝑀(𝑡 + 𝜏)
+4. Les facteurs influençant la célérité.
+La célérité d’une onde ne dépend que du milieu de propagation (sa
+densité, sa température, son inertie, …) et indépendante de
+l’amplitude de l’onde ou de la durée de la perturbation.
+Exemple 1 : La célérité de propagation d’une onde au long d’une
+corde homogène de longueur L et de masse m est : 𝑣 = √𝑇
+𝜇 , 𝜇 = 𝑚
+𝐿
+T : la tension de la corde en N.
+μ : la masse linéique de la corde en Kg/m.
+On remarque que plus la corde est tendue plus la célérité est
+grande ; et inversement par rapport à μ.
+Exemple 2 :
+Milieu de
+propagation
+Air à
+0°c
+Eau Béton Fer Verre
+Célérité
+en m/s
+330 1500 3200 5100 5400
+La célérité de propagation dépend du milieu matériel.
+5. Superpositions de deux ondes mécaniques.
+Lorsque deux ondes mécaniques
+se croisent, elles continuent à se
+propager après leur rencontre sans
+modification.
+
+-- 4 of 4 --
+

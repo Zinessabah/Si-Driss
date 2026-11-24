@@ -1,0 +1,1460 @@
+1
+0,5
+0,5
+0,75
+0,75
+Exercice 2 : Electricité-Utilisations d’un condensateur
+Les condensateurs sont caractérisés par la capacité d’emmagasiner l’énergie
+électrique, à fin de la récupérer en cas de besoin. Cette propriété permet d’utiliser
+les condensateurs dans différents appareils comme les flashs d’appareils photos.
+Partie1 : Charge du condensateur
+On réalise le montage représenté ci-contre et
+qui est constitué d’un condensateur de capacité
+C, initialement déchargé, monté en série avec
+un conducteur ohmique de résistance R et un
+interrupteur K.
+Le dipôle RC est soumis à un échelon de tension défini comme suit :
+- Pour t < 0, U = 0,
+- Pour t ≥ 0, U = E, tel que : E = 12V.
+On ferme le circuit à l’instant
+t = 0 et on visualise, en
+utilisant une interface
+informatique sur l’écran d’un
+ordinateur les variations de la
+tension uc aux bornes du
+condensateur en fonction du
+temps.
+Le graphe de la figure 2
+représente la courbe uc = f(t). Figure 2
+1-1- Etablir l’équation différentielle vérifiée par la tension uc(t).
+1-2- Vérifier que l’expression
+t
+τ
+C	u (t) E (1 e )
+
+  , est solution de l’équation
+différentielle pour t ≥ 0.
+τ est la constante de temps.
+1-3- Déterminer l’expression de τ, et montrer par analyse dimensionnelle que τ
+est homogène à un temps un temps.
+1-4- Noter graphiquement la valeur de τ, et vérifier que la valeur de la capacité
+du condensateur est C = 100 μF.
+On donne R=10 kΩ.
+1-5- Calculer l’énergie électrique emmagasinée par le condensateur en régime
+permanent.
+
+-- 1 of 38 --
+
+La tension aux bornes du condensateur varie
+selon l’équation
+t
+τ'
+C	u = 360.e
+.
+τ’ est la constante de temps, et uc(t) exprimée en
+volt (V).
+2-1- Calculer la résistance r de la lampe du
+flash de l’appareil photo, sachant que
+la tension aux bornes du condensateur
+prend la valeur uc(t) = 132,45 V à
+l’instant t = 2ms. Figure 3
+2-2- Expliquer comment faut-il choisir la résistance r, de la lampe du flash de
+l’appareil photo, pour assurer une décharge plus rapide du condensateur.
+La production d’étincelles dans le moteur d’une voiture nécessite deux circuits :
+ Circuit primaire constitué d’une bobine de coefficient d’inductance L et de
+résistance r alimentée par la batterie de la voiture ;
+ Circuit secondaire constitué d’une autre bobine et une bougie d’allumage.
+L’ouverture du circuit primaire provoque une étincelle qui jaillit entre les bornes de
+bougie d’allumage et amorce la combustion du mélange air-essence. Cette étincelle
+apparait lorsque la tension entre les bornes de la bougie d’allumage dépasse la
+valeur U = 10000 V.
+On modélise le système d’allumage dans le moteur d’une voiture par le montage
+représenté dans la figure 1.
+Figure 1
+Exercice 2 – Electricité – Principe de production d’une étincelle 2008 SR
+Partie 2 : décharge du condensateur
+Le fonctionnement du flash de l’appareil photo nécessite une énergie très grande que
+le générateur précèdent ne peut pas assurer. Pour obtenir l’énergie nécessaire le
+condensateur précédent est chargé par un circuit électronique permettant d’appliquer
+une tension continu entre ses bornes de valeur Uc = 360V.
+On décharge le condensateur, à l’instant t = 0, dans la lampe du flash d’un appareil
+photo qu’on modélise par un conducteur ohmique de résistance r. (Figure 3)
+
+-- 2 of 38 --
+
+Partie I : Etablissement du courant dans le circuit primaire :
+On modélise le circuit primaire par le montage de la figure 2, où :
+ G : Batterie de voiture assimilée à un générateur
+idéal de tension continue de f.é.m E = 12 V ;
+ (b) : Bobine d’inductance L et de résistance
+interne r = 1,5 Ω ;
+ D : Un conducteur ohmique équivalent au reste
+du circuit de résistance R = 4,5 Ω.
+ K : Interrupteur Figure 2
+1- On ferme l’interrupteur K à l’instant t = 0, le circuit est alors traversé par un
+courant électrique i(t).
+1-1- Recopier le circuit de la figure 2 et représenter dessus les tensions en
+convension récepteur.
+1-2- Montrer que l’équation differentielle vérifiée par le courant i(t) s’écrit sous
+la forme : , en précisant les expression de τ et A.
+dt τ
+di i
++ = A
+1-3- Montrer par analyse
+dimensionnelle que la
+constante τ est homogène à
+un temps.
+1-4- La courbe de la figure 3
+représente les variation de
+l’intensité du courant en
+fonction du temps. Figure 3
+1-4-1- Déterminer graphiquement la valeur de la constante de temps τ et
+celle l’intensité I0 du courant en régime permanent.
+1-4-2- En déduire la valeur du coefficient d’inductance L de la bobine (b).
+Partie II : Annulation du courant dans le circuit primaire :
+2- On ouvre le circuit primaire à un instant considéré comme nouvelle origine des
+temps t = 0, l’intensité du courant i(t) traversant le circuit diminue alors, et
+apparait une étincelle entre les bornes de la bougie d’allumage dans le circuit
+secondaire.
+2-1- Préciser entre les deux propositions suivantes de l’expression de i(t), celle
+qui correspond à cet état. Justifier.
+t
+-
+i(t) = B(1-e )	
+ ; t
+-
+i(t) = Be
+ , où B est une constante
+
+-- 3 of 38 --
+
+2-2- Sur la figure 4 sont
+représentées les courbes (a)
+et (b) traduisant les
+variations de i(t) en fonction
+du temps pour deux
+bobines de même résistance
+r et de coefficients d’auto-
+induction différents. Figure 4
+Sachant que la tension U dans le circuit secondaire est proportionnelle à Δi
+Δt , et que
+l’allumage de la bougie est plus efficace, tant que la tension U est plus grande.
+Préciser laquelle des deux bobines assure le plus efficace allumage.
+Deux groupes d’élèves, au cours d’une séance de travaux pratiques, ont réalisés
+deux études différentes pour déterminer le coefficient d’inductance L et la
+résistance interne r d’une bobine.
+1- Le premier groupe a réalisé le montage modélisé
+par le schéma de la figure 1 ci-contre et qui est
+constitué de :
+- Une bobine (b) de coefficient d’inductance L et
+de résistance interne r ;
+- Un résistor (D) de résistance R = 50 Ω ;
+- Un générateur (G) de f.é.m. E = 6 V et de
+résistance interne négligeable ;
+- Un interrupteur K. Figure 1
+Ce groupe a obtenu, grâce à un dispositif
+informatique convenable, la courbe reproduite
+sur le schéma de la figure 2 traduisant les
+variations de l’intensité du courant i(t) en
+fonction du temps.
+1-1- Etablir l’équation différentielle
+traduisant les variations du courant i(t).
+1-2- S’assurer que la solution de cette
+équation différentielle s’écrit sous la
+forme : t
+- τ
+0	i(t) = I (1- e ) Figure 2
+Où I0 est l’intensité du courant en régime permanent et τ la constante du temps.
+1-3- Déterminer à partir du graphe de la figure 2, la valeur de I0 et déduire la
+valeur de r.
+1-4- Déterminer graphiquement la valeur de τ.
+1-5- Déduire la valeur de L.
+Electricité : (05 points)2009SN
+
+-- 4 of 38 --
+
+2- Les élèves du deuxième groupe
+ont procédé à la charge totale
+d’un condensateur de capacité
+C = 10μF à l’aide d’un générateur
+de f.é.m. E = 6V, et sa décharge
+dans la bobine (b).
+La visualisation de la tension uC
+entre les bornes du condensateur
+sur un oscilloscope a permis
+d’obtenir le graphe ci-contre.
+2-1- Faire le schéma du
+montage expérimental
+utilisé.
+2-2- Justifier l’amortissement
+des oscillations. Figure 3
+2-3- Déterminer graphiquement la valeur de la pseudo-période T, en déduire la
+valeur du coefficient d’inductance L de la bobine (b) en supposant que la
+pseudo période T est égale à la période propre T0 des oscillations.
+(On prend π2 = 10)
+2-4- Quelle est la nature de l’énergie emmagasinée dans le circuit à l’instant
+t = 25 ms. Justifier.
+2-5- Les élèves du deuxième groupe ont monté la bobine (b) et le condensateur
+précédents en série avec un générateur qui qui maintient entre les bornes
+circuit une tension proportionnelle à l’intensité du courant qui le traverse
+(u = k.i).
+Les oscillations sont entretenus lorsque k prend la valeur : k =50 (SI).
+Quelle est la valeur de la résistance de la bobine r.
+1- Partie I : Charge d’un condensateur par un générateur idéal de courant
+On réalise le circuit représenté sur la figure 1 où G est un
+générateur qui débite dans le circuit un courant d’intensité
+constante.
+On ferme l’interrupteur à l’instant t = 0, le circuit est alors
+traversé par un courant d’intensité I = 0,3 A.
+l’étude des variations de la tension uC aux bornes du condensateur permet de tracer le
+graphe de la figure 2
+Exercice 2 : Electricité (04,5 points) 2009 RATTRAPPAGE
+Les condensateurs sont utilisés pour stocker de l’énergie, afin de la récupérer pour
+l’utiliser dans les circuits électroniques.
+Le but de cet exercice est d’étudier la charge d’un condensateur et sa décharge à
+travers une bobine.
+
+-- 5 of 38 --
+
+1-2- Par exploitation du graphe de la figure 2,
+déduire si le condensateur était chargé ou
+non à l’instant t = 0 ?
+1-3- Montrer que l’expression de uC peut s’écrire
+sous la forme : C
+I.t
+u = C pour uC < uC max. Figure 2
+1-4- Donner, en exploitant le graphe, l’expression de uC = f(t) pour uC < uC max.
+vérifier que la valeur de la capacité du condensateur est C = 0,1 F.
+1-1- Préciser l’armature portant les charges
+électriques négatives.
+1-5- Montrer que l’expression de l’énergie électrique emmagasinée dans le
+condensateur, à un instant t peut s’écrire : 2
+e C
+1
+E = Cu
+2 , et calculer sa valeur
+maximale. On rappelle l’expression de la puissance instantanée : dW
+dt
+=	P .
+2- Partie II : Détermination du coefficient d’inductance d’une bobine
+On réalise le circuit représenté sur la figure 3, et
+constitué de :
+ Générateur de f.é.m : E = 6 V et de résistance
+interne négligeable;
+ Résistor D1 de résistance R1 = 48 Ω ;
+ Résistor D2 de résistance R2 ;
+ Une bobine (b) de coefficient d’inductance L, et de résistance interne r = R2.
+ Deux interrupteurs K1 et K2.
+Dans une première phase, on maintient K2 ouvert, et on ferme K1 ;
+Dans une deuxième phase, on maintient K1 ouvert, et on ferme K2 .
+Sur la figure 4 sont représentées les courbes (a) et (b) traduisant les variations de
+l’intensité du courant traversant le circuit au cours de chacune des deux phases.
+2-1- Associer, en justifiant, chaque
+courbe à la phase correspondante.
+2-2- Etablir l’équation différentielle
+vérifiée par l’intensité du courant
+i(t) traversant le circuit au cours de
+la phase permettant d’obtenir la
+courbe (b). Figure 4
+2-3- La solution de cette équation s’écrit sous la forme : -λ.t
+i(t) + B	= Ae , où A, B
+et λ sont des constantes
+2-3-1- Exprimer λ, B et A en fonction des données nécessaires.
+2-3-2- Déduire la valeur de L.
+Figure 3
+
+-- 6 of 38 --
+
+3- On charge complétement le condensateur précédent et on le décharge à travers la
+bobine (b). La visualisation des variations de la tension uC en fonction du temps,
+permet d’obtenir l’un des graphes (c) et (d) représentés ci-dessous.
+(c) (d)
+Déterminer le graphe correspondant à cette expérience, sachant que la valeur de la
+pseudo-période est voisine de celle la période propre de l’oscillateur.
+Les conducteurs ohmiques, les condensateurs et les bobines sont utilisés dans le
+montage de différents appareils électroniques
+On étudie dans cet exercice quelques dipôles utilisés pour réaliser une radio simple
+AM permettant de capter une chaine radio de fréquence f.
+Première partie : Charge d’un condensateur par un générateur idéal de tension
+Le montage représenté dans la figure 1 se
+compose de :
+ Un générateur idéal de tension de f.é.m.
+E = 9V ;
+ Un conducteur ohmique de résistance R ;
+ Un condensateur de capacité C0 ;
+ Un interrupteur K. Figure 1
+On ferme l’interrupteur à l’instant t = 0, le
+circuit est désormais traversé par un courant
+d’intensité i variable en fonction du temps
+comme l’indique le graphe de la figure 2.
+(La droite (T) représente la tangente à la
+courbe à l’origine des temps)
+1-1- Recopier sur votre copie le schéma
+du montage, et représenter dessus,
+en convention récepteur :
+ La tension uc aux bornes du
+condensateur ;
+ La tension uR aux bornes du
+conducteur ohmique. Figure 2
+Electricité (05 points) 2010 S . NORMALE
+
+-- 7 of 38 --
+
+1-2- Montrer sur le montage précédent, comment faut-il brancher un oscilloscope
+à mémoire pour visualiser la tension uc.
+1-3- Etablir l’équation différentielle vérifiée par la charge du condensateur q(t).
+1-4- La solution de cette équation s’écrit sous la forme : α.t
+q(t) A(1 e )
+  .
+Déterminer les expressions de A et de α.
+1-5- Montrer que l’expression de l’intensité du courant circulant dans le circuit
+s’écrit sous la forme : t
+τ	
+E
+i(t) e
+R
+
+ , où τ est une constante qu’il faut exprimer
+en fonction de R et C0.
+1-6- Montrer, par analyse dimentionnelle, que τ est homogène à un temps.
+1-7- En utilisant le graphe i = f(t), déterminer la résistance R et la capacite C0.
+Deuxième partie : Réalisation d’une radio AM simple
+Au cours d’une séance de travaux pratiques, le montage de la figure 3 a été réalisé
+pour recevoir une émission radio de fréquence f = 540 kHz, en utilisant trois étages :
+X, Y et Z.
+L’étage X est constitué d’une bobine (b) d’inductance L = 5,3 mH et de résistance
+négligeable, et d’un condensateur de capacité C ajustable entre deux valeurs :
+C1 = 13,1 pF et C2 = 52,4 pF. (on rappelle que : 1 μF = 10-12 F).
+Etage X Etage Y Etage Z
+Figure 3
+2-1- Quel est le rôle de chacun des étages Y et Z dans la réception de l’émission?
+2-2- S’assurer que l’étage X permet la sélection de l’émission désirée.
+Le condensateur et la bobine sont des réservoirs d’énergie. Montés ensembles dans
+le même circuit, ils s’échangent l’énergie entre eux.
+On se propose à travers cet exercice d’étudier un circuit idéal LC, et d’étudier la
+modulation d’un signal sinusoïdal.
+1- Oscillations libres dans un circuit idéal LC :
+Un groupe d’élèves ont chargés complétement un
+condensateur de capacité C sous une tension continue
+U, et l’ont déchargé dans une bobine (b) d’inductance
+L et de résistance négligeable (Figure 1). Figure 1
+Electricité (04,5 points) 2010 SR
+
+-- 8 of 38 --
+
+1-1- Recopier sur la copie de rédaction, la figure1 et représenter dessus, en
+convention récepteur les tensions uC et uL respectivement aux bornes du
+condensateur et de la bobine.
+1-2- Etablir l’équation différentielle vérifiée par la tension uC.
+1-3- Les variations de uC en fonction du temps sont illustrées sur la figure 2. Par
+exploitation de ce graphe, écrire l’expression numérique de la tension uC(t).
+1-4- Les variations, en fonction du
+temps, de l’énergie magnétique
+Em emmagasinée dans la bobine,
+sont représentées sur la figure 3.
+a- Montrer que l’expression
+de cette énergie s’écrit sous
+la forme :
+2
+m
+0
+1 4π
+E = C U (1-cos t)
+4 T .
+2
+ 
+en fonction de C et U.
+c- Par exploitation du graphe Em(t),
+déduire la valeur de la capacité du
+condensateur utilisé.
+1-5- Déterminer le coefficient d’inductance L
+de la bobine (b).
+x x .
+b- En déduire l’expression de l’énergie magnétique maximale Em(max)
+Figure 2
+On rappelle que : 2 1
+sin ( ) (1 cos 2 )
+
+-- 9 of 38 --
+
+2- Modulation d’un signal :
+Pour transmettre un signal S(t) de fréquence fS, le
+groupe précédent d’élèves, réalise dans un deuxième
+temps le montage de la figure 4, où ils ont appliqué
+la tension p(t) = Pmcos(2πFPt) sur l’entrée E1 et la
+tension S(t) + U0 = Smcos(2πfSt) + U0 sur l’entrée E2.
+(U0 la composante continue de la tension)
+La visualisation des tensions S(t) + U0 et uS(t) à la
+sortie du circuit multiplieur, permet d’obtenir les
+courbes représentées sur les figures 5 et 6.
+Figure 3
+Figure 4
+Figure 5 Figure 6
+2-1- Quelle condition doit satisfaire FP et fS pour obtenir une bonne modulation?
+2-2- Affecter à chaque courbe des figures 5 et 6, la tension correspondante.
+2-3- Déterminer le taux de modulation m, sachant que la sensibilité verticale de
+l’oscilloscope est 1 V/div. Conclure.
+La minuterie est utilisée pour contrôler la consommation d’énergie dans les
+immeubles. C’est un appareil qui permet d’éteindre automatiquement les lampes
+des escaliers et couloirs après une durée préalablement ajustable.
+On vise à étudier le principe de fonctionnement d’une minuterie.
+Figure 1
+électricité (04,5 points)2011 SN
+
+-- 10 of 38 --
+
+0,5
+0,75
+0,25
+0,75
+La figure 1, représente une partie d’un circuit simplifié d’une minuterie, constitué de :
+ Un générateur idéal de tension, de force électromotrice E ;
+ Un interrupteur K ;
+ Un conducteur ohmique de résistance R ;
+ Un condensateur de capacité C ;
+ Un bouton poussoir P qui joue le rôle d'un interrupteur. (Il est fermé seulement
+quand on appuie dessus).
+ Un composant électronique qui permet l'allumage de la lampe L tant que la tension
+uC aux bornes du condensateur est inférieure ou égale à une tension limite US.
+On admet que l’intensité du courant électrique à l’entrée du composant électronique
+reste nulle à tout instant.
+1- Étude du circuit RC :
+A l'instant initial (t = 0 s), le condensateur est déchargé. On ferme l'interrupteur K, le
+bouton poussoir P est relâché (Figure 1), le condensateur se charge progressivement à
+l’aide du générateur. On visualise l’évolution de la tension uC(t) aux bornes du
+condensateur à l’aide d’une interface informatique convenable.
+1-1- Montrer que la tension uC vérifie l'équation différentielle : C
+C
+du
+u RC E
+1-2- Déterminer les expressions de A et τ, pour que l’équation horaire : t
+τ	
+A.(1 e )
+
+
+soit solution de l’équation différentielle précédente.
+1-3- A l'aide d'une analyse dimensionnelle, montrer que τ est homogène à un
+temps.
+1-4- La figure 2, représente les variations de uC(t).
+Figure 2
+Déterminer graphiquement les valeurs de A et τ, et déduire la valeur de la résistance
+R, sachant que la capacité du condensateur est : C = 220 μF.
+dt
+  .
+
+-- 11 of 38 --
+
+2- Détermination de la durée de fonctionnement de la minuterie:
+La durée nécessaire pour qu’un habitant d’un l’immeuble arrive à la porte de sa
+maison est Δt = 80 s.
+2-1- Soit tS la date à laquelle la tension uC atteint la valeur limite US , exprimer
+tS en fonction de E,  et US.
+2-2- Sachant que US = 15 V, montrer que la lampe L s’éteint avant que
+l’habitant de l’immeuble n’arrive chez soi.
+2-3- Déterminer la valeur limite RS de la résistance du conducteur ohmique qui
+permettra à l’habitant d’arriver chez soi avant que la lampe s’éteigne.
+(On considère que les valeurs de C, E et US n’ont pas changé).
+Le piano génère un ensemble de notes musicales classées selon une échelle
+musicale constituée de sept notes musicales essentielles.
+Le tableau suivant donne les fréquences correspondantes aux notes musicales
+essentielles:
+Note Do Ré Mi Fa Sol La Si
+Fréquence 262 294 330 349 392 440 494
+Le but de cet exercice est d’ajuster une note musicale de fréquence déterminée en
+utilisant un circuit RLC série.
+Pour ajuster la note souhaitée, un groupe d’élèves a réalisé une expérience sur deux
+étapes.
+ Première phase : Détermination de la capacité C d’un condensateur à l’aide d’un
+montage convenable ;
+ Deuxième phase : Ajustement de la fréquence de la note à l’aide d’un circuit RLC
+série.
+1- Détermination de la capacité d’un condensateur :
+A l’instant t = 0, les élèves commencent la
+décharge d’un condensateur de capacité C,
+initialement chargé, à travers un conducteur
+ohmique de résistance R = 200 Ω.
+La courbe de la figure 1, traduit les variations de la
+tension uC(t) aux bornes du condensateur.
+1-1- Représenter le schéma du dispositif
+expérimental permettant d’obtenir cette
+courbe.
+Electricité (05 points) 2011 SRR
+Figure 1
+
+-- 12 of 38 --
+
+0,5
+0,5
+0,5
+0,5
+0,25
+0,5
+1-2- Trouver l’équation différentielle verifiée par la tension uC(t) au bornes du
+condensateur au cours de la décharge.
+1-1- Vérifier que la solution de l’équation différentielle précédente est :
+t
+	- RC
+C 0	u = U .e , où U0 est une constante.
+1-3- Par analyse dimensionnelle, montrer que le produit RC est homogène à un
+temps.
+1-4- Déterminer graphiquement la constante de temps τ, et déduire la valeur de
+la capacité C du condensateur étudié.
+2- Ajustement de la fréquence de la note musicale
+Les élèves ont réalisé le montage expérimental représenté sur
+le Figure2, et qui est constitué de :
+ Générateur de tension de f.é.m E = 12 V et de résistance
+interne négligeable.
+ Conducteur ohmique de résistance R = 200 Ω.
+ Bobine de coefficient d’inductance L ajustable et de
+résistance interne négligeable.
+ Condensateur de capacité C’= 0,5 μF.
+ Interrupteur K à double position.
+Figure 2
+Après avoir chargé le condensateur, les élèves ont basculé l’interrupteur à la position
+(2) à un instant choisi comme origine des temps. Ils ont obtenus par l’intermédiaire
+d’une interface informatique la courbe représentée sur la Figure 3.
+Figure 3
+2-1- Etablir l’équation différentielle vérifiée par la tension uC’ entre les bornes
+du condensateur.
+2-2- Déterminer graphiquement la valeur de la pseudopériode T.
+
+-- 13 of 38 --
+
+2-3- On considère que la valeur de la pseudopériode T est égale à la valeur de la
+période propre T0 de l’oscillateur LC. En déduire la valeur de L.
+2-4- Calculer la valeur de l’énergie totale emmagasinée dans le circuit à l’instant
+t = 3,4 ms.
+3- Les élèves ont ajouté au montage RLC’ précèdent, un appareil d’entretien des
+oscillations, et ils ont relié le circuit à un haut-parleur qui transforme l’onde
+électrique de fréquence N0 en une onde sonore de même fréquence.
+3-1- Quel est le rôle de l’appareil d’entretien de point de vue énergétique.
+3-2- En se basant sur le tableau des fréquences des notes déterminer la note
+musicale émise par le haut-parleur.
+Dans le cadre de la réalisation d’un projet scientifique, une enseignante encadrante
+dans un club scientifique, propose à un groupe d’élèves de s’assurer du coefficient
+d’inductance L et de la résistance r d’une bobine (b), et du taux d’influence de cette
+résistance sur l’énergie électrique totale d’un circuit série RLC libre.
+Première partie : Réponse d’un dipôle RL à un échelon de tension ascendant :
+Le groupe a réalisé le montage de la figure 1, qui
+se compose de :
+ La bobine (b) ;
+ Résistor de résistance R = 92 Ω ;
+ Générateur de force électromotrice E = 12 V et
+de résistance négligeable.
+ Interrupteur K. Figure 1
+2- A l’aide d’un matériel informatique convenable, les élèves ont obtenu
+expérimentalement la courbe de la figure 2, représentant les variations, en
+fonction du temps, de l’intensité du courant i traversant le circuit.
+2-1- Etablir l’équation différentielle verifiée par i(t).
+Figure 2
+1- Recopier la figure 1 sur votre copie, et représenter dessus, la tension uR aux
+bornes du résistor, et la tension ub aux bornes de la bobine, en convention
+récepteur.
+Electricité (04,5 points) : 2012 SN
+
+-- 14 of 38 --
+
+2-2- La solution de l’équation différentielle est : t
+τ	
+i(t) A.(1 e )
+
+2-3- Détérminer les valeurs de r et L.
+Pour mettre en évidence l’influence de la résistance r de la
+bobine (b) sur l’énergie électrique totale d’un circuit série
+RLC libre, les élèves ont monté, à un instant considéré
+comme origine des temps, un condensateur de capacité C
+totalement chargé, avec cette bobine comme l’indique la
+figure 3. Figure 3
+A l’aide d’un matériel
+informatique convenable, on
+a pu visualiser les variations
+de l’énergie emmagasinée
+dans le condensateur et celle
+emmagasinée dan la bobine
+en fonction du temps
+(Figure 4).
+1- Etablir l’équation
+différentielle verifiée
+par la charge q(t) du
+condensateur. Figure 4
+2- Preciser, parmi les courbes (a) et (b), celle correspondante à l’énergie
+emmagasinée dans la bobine.
+3- On désigne par ET, l’énergie électrique totale emmagasinée dans le circuit à un
+instant t, et elle représente la somme de l’énérgie emmagasinée dans le
+condensateur et l’énergie emmagasinée dans la bobine au même instant t.
+3-1- Ecrire l’expression de ET en fonction de : C, L, q et dq
+dt .
+3-2- Montrer que l’énergie totale décroit avec le temps selon la relation :
+2
+T	dE r i dt	  . Expliquer la cause de cette décroissance.
+3-3- Déterminer l’énergie dissippée dans le circuit entre les instants :
+t1 = 2 ms et t2 = 3 ms.
+  , trouver les
+expressions de A et τ en fonction des paramètres du circuit ?
+Deuxième partie : Influence de la résistance électrique sur l’énergie électrique
+totale d’un circuit série RLC libre :
+
+-- 15 of 38 --
+
+Première partie : Etude du circuit LC :
+On réalise le circuit de la figure 2, qui est constitué de :
+ Générateur de f.é.m. E = 12 V et de résistance
+négligeable ;
+ Condensateur de capacité C = 4,7.10-3 F ;
+ Résistor de résistance R = 200 Ω ;
+ Bobine d’inductance L et de résistance négligeable ;
+ Interruptur K à double position. Figure 1
+On ferme l’interrupteur sur la position 1 jusqu’à ce que le condensateur soit chargé
+complétement, puis on le bascule vers la position 2, à un instant considéré comme
+origine des temps t0 = 0.
+Les deux parties sont indépendantes
+1- Etablir l’équation différentielle vérifiée par la charge q du condensateur.
+2- Trouver l’expression de la période propre T0 de l’oscillateur en fonction de
+L et C, pour que l’expression m
+0
+2π
+q(t) Q cos( t)
+T
+ soit solution de cette équation
+3- Verifier que la période est homogène à un temps.
+4- Calculer la valeur maximale Qm de la charge du condensateur.
+5- La figure 2 donne les variations de l’énergie
+électrique Ee emmagasinée dans le
+condensateur en fonction du temps.
+5-1- Sachant que la période T de l’énergie est
+0	T
+T 2
+ , déterminer la valeur de T0.
+5-2- En déduire la valeur du coefficient
+d’inductance de la bobine.
+Figure 2
+6- On rappelle que l’énergie totale ET du circuit est, à chaque instant, la somme
+des énergies : électrique et magnétique, emmagasinées respectivement dans le
+condensateur et la bobine.
+Montrer que l’énergie ET se conserve. Calculer sa valeur.
+différentielle.
+Le but de cet exercice est l’étude du circuit idéal LC et à la réception et démodulation
+d’une ondes modulée en amplitude.
+Les condensateurs et les bobines jouent un role très important dans la transmission
+et la reception d’ondes électromagnétiques.
+Electricité (05 points) :2012 SR
+
+-- 16 of 38 --
+
+Deuxième partie : Réception d’une onde modulée en amplitude et démodulation :
+Pour recevoir une onde issue d’une station de diffusion, on utilise le dispositif
+simplifié, qui est constitué de trois parties comme l’indique la figure 3.
+Partie 1 Partie 2 Partie 3
+Figure 3
+1- La partie 1 est constituée d’une antenne reliée à un circuit parallèle, constitué
+d’une bobine d’inductance ajustable et de résistance négligeable et d’un
+condensateur de capacité C1 = 4,7.10-10 F.
+1-1- Quel est le rôle de la partie 1 ?
+1-2- Pour recevoir une onde AM de fréquence f = 160 KHz, on fixe l’inductance
+de la bobine sur la valeur L1. Calculer L1.
+2- Les deux parties 1 et 2, permettent la démodulation du signal recu. Quel est le
+rôle de chacune des deux parties dans la démodulation ?
+3- On visualise sur l’écran d’un oscilloscope les tensions uEM , uGM et uHM, on
+obtient les courbes suivantes :
+(a) (b) (c)
+Associer chacune des courbes (a), (b) et (c), à la tension corréspondante. Justifier.
+
+-- 17 of 38 --
+
+0,5
+0,25
+0,5
+0,25
+0,5
+0,5
+0,5
+1- Etude d’un circuit RC soumis à un échelon de tension :
+Dans une première phase, on a réalisé le cirsuit de la figure 1,
+qui est composé de :
+ Condensateur de capacité C ;
+ Conducteur ohmique de résistance R = 106 Ω ;
+ Générateur de f.é.m. E et de résistance négligeable ;
+ Interrupteur K à double position.
+On charge complétement le condensateur, puis on bascule
+l’interrupteur vers la position (2) à l’instant t = 0. Figure 1
+A l’aide d’un matériel informatique
+convenable, on visualise, , les variations
+de la tension uC aux bornes du
+condensateur. On obtient la courbe de la
+figure 2.
+1-1- Etablir l’équation différentielle
+vérifiée par la tension uC.
+1-2- Etablir l’expression de τ pour
+que t
+τ
+C max	u (t) U .e
+ , soit solution
+de l’équation différentielle.
+1-3- Montrer que la capacité du
+condensateur est : C ≈ 1 nF. Figure 2
+(1 nF = 10-9 F)
+2- Etude des oscillations libres dans un circuit RLC série :
+Dans une deuxième phase, on remplace le conducteur ohmique précédent par une
+bobine (b) de coefficient d’inductance L et de résistance r (Figure 3).
+On visualise à l’aide du même matériel informatique, les variations de la charge q(t)
+du condensateur, on obtient la courbe de la figure 4.
+Figure 3
+Figure 4
+2-1- Lequel des régimes d’oscillation représente la courbe de la figure 4 ?
+2-2- Etablir l’équation différentielle vérifiée par la charge q(t) du condensateur.
+2-3- En considérant que la pseudo période T est identique à la période propre T0
+de l’oscillateur, déterminer la valeur du coefficient L.
+2-4- Calculer l’énergie dissipée par effet joule entre les instant t1 = 0 et t2 = 2T.
+Electricité (04,5 points):2013 SN
+Le but de cet exercice est de s’assurer expérimentalement de la valeur de la capacité C
+d’un condensateur, de déterminer le coefficient d’inductance L d’une bobine, et
+d’étudier un circuit expérimental simple permettant de recevoir une onde AM.
+
+-- 18 of 38 --
+
+3- Récéption d’un signal modulé en amplitude :
+On réalise le circuit simple de réception d’une onde AM, représenté sur la figure 5, et
+qui est constitué de trois parties principales. La première partie est constituée d’une
+association parallèle d’une bobine d’inductance L1 = 1,1 mH et de résistance
+négligeable, et du condensateur précédemment étudié.
+3-1- Quel est le rôle de la partie 3 dans la démodulation ?
+3-2- Quelle est la fréquence f0 de l’onde hertzienne quecapterace dispositif simple ?
+3-3- On obtient une bonne détéction de crêtes en utilisant un condensateur de
+capacité C2 = 4,7 nF et un conducteur ohmique de résistance R2. Parmi les
+résistors de résistances suivantes : 0,1 kΩ, 1 kΩ, 150 kΩ, déterminer la
+valeur de R2 convenable, sachant que la fréquence de l’onde sonore
+modulante est : fS = 1 kHz.
+Partie 1 Partie 2 Partie 3
+Figure 5
+La bobine est l’une des principales constituants des hauts-parleurs qui se trouvent
+dans la pluspart des appareils audio.
+Le but de cet exercice est de déterminer les deux caractéristiques d’une bobine d’un
+haut-parleur, en réalisant deux expériences différentes.
+Première expérience :
+Un haut-parleur contient une bobine de coefficient d’inductance L et de résistance
+interne r. Pour déterminer ces deux grandeurs, on a réalisé le montage électrique
+représenté sur la figure 1, où : E = 12 V et R = 42 Ω.
+Juste après la fermeture du circuit, on visualise à l’aide d’un dispositif informatique
+convenable, l’évolution de la tension uR en fonction du temps. (Figure 2)
+Figure 1
+Electricité : (05 points):2013 SR
+Figure 2
+
+-- 19 of 38 --
+
+0,75
+0,5
+0,5
+0,5
+0,25
+0,5
+0,5
+0,5
+0,5
+1- Montrer que la tension uR aux bornes du résistor verifie l’équation différentielle :
+R
+R
+du
+τ u A
+dt   , en exprimant les constantes A et τ en fonctions des paramètres
+du circuit.
+2- S’assurer que la constante τ est homogène à un temps.
+3- Trouver :
+3-1- La valeur de la résistance r.
+3-2- La valeur du coefficient d’inductance L de la bobine.
+Deuxième expérience :
+On monte la bobine précédente, en série, avec un condensateur (initialement chargé
+complétement) de capacité C = 0,2 μF et un résistor de résistance R’ = 200 Ω.
+On obtient, à l’aide du même dispositif informatique, la courbe de la figure 4 qui
+représente les variations de la tension uC aux bornes du condensateur en fonction du
+temps.
+Figure 3 Figure 4
+1- A quel des trois régimes d’oscillations, correspond la courbe de la figure 4 ?
+2- Etablir l’équation différentielle vérifiée par la tension uC.
+3- En considérant que la pseudopériode T est égale la période propre T0 de
+l’oscillateur LC, vérifier la valeur de l’inductance de la bobine étudiée.
+4- Calculer l’énergie dissipée par effet joule entre les instants t0 = 0 et 1
+3
+t T
+2
+ .
+5- Pour compenser l’énergie dissipée, on monte en sérié dans le circuit précédent
+(figure 3), un générateur maintenant entre ses bornes une tension uG
+proportinnelle à l’intensité du courant, tel que uG(t) = k.i(t).
+5-1- Etablir, dans ce cas, l’équation différentielle vérifiée par la charge q(t) du
+condensateur.
+5-2- On fixe le paramètre k sur la valeur 208,4 pour obtenir des oscillations
+électriques sinusoïdales. Vérifier la valeur de la résistance r de la bobine
+0,5
+étudiée.
+
+-- 20 of 38 --
+
+On trouve dans les laboatoires des produits chimiques sensibles à l’humidité de
+l’air. Pour déterminer le taux d’humidité x dans un laboratoire, un technicien a
+choisit de réaliser deux expériences, à fin de :
+ S’assurer de coefficient d’inductance L d’une bobine (b) de résistance r ;
+ Déterminer le taux d’humidité x, à l’aide d’un condensateur de capacité C
+variable avec le taux d’humidité.
+1- Première expérience :
+S’assurer du coefficient d’inductance d’une bobine
+Le technicien de la boratpire a monté en série les composants suivants :
+ Un conducteur ohmique de résistance R = 200 Ω ;
+ La bobine (b) ;
+ Un générateur idéal de tension de force électromotrice E ;
+ Un interuupteur K.
+Electricité (04,5 points) :2014SN
+Dans cette expérience, on néglige la résistance r de
+la bobine devant R.
+A un instant t = 0, le technicien ferme
+l’interrupteur, et visualise, à l’aide d’une interface
+informatique, la tension uR aux bornes du
+conducteur ohmique.
+Après un traitement informatique des données, il
+obtient la courbe de la figure 1, représentant
+l’intensité du courant i(t) traversant le circuit.
+1-1- Représenter le schéma du circuit, et
+indiquer dessus, le branchement de
+l’interface informatique. Figure 1
+(le branchement de l’interface est similaire à celui de l’oscilloscope)
+1-2- Etablir l’équation différentielle vérifiée par l’intensité du courant i(t).
+1-3- La solution de cette équation différentielle est : t
+τ	
+E
+i(t) (1 e )
+R
+
+  , exprimer τ
+en fonction des paramètres du circuit.
+1-4- Vérifier que l’inductance de la bobine (b) est : L = 0,4 H.
+2- Deuxième expérience :
+Détermination du taux d’humidité à l’aide d’un oscillateur électrique
+Le technicien réalise le montage expérimental de la
+figure 2, qui est constitué de :
+ La bobine précédente (b) de résistanre r et de
+coefficient d’inductance L ;
+ Le générateur idéal de tension de f.é.m. E ;
+ Un conducteur ohmique de résistance R’ ;
+ Un interrupteur K à double position ;
+ Un générateur G délivrant une tension uG = k.i(t), où k
+est un paramètre positif ajustable.
+
+-- 21 of 38 --
+
+Après avoir chargé complétement le condensateur, le technicien bascule l’interrupteur
+vers la position 2, à un instant t0 = 0. (Figure 2)
+La courbe de la figure 3 représente la tension
+uC(t) obtenue lorsque le paramètre k est fixé sur
+la valeur k = r.
+2-1- Quel est le régime des oscillations mis
+en évidence par la courbe ?
+2-2- Etablir l’équation différentielle
+vérifiée par uC(t).
+2-3- La solution de cette équation
+différentielle s’écrit sous la forme :
+C 0
+0
+2π
+u (t) U .cos .t
+T
+ 
+  
+ 
+Trouver l’expression de la période
+propre T0 de l’oscillateur électrique. Figure 3
+2-4- La capacité C du condensateur, varie avec le taux d’humidité x selon la
+relation : C = 0,5.x – 20, où C est donnée en (μF), et x un poucentage (%).
+Déterminer le taux d’humidité x à l’intérieur du laboratoire.
+Un professeur demande à ses élèves de déterminer la capacité d’un condensateur,
+pour l’utiliser dans le circuit de détection des crêtes, qui est l’un des constituants
+essentiels dans un poste radio AM. Pour cela il leur propose les activités suivantes :
+ Déterminer de la capacité d’un condensateur par utilisation d’un générateur
+idéal de courant;
+ S’assurer de cette capacité à travers l’étude de la réponse du circuit RC à un
+échelon de tension ascendant ;
+ Utiliser le condensateur étudié et un résistor dans le circuit détecteur de crêtes.
+1- Etude de la charge d’un condensateur :
+Un groupe d’élèves ont réalisé le dispositif expérimental de la figure 1, et à l’aide
+d’une interface informatique, ils ont visualisé la tension uC(t) aux bornes du
+condensateur au cours de sa charge par le générateur idéal de courant, délivrant un
+courant d’intensité constante I0 = 72 μA.
+Figure 1
+Figure 2
+Electricité : (04,5 points)2014 SR
+
+-- 22 of 38 --
+
+1-1- Recopier le schéma de la figure 1, et représenter dessus la desion uC(t), en
+convension récepteur ;
+1-2- La figure 2 représente les variations de la tension uC ainsi visualusée.
+a- Exprimer la tension uC(t) en fonction de I0, t et la capacité C du
+condensateur.
+b- Vérifier que la valeur de cette capacité est C = 1,2 μF.
+2- Etude de la réponse du dipôle RC à un échelon de tension assendant :
+Pour s’assurer de la capacité du condensateur précédent, un
+groupe d’élèves a réalisé le montage représenté sur la figure 3,
+en utilisant :
+ Le condensateur précédent ;
+ Un résistor de résistance R = 1 kΩ ;
+ Un générateur idéal de tension de f.é.m. E ;
+ Un interrupteur K.
+A l’intant t = 0, l’un des élèves a férmé l’interrupteur pour charger le condensateur
+initialement déchargé.
+La visualisation des variations de la tension uC(t), a été réalisée à l’aide d’une
+interface informatique.
+2-1- Montrer que l’équation différentielle vérifiée par la tension uC(t), s’écrit
+sous la forme : C
+C
+du (t)
+u (t) τ 0
+dt
+  , en précisant l’expression de τ en
+fonction de R et C.
+2-2- Montrer par analyse dimensionnelle que τ est homogène à un temps.
+2-3- Déterminer l’expression de chcune des constante A et B, pour que la
+solution de l’équation différentielle s’écrive sous la forme : C	u A Be	  .
+2-4- La courbe de la figure 4, représente la tension uC(t) ainsi visualisée.
+Déterminer la valeur de τ, et s’assurer de la valeur de la capacité C du
+condensateur.
+Figure 4
+
+-- 23 of 38 --
+
+3- Utilisation du condensateur dans un circuit détecteur de crêtes :
+La figure 5 représente le dispositif simple utilisé par les élèves pour recevoir une
+onde radio AM.
+L’expression, dans le système international d’unités (SI), de la tension à la sortie du
+circuit de sélection, s’écrit : u(t) = 0,1.[0,5.cos(103.π.t) + 0,7].cos(2.104.π.t)
+3-1- Déterminer la fréquence FP de la tension porteuse et fS du signal modulant.
+3-2- Calculer la valeur du taux de modulation m. Que conclure ?
+3-3- Le circuit de détection des crêtes du circuit réalisé, est constitué
+du condensateur et du résistor précédents : C = 1,2 μF et R = 1 kΩ.
+Les élèves ont-ils obtenu une bonne détection de crêtes ou non ? Justifier.
+Figure 5
+Pour établir la relation entre la résistance R
+et la température θ, une enseignante réalise
+le montage expérimental représenté sur la
+figure 1, et constitué de :
+ Un condensateur de capacité C = 1,5 μF ;
+ Une sonde thermique, sous forme d’une
+thérmistance de résistance variable avec θ;
+ Interrupteur K ; Figure 1
+ Générateur idéal de tension de f.é.m. E = 6 V ;
+ Interface informatique permettant de suivre l’évolution de la tension uC aux bornes
+du condensateur en fonction du temps.
+2015 SN Les deux parties sont indépendantes
+Première partie (02,5 points) : Etude d’un dipôle RC soumis à un échelon de tension ascendant
+Les thérmomètres électroniques permettent le repérage des hautes températures non
+repérables à l’aide des thérmomètres à mercure ou à alcool. Le fonctionnent de
+certains de ces thérmomètres utilise le comportement du circuit RC soumis à un
+échelon de tension ascendant, où R est la résistance d’une thermistance.
+
+-- 24 of 38 --
+
+0,5
+0,5
+0,5
+0,5
+Après immersion de la sonde thermique dans un milieu de température θ ajustable et
+fermeture de l’interrupteur, l’enseignante charge le condensateur à différentes
+température. Les courbes de la figure 2 résument les résultats obtenus.
+Figure 2
+1-1- Recopier, sur la copie de rédaction, le montage de la figure 1, et représenter
+dessus la tension uC(t) aux bornes du condensateur, et uR(t) aux bornes de la
+sonde thermique, en convension récepteur.
+1-2- Etablir l’équation différentielle vérifiée par uC(t).
+1-3- La solution de cette équation différentielle s’écrit sous la forme :
+t
+τ
+C	u (t) A B.e
+  . Trouver les constantes A et B.
+1-4- Déterminer la constante de temps τ1 à la température θ1 = 205 °C, puis en
+déduire l’influence d’une élévation de température sur la durée de charge
+du condensateur.
+τ2 = 0,45 ms.
+La courbe de la figure 3,
+représente les variations de la
+résistance R de la sonde
+thermique en fonction de la
+température θ.
+Déterminer la valeur de la
+température θ2 à l’intérieur du
+four électrique.
+Figure 3
+Deuxième partie (02 points) : Etude de la modulation d’amplitude
+La transmission d’informations sur de grandes distances à l’aides d’ondes
+électromagnétique, nécessite la modulation d’amplitude. Parmis les composants
+adoptées dans cette opération : le circuit multiplieur.
+Le but de cette partie de l’exercice est l’étude de la modulation d’amplitude.
+1-5- Pour mesurer la température θ2 d’un four électrique, l’enseignante
+pose la sonde précédente dans le four, puis elle détermine, par utilisation
+du même montage précédent (Figure 1), la constante de temps τ2.
+Elle trouve comme valeur :
+0,5
+
+-- 25 of 38 --
+
+Au cours d’une séance de travaux pratiques, un
+groupe d’élèves applique à l’entrée E1 du circuit
+multiplieur une tension sinusoïdale d’expression
+u1(t) = U0 + U1m cos (2π.f.t), et à l’entrée E2 du
+circuit multiplieur une tension sinusoïdale
+d’expression u2(t) = U2m cos (2π.F.t) correspondante
+à une onde porteuse. (Figure 4)
+(U0 est la composante continue de tension)
+Figure 4
+2-1- L’expression de la tension uS(t) à la sortie du circuit multiplieur est :
+uS(t) = k.u1(t).u2(t), avec k une constante caractérisant le circuit multiplieur.
+Montrer que l’amplitude de la tension uS(t) s’écrit sous la forme :
+US = A[1 + m cos (2π.f.t)] en précisant les expresions de A et m.
+2-2- Après réglage des sensibilités de
+l’oscilloscope sur : 1V/div et
+0,5 ms/div, les élèves ont visualisé
+la tension de sortie uS(t) obtenue. La
+figure 5 représente les variations de
+cette tension.
+Déterminer la fréquence f du signal
+modulant, et la fréquence F de
+l’onde porteuse.
+2-3- Montrer, en calculant la valeur du
+taux de modulation m, que la
+modulation est bonne. Figure 5
+
+-- 26 of 38 --
+
+Les résistors, les condensateurs et les bobines, sont parmi les composants essentiels
+entrant dans la composition de plusieurs appareils électroniques qu’on utilise dans
+notre vie quotidienne.
+Le but de cet exercice est de déterminer les deux grandeurs caractérisant une bobine,
+et à l’étude d’un circuit électrique oscillant librement, pour déterminer la capacité
+d’un condensateur.
+1- Réponse d’un dipôle RL à un échelon de tension ascendant :
+Le circuit de la figure 1 est constitué de :
+ Un générateur idéal de tension de f.é.m. E ;
+ Une bobine d’inductance L et de résistance interne r ;
+ Un résistor de résistance R = 90 Ω ;
+ Un interrupteur K.
+On ferme l’interrupteur à l’instant t = 0. Le suivi de
+l’évolution des tensions uR aux bornes du résistor et la
+tension UPN aux bornes du générateur, permet de tracer
+les courbes uR(t) et UPN(t) de la figure 2 ci-dessous. Figure 1
+1-1- Recopier sur la copie, le schéma du circuit de la figure 1, et représenter dessus la
+tension uR en convention récepteur.
+1-2- Par exploitation du document de la figure 2, déterminer :
+a- La force électromotrice E du générateur.
+b- La valeur de la constante de temps τ.
+c- La résistance r de la bobine.
+1-3- Vérifier que la valeur du coefficient d’inductance de la bobine est : L = 0,2 H.
+Figure 2
+Exercice 3 : (04,5 points) 2015 SR
+
+-- 27 of 38 --
+
+Pour obtenir des oscillations
+électriques libres, on remplace, le
+générateur, dans le circuit précédent
+(Figure 1), par un condensateur de
+capacité C initialement chargé.
+Le suivi de l’évolution de la tension
+uC aux bornes du condensateur en
+fonction du temps, à l’aide d’un
+matériel informatique convenable,
+permet d’obtenir la courbe de la
+figure 3. Figure 3
+2-1- Représenter le schéma du dispositif expérimental, et montrer dessus, le
+branchement du système d’acquisition permettant de suivre uC(t).
+2-2- Etablir l’équation différentielle vérifiée par la tension uC(t).
+2-3- Calculer la valeur de la capacité du condensateur, sachant que la valeur de la
+pseudo période est égale à celle de la péride propre de l’oscillateur.
+2-4- Déterminer la valeur E1 de l’énergie du circuit à l’instant t = 36 ms.
+2-5- Justifier, du point de vue énergétique, le régime oscillatoire représenté sur la
+2- Oscillations libres dans un circuit RLC série :
+figure 3.
+Certains dipôles électriques, comme les condensateurs et les bobines, permettent d’emmagasiner
+de l’énergie, qui se dissipe progressivement au cours du temps. On peut compenser cette énergie
+dissipée en utilisant des dispositifs adéquats.
+On étudie, dans un premier temps, le comportement d’un dipôle RC lors de la charge du
+condensateur, puis dans un deuxième temps, l’amortissement et l’entretien des oscillations
+dans un circuit RLC série.
+Pour cela, on réalise le circuit électrique schématisé sur la figure 1 qui comporte :
+- un générateur de tension de f.e.m. E ;
+- deux conducteurs ohmiques de résistance r = 20Ω et R ;
+- - une bobine (b) d’inductance L et de résistance r ;
+- - un condensateur de capacité C initialement
+déchargé ;
+- - un interrupteur K à double position.
+Figure 1
+K
+b	(L, r )
+(2)
+i
+E
+R
+C
+(1)
+c	u
+r
+Exercice III ( 4,5 points ) 2016 SN
+
+-- 28 of 38 --
+
+0
+Figure 2
+2
+4
+0,6 1,2
+t(ms)
+uC(V) (T)
+1- Etude du dipôle RC lors de la charge du
+condensateur
+A un instant de date t 0	 , on place l’interrupteur K en
+position (1) . Un système d’acquisition informatisé permet de tracer la courbe d’évolution de la
+tension C	u (t) . La droite (T) représente la tangente à la courbe à la date t=0. (figure 2)
+1.1. Etablir l’équation différentielle vérifiée par C	u (t) .
+1.2. Trouver les expressions de A et de  , pour que
+t
+- τ
+c	u (t) = A.(1-e ) soit solution de cette équation
+différentielle.
+1.3. L’intensité du courant électrique s’écrit sous forme
+0
+t
+- τ	i(t)=I .e .
+Trouver l’expression de 0	I en fonction de E, r et R.
+1.4. En exploitant la courbe de la figure 2 :
+1.4.1. Trouver la valeur de la résistance R sachant que
+0 0, 20	I  A .
+1.4.2. Déterminer la valeur de  .
+1.4.3. Vérifier que la capacité du condensateur est C=10μF .
+2-Etude de l’amortissement et de l’entretien des oscillations dans un circuit RLC
+Une fois le condensateur est totalement chargé, on bascule l’interrupteur K vers la position (2) à
+un instant que l’on choisira comme nouvelle origine des dates (t 0)	 .
+La courbe de la figure 3, représente l’évolution temporelle de la charge q(t) du condensateur.
+2.1. Identifier le régime oscillatoire qui correspond à la courbe de la figure 3 .
+2.2. En assimilant la pseudo période à la période propre de l’oscillateur électrique, déterminer
+l’inductance L de la bobine (b) .
+2.3. Calculer E , la variation de l’énergie totale du circuit entre les instants 1	t 0 ms	 et
+2	t 18ms	 , puis interpréter ce résultat.
+2.4. Pour entretenir les oscillations, on monte en série avec le condensateur et la bobine (b),
+précédemment étudiés, un générateur (G) qui délivre une tension proportionnelle à l’intensité du
+courant électrique: G	u (t) = k.i(t) .
+2.4.1. Etablir l’équation différentielle vérifiée par la charge q(t) .
+2.4.2. On obtient des oscillations électriques sinusoïdales lorsque la constante k prend la valeur
+k =11 dans le système d’unités internationales.
+En déduire la valeur de la résistance électrique
+br de la bobine (b).
+Figure 3
+6 12
+
+-- 29 of 38 --
+
+7
+P
+N
+Figure1
+E
+R
+L
+K
+r
+Entrée A
+Entrée B
+i
+Figure2
+C1
+C2
+t(ms)
+12
+2
+4
+6
+8
+10
+3 6 9
+0,5
+0,5
+0,25
+0,5
+0,5
+0,25
+0,5
+0,5
+Les parties I et II sont indépendantes
+On doit à M. Faraday (1791-1867 la découverte de l’induction électromagnétique. Par ce
+phénomène, une bobine se comporte comme un conducteur ohmique en régime permanant, et
+différemment en régime variable.
+L’objectif de cet exercice est d’étudier dans un premier temps, l’établissement du courant dans un
+dipôle RL , puis dans un deuxième temps la réception d’une onde modulée en amplitude.
+Partie I: Etude du dipôle RL (3,5 pts)
+On réalise le circuit électrique, schématisé sur la figure 1, qui comporte :
+- Un générateur de tension de f.e.m. E 12V	 ;
+- Une bobine d’inductance L et de résistance négligeable ;
+- Deux conducteurs ohmiques de résistance R 40	  et r ;
+- Un interrupteur K.
+On ferme l’interrupteur K à l’instant t=0. Avec un système d’acquisition informatisé, on
+enregistre les courbes 1	(C ) et 2	(C ) représentant les tensions des voies A et B (voir figure2).
+1. Identifier la courbe qui représente la tension R	u (t) et celle qui représente PN	u (t) .
+2. Déterminer la valeur de P	I ; l’intensité du courant électrique en régime permanent .
+3. Vérifier que la valeur de la résistance r du conducteur ohmique est r =8Ω .
+4. Etablir l’équation différentielle régissant l’établissement du courant i(t) dans le circuit.
+5. Trouver les expressions de A et de  en fonction des paramètres du circuit pour que
+l’expression
+t	
+- τ	i(t) = A.(1-e ) soit solution de cette équation différentielle.
+6. Déterminer la valeur de la constante du temps  .
+7. En déduire la valeur de l’inductance L de la bobine.
+8. Trouver l’énergie E emmagasinée par la bobine à l’instant t 2
+
+ .
+EXERCICE III ( 5 points)2016SR
+
+-- 30 of 38 --
+
+Partie II : Réception d’une onde modulée en amplitude (1,5 pts)
+Pour recevoir une onde radio, modulée en amplitude de fréquence 0	f 594kHz	 , on utilise le
+dispositif simplifié représenté par le schéma de la figure 3.
+Parmi les réponses proposées préciser, sans aucune justification, la réponse juste :
+1. La partie 1 du dispositif comporte une antenne et une bobine d’inductance 1	L 1 44mH	,	 et de
+résistance négligeable qui est montée en parallèle avec un condensateur de capacité C variable.
+1.1. La partie 1 sert à :
+recevoir et sélectionner l’onde éliminer la composante continue
+éliminer la porteuse moduler l’onde
+1.2. Pour capter l’onde radio de la fréquence 0	f , la capacité C doit être fixée sur la valeur :
+499 pF 49 9pF	,
+4 99pF	, 0 499pF	,
+2. La partie 2 joue le rôle du détecteur d'enveloppe. La capacité du condensateur utilisé dans cette
+partie est 2	C 50 nF	 .
+2.1. La dimension du produit 2 2	R C	. est :
+ 	L 	 	T
+1
+T	 
+   	I
+2.2. La moyenne des fréquences des ondes sonores est 1 kHz. La valeur de la résistance 2	R qui
+permet d’avoir une bonne démodulation de l’onde radio étudiée est:
+20k 5k
+35
+antenne
+C
+L1
+C 3
+R 3	
+C R
+2 2
+M
+D
+partie 3
+Figure 3
+partie 1 partie 2
+10
+
+-- 31 of 38 --
+
+)	1	(
+)	2	(
+i
+N
+P
+Figure 1
+E
+R
+L,r
+R
+K
+Nous utilisons quotidiennement des appareils électriques et électroniques qui contiennent des
+circuits comprenant des conducteurs ohmiques, des bobines, des condensateurs et des circuits
+intégrés réalisant des opérations mathématiques ou logiques.
+L’objectif de cet exercice est d’étudier dans sa première partie, l’établissement et la rupture du
+courant dans un dipôle RL et dans sa deuxième partie, l’étude de la modulation d’amplitude.
+Les deux parties sont indépendantes
+Partie I: Réponse d’un dipôle RL à un échelon de tension
+Pour étudier la réponse d’un dipôle RL à un échelon de tension,
+le professeur de physique a réalisé avec ses élèves le montage
+électrique schématisé sur la figure 1 qui comporte :
+- Un générateur idéal de tension de force électromotrice
+E 6,5V	= ;
+- Une bobine d’inductance L et de résistance r ;
+- Un conducteur ohmique de résistance R 60	= W ;
+- Un interrupteur K à double position.
+Exercice III ( 5 points )2017 SN17
+Figure 2
+( T )
+2 4 6 8
+0
+2
+4
+6
+uR(V)
+bornes du conducteur ohmique.
+1.2- Trouver, en fonction des paramètres du circuit, l’expression de l’intensité du courant p
+régime permanent.
+2. Dans une deuxième étape, le professeur étudie
+la rupture du courant dans la bobine.
+Lorsque le régime permanent est atteint, il
+bascule, à un instant t=0, l’interrupteur K sur la
+position ( 2) en prenant les précautions
+nécessaires.
+Avec un système informatisé d’acquisition , il
+obtient la courbe de figure 2 représentant les
+variations de la tension R	u (t) aux bornes du
+conducteur ohmique. La droite (T) représente la
+tangente à la courbe à l’origine des temps.
+2.1- Etablir l’équation différentielle vérifiée par
+la tension R	u (t) .
+2.2- La solution de cette équation différentielle
+est
+t
+- τ
+R p	u (t) = R.I .e . Trouver l’expression de t .
+2.3- En exploitant la courbe de la figure 2:
+a - Montrer que la résistance r de la bobine est r = 5Ω .
+b - Vérifier que la valeur de l’inductance de la bobine est L =182 m H .
+2.4- Trouver la valeur de l’énergie m	E emmagasinée par la bobine à l’instant t	1	t = .
+1- Dans une première étape, le professeur étudie l’établissement du courant dans une bobine en
+mettant l’interrupteur K sur la position(1).
+1.1- Recopier le schéma de la figure 1, et représenter en convention récepteur, la tension R
+
+-- 32 of 38 --
+
+Figure 3
+1	E
+S	u (t)
+E2
+1	u (t) 2	u (t)
+S
+appliquant une tension sinusoïdale m	1 p	u (t) = P .cos(2π.F .t) à son entrée E1 et une tension
+2 0	u (t ) = U + s(t ) à son entrée E2 , avec 0	U la
+composante continue de la tension et
+m s	s(t) = S .cos(2π.f .t) la tension modulante (figure 3).
+La courbe de la figure 4 représente la tension de sortie
+s 1 2	u (t ) = k.u (t).u (t) , visualisée par les élèves sur
+l’écran d’un oscilloscope. k est une constante positive
+caractérisant le multiplieur X.
+Partie II: Modulation d’amplitude
+Pour étudier la modulation d’amplitude et vérifier la qualité de la modulation, au cours d’une
+séance de TP, le professeur a utilisé avec ses élèves, un circuit intégré multiplieur (X) en
+-1
+-3
+-2
+0
+1
+2
+3
+uS(V)
+t(ms)
+5 15
+Figure 4
+1- Montrer, en précisant les expressions de A
+et de m, que la tension s	u (t) s’écrit sous la
+forme: ( 	)	s p	s = A 1 + m.cos 2πf t cos(2πF t)	u (t ) È ˘Î ˚ .
+2- En exploitant la courbe de la figure 4 :
+2.1- Trouver les fréquences Fp de la porteuse
+et fs de la tension modulante.
+2.2- Déterminer le taux de modulation et en
+déduire la qualité de modulation.
+Figure 1
+K
+L
+(2)
+i
+E
+R
+C
+(1)
+Un professeur de physique se propose dans un premier
+temps, d’étudier l’influence de la résistance d’un conducteur
+ohmique sur la constante de temps au cours de la charge d’un
+condensateur, et d’étudier dans un deuxième temps, le circuit
+RLC dans le cas d’un amortissement négligeable.
+Pour cela, il demande à ses élèves de réaliser le montage
+schématisé sur la figure 1 constitué de :
+- Un générateur idéal de tension de force électromotrice E ;
+- Un conducteur ohmique de résistance R réglable;
+- Un condensateur de capacité C ;
+- Une bobine d’inductance L et de résistance négligeable ;
+- Un interrupteur K à double position.
+Exercice III ( 4,5 points )2017 SR
+
+-- 33 of 38 --
+
+Figure 2
+T1
+T2
+(2)
+(1)
+4 8 12 t (ms)
+0
+2
+4
+6
+uC(V)
+Figure 3
+30 60 90 t (ms)
+-600
+-300
+0
+300
+600 q (μC)
+0,25
+0,5
+0,5
+0,5
+0,5
+0,5
+0,5
+0,5
+0,75
+1- Etude de la réponse d’un dipôle RC à un échelon de tension.
+Un élève a mis l’interrupteur K sur la position 1 à un instant t=0 considéré comme origine des
+dates.
+Les deux courbes (1) et (2) de la figure 2 représentent
+respectivement les évolutions temporelles de la tension
+C	u (t) aux bornes du condensateur pour 1	R = 20 W et 2	R .
+T1 et T2 sont les tangentes aux courbes (1) et (2) à t=0.
+1.1- Reproduire le schéma de la figure 1 et indiquer
+comment est branché un système d’acquisition informatisé
+pour visualiser la tension C	u (t) .
+1.2-Etablir l’équation différentielle vérifiée par C	u (t) .
+1.3- La solution de cette équation différentielle est
+t
+- τ
+C	u (t) = A (1- e ) . Trouver en fonction des paramètres du circuit,
+les expressions de A et de t .
+1.4- En exploitant les courbes (1) et (2), déterminer la valeur de la capacité C du condensateur et
+celle de la résistance 2	R .
+1.5- Déduire comment influe la résistance sur la constante de temps.
+2- Etude du circuit RLC dans le cas d’un amortissement négligeable
+Après avoir chargé totalement le condensateur de capacité C =100μF , un élève bascule
+l’interrupteur K sur la position 2 ( voir Figure 1).
+La courbe de la figure 3 représente l’évolution temporelle de la charge q t	( )du condensateur.
+2.1- Etablir l’équation différentielle vérifiée par la charge q t	( ).
+2.2- La solution de cette équation différentielle est : m
+0
+2π
+q(t) = Q cos( t)
+T . Trouver en fonction de L
+et de C l’expression de la période propre 0	T de l’oscillateur électrique.
+2.3- Vérifier que la valeur approximative de l’inductance de la bobine étudiée est : L 0, 91H	ª .
+2.4- Calculer l’énergie totale du circuit aux instants 1	t 0	= et 0
+2
+T
+t 4
+= . Justifier le résultat obtenu.
+
+-- 34 of 38 --
+
+
+
+-- 35 of 38 --
+
+
+
+-- 36 of 38 --
+
+
+
+-- 37 of 38 --
+
+
+
+-- 38 of 38 --
+

@@ -1,0 +1,239 @@
+laser.
+λR
+a = 0,3mm	D = 2 m
+LR = 8,5 mm
+( figure ci-dessous) .
+de la fente, des taches
+lumineuses réparties sur une ligne verticale.
+La tache centrale a une largeur
+. On observe, sur un écran situé à une distance
+, vers une fente horizontale de
+largeur
+EXERCICE 1
+Etude de la diffraction de la lumière :
+La diffraction de la lumière met en évidence l’aspect ondulatoire de la lumière. De nombreuses
+applications dans des domaines tels que l’industrie, les nouvelles technologies… sont basées
+sur ce phénomène.
+Cet exercice se propose de déterminer la longueur d’onde d’une radiation émise par une source
+Une source laser émet une radiation rouge, de longueur d’onde
+1. On propose quatre expressions pour la longueur d’onde	 d’une onde lumineuse diffractée.
+Choisir, en se basant sur une analyse dimensionnelle, l’expression juste :
+■a.L.D
+λ = 2 ■a.L
+λ = 2.D ■a
+λ = L.D ■2.L
+λ = a.D
+2. Recopier le numéro de la question et répondre par vrai ou faux.
+Les facteurs, intervenant dans la diffraction d’une radiation, varient ainsi :
+2.1. l’écart angulaire θ augmente si la longueur d’onde	 de la radiation émise augmente.
+2.2. la largeur L de la tache centrale est proportionnelle à la largeur a de la fente.
+3. Déterminer la longueur d’onde λR de la radiation émise par cette source laser.
+4. On remplace la source de radiation rouge par une source de radiation bleue ayant une longueur
+d’onde λB = 450 nm. Comparer les largeurs LR et LB des deux taches centrales obtenues
+successivement avec les radiations rouge et bleue.
+Ecran
+D
+L
+Laser
+Fente
+θ
+EXERCICE 2
+Exercice 1 – Les ondes – Mesure du diamètre d’un fil :
+Les rayons lasers sont utilisés dans plusieurs domaines, grâce à leurs propriétés
+optiques et énergétiques. Parmi ces utilisations, on cite la détermination des
+dimensions microscopiques de quelques corps.
+Pour mesurer le diamètre d’un fil fin, on réalise les deux expériences suivantes :
+1- Expérience 1 :
+On éclaire une plaque (P) contenant une fente de largeur a1, avec une lumière
+monochromatique de longueur d’onde λ issue d’une source laser. On observe sur un
+écran E placé à une distance D = 1,6 m de la fente (figure 1), un ensemble de taches
+lumineuses dont la largeur de la tache centrale est L1 = 4,8 cm (figure 2).
+Série 3 : Ondes lumineuses	2PC 2020
+2021
+EcoPlus
+D. Zinessabah /
+
+-- 1 of 6 --
+
+Figure 1
+1-1- Recopier la figure 1, et représenter les rayons lumineux après la traversée
+de la fente. Donner le nom du phénomène illustré par la figure 2 sur
+l’écran E.
+1-2- Quel est la condition que doit satisfaire la largeur a de la fente pour que se
+phénomène se produisse ?
+1-3- Ecrire l’expression de l’écart angulaire θ entre le milieu de la tache centrale
+et le milieu de la première extinction en fonction de L1 et D.
+1-4- La courbe de la figure 3, représente les variations de θ en fonction
+de 1
+a .
+1-4-1- Comment varie la largeur de la frange centrale avec a ?
+1-4-2- Déterminer graphiquement λ et calculer a1.
+Figure 2
+
+-- 2 of 6 --
+
+Les fibres optiques permettent la transmission d’informations numériques avec des
+vitesses très grandes et à haut débits en comparaison avec d’autres milieux.
+Pour déterminer l’indice de réfraction du milieu transparent constituant le cœur
+d’une fibre optique, on a réalisé un dispositif expérimental représenté sue la
+figure 1, où les récepteurs R1 et R2 permettent de transformer l’onde lumineuse
+monochromatique issue de la source laser, en tension électrique qu’on affiche sur
+l’écran d’un oscilloscope comme indiqué sur la figure 2.
+Figure 1
+On donne :
+ Sensibilité horizontale : SH = 0,2 μs.div-1 ; Figure 2
+ Célérité de propagation de la lumière dans le vide : c = 3.108 m.s-1 ;
+ Sur l’étiquette du laser on lit, la longueur d’onde dans le vide : λ0 = 600 nm ;
+Pour déterminer la vitesse d’une onde lumineuse dans une fibre optique de longueur
+L = 200 m, on a réalisé le montage de la figure 1, où R1 et R2 des capteurs permettant
+de transformer le signal lumineux en signal électrique qu’on affiche sur l’écran d’un
+oscilloscope (Figure 2)
+1- Par exploitation de la figure 2 :
+1-1- Déterminer le retard temporel τ enregistré entre R1 et R2.
+1-2- Calculer la célérité de propagation de l’onde lumineuse à l’intérieur du cœur
+de la fibre optique.
+1-3- Déduire la valeur de l’indice de réfraction n de la matière constituant le
+cœur de la fibre optique.
+1-4- Calculer la valeur de la longueur d’onde λ à l’intérieur du cœur de la fibre
+optique.
+2- Le cœur de la fibre optique est un milieu transparent dont l’indice de réfraction
+varie avec la longueur de l’onde incidente selon la loi :
+-15
+2
+5, 6.10
+n = 1, 484 + λ (SI).
+On remplace la source lumineuse par une autre source monochromatique de
+longueur d’onde dans le vide λ’0 = 400 nm, sans aucune modification dans le
+dispositif expérimental précédent. Trouver la valeur du retard temporel τ’ observé
+sur l’écran de l’oscilloscope.
+EXERCICE 3
+
+-- 3 of 6 --
+
+Al hassan ibn al haytam (354-430 de l’hégire), est considéré comme l’un des grands
+initiateurs de l’optique moderne, son ouvrage « Traité d’optique » est une référence
+essentielle dans ce domaine, et qui a été traduit du latin plus de cinq fois. Aucun
+autre savant considérable dans ce domaine n’a apparu après ibn al haytam, jusqu’au
+ème
+XVII siècle grégorien, où apparaissent les deux savants ; Isaac Newton avec sa
+théorie corpusculaire de la lumière, et le physicien astronaume hollandais Cristian
+Huygens avec sa téorie ondulatoire.
+Le but de cet exercice est l’étude de quelques propriétés de la lumière, et son
+exploitation pour déterminer le diamètre d’un cheveu.
+Données :
+ Célerité de propagation de la lumière dans le vide : c = 3.108 m.s-1 ;
+ Constante de Planck : h = 6,63.10-34 J.s.
+On réalise l’exprérience de la diffraction de la lumière à d’une source laser
+monochromatique de longueur d’onde dans le vide λ. On fixe à quelques centimètres
+de cette source un fil fin de diamètre a une distance D = 5,54 m, un écran E (Figure1).
+Figure 1
+1- On éclaire le fil par la source laser, on observe sur l’écran des taches de
+diffraction. On désignera la largeur de la tache centrale par L.
+1-1- Quelles est la nature de la lumière mise en évidence par le phénomène de
+diffraction ?
+1-2- Exprimer la longueur d’onde λ, en fonction de D, L et a, sachant que
+l’expression de l’écart angulaire entre le milieu de la tache centrale et l’un
+de ses extrémités est :λ
+θ a
+	 . (On considére θ petit)
+1-3- On mesure la longueur L de la frange
+centrale pour différents fils fins. Les
+résultats obtenus permettent de tracer la
+courbe de la figure 2, qui représente les
+variations de L en fonction de1
+a .
+a- Par exploitation de cette courbe,
+déterminer la longueur d’onde λ.
+b- Calculer, en eV, l’énergie E du
+photon correspondant à cette onde
+lumineuse. Figure 2
+2- On refait la même expérience en fixant un cheveu exactement à la place du fil.
+La mesure de la largeur de la tache centrale donne : L’ = 42 mm. Détérminer, à
+l’aide de la courbe, le diamètre d du cheveu.
+EXERCICE 4
+
+-- 4 of 6 --
+
+PHYSIQUE 5 : Détermination du diamètre d’un fil fin
+Lorsque la lumière rencontre un obstacle , elle ne se propage plus en ligne droite , il se produit le
+phénomène de diffraction . ce phénomène peut être utilisé pour déterminer le diamètre d’un fil très fin .
+Données :
+La célérité de la lumière dans l’air est c = 3,00.108 m.s-1.
+L’écart angulaire  entre le centre de la tache centrale et la 1ère extinction lors de la diffraction par une
+fente ou par un fil est exprimé par la relation a
+
+  dont  est la longueur d’onde et a la largeur de la
+fente ou le diamètre du fil .
+1- Diffraction de la lumière
+On réalise une expérience de diffraction
+à l’aide d’une lumière monochromatique
+de fréquence  = 4,44.1014 Hz .
+On place à quelques centimètres de la source
+lumineuse une fente verticale de largeur a .
+La figure de diffraction est observée sur un
+écran vertical placé à une distance D = 50,0cm de la fente .
+La figure de diffraction est constituée d’une série de taches
+situées sur une perpendiculaire à la fente. figure (1) .
+D
+
+Ecran
+Fente
+L1
+Source lumineuse
+Figure 1
+La tache centrale est plus éclairée et plus large que les autres ,
+sa largeur est L1 = 6,70.10-1cm .
+1.1- Quel est la nature de la lumière que montre
+cette expérience ?
+1.2-Trouver l’expression de a en fonction de
+L1 , D ,  et c .
+Calculer a .
+2- On place entre la fente et l’écran un bloc de verre
+de forme parallélépipédique comme l’indique la figure (2) .
+L’indice de réfraction du verre pour la lumière monochromatique
+utilisée est n = 1,61 .
+On observe sur l’écran que la largeur de la tache lumineuse
+centrale prend une valeur L2 .
+Trouver l’expression de L2 en fonction de L1 et n .
+3- Détermination du diamètre du fil de la toile d’araignée
+On garde la source lumineuse et l’écran à leur place . On enlève le bloc de verre et on remplace la fente
+par un fil rectiligne vertical de la toile d’araignée . On mesure la largeur de la tache centrale sur l’écran ,
+on trouve alors L3= 1,00cm .
+Déterminer le diamètre du fil de toile d’araignée .
+D
+L2
+Bloc de verre
+Fente
+Figure 2
+
+-- 5 of 6 --
+
+: Etude du phénomène de diffraction de la lumière
+Les rayons lasers sont utilisés dans plusieurs domaines tels que la métallurgie,
+l’ophtalmologie et opérations chirurgicales ... Ils sont aussi utilisés pour la
+détermination des dimensions microscopiques de quelques corps.
+Cet exercice vise la détermination de la longueur d’onde d’une onde
+électromagnétique, et la détermination du diamètre d’un fil fin métallique en
+exploitant le phénomène de diffraction.
+On envoie, à l’aide d’une source laser, un faisceau de lumière monochromatique
+de longueur d’onde λ, sur une plaque contenant une fente verticale de largeur
+a = 0,06 mm, on observe un phénomène de diffraction sur un écran vertical situé à
+une distance D = 1,5 m de la plaque.
+La mesure de la longueur de la frange
+centrale donne L1 = 3,5 cm. (Figure ci-contre)
+1- Quelle est la condition que doit
+satisfaire la largeur a de la fente pour
+que le phénomène de diffraction se
+produise ?
+2- Quelle est la nature de la lumière mise
+en évidence par cette expérience ?
+3- Exprimer λ en fonction de L1, D et a.
+calculer sa valeur.
+(On considère tan θ ≈ θ pour les petit angles)
+4- On remplace la plaque (P) par un fil fin de diamètre d, qu’on fixe à la même
+place de la plaque. On visualise sur l’écran des franges brillantes commes les
+précédentes, mais dont la largeur de la tâche centrale est L2 = 2,8 cm. Calculer d.
+EXERCICE 6
+
+-- 6 of 6 --
+
