@@ -30,8 +30,6 @@ export interface VersionCheckResult {
   checkedAt: string;
 }
 
-let cachedVersionInfo: VersionInfo | null = null;
-
 export function isCloudEnvironment(): boolean {
   return Boolean(
     process.env.RENDER ||
@@ -43,13 +41,10 @@ export function isCloudEnvironment(): boolean {
 
 /**
  * Lit ou extrait les métadonnées de version de l'application locale.
+ * Sur une machine locale avec Git, Git HEAD est la source de vérité prioritaire.
  */
 export function getLocalVersionInfo(): VersionInfo {
-  if (cachedVersionInfo) {
-    return cachedVersionInfo;
-  }
-
-  let pkgVersion = '2.1.0';
+  let pkgVersion = '2.2.0';
   try {
     const pkgPath = path.join(ROOT_DIR, 'package.json');
     if (fs.existsSync(pkgPath)) {
@@ -66,39 +61,40 @@ export function getLocalVersionInfo(): VersionInfo {
     } catch {}
   }
 
-  let commit = versionFileContent.commit || process.env.RENDER_GIT_COMMIT || '';
-  let commitDate = versionFileContent.commitDate || '';
-  let commitMessage = versionFileContent.commitMessage || '';
-  const buildTime = versionFileContent.buildTime || new Date().toISOString();
+  // 1. Tenter d'interroger directement Git (source de vérité absolue en local)
+  let commit = '';
+  let commitDate = '';
+  let commitMessage = '';
 
-  // Si non défini dans version.json, tenter d'extraire depuis git local
-  if (!commit) {
-    try {
-      commit = execSync('git rev-parse --short HEAD', { cwd: ROOT_DIR, encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
-    } catch {
-      commit = 'latest';
-    }
-  } else if (commit.length > 7) {
-    commit = commit.substring(0, 7);
-  }
+  try {
+    commit = execSync('git rev-parse --short HEAD', { cwd: ROOT_DIR, encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+  } catch {}
 
-  if (!commitDate) {
+  if (commit) {
+    if (commit.length > 7) commit = commit.substring(0, 7);
     try {
       commitDate = execSync('git log -1 --format=%cI', { cwd: ROOT_DIR, encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
-    } catch {
-      commitDate = new Date().toISOString();
-    }
-  }
-
-  if (!commitMessage) {
+    } catch {}
     try {
       commitMessage = execSync('git log -1 --format=%s', { cwd: ROOT_DIR, encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
-    } catch {
-      commitMessage = 'Dernière mise à jour';
-    }
+    } catch {}
   }
 
-  cachedVersionInfo = {
+  // 2. Si Git n'est pas disponible (ex: conteneur Docker de production), fallback sur version.json
+  if (!commit) {
+    commit = versionFileContent.commit || process.env.RENDER_GIT_COMMIT || 'latest';
+    if (commit.length > 7) commit = commit.substring(0, 7);
+  }
+  if (!commitDate) {
+    commitDate = versionFileContent.commitDate || new Date().toISOString();
+  }
+  if (!commitMessage) {
+    commitMessage = versionFileContent.commitMessage || 'Dernière mise à jour';
+  }
+
+  const buildTime = versionFileContent.buildTime || new Date().toISOString();
+
+  return {
     version: pkgVersion,
     commit,
     commitDate,
@@ -108,8 +104,6 @@ export function getLocalVersionInfo(): VersionInfo {
     environment: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     cloudUrl: CLOUD_SERVER_URL,
   };
-
-  return cachedVersionInfo;
 }
 
 /**
@@ -157,28 +151,94 @@ export async function checkCloudVersion(): Promise<VersionCheckResult> {
     }
 
     const cloudData = (await res.json()) as VersionInfo;
-    const cloudCommit = (cloudData.commit || '').substring(0, 7);
-    const localCommit = (local.commit || '').substring(0, 7);
+    const cloudCommit = (cloudData.commit || '').trim().substring(0, 7).toLowerCase();
+    const localCommit = (local.commit || '').trim().substring(0, 7).toLowerCase();
 
-    // Comparaison des commits
-    const isSameCommit = Boolean(cloudCommit && localCommit && cloudCommit === localCommit);
+    // 1. Si les commits sont strictement identiques
+    if (cloudCommit && localCommit && cloudCommit === localCommit) {
+      return {
+        isCloud: false,
+        cloudReachable: true,
+        upToDate: true,
+        hasUpdate: false,
+        localCommit,
+        localDate: local.commitDate,
+        cloudCommit,
+        cloudDate: cloudData.commitDate,
+        cloudCommitMessage: cloudData.commitMessage,
+        message: 'Votre version locale est parfaitement synchronisée avec le serveur Cloud.',
+        checkedAt,
+      };
+    }
+
+    // 2. Si le cloud renvoie "latest" ou n'a pas de SHA de commit Git identifiable
+    if (!cloudCommit || cloudCommit === 'latest' || localCommit === 'latest') {
+      const isSameVersion = Boolean(local.version && cloudData.version && local.version === cloudData.version);
+      return {
+        isCloud: false,
+        cloudReachable: true,
+        upToDate: isSameVersion,
+        hasUpdate: !isSameVersion,
+        localCommit,
+        localDate: local.commitDate,
+        cloudCommit: cloudCommit || 'latest',
+        cloudDate: cloudData.commitDate,
+        cloudCommitMessage: cloudData.commitMessage,
+        message: isSameVersion
+          ? `Votre version locale est à jour avec le serveur Cloud (version ${local.version}).`
+          : `Une nouvelle version (${cloudData.version}) est disponible sur le Cloud.`,
+        checkedAt,
+      };
+    }
+
+    // 3. Les deux sont des commits Git valides : vérifier l'ascendance avec Git local
+    let isAncestor = false;
+    try {
+      // Si cloudCommit est un ancêtre de HEAD, local POSSÈDE DÉJÀ ce commit (ou est en avance)
+      execSync(`git merge-base --is-ancestor ${cloudCommit} HEAD`, { cwd: ROOT_DIR, stdio: ['ignore', 'ignore', 'ignore'] });
+      isAncestor = true;
+    } catch {}
+
+    if (isAncestor) {
+      // Le code local a déjà le commit du cloud (ou un commit plus récent)
+      return {
+        isCloud: false,
+        cloudReachable: true,
+        upToDate: true,
+        hasUpdate: false,
+        localCommit,
+        localDate: local.commitDate,
+        cloudCommit,
+        cloudDate: cloudData.commitDate,
+        cloudCommitMessage: cloudData.commitMessage,
+        message: 'Votre version locale est à jour avec le serveur Cloud.',
+        checkedAt,
+      };
+    }
+
+    // 4. Le commit cloud n'est pas dans l'historique de HEAD : vérifier si local est ancêtre du cloud (cloud en avance)
+    let isCloudAhead = false;
+    try {
+      execSync(`git merge-base --is-ancestor HEAD ${cloudCommit}`, { cwd: ROOT_DIR, stdio: ['ignore', 'ignore', 'ignore'] });
+      isCloudAhead = true;
+    } catch {}
+
     let hasNewerCloudVersion = false;
-
-    if (!isSameCommit) {
-      // Comparer les dates de commit si disponibles
-      if (cloudData.commitDate && local.commitDate) {
-        const cloudTime = new Date(cloudData.commitDate).getTime();
-        const localTime = new Date(local.commitDate).getTime();
-        hasNewerCloudVersion = cloudTime > localTime;
-      } else {
-        hasNewerCloudVersion = true;
-      }
+    if (isCloudAhead) {
+      hasNewerCloudVersion = true;
+    } else if (cloudData.commitDate && local.commitDate) {
+      const cloudTime = new Date(cloudData.commitDate).getTime();
+      const localTime = new Date(local.commitDate).getTime();
+      // Marge de sécurité de 60s pour absorber la dérive d'horloge
+      hasNewerCloudVersion = cloudTime > (localTime + 60_000);
+    } else {
+      hasNewerCloudVersion = true;
     }
 
     return {
       isCloud: false,
       cloudReachable: true,
-      upToDate: isSameCommit || !hasNewerCloudVersion,
+      upToDate: !hasNewerCloudVersion,
       hasUpdate: hasNewerCloudVersion,
       localCommit,
       localDate: local.commitDate,
@@ -187,7 +247,7 @@ export async function checkCloudVersion(): Promise<VersionCheckResult> {
       cloudCommitMessage: cloudData.commitMessage,
       message: hasNewerCloudVersion
         ? `Une mise à jour plus récente est disponible sur le serveur Cloud (${cloudCommit}).`
-        : 'Votre version locale est parfaitement synchronisée avec le serveur Cloud.',
+        : 'Votre version locale est synchronisée avec le serveur Cloud.',
       checkedAt,
     };
   } catch (err: any) {
@@ -228,12 +288,9 @@ export async function performLocalUpdate(): Promise<{ success: boolean; message:
     const pullOutput = execSync('git pull origin main', { cwd: ROOT_DIR, encoding: 'utf-8' });
     const installOutput = execSync('npm install --prefer-offline --no-audit', { cwd: ROOT_DIR, encoding: 'utf-8' });
 
-    // Réinitialiser le cache après mise à jour
-    cachedVersionInfo = null;
-
     return {
       success: true,
-      message: 'Mise à jour réussie avec succès depuis GitHub ! Redémarrez le serveur pour appliquer tous les changements.',
+      message: 'Mise à jour réussie avec succès depuis GitHub ! Rechargez la page web pour appliquer tous les changements.',
       output: `${pullOutput}\n${installOutput}`,
     };
   } catch (err: any) {

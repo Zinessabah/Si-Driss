@@ -17,12 +17,23 @@ interface VersionCheckData {
 export const CloudUpdateBanner: React.FC = () => {
   const [data, setData] = useState<VersionCheckData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(() => {
+    try {
+      return sessionStorage.getItem('sidriss_update_banner_dismissed') === 'true';
+    } catch {
+      return false;
+    }
+  });
   const [updating, setUpdating] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Ne jamais interroger ni afficher la bannière sur le serveur Cloud de production (ex: Render)
+    if (typeof window !== 'undefined' && window.location.hostname.includes('onrender.com')) {
+      return;
+    }
+
     let isMounted = true;
     fetch('/api/version/check')
       .then((res) => (res.ok ? res.json() : null))
@@ -39,6 +50,13 @@ export const CloudUpdateBanner: React.FC = () => {
     };
   }, []);
 
+  const handleDismiss = () => {
+    setIsDismissed(true);
+    try {
+      sessionStorage.setItem('sidriss_update_banner_dismissed', 'true');
+    } catch {}
+  };
+
   const handleApplyUpdate = async () => {
     setUpdating(true);
     setUpdateError(null);
@@ -50,6 +68,8 @@ export const CloudUpdateBanner: React.FC = () => {
       const result = await res.json();
       if (res.ok && result.success) {
         setUpdateSuccess(true);
+        setData((prev) => (prev ? { ...prev, hasUpdate: false, upToDate: true } : null));
+        handleDismiss();
       } else {
         setUpdateError(result.message || 'La mise à jour a échoué. Utilisez la commande manuelle ci-dessous.');
       }
@@ -61,6 +81,11 @@ export const CloudUpdateBanner: React.FC = () => {
   };
 
   if (!data || !data.hasUpdate || isDismissed || data.isCloud) {
+    return null;
+  }
+
+  // Double vérification client : pas de bannière sur onrender.com
+  if (typeof window !== 'undefined' && window.location.hostname.includes('onrender.com')) {
     return null;
   }
 
@@ -83,7 +108,7 @@ export const CloudUpdateBanner: React.FC = () => {
             Mettre à jour
           </button>
           <button
-            onClick={() => setIsDismissed(true)}
+            onClick={handleDismiss}
             className="p-1 rounded text-amber-400/60 hover:text-amber-200 hover:bg-amber-500/10 transition cursor-pointer"
             title="Masquer le bandeau"
             aria-label="Fermer"

@@ -67,7 +67,7 @@ if [ -n "$CLOUD_INFO" ] && echo "$CLOUD_INFO" | grep -q '"commit"'; then
   CLOUD_DATE=$(echo "$CLOUD_INFO" | grep -o '"commitDate":"[^"]*"' | cut -d'"' -f4)
   
   if [ -n "$LOCAL_COMMIT" ] && [ -n "$CLOUD_COMMIT" ]; then
-    if [ "$LOCAL_COMMIT" = "$CLOUD_COMMIT" ]; then
+    if [ "$CLOUD_COMMIT" = "latest" ] || [ "$LOCAL_COMMIT" = "$CLOUD_COMMIT" ] || git merge-base --is-ancestor "$CLOUD_COMMIT" HEAD 2>/dev/null; then
       echo -e "${GREEN}✓ Code local à jour et synchronisé avec le Cloud (commit ${LOCAL_COMMIT}).${NC}"
     else
       echo -e "${YELLOW}⚡ Une mise à jour est disponible sur le serveur Cloud !${NC}"

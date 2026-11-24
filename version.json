@@ -1,7 +1,7 @@
 {
   "version": "2.2.0",
-  "commit": "c7b7d9e",
-  "commitDate": "2026-11-24T12:05:48Z",
-  "commitMessage": "feat(sync): verification automatique de version locale vs serveur cloud si-driss.onrender.com",
-  "buildTime": "2026-11-24T12:39:31.716Z"
+  "commit": "82101f9",
+  "commitDate": "2026-11-24T12:39:56Z",
+  "commitMessage": "docs: ajouter le rapport d'analyse technique et finaliser version 2.2.0",
+  "buildTime": "2026-11-24T12:51:39.375Z"
 }
