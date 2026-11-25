@@ -863,11 +863,135 @@ function extractExamMetaFromFilename(fileName: string): { year: number | null; s
   return { year, session };
 }
 
+export type SlashCommandType =
+  | 'cours'
+  | 'examen'
+  | 'exercice'
+  | 'cadre'
+  | 'courbe'
+  | 'schema'
+  | 'mindmap'
+  | 'piege'
+  | 'aide';
+
+export interface ParsedSlashCommand {
+  command: SlashCommandType;
+  arg: string;
+  effectivePrompt: string;
+}
+
+function stripWrappingQuotes(value: string): string {
+  const t = value.trim();
+  if (
+    (t.startsWith("'") && t.endsWith("'") && t.length >= 2) ||
+    (t.startsWith('"') && t.endsWith('"') && t.length >= 2)
+  ) {
+    return t.slice(1, -1).trim();
+  }
+  return t;
+}
+
+const SLASH_COMMAND_ALIASES: { prefix: string; command: SlashCommandType }[] = [
+  { prefix: '/affiche le cours', command: 'cours' },
+  { prefix: '/afficher cours', command: 'cours' },
+  { prefix: '/affiche cours', command: 'cours' },
+  { prefix: '/affiche examen', command: 'examen' },
+  { prefix: '/affiche sujet', command: 'examen' },
+  { prefix: '/affiche exercice', command: 'exercice' },
+  { prefix: '/affiche courbe', command: 'courbe' },
+  { prefix: '/affiche schema', command: 'schema' },
+  { prefix: '/commandes', command: 'aide' },
+  { prefix: '/mindmap', command: 'mindmap' },
+  { prefix: '/exercice', command: 'exercice' },
+  { prefix: '/reference', command: 'cadre' },
+  { prefix: '/examen', command: 'examen' },
+  { prefix: '/annale', command: 'examen' },
+  { prefix: '/courbe', command: 'courbe' },
+  { prefix: '/schema', command: 'schema' },
+  { prefix: '/tracer', command: 'courbe' },
+  { prefix: '/cours', command: 'cours' },
+  { prefix: '/serie', command: 'exercice' },
+  { prefix: '/cadre', command: 'cadre' },
+  { prefix: '/carte', command: 'mindmap' },
+  { prefix: '/piege', command: 'piege' },
+  { prefix: '/trap', command: 'piege' },
+  { prefix: '/aide', command: 'aide' },
+  { prefix: '/help', command: 'aide' },
+];
+
+export function parseSlashCommand(rawText: string): ParsedSlashCommand | null {
+  const trimmed = (rawText || '').trim();
+  if (!trimmed.startsWith('/')) return null;
+
+  const norm = trimmed
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+  for (const entry of SLASH_COMMAND_ALIASES) {
+    if (norm === entry.prefix || norm.startsWith(`${entry.prefix} `)) {
+      const arg = stripWrappingQuotes(trimmed.slice(entry.prefix.length));
+      let effectivePrompt = arg || trimmed;
+      switch (entry.command) {
+        case 'cours':
+          effectivePrompt = arg
+            ? `Affiche le cours officiel "${arg}" et explique ses notions clés, définitions et formules essentielles.`
+            : `Explique les notions clés du cours officiel du programme.`;
+          break;
+        case 'examen':
+          effectivePrompt = arg
+            ? `Affiche et corrige méthodiquement le sujet d'examen national : ${arg}.`
+            : `Affiche un exercice officiel de l'Examen National du Baccalauréat.`;
+          break;
+        case 'exercice':
+          effectivePrompt = arg
+            ? `Affiche l'exercice ou la série officielle sur : ${arg}, et guide-moi dans sa résolution.`
+            : `Propose un exercice officiel du programme pour m'entraîner.`;
+          break;
+        case 'cadre':
+          effectivePrompt = arg
+            ? `Quelles sont les exigences exactes du Cadre de Référence officiel concernant : ${arg} ?`
+            : `Présente les points clés du Cadre de Référence officiel du programme.`;
+          break;
+        case 'courbe':
+          effectivePrompt = arg
+            ? `Trace la courbe interactive (\`\`\`curve) pour : ${arg}, et explique son exploitation le jour du Bac.`
+            : `Trace une courbe caractéristique du programme en \`\`\`curve et explique son exploitation.`;
+          break;
+        case 'schema':
+          effectivePrompt = arg
+            ? `Dessine un schéma clair (\`\`\`svg) pour : ${arg}, avec ses annotations et explications.`
+            : `Dessine un schéma physique du programme en \`\`\`svg.`;
+          break;
+        case 'mindmap':
+          effectivePrompt = arg
+            ? `Génère une carte mentale (\`\`\`mindmap) complète pour réviser : ${arg}.`
+            : `Génère une carte mentale de révision (\`\`\`mindmap).`;
+          break;
+        case 'piege':
+          effectivePrompt = arg
+            ? `Pose-moi un piège classique de l'Examen National sur : ${arg}.`
+            : `Pose-moi un piège classique de l'Examen National.`;
+          break;
+        case 'aide':
+          effectivePrompt = 'Liste les commandes rapides disponibles dans Si Driss.';
+          break;
+      }
+
+      return { command: entry.command, arg, effectivePrompt };
+    }
+  }
+
+  return null;
+}
+
 export interface SearchLocalDocumentsOptions {
   hasUserAttachments?: boolean;
   explicitExamRequested?: boolean;
   explicitOfficialRequested?: boolean;
   latestUserText?: string;
+  forcedCommand?: SlashCommandType;
+  commandArg?: string;
 }
 
 const COURSE_STOP_WORDS = new Set([
@@ -1127,7 +1251,11 @@ function buildOfficialCourseResponse(
   return { contextText, officialSource, isScannedPdf };
 }
 
-function findExplicitOfficialPdfByName(query: string, branchUpper: 'PC' | 'SM'): CachedDoc | null {
+function findExplicitOfficialPdfByName(
+  query: string,
+  branchUpper: 'PC' | 'SM',
+  forcedCmd?: SlashCommandType
+): CachedDoc | null {
   const qLower = query.toLowerCase();
   const qNorm = normalizeCourseText(query);
 
@@ -1139,6 +1267,10 @@ function findExplicitOfficialPdfByName(query: string, branchUpper: 'PC' | 'SM'):
     if (!doc.name.toLowerCase().endsWith('.pdf')) continue;
     // Protéger les corrigés confidentiels en mode socratique
     if (doc.category === 'corriges') continue;
+    if (forcedCmd === 'cours' && doc.category !== 'cours') continue;
+    if (forcedCmd === 'examen' && doc.category !== 'examens') continue;
+    if (forcedCmd === 'exercice' && doc.category !== 'series' && doc.category !== 'examens') continue;
+    if (forcedCmd === 'cadre' && doc.category !== 'cadres') continue;
 
     const nameLower = doc.name.toLowerCase();
     const normFull = normalizeCourseText(doc.name);
@@ -1161,6 +1293,85 @@ function findExplicitOfficialPdfByName(query: string, branchUpper: 'PC' | 'SM'):
   return best;
 }
 
+function findBestPdfByCategory(
+  category: 'cours' | 'series' | 'cadres',
+  branchUpper: 'PC' | 'SM',
+  tokens: string[],
+  topic: ExamTopic | null,
+  options?: { wantsManuscript?: boolean; wantsManual?: boolean }
+): { doc: CachedDoc; score: number } | null {
+  let bestDoc: CachedDoc | null = null;
+  let bestScore = 0;
+
+  for (const doc of documentsCache) {
+    if (doc.branch !== 'ALL' && doc.branch !== branchUpper) continue;
+    if (doc.category !== category) continue;
+    if (!doc.name.toLowerCase().endsWith('.pdf')) continue;
+
+    const normFileName = normalizeCourseText(path.basename(doc.name, path.extname(doc.name)));
+    const fileTokens = normFileName
+      .split(/\s+/)
+      .filter((t) => t && !COURSE_STOP_WORDS.has(t) && (t.length >= 2 || t === '1' || t === '2'));
+
+    let score = 0;
+    let fileMatches = 0;
+    for (const tok of tokens) {
+      if (tokenMatchesText(tok, normFileName)) {
+        score += 32;
+        fileMatches++;
+      }
+    }
+    if (fileTokens.length > 0 && fileMatches > 0) {
+      score += Math.round((fileMatches / fileTokens.length) * 25);
+    }
+
+    if (category === 'cours') {
+      const isManuscriptDoc = normFileName.includes('manuscrit');
+      if (isManuscriptDoc) {
+        score += options?.wantsManuscript ? 45 : -15;
+      }
+    }
+
+    const fullContent = readDocumentFullText(doc);
+    const markerIdx = fullContent.indexOf(SCIENTIFIC_VISION_MARKER);
+    const bodyOnly = markerIdx !== -1 ? fullContent.slice(0, markerIdx) : fullContent;
+    const { totalPages } = splitPdfIntoPages(bodyOnly);
+    const isDedicated = totalPages <= 20;
+    const isManualDoc = /soir|semestre|pc1/i.test(normFileName);
+
+    if (isDedicated && fileMatches > 0) {
+      score += 30;
+    }
+    if (isManualDoc && options?.wantsManual) {
+      score += 35;
+    }
+
+    const { bodyScore } = buildCourseExcerptAndPages(fullContent, doc.name, tokens, topic);
+    if (bodyScore > 0) {
+      score += Math.min(45, bodyScore);
+      if (isDedicated) {
+        score += 15;
+      }
+    }
+
+    if (tokens.length === 0 && category === 'cadres') {
+      score += 30;
+    }
+
+    if (doc.branch === branchUpper) {
+      score += 3;
+    }
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestDoc = doc;
+    }
+  }
+
+  if (!bestDoc || bestScore < 20) return null;
+  return { doc: bestDoc, score: bestScore };
+}
+
 export async function searchLocalDocumentsDetailed(
   query: string,
   branch: string = 'PC',
@@ -1171,22 +1382,39 @@ export async function searchLocalDocumentsDetailed(
     if (!documentsCache.length) return { contextText: '' };
 
     const branchUpper = (branch || 'PC').toUpperCase() as 'PC' | 'SM';
-    const intentSource = options?.latestUserText?.trim() ? options.latestUserText : query;
+    const forcedCmd = options?.forcedCommand;
+    const cmdArg = (options?.commandArg || '').trim();
+
+    const intentSource = cmdArg || (options?.latestUserText?.trim() ? options.latestUserText : query);
     const parsedFromLatest = parseExamQuery(intentSource);
     const parsed = parsedFromLatest.isExamQuery ? parsedFromLatest : parseExamQuery(query);
+    if (forcedCmd === 'examen' || (forcedCmd === 'exercice' && /\b(20[012]\d|sn|sr|national)\b/i.test(intentSource))) {
+      parsed.isExamQuery = true;
+    }
+
     const courseFromLatest = parseCourseQuery(intentSource);
     const courseParsed = courseFromLatest.isCourseQuery ? courseFromLatest : parseCourseQuery(query);
+    if (forcedCmd === 'cours') {
+      courseParsed.isCourseQuery = true;
+    }
+
+    const suppressVisualPdf = Boolean(
+      forcedCmd && ['courbe', 'schema', 'mindmap', 'piege', 'aide'].includes(forcedCmd)
+    );
 
     // Si l'élève a joint ses propres documents/exercices ou photos et n'a pas explicitement
     // réclamé l'ouverture d'un sujet ou cours officiel, on priorise son énoncé uploadé.
-    const shouldSkipOfficialSource = Boolean(
-      options?.hasUserAttachments && !options?.explicitExamRequested && !options?.explicitOfficialRequested
-    );
+    const shouldSkipOfficialSource =
+      suppressVisualPdf ||
+      Boolean(
+        options?.hasUserAttachments && !options?.explicitExamRequested && !options?.explicitOfficialRequested
+      );
 
     // 0. ROUTE PRIORITAIRE ABSOLUE : NOM DE DOCUMENT OFFICIEL EXPLICITE (ex: bouton "Interroger" ou nom exact .pdf)
     if (!shouldSkipOfficialSource) {
-      const explicitDoc = findExplicitOfficialPdfByName(intentSource, branchUpper) ||
-        findExplicitOfficialPdfByName(query, branchUpper);
+      const explicitDoc =
+        findExplicitOfficialPdfByName(intentSource, branchUpper, forcedCmd) ||
+        findExplicitOfficialPdfByName(query, branchUpper, forcedCmd);
 
       if (explicitDoc) {
         if (explicitDoc.category === 'cours') {
@@ -1231,10 +1459,62 @@ export async function searchLocalDocumentsDetailed(
       }
     }
 
+    // 0.5 COMMANDES SLASH CIBLÉES (/cours, /exercice -> série, /cadre)
+    if (!shouldSkipOfficialSource && forcedCmd === 'cours') {
+      const matched = findBestPdfByCategory('cours', branchUpper, courseParsed.tokens, courseParsed.topic, {
+        wantsManuscript: courseParsed.wantsManuscript,
+        wantsManual: courseParsed.wantsManual,
+      });
+      if (matched) {
+        return buildOfficialCourseResponse(
+          matched.doc,
+          branchUpper,
+          courseParsed.tokens,
+          courseParsed.topic
+        );
+      }
+    }
+
+    if (!shouldSkipOfficialSource && forcedCmd === 'exercice') {
+      const matchedSeries = findBestPdfByCategory(
+        'series',
+        branchUpper,
+        courseParsed.tokens,
+        courseParsed.topic || parsed.topic
+      );
+      if (matchedSeries && matchedSeries.score >= 25) {
+        return buildOfficialCourseResponse(
+          matchedSeries.doc,
+          branchUpper,
+          courseParsed.tokens,
+          courseParsed.topic || parsed.topic
+        );
+      }
+      // Repli vers la route des examens si aucune série dédiée ne correspond
+      parsed.isExamQuery = true;
+    }
+
+    if (!shouldSkipOfficialSource && forcedCmd === 'cadre') {
+      const matchedCadre = findBestPdfByCategory(
+        'cadres',
+        branchUpper,
+        courseParsed.tokens,
+        courseParsed.topic || parsed.topic
+      );
+      if (matchedCadre) {
+        return buildOfficialCourseResponse(
+          matchedCadre.doc,
+          branchUpper,
+          courseParsed.tokens,
+          courseParsed.topic || parsed.topic
+        );
+      }
+    }
+
     // 1. ROUTE PRIORITAIRE : EXAMEN NATIONAL DU BACCALAURÉAT
     // Si la requête concerne une épreuve nationale (année, session, ou mot-clé examen/national),
     // on identifie le document officiel cible dans la filière de l'élève (PC ou SM)
-    if (parsed.isExamQuery && !shouldSkipOfficialSource) {
+    if (parsed.isExamQuery && forcedCmd !== 'cours' && !shouldSkipOfficialSource) {
       let bestDoc: CachedDoc | null = null;
       let bestScore = 0;
 
@@ -1382,79 +1662,20 @@ export async function searchLocalDocumentsDetailed(
 
     // 1.5 ROUTE PRIORITAIRE : COURS OFFICIELS DU PROGRAMME (MÊME AFFICHAGE PDF QUE LES EXAMENS)
     if (courseParsed.isCourseQuery && !shouldSkipOfficialSource) {
-      let bestCourseDoc: CachedDoc | null = null;
-      let bestCourseScore = 0;
-
-      for (const doc of documentsCache) {
-        if (doc.branch !== 'ALL' && doc.branch !== branchUpper) continue;
-        if (doc.category !== 'cours') continue;
-        if (!doc.name.toLowerCase().endsWith('.pdf')) continue;
-
-        const normFileName = normalizeCourseText(path.basename(doc.name, path.extname(doc.name)));
-        const fileTokens = normFileName
-          .split(/\s+/)
-          .filter((t) => t && !COURSE_STOP_WORDS.has(t) && (t.length >= 2 || t === '1' || t === '2'));
-
-        let score = 0;
-        let fileMatches = 0;
-        for (const tok of courseParsed.tokens) {
-          if (tokenMatchesText(tok, normFileName)) {
-            score += 32;
-            fileMatches++;
-          }
+      const matchedCourse = findBestPdfByCategory(
+        'cours',
+        branchUpper,
+        courseParsed.tokens,
+        courseParsed.topic,
+        {
+          wantsManuscript: courseParsed.wantsManuscript,
+          wantsManual: courseParsed.wantsManual,
         }
-        if (fileTokens.length > 0 && fileMatches > 0) {
-          score += Math.round((fileMatches / fileTokens.length) * 25);
-        }
+      );
 
-        // Préférence pour les cours manuscrits uniquement s'ils sont demandés
-        const isManuscriptDoc = normFileName.includes('manuscrit');
-        if (isManuscriptDoc) {
-          score += courseParsed.wantsManuscript ? 45 : -15;
-        }
-
-        const fullContent = readDocumentFullText(doc);
-        const markerIdx = fullContent.indexOf(SCIENTIFIC_VISION_MARKER);
-        const bodyOnly = markerIdx !== -1 ? fullContent.slice(0, markerIdx) : fullContent;
-        const { totalPages } = splitPdfIntoPages(bodyOnly);
-        const isDedicatedCourse = totalPages <= 20;
-        const isManualDoc = /soir|semestre|pc1/i.test(normFileName);
-
-        if (isDedicatedCourse && fileMatches > 0) {
-          score += 30;
-        }
-        if (isManualDoc && courseParsed.wantsManual) {
-          score += 35;
-        }
-
-        // Vérifier aussi la correspondance dans le contenu du cours (ex: chapitres des manuels de soir)
-        const { bodyScore } = buildCourseExcerptAndPages(
-          fullContent,
-          doc.name,
-          courseParsed.tokens,
-          courseParsed.topic
-        );
-        if (bodyScore > 0) {
-          score += Math.min(45, bodyScore);
-          // Si le fichier dédié court contient le sujet dans son texte/titre de page 1
-          if (isDedicatedCourse) {
-            score += 15;
-          }
-        }
-
-        if (doc.branch === branchUpper) {
-          score += 3;
-        }
-
-        if (score > bestCourseScore) {
-          bestCourseScore = score;
-          bestCourseDoc = doc;
-        }
-      }
-
-      if (bestCourseDoc && bestCourseScore >= 25) {
+      if (matchedCourse && matchedCourse.score >= 25) {
         return buildOfficialCourseResponse(
-          bestCourseDoc,
+          matchedCourse.doc,
           branchUpper,
           courseParsed.tokens,
           courseParsed.topic

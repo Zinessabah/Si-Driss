@@ -12,7 +12,7 @@ import {
 } from '../ai/providers';
 import { generateUnifiedCompletion, streamUnifiedChat, trimUpstreamError } from '../ai/completion';
 import { sseWrite } from '../ai/sse';
-import { extractTextFromPdf, searchLocalDocumentsDetailed } from '../rag';
+import { extractTextFromPdf, parseSlashCommand, searchLocalDocumentsDetailed } from '../rag';
 import { getSiDrissBasePrompt, getInstruction, normalizeBranchParam } from '../prompts';
 import type { ClientAttachment, ClientMessage } from '../ai/adapters';
 
@@ -273,6 +273,89 @@ router.post('/validate-key', validateKeyLimiter, async (req, res) => {
   }
 });
 
+async function prepareChatContext(
+  req: any,
+  aiConfig: ResolvedAIConfig,
+  messages: ClientMessage[],
+  context: string | undefined,
+  mode: string,
+  socraticEnabled: boolean,
+  branch: 'PC' | 'SM'
+) {
+  const enrichedMessages = await enrichPdfAttachments(messages);
+  let lastUserIdx = -1;
+  for (let i = enrichedMessages.length - 1; i >= 0; i--) {
+    if (enrichedMessages[i]?.role === 'user') {
+      lastUserIdx = i;
+      break;
+    }
+  }
+  const lastUserMessage = lastUserIdx >= 0 ? enrichedMessages[lastUserIdx] : undefined;
+  const hasUserAttachments = enrichedMessages.some(
+    (m) => m.role === 'user' && Array.isArray(m.attachments) && m.attachments.length > 0
+  );
+  const lastUserText = lastUserMessage?.content || '';
+  const slashCmd = parseSlashCommand(lastUserText);
+
+  const effectiveMessages =
+    slashCmd && lastUserIdx >= 0
+      ? enrichedMessages.map((m, idx) =>
+          idx === lastUserIdx ? { ...m, content: slashCmd.effectivePrompt } : m
+        )
+      : enrichedMessages;
+
+  const effectiveMode = slashCmd?.command === 'piege' ? 'trap' : mode;
+  const effectiveSocratic = slashCmd?.command === 'piege' ? true : socraticEnabled;
+
+  const explicitExamRequested =
+    slashCmd?.command === 'examen' ||
+    (/\b(20[012]\d)\b/.test(lastUserText) &&
+      /\b(national|annale|epreuve|officiel|sn|sr)\b/i.test(lastUserText));
+  const explicitOfficialRequested =
+    explicitExamRequested ||
+    Boolean(slashCmd && ['cours', 'examen', 'exercice', 'cadre'].includes(slashCmd.command)) ||
+    /\.pdf\b/i.test(lastUserText) ||
+    /\b(affiche|afficher|montre|montrer|ouvre|ouvrir|voir)\b[\s\S]{0,40}\b(cours|manuel|polycopie|document|officiel)\b/i.test(lastUserText);
+
+  const searchTerms = slashCmd?.arg
+    ? slashCmd.arg
+    : buildPersistentSearchTerms(effectiveMessages);
+  const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(
+    searchTerms,
+    branch,
+    {
+      hasUserAttachments,
+      explicitExamRequested,
+      explicitOfficialRequested,
+      latestUserText: slashCmd ? slashCmd.arg || slashCmd.effectivePrompt : lastUserText,
+      forcedCommand: slashCmd?.command,
+      commandArg: slashCmd?.arg,
+    }
+  );
+  const fullInstruction = getInstruction(effectiveMode, effectiveSocratic, matchedDocs, branch, context, {
+    hasOfficialPdf: Boolean(officialSource?.isPdf),
+    isScannedPdf,
+    officialCategory: officialSource?.category,
+  });
+
+  // Enregistrement télémétrique anonymisé pour le dashboard admin
+  recordChatEvent(req, {
+    branch,
+    provider: aiConfig.provider,
+    model: aiConfig.model,
+    userText: slashCmd ? `/${slashCmd.command} ${slashCmd.arg}`.trim() : lastUserText,
+    mode: effectiveMode,
+    ragStatus: officialSource?.isPdf ? 'Document Officiel' : matchedDocs ? 'RAG Indexé' : 'Conforme Cadre',
+  });
+
+  return {
+    effectiveMessages,
+    fullInstruction,
+    matchedDocs,
+    officialSource,
+  };
+}
+
 // Streaming Chat (Server-Sent Events)
 router.post('/chat/stream', async (req, res) => {
   let aiConfig: ResolvedAIConfig;
@@ -293,46 +376,15 @@ router.post('/chat/stream', async (req, res) => {
       return res.status(400).json({ error: 'Format invalide.' });
     }
 
-    const enrichedMessages = await enrichPdfAttachments(messages);
-    const lastUserMessage = [...enrichedMessages].reverse().find((m) => m.role === 'user');
-    const hasUserAttachments = enrichedMessages.some(
-      (m) => m.role === 'user' && Array.isArray(m.attachments) && m.attachments.length > 0
-    );
-    const lastUserText = lastUserMessage?.content || '';
-    const explicitExamRequested =
-      /\b(20[012]\d)\b/.test(lastUserText) &&
-      /\b(national|annale|epreuve|officiel|sn|sr)\b/i.test(lastUserText);
-    const explicitOfficialRequested =
-      explicitExamRequested ||
-      /\.pdf\b/i.test(lastUserText) ||
-      /\b(affiche|afficher|montre|montrer|ouvre|ouvrir|voir)\b[\s\S]{0,40}\b(cours|manuel|polycopie|document|officiel)\b/i.test(lastUserText);
-
-    const searchTerms = buildPersistentSearchTerms(enrichedMessages);
-    const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(
-      searchTerms,
-      branch,
-      {
-        hasUserAttachments,
-        explicitExamRequested,
-        explicitOfficialRequested,
-        latestUserText: lastUserText,
-      }
-    );
-    const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context, {
-      hasOfficialPdf: Boolean(officialSource?.isPdf),
-      isScannedPdf,
-      officialCategory: officialSource?.category,
-    });
-
-    // Enregistrement télémétrique anonymisé pour le dashboard admin
-    recordChatEvent(req, {
-      branch,
-      provider: aiConfig.provider,
-      model: aiConfig.model,
-      userText: lastUserText,
+    const { effectiveMessages, fullInstruction, officialSource } = await prepareChatContext(
+      req,
+      aiConfig,
+      messages,
+      context,
       mode,
-      ragStatus: officialSource?.isPdf ? 'Document Officiel' : matchedDocs ? 'RAG Indexé' : 'Conforme Cadre',
-    });
+      socraticEnabled,
+      branch
+    );
 
     // Setup SSE headers
     res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
@@ -359,7 +411,7 @@ router.post('/chat/stream', async (req, res) => {
     }, 10000);
 
     try {
-      await streamUnifiedChat(aiConfig, enrichedMessages, fullInstruction, res, disconnectController.signal);
+      await streamUnifiedChat(aiConfig, effectiveMessages, fullInstruction, res, disconnectController.signal);
     } finally {
       clearInterval(heartbeat);
     }
@@ -394,48 +446,17 @@ router.post('/chat', async (req, res) => {
       return res.status(400).json({ error: 'Format invalide.' });
     }
 
-    const enrichedMessages = await enrichPdfAttachments(messages);
-    const lastUserMessage = [...enrichedMessages].reverse().find((m) => m.role === 'user');
-    const hasUserAttachments = enrichedMessages.some(
-      (m) => m.role === 'user' && Array.isArray(m.attachments) && m.attachments.length > 0
-    );
-    const lastUserText = lastUserMessage?.content || '';
-    const explicitExamRequested =
-      /\b(20[012]\d)\b/.test(lastUserText) &&
-      /\b(national|annale|epreuve|officiel|sn|sr)\b/i.test(lastUserText);
-    const explicitOfficialRequested =
-      explicitExamRequested ||
-      /\.pdf\b/i.test(lastUserText) ||
-      /\b(affiche|afficher|montre|montrer|ouvre|ouvrir|voir)\b[\s\S]{0,40}\b(cours|manuel|polycopie|document|officiel)\b/i.test(lastUserText);
-
-    const searchTerms = buildPersistentSearchTerms(enrichedMessages);
-    const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(
-      searchTerms,
-      branch,
-      {
-        hasUserAttachments,
-        explicitExamRequested,
-        explicitOfficialRequested,
-        latestUserText: lastUserText,
-      }
-    );
-    const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context, {
-      hasOfficialPdf: Boolean(officialSource?.isPdf),
-      isScannedPdf,
-      officialCategory: officialSource?.category,
-    });
-
-    // Enregistrement télémétrique anonymisé pour le dashboard admin
-    recordChatEvent(req, {
-      branch,
-      provider: aiConfig.provider,
-      model: aiConfig.model,
-      userText: lastUserText,
+    const { effectiveMessages, fullInstruction, matchedDocs, officialSource } = await prepareChatContext(
+      req,
+      aiConfig,
+      messages,
+      context,
       mode,
-      ragStatus: officialSource?.isPdf ? 'Document Officiel' : matchedDocs ? 'RAG Indexé' : 'Conforme Cadre',
-    });
+      socraticEnabled,
+      branch
+    );
 
-    const { text, model } = await generateUnifiedCompletion(aiConfig, enrichedMessages, fullInstruction, false);
+    const { text, model } = await generateUnifiedCompletion(aiConfig, effectiveMessages, fullInstruction, false);
 
     const reply = text || "Désolé mon élève, peux-tu reformuler ta question, lah yerdi 3lik ?";
     return res.json({

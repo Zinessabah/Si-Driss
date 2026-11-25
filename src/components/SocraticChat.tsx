@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   Send,
   Sparkles,
@@ -37,6 +37,13 @@ import { ExportResponseButtons } from './ExportResponseButtons';
 import { useApiKey } from '../hooks/useApiKey';
 import { useBranch } from '../hooks/useBranch';
 import { ApiKeyModal } from './ApiKeyModal';
+import {
+  SLASH_COMMANDS,
+  parseClientSlashCommand,
+  formatSlashHelpMarkdown,
+  type SlashCommandDef,
+} from '../utils/slashCommands';
+import { fetchOfficialDocuments, type DriveDoc } from '../utils/googleDrive';
 
 interface SocraticChatProps {
   initialPrompt?: string;
@@ -157,6 +164,11 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
   const [input, setInput] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [slashMenuDismissed, setSlashMenuDismissed] = useState<boolean>(false);
+  const [slashActiveIndex, setSlashActiveIndex] = useState<number>(0);
+  const [officialCatalog, setOfficialCatalog] = useState<DriveDoc[]>([]);
+  const [officialCatalogBranch, setOfficialCatalogBranch] = useState<string>('');
+  const slashMenuRef = useRef<HTMLDivElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const chatScrollContainerRef = useRef<HTMLDivElement | null>(null);
   // (H3) Flags pour le scroll intelligent : évite de scroller à chaque frame rAF
@@ -256,6 +268,9 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
       }
       if (formulaMenuRef.current && !formulaMenuRef.current.contains(event.target as Node)) {
         setIsFormulaMenuOpen(false);
+      }
+      if (slashMenuRef.current && !slashMenuRef.current.contains(event.target as Node)) {
+        setSlashMenuDismissed(true);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -570,18 +585,191 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     setPendingAttachments((prev) => prev.filter((a) => a.id !== id));
   };
 
+  interface SlashSuggestionItem {
+    key: string;
+    kind: 'command' | 'doc' | 'topic';
+    title: string;
+    subtitle: string;
+    badge?: string;
+    badgeColor?: string;
+    insertValue: string;
+    submitOnSelect: boolean;
+  }
+
+  // Charger le catalogue officiel (cours, examens, séries) à la demande dès que l'élève tape `/`
+  useEffect(() => {
+    if (!input.trimStart().startsWith('/')) return;
+    if (officialCatalogBranch === branch && officialCatalog.length > 0) return;
+    let cancelled = false;
+    fetchOfficialDocuments(branch).then((docs) => {
+      if (!cancelled) {
+        setOfficialCatalog(docs);
+        setOfficialCatalogBranch(branch);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [input, branch, officialCatalogBranch, officialCatalog.length]);
+
+  const slashAutocomplete = useMemo<{
+    open: boolean;
+    mode: 'command' | 'arg';
+    activeDef?: SlashCommandDef;
+    items: SlashSuggestionItem[];
+  }>(() => {
+    const trimmedStart = input.trimStart();
+    if (!trimmedStart.startsWith('/') || slashMenuDismissed || input.includes('\n')) {
+      return { open: false, mode: 'command', items: [] };
+    }
+
+    const norm = (s: string) =>
+      (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+    const parsed = parseClientSlashCommand(trimmedStart);
+    const hasTrailingSpaceOrArg =
+      parsed !== null && trimmedStart.length > parsed.matchedPrefix.length;
+
+    // Niveau 2 : autocomplétion des cours, examens, séries ou thèmes après la commande (`/cours ...`)
+    if (parsed && hasTrailingSpaceOrArg) {
+      const argNorm = norm(parsed.arg);
+      const items: SlashSuggestionItem[] = [];
+
+      if (parsed.def.docCategories && parsed.def.docCategories.length > 0) {
+        const matchingDocs = officialCatalog
+          .filter(
+            (doc) =>
+              doc.mimeType === 'application/pdf' &&
+              parsed.def.docCategories!.includes((doc.category || 'autre') as any)
+          )
+          .filter((doc) => !argNorm || norm(doc.name).includes(argNorm))
+          .slice(0, 8);
+
+        for (const doc of matchingDocs) {
+          const catLabel =
+            doc.category === 'cours'
+              ? 'COURS PDF'
+              : doc.category === 'examens'
+              ? 'EXAMEN'
+              : doc.category === 'series'
+              ? 'SÉRIE'
+              : 'CADRE';
+          items.push({
+            key: `doc-${doc.id}`,
+            kind: 'doc',
+            title: doc.name,
+            subtitle: `Document officiel 2BAC ${doc.branch}`,
+            badge: catLabel,
+            badgeColor: parsed.def.badgeColor,
+            insertValue: `${parsed.matchedPrefix} ${doc.name}`,
+            submitOnSelect: true,
+          });
+        }
+      }
+
+      if (parsed.def.topicSuggestions) {
+        const matchingTopics = parsed.def.topicSuggestions
+          .filter((t) => (!t.smOnly || isSM) && (!t.pcOnly || !isSM))
+          .filter((t) => !argNorm || norm(t.label).includes(argNorm) || norm(t.value).includes(argNorm))
+          .slice(0, 6);
+
+        for (const t of matchingTopics) {
+          items.push({
+            key: `topic-${t.value}`,
+            kind: 'topic',
+            title: t.label,
+            subtitle: `${parsed.matchedPrefix} ${t.value}`,
+            badge: 'THÈME',
+            badgeColor: parsed.def.badgeColor,
+            insertValue: `${parsed.matchedPrefix} ${t.value}`,
+            submitOnSelect: true,
+          });
+        }
+      }
+
+      return {
+        open: items.length > 0,
+        mode: 'arg',
+        activeDef: parsed.def,
+        items,
+      };
+    }
+
+    // Niveau 1 : autocomplétion des commandes `/`
+    const queryNorm = norm(trimmedStart);
+    const matchingCommands = SLASH_COMMANDS.filter(
+      (cmd) =>
+        norm(cmd.command).includes(queryNorm) ||
+        cmd.aliases.some((al) => norm(al).includes(queryNorm)) ||
+        norm(cmd.description).includes(queryNorm.slice(1))
+    );
+
+    const items: SlashSuggestionItem[] = matchingCommands.map((cmd) => ({
+      key: `cmd-${cmd.id}`,
+      kind: 'command',
+      title: cmd.command,
+      subtitle: cmd.description,
+      badge: cmd.usage,
+      badgeColor: cmd.badgeColor,
+      insertValue: cmd.immediate ? cmd.command : `${cmd.command} `,
+      submitOnSelect: Boolean(cmd.immediate),
+    }));
+
+    return {
+      open: items.length > 0,
+      mode: 'command',
+      items,
+    };
+  }, [input, slashMenuDismissed, officialCatalog, isSM]);
+
+  useEffect(() => {
+    setSlashActiveIndex(0);
+  }, [input, slashAutocomplete.items.length]);
+
   const handleSend = async (textToSend?: string, customAttachments?: ChatAttachment[]) => {
     const text = textToSend !== undefined ? textToSend : input;
     const attsToSend = customAttachments || pendingAttachments;
 
     if ((!text.trim() && attsToSend.length === 0) || loading) return;
 
+    const localSlash = parseClientSlashCommand(text);
+
+    // Commande /aide traitée instantanément en local sans appel réseau ni clé API
+    if (localSlash?.def.id === 'aide') {
+      const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const helpUserMsg: ChatMessage = {
+        id: String(Date.now()),
+        role: 'user',
+        content: text.trim(),
+        mode: !socraticEnabled ? 'direct' : coachingMode,
+        timestamp: nowTime,
+      };
+      const helpAssistantMsg: ChatMessage = {
+        id: String(Date.now() + 1),
+        role: 'assistant',
+        content: formatSlashHelpMarkdown(branch),
+        mode: 'direct',
+        timestamp: nowTime,
+      };
+      setMessages((prev) => [...prev, helpUserMsg, helpAssistantMsg]);
+      setInput('');
+      setSlashMenuDismissed(false);
+      setIsAddMenuOpen(false);
+      setIsFormulaMenuOpen(false);
+      return;
+    }
+
     if (!hasApiKey) {
       setIsApiKeyModalOpen(true);
       return;
     }
 
-    const currentMode = !socraticEnabled ? 'direct' : coachingMode;
+    const currentMode =
+      localSlash?.def.id === 'piege'
+        ? 'trap'
+        : !socraticEnabled
+        ? 'direct'
+        : coachingMode;
 
     const userMsg: ChatMessage = {
       id: String(Date.now()),
@@ -870,6 +1058,16 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     }
   };
 
+  const applySlashSuggestion = (item: SlashSuggestionItem, allowSubmit: boolean) => {
+    setSlashMenuDismissed(false);
+    if (allowSubmit && item.submitOnSelect) {
+      handleSend(item.insertValue);
+    } else {
+      setInput(item.insertValue);
+      requestAnimationFrame(() => textareaRef.current?.focus({ preventScroll: true }));
+    }
+  };
+
   const insertFormula = (formula: string) => {
     setInput((prev) => (prev ? `${prev} $${formula}$ ` : `$${formula}$ `));
     setIsFormulaMenuOpen(false);
@@ -1140,8 +1338,23 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                   />
                 )}
 
-                {/* Markdown and KaTeX content */}
-                <MathView content={msg.content} className="text-sm leading-relaxed" />
+                {/* Markdown and KaTeX content (with slash command badge on user command messages) */}
+                {(() => {
+                  const userSlash = msg.role === 'user' ? parseClientSlashCommand(msg.content) : null;
+                  if (userSlash) {
+                    return (
+                      <div className="flex flex-wrap items-baseline gap-2 text-sm leading-relaxed">
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 rounded-lg border font-mono text-xs font-semibold shrink-0 ${userSlash.def.badgeColor}`}
+                        >
+                          {userSlash.matchedPrefix}
+                        </span>
+                        {userSlash.arg && <span>{userSlash.arg}</span>}
+                      </div>
+                    );
+                  }
+                  return <MathView content={msg.content} className="text-sm leading-relaxed" />;
+                })()}
 
                 {/* Assistant Action Toolbar (Copy, TTS) */}
                 {msg.role === 'assistant' && msg.id !== 'welcome' && (
@@ -1242,14 +1455,112 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
           )}
 
           {/* Gemini Input Box */}
-          <div className="bg-[#1e1f20] border border-[#3c4043]/80 focus-within:border-[#8ab4f8] focus-within:bg-[#202124] rounded-3xl p-3 shadow-xl transition-all">
+          <div className="relative bg-[#1e1f20] border border-[#3c4043]/80 focus-within:border-[#8ab4f8] focus-within:bg-[#202124] rounded-3xl p-3 shadow-xl transition-all">
+            {/* Slash Command Autocomplete Menu */}
+            {slashAutocomplete.open && (
+              <div
+                ref={slashMenuRef}
+                className="absolute bottom-full left-0 right-0 mb-2 bg-[#1e1f20]/95 border border-[#3c4043] rounded-2xl shadow-2xl p-2 z-50 backdrop-blur-md animate-in fade-in slide-in-from-bottom-2"
+              >
+                <div className="flex items-center justify-between px-2.5 pb-1.5 mb-1 border-b border-[#282a2c]">
+                  <span className="text-[11px] font-semibold text-[#c4c7c5] flex items-center gap-1.5">
+                    <span className="px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono text-[10px] border border-sky-500/30">
+                      /
+                    </span>
+                    {slashAutocomplete.mode === 'arg' && slashAutocomplete.activeDef
+                      ? `Suggestions pour ${slashAutocomplete.activeDef.command} (2BAC ${branch})`
+                      : 'Commandes rapides Si Driss'}
+                  </span>
+                  <span className="hidden sm:inline text-[10px] text-[#8e918f]">
+                    ↑↓ naviguer · Tab compléter · Entrée valider · Échap
+                  </span>
+                </div>
+
+                <div className="max-h-64 overflow-y-auto no-scrollbar space-y-0.5">
+                  {slashAutocomplete.items.map((item, idx) => {
+                    const isActive = idx === Math.min(slashActiveIndex, slashAutocomplete.items.length - 1);
+                    return (
+                      <button
+                        key={item.key}
+                        type="button"
+                        onMouseEnter={() => setSlashActiveIndex(idx)}
+                        onClick={() => applySlashSuggestion(item, true)}
+                        className={`w-full text-left px-2.5 py-2 rounded-xl transition flex items-center justify-between gap-3 ${
+                          isActive
+                            ? 'bg-[#282a2c] ring-1 ring-[#8ab4f8]/50'
+                            : 'hover:bg-[#282a2c]/70'
+                        }`}
+                      >
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`text-xs font-semibold truncate ${
+                                item.kind === 'command' ? 'font-mono text-white' : 'text-white'
+                              }`}
+                            >
+                              {item.title}
+                            </span>
+                            {item.badge && (
+                              <span
+                                className={`text-[10px] px-1.5 py-0.5 rounded-md border shrink-0 font-mono ${
+                                  item.badgeColor || 'bg-[#282a2c] text-[#8ab4f8] border-[#3c4043]'
+                                }`}
+                              >
+                                {item.badge}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-[#8e918f] truncate mt-0.5">{item.subtitle}</p>
+                        </div>
+                        <span className="text-[10px] text-[#8e918f] shrink-0">
+                          {item.submitOnSelect ? 'Envoyer ↵' : 'Compléter ⇥'}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Auto-expanding Textarea */}
             <textarea
               ref={textareaRef}
               rows={1}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => {
+                setInput(e.target.value);
+                setSlashMenuDismissed(false);
+              }}
               onKeyDown={(e) => {
+                if (slashAutocomplete.open && slashAutocomplete.items.length > 0) {
+                  const len = slashAutocomplete.items.length;
+                  const safeIdx = Math.min(slashActiveIndex, len - 1);
+                  if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setSlashActiveIndex((prev) => (prev + 1) % len);
+                    return;
+                  }
+                  if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setSlashActiveIndex((prev) => (prev - 1 + len) % len);
+                    return;
+                  }
+                  if (e.key === 'Escape') {
+                    e.preventDefault();
+                    setSlashMenuDismissed(true);
+                    return;
+                  }
+                  if (e.key === 'Tab') {
+                    e.preventDefault();
+                    applySlashSuggestion(slashAutocomplete.items[safeIdx], false);
+                    return;
+                  }
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    applySlashSuggestion(slashAutocomplete.items[safeIdx], true);
+                    return;
+                  }
+                }
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
                   handleSend();
@@ -1259,8 +1570,8 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                 pendingAttachments.length > 0
                   ? "Pose une question sur la pièce jointe..."
                   : socraticEnabled
-                  ? "Demander à Si Driss (guidage socratique actif)..."
-                  : "Demander à Si Driss (définition, formule, équation différentielle)..."
+                  ? "Demander à Si Driss ou taper / (/cours, /examen, /courbe)..."
+                  : "Demander à Si Driss ou taper / (/cours, /examen, /courbe)..."
               }
               className="w-full bg-transparent text-sm text-[#e3e3e3] placeholder:text-[#8e918f] resize-none outline-none max-h-36 py-1 px-1 no-scrollbar"
             />
@@ -1427,6 +1738,25 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                     </div>
                   )}
                 </div>
+
+                {/* THE (/) SLASH COMMANDS BUTTON */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSlashMenuDismissed(false);
+                    setInput((prev) => (prev.trimStart().startsWith('/') ? prev : '/'));
+                    requestAnimationFrame(() => textareaRef.current?.focus());
+                  }}
+                  className={`px-2 py-1 rounded-full hover:bg-[#282a2c] transition flex items-center gap-1 font-mono text-xs font-bold ${
+                    slashAutocomplete.open
+                      ? 'bg-[#282a2c] text-sky-300'
+                      : 'text-[#8e918f] hover:text-sky-300'
+                  }`}
+                  title="Commandes rapides (/cours, /examen, /exercice, /courbe...)"
+                >
+                  <span>/</span>
+                  <span className="hidden sm:inline font-sans font-semibold">Commandes</span>
+                </button>
               </div>
 
               {/* Right Action Buttons (Socratic toggle, Send) */}
