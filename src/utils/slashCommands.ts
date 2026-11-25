@@ -7,6 +7,8 @@ export type SlashCommandId =
   | 'schema'
   | 'mindmap'
   | 'piege'
+  | 'profil'
+  | 'memoire'
   | 'aide';
 
 export interface SlashCommandDef {
@@ -130,6 +132,24 @@ export const SLASH_COMMANDS: SlashCommandDef[] = [
     aliases: ['/reference'],
     badgeColor: 'bg-violet-500/20 text-violet-300 border-violet-500/30',
     docCategories: ['cadres'],
+  },
+  {
+    id: 'profil',
+    command: '/profil',
+    usage: '/profil',
+    description: 'Configurer votre profil USER.md (objectif Bac, style, langue)',
+    aliases: ['/user'],
+    badgeColor: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+    immediate: true,
+  },
+  {
+    id: 'memoire',
+    command: '/memoire',
+    usage: '/memoire',
+    description: 'Gérer votre MEMORY.md local (chapitres maîtrisés & pièges suivis)',
+    aliases: ['/memory'],
+    badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    immediate: true,
   },
   {
     id: 'aide',

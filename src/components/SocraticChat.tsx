@@ -25,6 +25,7 @@ import {
   Sigma,
   AlertTriangle,
   TrendingUp,
+  Brain,
 } from 'lucide-react';
 import { MathView } from './MathView';
 import { OfficialExamPageViewer } from './OfficialExamPageViewer';
@@ -44,6 +45,13 @@ import {
   type SlashCommandDef,
 } from '../utils/slashCommands';
 import { fetchOfficialDocuments, type DriveDoc } from '../utils/googleDrive';
+import { StudentProfileModal } from './StudentProfileModal';
+import {
+  loadStudentProfile,
+  loadStudentMemory,
+  detectChapterTagFromText,
+  setChapterProgressStatus,
+} from '../utils/studentMemory';
 
 interface SocraticChatProps {
   initialPrompt?: string;
@@ -132,6 +140,9 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
   const [isFormulaMenuOpen, setIsFormulaMenuOpen] = useState<boolean>(false);
   const [isExercisePickerOpen, setIsExercisePickerOpen] = useState<boolean>(false);
   const [isGraphicsModalOpen, setIsGraphicsModalOpen] = useState<boolean>(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
+  const [profileModalTab, setProfileModalTab] = useState<'profile' | 'memory'>('profile');
+  const [memorizedChapterToast, setMemorizedChapterToast] = useState<string | null>(null);
   const [pendingAttachments, setPendingAttachments] = useState<ChatAttachment[]>([]);
   const [previewImageModal, setPreviewImageModal] = useState<{ url: string; name: string } | null>(null);
 
@@ -759,6 +770,17 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
       return;
     }
 
+    // Commandes locales /profil et /memoire -> ouvrent la modale dédiée sans appel réseau
+    if (localSlash?.def.id === 'profil' || localSlash?.def.id === 'memoire') {
+      setProfileModalTab(localSlash.def.id === 'memoire' ? 'memory' : 'profile');
+      setIsProfileModalOpen(true);
+      setInput('');
+      setSlashMenuDismissed(false);
+      setIsAddMenuOpen(false);
+      setIsFormulaMenuOpen(false);
+      return;
+    }
+
     if (!hasApiKey) {
       setIsApiKeyModalOpen(true);
       return;
@@ -842,6 +864,8 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     resetInactivityTimeout();
     let accumulated = '';
     let receivedOfficialSource: OfficialSourceRef | undefined = undefined;
+    const studentProfile = loadStudentProfile();
+    const studentMemory = loadStudentMemory(branch);
 
     try {
       const streamRes = await fetch('/api/chat/stream', {
@@ -857,6 +881,8 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
           mode: currentMode,
           socraticEnabled,
           branch,
+          studentProfile,
+          studentMemory,
         }),
       });
 
@@ -980,6 +1006,8 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
               mode: currentMode,
               socraticEnabled,
               branch,
+              studentProfile,
+              studentMemory,
             }),
           });
           if (res.ok) {
@@ -1012,6 +1040,8 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
             mode: currentMode,
             socraticEnabled,
             branch,
+            studentProfile,
+            studentMemory,
           }),
         });
 
@@ -1396,6 +1426,29 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                       title={currentSessionTitle}
                       branch={branch}
                     />
+
+                    {/* Enrichissement local MEMORY.md (tag chapitre prédéfini) */}
+                    {(() => {
+                      const detectedChId = detectChapterTagFromText(msg.content, branch);
+                      if (!detectedChId) return null;
+                      return (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setChapterProgressStatus(detectedChId, 'en_cours');
+                            setMemorizedChapterToast(msg.id);
+                            setTimeout(() => setMemorizedChapterToast((cur) => (cur === msg.id ? null : cur)), 2500);
+                          }}
+                          className="ml-auto p-1.5 rounded-lg hover:bg-[#1e1f20] text-[#8e918f] hover:text-purple-300 transition flex items-center gap-1 text-[11px]"
+                          title="Ajouter ce chapitre à votre mémoire de révision locale (MEMORY.md)"
+                        >
+                          <Brain className="w-3.5 h-3.5 text-purple-400" />
+                          <span>
+                            {memorizedChapterToast === msg.id ? 'Mémorisé ✓' : 'Suivre ce chapitre'}
+                          </span>
+                        </button>
+                      );
+                    })()}
                   </div>
                 )}
               </div>
@@ -1757,6 +1810,20 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
                   <span>/</span>
                   <span className="hidden sm:inline font-sans font-semibold">Commandes</span>
                 </button>
+
+                {/* USER.md / MEMORY.md PROFILE & MEMORY BUTTON */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProfileModalTab('profile');
+                    setIsProfileModalOpen(true);
+                  }}
+                  className="px-2 py-1 rounded-full hover:bg-[#282a2c] text-[#8e918f] hover:text-purple-300 transition flex items-center gap-1 text-xs font-semibold"
+                  title="Profil élève (USER.md) & Mémoire de révision locale (MEMORY.md)"
+                >
+                  <Brain className="w-3.5 h-3.5 text-purple-400" />
+                  <span className="hidden md:inline">Profil</span>
+                </button>
               </div>
 
               {/* Right Action Buttons (Socratic toggle, Send) */}
@@ -1847,6 +1914,13 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
       {/* Student API Key Configuration Modal */}
       <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={() => setIsApiKeyModalOpen(false)} />
+
+      {/* Student Local Profile (USER.md) & Memory (MEMORY.md) Modal */}
+      <StudentProfileModal
+        isOpen={isProfileModalOpen}
+        initialTab={profileModalTab}
+        onClose={() => setIsProfileModalOpen(false)}
+      />
     </div>
   );
 };

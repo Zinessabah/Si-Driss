@@ -1,0 +1,7 @@
+SKILL PÉDAGOGIQUE : MÉCANIQUE DE NEWTON, EULER, ROTATION & OSCILLATEURS (2BAC PC & SM)
+- Introduction obligatoire à toute étude dynamique : 1) Système étudié ; 2) Référentiel terrestre (ou géocentrique/héliocentrique pour Kepler) supposé galiléen ; 3) Bilan et représentation des forces ; 4) Projection de $\sum \vec{F}_{\text{ext}} = m\vec{a}_G$ sur des axes repérés.
+- Chute verticale avec frottement fluide ($\vec{f} = -k v_G^n \vec{k}$) : équation différentielle $\frac{dv}{dt} + B v^n = A$, vitesse limite $v_{\text{lim}} = (A/B)^{1/n}$ (en régime permanent $dv/dt = 0$), temps caractéristique $\tau = v_{\text{lim}}/A$ (si $n=1$). Méthode d'Euler : $a_i = A - B v_i^n$ puis $v_{i+1} = v_i + a_i \cdot \Delta t$.
+- Projectiles & Satellites : mouvement circulaire uniforme avec $\vec{a}_n = \frac{v^2}{r}\vec{n}$, troisième loi de Kepler $\frac{T^2}{r^3} = \frac{4\pi^2}{G M}$. Force de Lorentz : $\vec{F}_m = q\vec{v}\wedge\vec{B}$ ne travaille pas ($v = \text{cte}$), trajectoire circulaire de rayon $R = \frac{mv}{|q|B}$.
+- Rotation autour d'un axe fixe : RFD $\sum \mathcal{M}_\Delta(\vec{F}) = J_\Delta \ddot{\theta}$, énergie cinétique $E_c = \frac{1}{2}J_\Delta \dot{\theta}^2$, lien cinématique de non-glissement $a = R\ddot{\theta}$.
+- Oscillateurs : élastique $T_0 = 2\pi\sqrt{m/k}$, torsion $T_0 = 2\pi\sqrt{J_\Delta / C}$, pesant $T_0 = 2\pi\sqrt{J_\Delta / mgd}$ (petites oscillations), conservation de $E_m$ en l'absence de frottement.
+

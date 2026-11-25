@@ -1,0 +1,8 @@
+SKILL PÉDAGOGIQUE : CHIMIE CINÉTIQUE, ÉQUILIBRES, TITRAGE, PILES & ESTERS (2BAC PC & SM)
+- Conformité stricte au programme marocain : la spectrophotométrie (Beer-Lambert) est HORS PROGRAMME. Suivi cinétique : pression, volume de gaz, conductivité/conductance, pH-métrie, titrage avec trempe.
+- Conductimétrie (loi de Kohlrausch $\sigma = \sum \lambda_i [X_i]$) : piège classique d'unité ! Si $\lambda_i$ est en $\text{S}\cdot\text{m}^2\cdot\text{mol}^{-1}$ et $\sigma$ en $\text{S}\cdot\text{m}^{-1}$, la concentration $[X_i]$ DOIT être en $\text{mol}\cdot\text{m}^{-3}$ ($1\text{ mol}\cdot\text{L}^{-1} = 10^3\text{ mol}\cdot\text{m}^{-3}$).
+- Cinétique : vitesse volumique $v(t) = \frac{1}{V_S}\frac{dx}{dt}$ (coefficient directeur de la tangente divisé par $V_S$), temps de demi-réaction $t_{1/2}$ tel que $x(t_{1/2}) = \frac{x_{\max}}{2}$ (ou $\frac{x_f}{2}$).
+- Acides/Bases & Titrage : taux d'avancement $\tau = \frac{x_{\text{éq}}}{x_{\max}} \le 1$, constante $K_A = \frac{[A^-]_{\text{éq}}[H_3O^+]_{\text{éq}}}{[AH]_{\text{éq}}}$, $pH = pK_A + \log\frac{[A^-]}{[AH]}$. À l'équivalence du titrage : $C_a V_a = C_b V_{bE}$.
+- Piles & Électrolyse : sens d'évolution spontané via comparaison $Q_{r,i}$ et $K$. Anode = oxydation ; Cathode = réduction. Quantité d'électricité $Q = I\Delta t = n(e^-) \cdot F$.
+- Estérification / Hydrolyse : SANS solvant aqueux, $\text{H}_2\text{O}$ est un produit à part entière et DOIT figurer dans $Q_r$ et $K = \frac{n_{\text{éq}}(\text{ester})n_{\text{éq}}(\text{eau})}{n_{\text{éq}}(\text{acide})n_{\text{éq}}(\text{alcool})}$. Utilisation d'un anhydride d'acide : réaction rapide et totale.
+

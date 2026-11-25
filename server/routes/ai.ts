@@ -14,6 +14,7 @@ import { generateUnifiedCompletion, streamUnifiedChat, trimUpstreamError } from 
 import { sseWrite } from '../ai/sse';
 import { extractTextFromPdf, parseSlashCommand, searchLocalDocumentsDetailed } from '../rag';
 import { getSiDrissBasePrompt, getInstruction, normalizeBranchParam } from '../prompts';
+import { sanitizeStudentProfile, sanitizeStudentMemory } from '../personaLoader';
 import type { ClientAttachment, ClientMessage } from '../ai/adapters';
 
 const MAX_ATTACHED_PDF_TEXT_CHARS = 24_000;
@@ -277,10 +278,12 @@ async function prepareChatContext(
   req: any,
   aiConfig: ResolvedAIConfig,
   messages: ClientMessage[],
-  context: string | undefined,
+  context: unknown,
   mode: string,
   socraticEnabled: boolean,
-  branch: 'PC' | 'SM'
+  branch: 'PC' | 'SM',
+  rawProfile?: unknown,
+  rawMemory?: unknown
 ) {
   const enrichedMessages = await enrichPdfAttachments(messages);
   let lastUserIdx = -1;
@@ -332,10 +335,16 @@ async function prepareChatContext(
       commandArg: slashCmd?.arg,
     }
   );
-  const fullInstruction = getInstruction(effectiveMode, effectiveSocratic, matchedDocs, branch, context, {
+  const validatedProfile = sanitizeStudentProfile(rawProfile);
+  const validatedMemory = sanitizeStudentMemory(rawMemory, branch);
+
+  const fullInstruction = getInstruction(effectiveMode, effectiveSocratic, matchedDocs, branch, typeof context === 'string' ? context : undefined, {
     hasOfficialPdf: Boolean(officialSource?.isPdf),
     isScannedPdf,
     officialCategory: officialSource?.category,
+    skillQuery: `${lastUserText} ${matchedDocs.slice(0, 400)}`,
+    studentProfile: validatedProfile,
+    studentMemory: validatedMemory,
   });
 
   // Enregistrement télémétrique anonymisé pour le dashboard admin
@@ -369,7 +378,7 @@ router.post('/chat/stream', async (req, res) => {
   }
 
   try {
-    const { messages, context, mode, socraticEnabled = true } = req.body;
+    const { messages, context, mode, socraticEnabled = true, studentProfile, studentMemory } = req.body;
     const branch = normalizeBranchParam(req.body?.branch);
 
     if (!messages || !Array.isArray(messages)) {
@@ -383,7 +392,9 @@ router.post('/chat/stream', async (req, res) => {
       context,
       mode,
       socraticEnabled,
-      branch
+      branch,
+      studentProfile,
+      studentMemory
     );
 
     // Setup SSE headers
@@ -440,7 +451,7 @@ router.post('/chat', async (req, res) => {
   }
 
   try {
-    const { messages, context, mode, socraticEnabled = true } = req.body;
+    const { messages, context, mode, socraticEnabled = true, studentProfile, studentMemory } = req.body;
     const branch = normalizeBranchParam(req.body?.branch);
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: 'Format invalide.' });
@@ -453,7 +464,9 @@ router.post('/chat', async (req, res) => {
       context,
       mode,
       socraticEnabled,
-      branch
+      branch,
+      studentProfile,
+      studentMemory
     );
 
     const { text, model } = await generateUnifiedCompletion(aiConfig, effectiveMessages, fullInstruction, false);

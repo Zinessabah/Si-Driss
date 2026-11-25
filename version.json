@@ -1,7 +1,7 @@
 {
   "version": "2.2.0",
-  "commit": "c4019c9",
-  "commitDate": "2026-11-25T17:20:57+00:00",
-  "commitMessage": "feat(cours): afficher les cours officiels PDF comme les examens dans le chat et les documents",
-  "buildTime": "2026-11-25T22:46:58.263Z"
+  "commit": "d2b4e6e",
+  "commitDate": "2026-11-25T22:52:14+00:00",
+  "commitMessage": "feat(chat): ajouter commandes rapides / avec autocomplétion et routage RAG dédié",
+  "buildTime": "2026-11-25T23:47:38.878Z"
 }
