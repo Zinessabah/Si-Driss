@@ -21,6 +21,7 @@ export interface OfficialSourceRef {
   name: string;
   relativePath: string;
   branch: 'PC' | 'SM' | 'ALL';
+  category?: 'examens' | 'series' | 'corriges' | 'cours' | 'cadres' | 'autre';
   year?: number | null;
   session?: 'SN' | 'SR' | null;
   topic?: string | null;

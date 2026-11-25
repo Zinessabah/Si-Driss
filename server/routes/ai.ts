@@ -302,6 +302,10 @@ router.post('/chat/stream', async (req, res) => {
     const explicitExamRequested =
       /\b(20[012]\d)\b/.test(lastUserText) &&
       /\b(national|annale|epreuve|officiel|sn|sr)\b/i.test(lastUserText);
+    const explicitOfficialRequested =
+      explicitExamRequested ||
+      /\.pdf\b/i.test(lastUserText) ||
+      /\b(affiche|afficher|montre|montrer|ouvre|ouvrir|voir)\b[\s\S]{0,40}\b(cours|manuel|polycopie|document|officiel)\b/i.test(lastUserText);
 
     const searchTerms = buildPersistentSearchTerms(enrichedMessages);
     const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(
@@ -310,11 +314,14 @@ router.post('/chat/stream', async (req, res) => {
       {
         hasUserAttachments,
         explicitExamRequested,
+        explicitOfficialRequested,
+        latestUserText: lastUserText,
       }
     );
     const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context, {
       hasOfficialPdf: Boolean(officialSource?.isPdf),
       isScannedPdf,
+      officialCategory: officialSource?.category,
     });
 
     // Enregistrement télémétrique anonymisé pour le dashboard admin
@@ -396,6 +403,10 @@ router.post('/chat', async (req, res) => {
     const explicitExamRequested =
       /\b(20[012]\d)\b/.test(lastUserText) &&
       /\b(national|annale|epreuve|officiel|sn|sr)\b/i.test(lastUserText);
+    const explicitOfficialRequested =
+      explicitExamRequested ||
+      /\.pdf\b/i.test(lastUserText) ||
+      /\b(affiche|afficher|montre|montrer|ouvre|ouvrir|voir)\b[\s\S]{0,40}\b(cours|manuel|polycopie|document|officiel)\b/i.test(lastUserText);
 
     const searchTerms = buildPersistentSearchTerms(enrichedMessages);
     const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(
@@ -404,11 +415,14 @@ router.post('/chat', async (req, res) => {
       {
         hasUserAttachments,
         explicitExamRequested,
+        explicitOfficialRequested,
+        latestUserText: lastUserText,
       }
     );
     const fullInstruction = getInstruction(mode, socraticEnabled, matchedDocs, branch, context, {
       hasOfficialPdf: Boolean(officialSource?.isPdf),
       isScannedPdf,
+      officialCategory: officialSource?.category,
     });
 
     // Enregistrement télémétrique anonymisé pour le dashboard admin

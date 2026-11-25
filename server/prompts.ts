@@ -125,6 +125,7 @@ Accompagne toujours la courbe ou le schéma de commentaires pédagogiques expliq
 export interface InstructionOptions {
   hasOfficialPdf?: boolean;
   isScannedPdf?: boolean;
+  officialCategory?: 'examens' | 'series' | 'corriges' | 'cours' | 'cadres' | 'autre';
 }
 
 export function getInstruction(
@@ -151,12 +152,39 @@ L'élève résout un problème. Pose UNE question directrice ciblée pour le gui
 
   let full = getSiDrissBasePrompt(safeBranch) + extra;
   if (matchedDocs) {
+    const isCoursePdf = Boolean(options?.hasOfficialPdf && options?.officialCategory === 'cours');
     const pdfNoticeLine = options?.hasOfficialPdf
-      ? "   - Signale à l'élève que l'extrait visuel officiel du sujet PDF (avec ses schémas/graphes d'origine) est affiché directement au-dessus de ta réponse (ne dis jamais que tu ne peux pas afficher l'image du sujet)."
+      ? isCoursePdf
+        ? "   - Signale à l'élève que le document PDF officiel du cours (avec ses schémas, graphes et formules d'origine) est affiché directement au-dessus de ta réponse dans la visionneuse PDF (ne dis jamais que tu ne peux pas afficher le document ou le cours PDF)."
+        : "   - Signale à l'élève que l'extrait visuel officiel du sujet PDF (avec ses schémas/graphes d'origine) est affiché directement au-dessus de ta réponse (ne dis jamais que tu ne peux pas afficher l'image du sujet)."
       : "   - Aucune image PDF n'a pu être attachée automatiquement pour cette requête ; présente l'énoncé directement en texte Markdown + LaTeX sans jamais prétendre qu'une image PDF est affichée ni afficher du code brut.";
     const statementGuidanceLine = options?.isScannedPdf
-      ? "   - ⚠️ CE SUJET PDF EST SCANNÉ SANS COUCHE TEXTE (OCR) : N'invente pas l'énoncé ni les valeurs numériques manquantes, et n'écris aucun bloc de code SVG/LaTeX de substitution. Invite simplement l'élève à consulter la page officielle affichée dans la visionneuse PDF ci-dessus (boutons < / > et Zoom) et propose-lui de copier ou joindre une capture de la question qu'il souhaite résoudre."
-      : "   - Affiche d'abord l'énoncé intégral fidèlement traduit en français scientifique irréprochable adapté aux élèves 2BAC BIOF (les sujets d'avant 2016 ayant été rédigés en arabe), directement en Markdown + LaTeX (sans l'enfermer dans un bloc de code ```latex ou ```markdown).";
+      ? isCoursePdf
+        ? "   - ⚠️ CE COURS PDF EST MANUSCRIT OU SCANNÉ SANS COUCHE TEXTE (OCR) : N'invente pas le contenu manuscrit non extrait et n'écris aucun bloc de code SVG/LaTeX de substitution inventé. Invite l'élève à feuilleter les pages du cours affichées dans la visionneuse PDF ci-dessus (boutons < / > et Zoom) et propose-lui de joindre une capture d'une page ou de te poser une question sur une notion précise du chapitre."
+        : "   - ⚠️ CE SUJET PDF EST SCANNÉ SANS COUCHE TEXTE (OCR) : N'invente pas l'énoncé ni les valeurs numériques manquantes, et n'écris aucun bloc de code SVG/LaTeX de substitution. Invite simplement l'élève à consulter la page officielle affichée dans la visionneuse PDF ci-dessus (boutons < / > et Zoom) et propose-lui de copier ou joindre une capture de la question qu'il souhaite résoudre."
+      : isCoursePdf
+        ? "   - Synthétise, structure et explique fidèlement les notions clés, lois, définitions et formules LaTeX du cours officiel extrait ci-dessus, en guidant l'élève vers les pages affichées dans la visionneuse PDF ci-dessus."
+        : "   - Affiche d'abord l'énoncé intégral fidèlement traduit en français scientifique irréprochable adapté aux élèves 2BAC BIOF (les sujets d'avant 2016 ayant été rédigés en arabe), directement en Markdown + LaTeX (sans l'enfermer dans un bloc de code ```latex ou ```markdown).";
+
+    const specialDocumentSection = isCoursePdf
+      ? `================================================================================
+CONSIGNE SPÉCIALE : COURS OFFICIEL DU PROGRAMME 2BAC ${safeBranch} (BIOF) :
+Quand l'extrait documentaire fourni ci-dessus provient d'un cours officiel (/docs/programme/*/cours/) :
+1. AFFICHAGE & RÉFÉRENCE VISUELLE :
+${pdfNoticeLine}
+${statementGuidanceLine}
+2. EXPLICATION PÉDAGOGIQUE RIGOUREUSE :
+   - Mets en évidence les définitions exactes, les équations différentielles ou relations fondamentales en LaTeX ($...$, $$...$$), les unités SI et les pièges classiques du National liés à ce chapitre.`
+      : `================================================================================
+CONSIGNE SPÉCIALE : ÉPREUVES DU BACCALAURÉAT NATIONAL MAROCAIN (BIOF) :
+Quand l'extrait documentaire fourni ci-dessus provient d'une Épreuve Nationale du Baccalauréat marocain (ou quand l'élève demande d'afficher et/ou résoudre un exercice d'examen national) :
+1. ÉNONCÉ OFFICIEL EN FRANÇAIS (BIOF) :
+${pdfNoticeLine}
+${statementGuidanceLine}
+   - Inclus toutes les données expérimentales et numériques officielles ($S_h$, $\\lambda$, $c$, $h$, $v$, divisions sur l'oscillogramme ou la courbe).
+   - Reproduis fidèlement les questions avec leurs 4 propositions de choix (QCM) telles qu'au sujet officiel.
+2. CORRECTION MÉTHODIQUE ET OFFICIELLE :
+   - Résous chaque question étape par étape avec la méthode officielle en 4 points (Justification & formule littérale, lecture graphique / conversions, calcul numérique, résultat final en gras identifiant la proposition exacte).`;
 
     full += `\n\n================================================================================
 DOCUMENTS DE RÉFÉRENCE OFFICIELS DU PROGRAMME (EXTRAITS DE /docs/programme/) :
@@ -166,18 +194,9 @@ ${matchedDocs}
 EXPLOITATION DES SCHÉMAS ET GRAPHES DÉCODÉS (TRANSCRIPTIONS VISUELLES) :
 Certains extraits de documents comportent une section intitulée « TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES » avec des balises « --- [FIGURE / SCHÉMA DÉCODÉ : ...] --- ».
 Ces blocs décrivent fidèlement les schémas de montage (circuits RC, RL, RLC, dipôles, sens des courants et flèches de tensions) et les courbes expérimentales ($u(t)$, $i(t)$, résonance, titrage pH-métrique, trajectoire balistique) : axes, unités, échelles par division, points remarquables, asymptotes et tangentes.
-- Exploite rigoureusement ces données visuelles transcrites pour déterminer les grandeurs expérimentales (ex: $\tau$, $E$, $I_0$, $T_0$, $pH_E$, $V_{bE}$, retard $\Delta t$).
+- Exploite rigoureusement ces données visuelles transcrites pour déterminer les grandeurs expérimentales (ex: $\\tau$, $E$, $I_0$, $T_0$, $pH_E$, $V_{bE}$, retard $\\Delta t$).
 - Justifie toujours par la lecture graphique officielle telle que décrite dans la transcription.
-================================================================================
-CONSIGNE SPÉCIALE : ÉPREUVES DU BACCALAURÉAT NATIONAL MAROCAIN (BIOF) :
-Quand l'extrait documentaire fourni ci-dessus provient d'une Épreuve Nationale du Baccalauréat marocain (ou quand l'élève demande d'afficher et/ou résoudre un exercice d'examen national) :
-1. ÉNONCÉ OFFICIEL EN FRANÇAIS (BIOF) :
-${pdfNoticeLine}
-${statementGuidanceLine}
-   - Inclus toutes les données expérimentales et numériques officielles ($S_h$, $\lambda$, $c$, $h$, $v$, divisions sur l'oscillogramme ou la courbe).
-   - Reproduis fidèlement les questions avec leurs 4 propositions de choix (QCM) telles qu'au sujet officiel.
-2. CORRECTION MÉTHODIQUE ET OFFICIELLE :
-   - Résous chaque question étape par étape avec la méthode officielle en 4 points (Justification & formule littérale, lecture graphique / conversions, calcul numérique, résultat final en gras identifiant la proposition exacte).
+${specialDocumentSection}
 ================================================================================
 CONSIGNE SPÉCIALE : EXPLOITATION DES CORRIGÉS ET SOLUTIONS ([CORRIGÉ / SOLUTION]) :
 Quand un extrait documentaire porte la mention « [CORRIGÉ / SOLUTION OFFICIELLE DU PROFESSEUR] » :

@@ -25,6 +25,8 @@ import {
 import { useModalA11y } from '../hooks/useModalA11y';
 import { useBranch, StudentBranch } from '../hooks/useBranch';
 import { useApiKey, getAccessToken, getAdminToken, setAdminToken } from '../hooks/useApiKey';
+import { OfficialExamPageViewer } from './OfficialExamPageViewer';
+import type { OfficialSourceRef } from '../types/chat';
 import {
   saveDocumentToVault,
   removeDocumentFromVault,
@@ -66,7 +68,12 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
   const [statusMsg, setStatusMsg] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
 
   // Document preview state
-  const [previewDoc, setPreviewDoc] = useState<{ name: string; content: string } | null>(null);
+  const [previewDoc, setPreviewDoc] = useState<{
+    name: string;
+    content?: string;
+    officialSource?: OfficialSourceRef;
+  } | null>(null);
+  const [zoomedPreviewImage, setZoomedPreviewImage] = useState<{ url: string; name: string } | null>(null);
 
   // Deletion confirmation modal
   const [docToDelete, setDocToDelete] = useState<{ name: string } | null>(null);
@@ -315,14 +322,31 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
     }
   };
 
-  // Prévisualisation d'un document officiel (avec son décodage visuel de schémas & graphes)
-  const handlePreviewOfficialDoc = async (docName: string) => {
+  // Prévisualisation d'un document officiel (rendu PDF identique aux examens pour tout PDF officiel, ou texte brut en mode Enseignant)
+  const handlePreviewOfficialDoc = async (doc: DriveDoc) => {
+    const isPdf = doc.mimeType === 'application/pdf' || doc.name.toLowerCase().endsWith('.pdf');
+    if (isPdf) {
+      setPreviewDoc({
+        name: doc.name,
+        officialSource: {
+          name: doc.name,
+          relativePath: doc.relativePath || doc.name,
+          branch: doc.branch,
+          category: doc.category,
+          pages: [1],
+          totalPages: 1,
+          isPdf: true,
+        },
+      });
+      return;
+    }
+
     try {
       const headers: Record<string, string> = {};
       const accessTokenVal = getAccessToken();
       if (accessTokenVal) headers['x-access-token'] = accessTokenVal;
       if (adminTokenVal) headers['x-admin-token'] = adminTokenVal;
-      const res = await fetch(`/api/documents/file?name=${encodeURIComponent(docName)}`, { headers });
+      const res = await fetch(`/api/documents/file?name=${encodeURIComponent(doc.relativePath || doc.name)}`, { headers });
       if (res.ok) {
         const data = await res.json();
         setPreviewDoc({
@@ -330,9 +354,8 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
           content: data.content || 'Contenu en cours de traitement.',
         });
       } else {
-        // En mode public, affiche la description extraite publique ou informe
         setStatusMsg({
-          text: `Document "${docName}" indexé dans le RAG. Pour afficher l'intégralité du texte brut, activez le mode Enseignant.`,
+          text: `Document "${doc.name}" indexé dans le RAG. Pour afficher l'intégralité du texte brut, activez le mode Enseignant.`,
           type: 'info',
         });
       }
@@ -749,9 +772,9 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
                       <div className="flex items-center gap-1.5 shrink-0">
                         <button
                           type="button"
-                          onClick={() => handlePreviewOfficialDoc(doc.name)}
+                          onClick={() => handlePreviewOfficialDoc(doc)}
                           className="p-1 rounded-lg text-[#9aa0a6] hover:text-white hover:bg-[#202124] transition"
-                          title="Consulter le contenu et le décodage du document"
+                          title="Afficher le document officiel"
                         >
                           <Eye className="w-3.5 h-3.5" />
                         </button>
@@ -1172,35 +1195,119 @@ export const DocumentManager: React.FC<DocumentManagerProps> = ({ onAskQuestionA
             aria-modal="true"
             aria-label="Aperçu du document"
             tabIndex={-1}
-            className="bg-[#18191b] border border-[#282a2c] rounded-3xl w-full max-w-3xl max-h-[80vh] flex flex-col p-5 sm:p-6 shadow-2xl"
+            className="bg-[#18191b] border border-[#282a2c] rounded-3xl w-full max-w-4xl max-h-[88vh] flex flex-col p-5 sm:p-6 shadow-2xl"
           >
             <div className="flex items-center justify-between border-b border-[#282a2c] pb-3 mb-3">
-              <div className="flex items-center gap-2">
-                <FileText className="w-4 h-4 text-emerald-400" />
+              <div className="flex items-center gap-2 min-w-0">
+                <FileText className="w-4 h-4 text-emerald-400 shrink-0" />
                 <h3 className="text-sm font-bold text-white truncate max-w-md">{previewDoc.name}</h3>
               </div>
-              <button
-                type="button"
-                onClick={() => setPreviewDoc(null)}
-                className="text-slate-400 hover:text-white p-1"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                {previewDoc.officialSource?.isPdf && isAdminMode && adminTokenVal && (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (previewDoc.content) {
+                        setPreviewDoc({ name: previewDoc.name, officialSource: previewDoc.officialSource });
+                        return;
+                      }
+                      try {
+                        const res = await fetch(
+                          `/api/documents/file?name=${encodeURIComponent(previewDoc.officialSource?.relativePath || previewDoc.name)}`,
+                          { headers: { 'x-admin-token': adminTokenVal } }
+                        );
+                        if (res.ok) {
+                          const data = await res.json();
+                          setPreviewDoc((prev) =>
+                            prev ? { ...prev, content: data.content || 'Contenu vide.' } : prev
+                          );
+                        }
+                      } catch {}
+                    }}
+                    className="px-2.5 py-1 rounded-lg bg-[#202124] hover:bg-[#282a2c] border border-[#3c4043] text-[11px] text-[#c4c7c5] hover:text-white transition"
+                  >
+                    {previewDoc.content ? 'Afficher PDF' : 'Texte extrait (Admin)'}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPreviewDoc(null);
+                    setZoomedPreviewImage(null);
+                  }}
+                  className="text-slate-400 hover:text-white p-1"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto bg-[#131314] border border-[#282a2c] rounded-2xl p-4 text-xs text-[#c4c7c5] whitespace-pre-wrap font-sans leading-relaxed">
-              {previewDoc.content}
-            </div>
+            {previewDoc.officialSource?.isPdf && !previewDoc.content ? (
+              <div className="flex-1 overflow-y-auto pr-1">
+                <OfficialExamPageViewer
+                  source={previewDoc.officialSource}
+                  onPreviewImage={(preview) => setZoomedPreviewImage(preview)}
+                />
+              </div>
+            ) : (
+              <div className="flex-1 overflow-y-auto bg-[#131314] border border-[#282a2c] rounded-2xl p-4 text-xs text-[#c4c7c5] whitespace-pre-wrap font-sans leading-relaxed">
+                {previewDoc.content || ''}
+              </div>
+            )}
 
             <div className="flex items-center justify-end gap-2 pt-3 mt-3 border-t border-[#282a2c]">
+              {previewDoc.officialSource?.isPdf && onAskQuestionAboutDoc && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const docName = previewDoc.name;
+                    setPreviewDoc(null);
+                    setZoomedPreviewImage(null);
+                    onAskQuestionAboutDoc(docName);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 transition"
+                >
+                  <span>Interroger Si Driss</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
               <button
                 type="button"
-                onClick={() => setPreviewDoc(null)}
+                onClick={() => {
+                  setPreviewDoc(null);
+                  setZoomedPreviewImage(null);
+                }}
                 className="px-4 py-2 rounded-xl bg-[#202124] text-xs text-white font-semibold hover:bg-[#282a2c] transition"
               >
                 Fermer
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ZOOMED PAGE MODAL */}
+      {zoomedPreviewImage && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-sm"
+          onClick={() => setZoomedPreviewImage(null)}
+        >
+          <div className="relative max-w-5xl max-h-[92vh] w-full flex flex-col items-center gap-2" onClick={(e) => e.stopPropagation()}>
+            <div className="w-full flex items-center justify-between text-xs text-white px-2">
+              <span className="font-semibold truncate">{zoomedPreviewImage.name}</span>
+              <button
+                type="button"
+                onClick={() => setZoomedPreviewImage(null)}
+                className="p-1.5 rounded-lg bg-[#1e1f20] hover:bg-[#282a2c] text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <img
+              src={zoomedPreviewImage.url}
+              alt={zoomedPreviewImage.name}
+              className="max-h-[84vh] w-auto rounded-xl border border-[#3c4043] bg-white object-contain"
+            />
           </div>
         </div>
       )}

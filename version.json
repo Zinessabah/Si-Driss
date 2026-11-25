@@ -1,7 +1,7 @@
 {
   "version": "2.2.0",
-  "commit": "82101f9",
-  "commitDate": "2026-11-24T12:39:56Z",
-  "commitMessage": "docs: ajouter le rapport d'analyse technique et finaliser version 2.2.0",
-  "buildTime": "2026-11-24T12:51:39.375Z"
+  "commit": "e8dc25d",
+  "commitDate": "2026-11-24T12:52:19+00:00",
+  "commitMessage": "fix(version): fiabiliser la detection de mise a jour et eviter les fausses alertes infinies",
+  "buildTime": "2026-11-25T17:09:37.928Z"
 }

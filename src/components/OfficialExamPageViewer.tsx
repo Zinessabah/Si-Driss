@@ -193,8 +193,27 @@ export const OfficialExamPageViewer: React.FC<OfficialExamPageViewerProps> = ({
     } catch {}
   };
 
+  const isCourse = source.category === 'cours';
+  const isSeries = source.category === 'series';
+  const isCadre = source.category === 'cadres';
+  const categoryBadge = isCourse
+    ? 'COURS'
+    : isSeries
+    ? 'SÉRIE'
+    : isCadre
+    ? 'CADRE'
+    : null;
+  const headerTitlePrefix = isCourse
+    ? 'Cours Officiel'
+    : isSeries
+    ? 'Série Officielle'
+    : isCadre
+    ? 'Cadre Officiel'
+    : 'Extrait Officiel';
+
   const labelParts = [
     source.branch && source.branch !== 'ALL' ? `2BAC ${source.branch}` : null,
+    categoryBadge,
     source.year ? String(source.year) : null,
     source.session || null,
     source.topic ? source.topic.toUpperCase() : null,
@@ -211,7 +230,7 @@ export const OfficialExamPageViewer: React.FC<OfficialExamPageViewerProps> = ({
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-xs font-semibold text-[#e3e3e3] truncate max-w-[210px] sm:max-w-[300px]">
-                Extrait Officiel : {source.name}
+                {headerTitlePrefix} : {source.name}
               </span>
               {labelParts.length > 0 && (
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-sky-500/15 border border-sky-500/30 text-sky-300 font-medium">
@@ -221,7 +240,9 @@ export const OfficialExamPageViewer: React.FC<OfficialExamPageViewerProps> = ({
             </div>
             <p className="text-[10px] text-[#8e918f]">
               {source.pages.length > 1
-                ? `Pages de l'exercice : ${source.pages.join(', ')} sur ${totalPages}`
+                ? isCourse
+                  ? `Pages du cours : ${source.pages.join(', ')} sur ${totalPages}`
+                  : `Pages de l'exercice : ${source.pages.join(', ')} sur ${totalPages}`
                 : `Page ciblée : ${source.pages[0] || 1} sur ${totalPages}`}
             </p>
           </div>
@@ -244,7 +265,7 @@ export const OfficialExamPageViewer: React.FC<OfficialExamPageViewerProps> = ({
             target="_blank"
             rel="noopener noreferrer"
             className="p-1.5 rounded-lg hover:bg-[#282a2c] text-[#c4c7c5] hover:text-white transition flex items-center gap-1 text-[11px]"
-            title="Ouvrir le sujet PDF officiel complet"
+            title={isCourse ? 'Ouvrir le cours PDF officiel complet' : 'Ouvrir le sujet PDF officiel complet'}
           >
             <ExternalLink className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">PDF</span>
@@ -289,9 +310,9 @@ export const OfficialExamPageViewer: React.FC<OfficialExamPageViewerProps> = ({
               </button>
             </div>
 
-            {/* Quick Page Selector (exercise pages highlighted) */}
+            {/* Quick Page Selector (exercise/course pages highlighted) */}
             <div className="flex items-center flex-wrap gap-1">
-              {(totalPages <= 10
+              {(totalPages <= 15
                 ? Array.from({ length: totalPages }, (_, i) => i + 1)
                 : source.pages
               ).map((pNum) => {
@@ -309,7 +330,13 @@ export const OfficialExamPageViewer: React.FC<OfficialExamPageViewerProps> = ({
                         ? 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25'
                         : 'bg-[#1e1f20] border-[#282a2c] text-[#8e918f] hover:text-[#e3e3e3]'
                     }`}
-                    title={isTarget ? "Page de l'exercice détecté" : `Aller à la page ${pNum}`}
+                    title={
+                      isTarget
+                        ? isCourse
+                          ? 'Page du cours ciblée'
+                          : "Page de l'exercice détecté"
+                        : `Aller à la page ${pNum}`
+                    }
                   >
                     p.{pNum}
                   </button>

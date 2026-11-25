@@ -173,12 +173,19 @@ export function createDocumentsRouter(): Router {
       }
 
       const baseName = path.basename(name);
+      const normalizedName = name.replace(/\\/g, '/');
       const allDocs = discoverProgrammeFiles(DOCS_DIR);
-      const matched = allDocs.find(
-        (doc) =>
-          doc.name.toLowerCase().endsWith('.pdf') &&
-          (doc.relativePath === name || doc.name === name || doc.name === baseName)
-      );
+      const matched =
+        allDocs.find(
+          (doc) =>
+            doc.name.toLowerCase().endsWith('.pdf') &&
+            doc.relativePath.replace(/\\/g, '/') === normalizedName
+        ) ||
+        allDocs.find(
+          (doc) =>
+            doc.name.toLowerCase().endsWith('.pdf') &&
+            (doc.name === name || doc.name === baseName)
+        );
 
       if (!matched || !fs.existsSync(matched.absolutePath)) {
         return res.status(404).json({ error: 'Document PDF officiel introuvable.' });

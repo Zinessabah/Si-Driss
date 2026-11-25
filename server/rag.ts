@@ -194,9 +194,10 @@ export interface OfficialSourceRef {
   name: string;
   relativePath: string;
   branch: DocumentBranch;
-  year: number | null;
-  session: 'SN' | 'SR' | null;
-  topic: ExamTopic | null;
+  category?: DocumentCategory;
+  year?: number | null;
+  session?: 'SN' | 'SR' | null;
+  topic?: ExamTopic | null;
   pages: number[];
   totalPages: number;
   isPdf: boolean;
@@ -865,6 +866,299 @@ function extractExamMetaFromFilename(fileName: string): { year: number | null; s
 export interface SearchLocalDocumentsOptions {
   hasUserAttachments?: boolean;
   explicitExamRequested?: boolean;
+  explicitOfficialRequested?: boolean;
+  latestUserText?: string;
+}
+
+const COURSE_STOP_WORDS = new Set([
+  'le', 'la', 'les', 'l', 'du', 'de', 'des', 'd', 'un', 'une', 'sur', 'en', 'et', 'ou',
+  'a', 'au', 'aux', 'pour', 'avec', 'dans', 'par', 'cours', 'officiel', 'officielle',
+  'officiels', 'officielles', 'affiche', 'afficher', 'montre', 'montrer', 'moi', 'ouvre',
+  'ouvrir', 'voir', 'consulter', 'donne', 'donner', 'explique', 'expliquer', 'analyse',
+  'analyser', 'notions', 'cles', 'resume', 'document', 'pdf', 'filiere', 'pc', 'sm',
+  'si', 'driss', 'veux', 'voudrais', 'je', 'me', 'te', 'stp', 'svp', 'manuel',
+  'polycopie', 'fiche', 'chapitre', 'lecon', 'lecons', 'svt', 'biof', 'www', 'ma',
+]);
+
+function normalizeCourseText(text: string): string {
+  return (text || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/([a-z])(\d)/g, '$1 $2')
+    .replace(/(\d)([a-z])/g, '$1 $2')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function tokenMatchesText(token: string, normText: string): boolean {
+  if (!token || !normText) return false;
+  if (normText.includes(token)) return true;
+  if (token.length >= 5 && token.endsWith('s') && normText.includes(token.slice(0, -1))) {
+    return true;
+  }
+  return false;
+}
+
+function parseCourseQuery(query: string): {
+  isCourseQuery: boolean;
+  tokens: string[];
+  wantsManuscript: boolean;
+  wantsManual: boolean;
+  topic: ExamTopic | null;
+} {
+  const q = query.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const hasCourseKeyword =
+    /\b(cours|lecon|lecons|polycopie|polycop|manuel|fiche\s+de\s+cours|resume\s+du\s+cours)\b/i.test(q);
+  const hasNamedCourseIntent =
+    /\b(manuscrit|onde\s*[12]|cours\s+de\s+soir|noyaux[\s-]+masse|decroissance\s+radioactive)\b/i.test(q) &&
+    /\b(affiche|afficher|montre|montrer|ouvre|ouvrir|voir|consulter|cours|document|analyse|explique|donne|veux)\b/i.test(q);
+
+  const isCourseQuery = hasCourseKeyword || hasNamedCourseIntent;
+  const wantsManuscript = /\b(manuscrit|ecrit\s+a\s+la\s+main)\b/i.test(q);
+  const wantsManual = /\b(soir|semestre|manuel|complet)\b/i.test(q);
+  const topic = parseExamQuery(query).topic;
+
+  const rawTokens = normalizeCourseText(query).split(/\s+/);
+  const seen = new Set<string>();
+  const tokens: string[] = [];
+  for (const tok of rawTokens) {
+    if (!tok || COURSE_STOP_WORDS.has(tok)) continue;
+    if (tok.length < 2 && tok !== '1' && tok !== '2') continue;
+    if (!seen.has(tok)) {
+      seen.add(tok);
+      tokens.push(tok);
+    }
+  }
+
+  return { isCourseQuery, tokens, wantsManuscript, wantsManual, topic };
+}
+
+interface PdfPageSlice {
+  page: number;
+  text: string;
+  normText: string;
+  topNormText: string;
+}
+
+function splitPdfIntoPages(bodyOnly: string): { pages: PdfPageSlice[]; totalPages: number } {
+  const markerRe = /^--\s*(\d+)\s+of\s+(\d+)\s*--$/gm;
+  const pages: PdfPageSlice[] = [];
+  let prevEnd = 0;
+  let totalPages = 1;
+  let m: RegExpExecArray | null;
+
+  while ((m = markerRe.exec(bodyOnly)) !== null) {
+    const pageNum = parseInt(m[1], 10);
+    const total = parseInt(m[2], 10);
+    if (Number.isFinite(total) && total > totalPages) totalPages = total;
+    const rawSlice = bodyOnly.slice(prevEnd, m.index).trim();
+    const topLines = rawSlice.split('\n').filter((l) => l.trim()).slice(0, 6).join(' ');
+    pages.push({
+      page: Number.isFinite(pageNum) && pageNum >= 1 ? pageNum : pages.length + 1,
+      text: rawSlice,
+      normText: normalizeCourseText(rawSlice),
+      topNormText: normalizeCourseText(topLines),
+    });
+    prevEnd = m.index + m[0].length;
+  }
+
+  if (pages.length === 0) {
+    const topLines = bodyOnly.split('\n').filter((l) => l.trim()).slice(0, 6).join(' ');
+    pages.push({
+      page: 1,
+      text: bodyOnly.trim(),
+      normText: normalizeCourseText(bodyOnly),
+      topNormText: normalizeCourseText(topLines),
+    });
+  } else {
+    totalPages = Math.max(totalPages, pages.length);
+  }
+
+  return { pages, totalPages };
+}
+
+function isScannedPdfContent(bodyOnly: string, totalPages: number): boolean {
+  const cleanTextLen = bodyOnly.replace(/^--\s*\d+\s+of\s+\d+\s*--$/gm, '').trim().length;
+  const avgCharsPerPage = totalPages > 0 ? cleanTextLen / totalPages : cleanTextLen;
+  return cleanTextLen < 150 || (totalPages > 1 && avgCharsPerPage < 50);
+}
+
+function buildCourseExcerptAndPages(
+  fullContent: string,
+  docName: string,
+  tokens: string[],
+  topic: ExamTopic | null
+): {
+  pages: number[];
+  totalPages: number;
+  excerpt: string;
+  visualText: string;
+  isScannedPdf: boolean;
+  bodyScore: number;
+} {
+  const markerIdx = fullContent.indexOf(SCIENTIFIC_VISION_MARKER);
+  const bodyOnly = markerIdx !== -1 ? fullContent.slice(0, markerIdx) : fullContent;
+  const visionContent = markerIdx !== -1 ? fullContent.slice(markerIdx) : '';
+
+  const { pages: pdfPages, totalPages } = splitPdfIntoPages(bodyOnly);
+  const isScannedPdf = isScannedPdfContent(bodyOnly, totalPages);
+
+  if (isScannedPdf) {
+    return {
+      pages: [1],
+      totalPages,
+      excerpt: bodyOnly.slice(0, 1500).trim(),
+      visualText: visionContent.slice(0, 2500).trim(),
+      isScannedPdf: true,
+      bodyScore: 0,
+    };
+  }
+
+  const normFileName = normalizeCourseText(path.basename(docName, path.extname(docName)));
+  const subtopicTokens = tokens.filter((t) => !tokenMatchesText(t, normFileName));
+  const scoringTokens = subtopicTokens.length > 0 ? subtopicTokens : tokens;
+
+  let bestPage = 1;
+  let bestPageScore = 0;
+
+  for (const p of pdfPages) {
+    let score = 0;
+    for (const tok of scoringTokens) {
+      if (tokenMatchesText(tok, p.normText)) {
+        score += 10;
+      }
+      if (tokenMatchesText(tok, p.topNormText)) {
+        score += 18;
+      }
+    }
+    if (topic && TOPIC_VISION_PATTERNS[topic]?.some((re) => re.test(p.text))) {
+      score += 6;
+    }
+
+    // Favoriser les pages de début de cours/résumé par rapport aux pages d'exercices dans les manuels
+    if (/\b(niveaux|resume|cours)\b/.test(p.topNormText) && score > 0) {
+      score += 15;
+    }
+    if (/\bexercice\s*\d*/.test(p.topNormText) && score > 0) {
+      score -= 12;
+    }
+
+    // Réduire fortement le poids des pages de sommaire (dotted lines) sur les gros manuels
+    const isTocPage =
+      p.page <= 3 && (/\bsommaire\b|table\s+des\s+matieres/i.test(p.normText) || /\.{5,}/.test(p.text));
+    if (isTocPage) {
+      score = score * 0.05;
+    }
+
+    if (score > bestPageScore) {
+      bestPageScore = score;
+      bestPage = p.page;
+    }
+  }
+
+  // Pour un cours dédié court (<= 15 pages) demandé globalement sans sous-sujet précis, ouvrir à la page 1
+  const startPage =
+    totalPages <= 15 && subtopicTokens.length === 0
+      ? 1
+      : bestPageScore > 0
+      ? bestPage
+      : 1;
+
+  const targetPages: number[] = [];
+  for (let p = startPage; p <= Math.min(totalPages, startPage + 3); p++) {
+    targetPages.push(p);
+  }
+
+  const selectedSlices = pdfPages
+    .filter((p) => p.page >= startPage && p.page <= startPage + 3)
+    .map((p) => `[Page ${p.page}/${totalPages}]\n${p.text}`);
+
+  const excerpt = (selectedSlices.length > 0 ? selectedSlices.join('\n\n') : bodyOnly).slice(0, 9000).trim();
+
+  return {
+    pages: targetPages.length > 0 ? targetPages : [1],
+    totalPages,
+    excerpt,
+    visualText: visionContent.slice(0, 2500).trim(),
+    isScannedPdf: false,
+    bodyScore: bestPageScore,
+  };
+}
+
+function buildOfficialCourseResponse(
+  doc: CachedDoc,
+  branchUpper: 'PC' | 'SM',
+  tokens: string[],
+  topic: ExamTopic | null
+): { contextText: string; officialSource: OfficialSourceRef; isScannedPdf: boolean } {
+  const fullContent = readDocumentFullText(doc);
+  const { pages, totalPages, excerpt, visualText, isScannedPdf } = buildCourseExcerptAndPages(
+    fullContent,
+    doc.name,
+    tokens,
+    topic
+  );
+
+  const officialSource: OfficialSourceRef = {
+    name: doc.name,
+    relativePath: doc.relativePath,
+    branch: doc.branch,
+    category: doc.category,
+    topic,
+    pages,
+    totalPages,
+    isPdf: true,
+  };
+
+  const scannedNotice = isScannedPdf
+    ? '\n[IMPORTANT — COURS PDF MANUSCRIT / SCANNÉ SANS OCR : Ce document officiel ne contient pas de texte extractible ; ses pages officielles sont directement affichées visuellement à l’élève dans la visionneuse PDF au-dessus de ta réponse. Ne jamais inventer le contenu absent : invite l’élève à consulter les pages affichées (< / > et Zoom) ou à joindre une capture d’écran d’une page précise.]\n'
+    : '';
+
+  const courseHeader =
+    `[Cadre Officiel 2BAC ${branchUpper} - Cours Officiel du Programme]\n` +
+    `Document officiel : ${doc.name} | Page(s) PDF ciblée(s) : ${pages.join(', ')}/${totalPages}\n` +
+    (topic ? `Thème détecté : ${topic.toUpperCase()}\n` : '');
+
+  const contextText =
+    `${courseHeader}${scannedNotice}\n--- EXTRAIT DU COURS OFFICIEL ---\n${excerpt}\n\n` +
+    (visualText ? `--- DONNÉES VISUELLES & SCHÉMAS DÉCODÉS ---\n${visualText}\n` : '');
+
+  return { contextText, officialSource, isScannedPdf };
+}
+
+function findExplicitOfficialPdfByName(query: string, branchUpper: 'PC' | 'SM'): CachedDoc | null {
+  const qLower = query.toLowerCase();
+  const qNorm = normalizeCourseText(query);
+
+  let best: CachedDoc | null = null;
+  let bestLen = 0;
+
+  for (const doc of documentsCache) {
+    if (doc.branch !== 'ALL' && doc.branch !== branchUpper) continue;
+    if (!doc.name.toLowerCase().endsWith('.pdf')) continue;
+    // Protéger les corrigés confidentiels en mode socratique
+    if (doc.category === 'corriges') continue;
+
+    const nameLower = doc.name.toLowerCase();
+    const normFull = normalizeCourseText(doc.name);
+    const stemNorm = normalizeCourseText(path.basename(doc.name, path.extname(doc.name)));
+
+    const exactMatch = qLower.includes(nameLower) || (normFull.length >= 6 && qNorm.includes(normFull));
+    const quotedStemMatch =
+      stemNorm.length >= 4 &&
+      (qLower.includes(`"${path.basename(doc.name, path.extname(doc.name)).toLowerCase()}"`) ||
+        qNorm.includes(`document ${stemNorm}`));
+
+    if (exactMatch || quotedStemMatch) {
+      if (doc.name.length > bestLen) {
+        best = doc;
+        bestLen = doc.name.length;
+      }
+    }
+  }
+
+  return best;
 }
 
 export async function searchLocalDocumentsDetailed(
@@ -877,17 +1171,70 @@ export async function searchLocalDocumentsDetailed(
     if (!documentsCache.length) return { contextText: '' };
 
     const branchUpper = (branch || 'PC').toUpperCase() as 'PC' | 'SM';
-    const parsed = parseExamQuery(query);
+    const intentSource = options?.latestUserText?.trim() ? options.latestUserText : query;
+    const parsedFromLatest = parseExamQuery(intentSource);
+    const parsed = parsedFromLatest.isExamQuery ? parsedFromLatest : parseExamQuery(query);
+    const courseFromLatest = parseCourseQuery(intentSource);
+    const courseParsed = courseFromLatest.isCourseQuery ? courseFromLatest : parseCourseQuery(query);
 
     // Si l'élève a joint ses propres documents/exercices ou photos et n'a pas explicitement
-    // réclamé l'ouverture d'un sujet officiel du Bac en texte, NE PAS forcer l'ouverture
-    // d'un PDF officiel externe (ex: 2026_SN_SM.pdf) : la priorité absolue est accordée à son énoncé uploadé !
-    const shouldSkipExamSource = Boolean(options?.hasUserAttachments && !options?.explicitExamRequested);
+    // réclamé l'ouverture d'un sujet ou cours officiel, on priorise son énoncé uploadé.
+    const shouldSkipOfficialSource = Boolean(
+      options?.hasUserAttachments && !options?.explicitExamRequested && !options?.explicitOfficialRequested
+    );
+
+    // 0. ROUTE PRIORITAIRE ABSOLUE : NOM DE DOCUMENT OFFICIEL EXPLICITE (ex: bouton "Interroger" ou nom exact .pdf)
+    if (!shouldSkipOfficialSource) {
+      const explicitDoc = findExplicitOfficialPdfByName(intentSource, branchUpper) ||
+        findExplicitOfficialPdfByName(query, branchUpper);
+
+      if (explicitDoc) {
+        if (explicitDoc.category === 'cours') {
+          return buildOfficialCourseResponse(
+            explicitDoc,
+            branchUpper,
+            courseParsed.tokens,
+            courseParsed.topic || parsed.topic
+          );
+        }
+
+        if (explicitDoc.category !== 'examens' || !parsed.isExamQuery) {
+          const fullContent = readDocumentFullText(explicitDoc);
+          const markerIdx = fullContent.indexOf(SCIENTIFIC_VISION_MARKER);
+          const bodyOnly = markerIdx !== -1 ? fullContent.slice(0, markerIdx) : fullContent;
+          const { totalPages } = splitPdfIntoPages(bodyOnly);
+          const isScannedPdf = isScannedPdfContent(bodyOnly, totalPages);
+          const meta = extractExamMetaFromFilename(explicitDoc.name);
+          const pages: number[] = [];
+          for (let p = 1; p <= Math.min(totalPages, 4); p++) pages.push(p);
+
+          const officialSource: OfficialSourceRef = {
+            name: explicitDoc.name,
+            relativePath: explicitDoc.relativePath,
+            branch: explicitDoc.branch,
+            category: explicitDoc.category,
+            year: meta.year,
+            session: meta.session,
+            topic: parsed.topic,
+            pages,
+            totalPages,
+            isPdf: true,
+          };
+
+          const contextText =
+            `[Cadre Officiel 2BAC ${branchUpper} - Document Officiel : ${explicitDoc.name}]\n` +
+            `Page(s) PDF ciblée(s) : ${pages.join(', ')}/${totalPages}\n\n` +
+            bodyOnly.slice(0, 8000).trim();
+
+          return { contextText, officialSource, isScannedPdf };
+        }
+      }
+    }
 
     // 1. ROUTE PRIORITAIRE : EXAMEN NATIONAL DU BACCALAURÉAT
     // Si la requête concerne une épreuve nationale (année, session, ou mot-clé examen/national),
     // on identifie le document officiel cible dans la filière de l'élève (PC ou SM)
-    if (parsed.isExamQuery && !shouldSkipExamSource) {
+    if (parsed.isExamQuery && !shouldSkipOfficialSource) {
       let bestDoc: CachedDoc | null = null;
       let bestScore = 0;
 
@@ -999,6 +1346,7 @@ export async function searchLocalDocumentsDetailed(
           name: bestDoc.name,
           relativePath: bestDoc.relativePath,
           branch: bestDoc.branch,
+          category: bestDoc.category,
           year: resolvedYear,
           session: resolvedSession,
           topic: parsed.topic,
@@ -1007,8 +1355,7 @@ export async function searchLocalDocumentsDetailed(
           isPdf,
         };
 
-        const cleanTextLen = bodyOnly.replace(/^--\s*\d+\s+of\s+\d+\s*--$/gm, '').trim().length;
-        const isScannedPdf = isPdf && cleanTextLen < 150;
+        const isScannedPdf = isPdf && isScannedPdfContent(bodyOnly, totalPages);
 
         if (exerciseText || visualText || isPdf) {
           const sessionLabel = resolvedSession === 'SN'
@@ -1030,6 +1377,88 @@ export async function searchLocalDocumentsDetailed(
 
           return { contextText, officialSource, isScannedPdf };
         }
+      }
+    }
+
+    // 1.5 ROUTE PRIORITAIRE : COURS OFFICIELS DU PROGRAMME (MÊME AFFICHAGE PDF QUE LES EXAMENS)
+    if (courseParsed.isCourseQuery && !shouldSkipOfficialSource) {
+      let bestCourseDoc: CachedDoc | null = null;
+      let bestCourseScore = 0;
+
+      for (const doc of documentsCache) {
+        if (doc.branch !== 'ALL' && doc.branch !== branchUpper) continue;
+        if (doc.category !== 'cours') continue;
+        if (!doc.name.toLowerCase().endsWith('.pdf')) continue;
+
+        const normFileName = normalizeCourseText(path.basename(doc.name, path.extname(doc.name)));
+        const fileTokens = normFileName
+          .split(/\s+/)
+          .filter((t) => t && !COURSE_STOP_WORDS.has(t) && (t.length >= 2 || t === '1' || t === '2'));
+
+        let score = 0;
+        let fileMatches = 0;
+        for (const tok of courseParsed.tokens) {
+          if (tokenMatchesText(tok, normFileName)) {
+            score += 32;
+            fileMatches++;
+          }
+        }
+        if (fileTokens.length > 0 && fileMatches > 0) {
+          score += Math.round((fileMatches / fileTokens.length) * 25);
+        }
+
+        // Préférence pour les cours manuscrits uniquement s'ils sont demandés
+        const isManuscriptDoc = normFileName.includes('manuscrit');
+        if (isManuscriptDoc) {
+          score += courseParsed.wantsManuscript ? 45 : -15;
+        }
+
+        const fullContent = readDocumentFullText(doc);
+        const markerIdx = fullContent.indexOf(SCIENTIFIC_VISION_MARKER);
+        const bodyOnly = markerIdx !== -1 ? fullContent.slice(0, markerIdx) : fullContent;
+        const { totalPages } = splitPdfIntoPages(bodyOnly);
+        const isDedicatedCourse = totalPages <= 20;
+        const isManualDoc = /soir|semestre|pc1/i.test(normFileName);
+
+        if (isDedicatedCourse && fileMatches > 0) {
+          score += 30;
+        }
+        if (isManualDoc && courseParsed.wantsManual) {
+          score += 35;
+        }
+
+        // Vérifier aussi la correspondance dans le contenu du cours (ex: chapitres des manuels de soir)
+        const { bodyScore } = buildCourseExcerptAndPages(
+          fullContent,
+          doc.name,
+          courseParsed.tokens,
+          courseParsed.topic
+        );
+        if (bodyScore > 0) {
+          score += Math.min(45, bodyScore);
+          // Si le fichier dédié court contient le sujet dans son texte/titre de page 1
+          if (isDedicatedCourse) {
+            score += 15;
+          }
+        }
+
+        if (doc.branch === branchUpper) {
+          score += 3;
+        }
+
+        if (score > bestCourseScore) {
+          bestCourseScore = score;
+          bestCourseDoc = doc;
+        }
+      }
+
+      if (bestCourseDoc && bestCourseScore >= 25) {
+        return buildOfficialCourseResponse(
+          bestCourseDoc,
+          branchUpper,
+          courseParsed.tokens,
+          courseParsed.topic
+        );
       }
     }
 
