@@ -782,6 +782,53 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
     }
 
     if (!hasApiKey) {
+      // Si l'élève demande un document officiel (/cours, /examen, /exercice, /cadre) sans clé API,
+      // on affiche directement la visionneuse PDF officielle sans exiger d'IA.
+      const wantsOfficialDoc =
+        (localSlash && ['cours', 'examen', 'exercice', 'cadre'].includes(localSlash.def.id)) ||
+        /\.pdf\b/i.test(text) ||
+        /\b(affiche|afficher|montre|montrer|ouvre|ouvrir|voir)\b[\s\S]{0,40}\b(cours|examen|sujet|annale|serie|cadre)\b/i.test(text);
+
+      if (wantsOfficialDoc) {
+        try {
+          const resolveRes = await fetch('/api/documents/official/resolve', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...getAuthHeaders(),
+            },
+            body: JSON.stringify({ query: text.trim(), branch }),
+          });
+          if (resolveRes.ok) {
+            const resolved = await resolveRes.json();
+            if (resolved?.officialSource?.isPdf) {
+              const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              const userDocMsg: ChatMessage = {
+                id: String(Date.now()),
+                role: 'user',
+                content: text.trim(),
+                mode: 'direct',
+                timestamp: nowTime,
+              };
+              const docAssistantMsg: ChatMessage = {
+                id: String(Date.now() + 1),
+                role: 'assistant',
+                content: `Voici le document officiel **${resolved.officialSource.name}** (2BAC ${branch}). Tu peux feuilleter les pages ci-dessus sans clé IA. *(Configure une clé API à tout moment si tu souhaites poser des questions à Si Driss sur ce document.)*`,
+                mode: 'direct',
+                timestamp: nowTime,
+                officialSource: resolved.officialSource,
+              };
+              setMessages((prev) => [...prev, userDocMsg, docAssistantMsg]);
+              setInput('');
+              setSlashMenuDismissed(false);
+              setIsAddMenuOpen(false);
+              setIsFormulaMenuOpen(false);
+              return;
+            }
+          }
+        } catch {}
+      }
+
       setIsApiKeyModalOpen(true);
       return;
     }

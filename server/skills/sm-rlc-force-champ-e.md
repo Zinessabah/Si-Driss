@@ -5,5 +5,5 @@ SKILL PÉDAGOGIQUE EXCLUSIF 2BAC SM : RLC FORCÉ & CHAMP ÉLECTROSTATIQUE UNIFOR
   * Résonance d'intensité ($N = N_0 = \frac{1}{2\pi\sqrt{LC}}$) : $Z = R_t$ minimale, $I_0 = \frac{U}{R_t}$ maximale, $\varphi = 0$ ($u$ et $i$ en phase).
   * Bande passante à $-3\text{ dB}$ : intervalle $[N_1, N_2]$ tel que $I \ge \frac{I_0}{\sqrt{2}}$ (puissance $P \ge \frac{P_{\max}}{2}$ — ne jamais diviser $I_0$ par $2$ !). Largeur $\Delta N = N_2 - N_1 = \frac{R_t}{2\pi L} = \frac{N_0}{Q}$.
   * Facteur de qualité $Q = \frac{L\omega_0}{R_t} = \frac{1}{R_t C \omega_0}$ et surtension aux bornes du condensateur à la résonance : $U_{C,0} = Q \cdot U$.
-- Particule chargée dans un champ électrique uniforme $\vec{E}$ : $\vec{F}_e = q\vec{E}$ avec $E = \frac{U}{d}$, trajectoire parabolique dans le condensateur plan et déflexion linéaire à la sortie vers l'écran.
+- Particule chargée dans un champ électrique uniforme $\vec{E}$ : poser d'abord la relation vectorielle avec flèches $\sum \vec{F}_{\text{ext}} = \vec{F}_e = q\vec{E} = m\vec{a}_G$ (poids négligé) avec $E = \frac{U}{d}$, puis projeter sur $(Ox, Oy)$ pour obtenir la trajectoire parabolique dans le condensateur plan et la déflexion linéaire à la sortie vers l'écran.
 

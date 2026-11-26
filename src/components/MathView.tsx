@@ -92,6 +92,19 @@ function sanitizeLatexForKatex(rawMath: string, isDisplay: boolean): { code: str
   // Répare les commandes LaTeX mathématiques standards dont le backslash a été avalé par un littéral JS
   code = code.replace(/(^|[^\\])\b(cdot|implies|iff|mathrm|mathbf|mathit|sqrt|left|right|quad|qquad|approx|equiv)\b/g, '$1\\$2');
 
+  // Filet de sécurité notation vectorielle marocaine (BIOF) :
+  // Convertit les vecteurs anglo-saxons en gras (\mathbf{F}, \boldsymbol{a}) ou à chapeau (\hat{i}) en flèches \vec{...}
+  code = code.replace(/\\(?:mathbf|boldsymbol)\{([PFRTfavgEBijkun])\}/g, '\\vec{$1}');
+  code = code.replace(/\\(?:mathbf|boldsymbol)\{([A-Z]{2})\}/g, '\\overrightarrow{$1}');
+  code = code.replace(/\\hat\{\\?(i(?:math)?|j(?:math)?|k|u|n)\}/g, (_m, sym: string) => {
+    const clean = sym.startsWith('i') ? 'i' : sym.startsWith('j') ? 'j' : sym;
+    return `\\vec{${clean}}`;
+  });
+  code = code.replace(/\\sum\s*F(\s*(?:_\{?(?:\\text\{)?ext\}?\}?))?\s*=/g, (_m, sub = '') => `\\sum \\vec{F}${sub} =`);
+  code = code.replace(/(\\sum\s*\\vec\{F\}[^=]*=\s*m\s*(?:\\cdot\s*)?)(?<!\\vec\{)a(_\{?[G0-9a-zA-Z]*\}?)?/g, (_m, lhs, sub = '') => `${lhs}\\vec{a}${sub}`);
+  code = code.replace(/(\\mathcal\{M\}|M)_(\\Delta)\(F\)/g, '$1_$2(\\vec{F})');
+  code = code.replace(/\bW(_\{[^}]*\})?\(F\)/g, 'W$1(\\vec{F})');
+
   // Convertit \begin{align} ou \begin{align*} en \begin{aligned} (compatible partout dans KaTeX)
   if (/\\begin\{align\*?\}/.test(code)) {
     code = code

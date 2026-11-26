@@ -1,7 +1,7 @@
 {
   "version": "2.2.0",
-  "commit": "d2b4e6e",
-  "commitDate": "2026-11-25T22:52:14+00:00",
-  "commitMessage": "feat(chat): ajouter commandes rapides / avec autocomplétion et routage RAG dédié",
-  "buildTime": "2026-11-25T23:47:38.878Z"
+  "commit": "b5c95c2",
+  "commitDate": "2026-11-25T23:51:21+00:00",
+  "commitMessage": "feat(persona): ajouter SOUL.md, skills modulaires et profil/mémoire élève sécurisés",
+  "buildTime": "2026-11-26T00:34:44.609Z"
 }

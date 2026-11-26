@@ -5,7 +5,6 @@ import {
   Brain,
   CheckCircle,
   RotateCcw,
-  Download,
   AlertTriangle,
   Eye,
   SlidersHorizontal,
@@ -89,21 +88,6 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
       : [...memory.activePitfalls, pitfallId];
     const next = saveStudentMemory({ ...memory, activePitfalls });
     setMemory(next);
-  };
-
-  const handleExportMarkdown = () => {
-    const content =
-      activeTab === 'profile'
-        ? formatUserProfileMarkdown(profile, branch)
-        : formatStudentMemoryMarkdown(memory, branch);
-    const filename = activeTab === 'profile' ? `USER_${branch}.md` : `MEMORY_${branch}.md`;
-    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
   };
 
   const handleReset = () => {
@@ -400,24 +384,14 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
 
         {/* Footer */}
         <div className="px-5 py-3 border-t border-[#282a2c] bg-[#1e1f20] flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleReset}
-              className="px-3 py-1.5 rounded-xl bg-[#282a2c] hover:bg-rose-950/50 text-[#9aa0a6] hover:text-rose-300 text-xs font-medium flex items-center gap-1.5 transition"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Réinitialiser</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleExportMarkdown}
-              className="px-3 py-1.5 rounded-xl bg-[#282a2c] hover:bg-[#323538] text-[#c4c7c5] hover:text-white text-xs font-medium flex items-center gap-1.5 transition"
-            >
-              <Download className="w-3.5 h-3.5 text-sky-400" />
-              <span>Exporter .md</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleReset}
+            className="px-3 py-1.5 rounded-xl bg-[#282a2c] hover:bg-rose-950/50 text-[#9aa0a6] hover:text-rose-300 text-xs font-medium flex items-center gap-1.5 transition"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Réinitialiser</span>
+          </button>
 
           <button
             type="button"

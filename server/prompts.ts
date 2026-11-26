@@ -79,7 +79,7 @@ L'élève de 2ème Bac ${safeBranch} attend une réponse immédiate, complète, 
     extra = `\nMODE ACTIF : COACHING SOCRATIQUE POUR ÉLÈVE 2ÈME BAC ${safeBranch}.
 L'élève résout un problème. Pose UNE question directrice ciblée pour le guider sur l'étape logique suivante sans donner la solution brute d'emblée. Exige une justification rigoureuse.`;
   } else if (mode === 'review') {
-    extra = `\nMODE ACTIF : AUDIT DE RÉDACTION TYPE NATIONAL 2ÈME BAC ${safeBranch}. Analyse la réponse selon la grille officielle : 1) Système/Référentiel/Forces, 2) Formule littérale, 3) Valeur & CS, 4) Unité SI.`;
+    extra = `\nMODE ACTIF : AUDIT DE RÉDACTION TYPE NATIONAL 2ÈME BAC ${safeBranch}. Analyse la réponse selon la grille officielle : 1) Système/Référentiel/Forces et relation vectorielle avec flèches (\\vec{...}) avant projection, 2) Formule littérale, 3) Valeur & CS, 4) Unité SI.`;
   } else if (mode === 'trap') {
     extra = `\nMODE ACTIF : CHASSE AUX PIÈGES DU NATIONAL 2ÈME BAC ${safeBranch}. Pose un piège récurrent du National pour la section ${safeBranch}.`;
   }

@@ -31,25 +31,25 @@ export const ApiKeyStatusBadge: React.FC<ApiKeyStatusBadgeProps> = ({ compact = 
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border shadow-sm ${
           hasApiKey || serverHasKey
             ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
-            : 'bg-amber-500/15 text-amber-300 border-amber-500/35 hover:bg-amber-500/25 animate-pulse'
+            : 'bg-[#1e1f20] text-[#c4c7c5] border-[#3c4043] hover:bg-[#282a2c] hover:text-white'
         }`}
         title={
           hasApiKey || serverHasKey
             ? `Fournisseur IA actif : ${activeLabel} (${model}). Cliquer pour basculer de fournisseur (Gemini, Groq, Ollama, OpenAI...).`
-            : 'Aucune clé configurée. Cliquer pour choisir votre IA (Gemini, Groq, OpenAI, Ollama...).'
+            : 'Navigation libre sur les labos, formules, pièges et documents officiels. Cliquer pour configurer une clé IA (uniquement pour le Chat et l’Audit IA).'
         }
       >
         <span
           className={`w-2 h-2 rounded-full ${
-            hasApiKey || serverHasKey ? 'bg-emerald-400' : 'bg-amber-400'
+            hasApiKey || serverHasKey ? 'bg-emerald-400' : 'bg-slate-400'
           }`}
         />
         <Cpu className="w-3.5 h-3.5 shrink-0" />
         {compact ? (
-          <span className="font-mono">{hasApiKey || serverHasKey ? activeLabel : 'IA requise'}</span>
+          <span className="font-mono">{hasApiKey || serverHasKey ? activeLabel : 'Clé IA (Chat)'}</span>
         ) : (
           <span className="flex items-center gap-1">
-            <span>{hasApiKey || serverHasKey ? activeLabel : 'Choisir Moteur IA'}</span>
+            <span>{hasApiKey || serverHasKey ? activeLabel : 'Configurer IA (Chat)'}</span>
             {hasApiKey && model && (
               <span className="text-[10px] text-emerald-300/70 font-mono hidden md:inline">
                 ({model.replace('gemini-', '').replace('-versatile', '')})

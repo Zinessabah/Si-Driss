@@ -12,6 +12,8 @@ import {
   hasVisualMarker,
   startBackgroundOfficialSync,
   getOfficialSyncStatus,
+  parseSlashCommand,
+  searchLocalDocumentsDetailed,
 } from '../rag';
 import { isLikelyGeminiKey } from '../visionExtractor';
 import { syncGoogleDriveBranch, extractDriveFolderId } from '../driveSync';
@@ -198,6 +200,38 @@ export function createDocumentsRouter(): Router {
     } catch (err: any) {
       console.error('Erreur lecture PDF officiel:', err);
       return res.status(500).json({ error: 'Impossible de servir le document PDF officiel.' });
+    }
+  });
+
+  /**
+   * Résolution publique (sans clé IA) d'un PDF officiel (cours, examen, série, cadre)
+   * pour permettre la consultation directe dans le chat même sans configurer de fournisseur IA.
+   */
+  router.post('/documents/official/resolve', async (req, res) => {
+    try {
+      const query = String(req.body?.query || '').trim();
+      const branch = String(req.body?.branch || '').toUpperCase() === 'SM' ? 'SM' : 'PC';
+      if (!query) {
+        return res.status(400).json({ error: 'Requête requise.' });
+      }
+
+      const slashCmd = parseSlashCommand(query);
+      const effectiveQuery = slashCmd?.arg || query;
+      const { officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(effectiveQuery, branch, {
+        explicitOfficialRequested: true,
+        explicitExamRequested: slashCmd?.command === 'examen',
+        latestUserText: effectiveQuery,
+        forcedCommand: slashCmd?.command,
+        commandArg: slashCmd?.arg,
+      });
+
+      return res.json({
+        officialSource: officialSource?.isPdf ? officialSource : undefined,
+        isScannedPdf: Boolean(isScannedPdf),
+      });
+    } catch (err: any) {
+      console.error('Erreur résolution PDF officiel:', err);
+      return res.status(500).json({ error: 'Impossible de résoudre le document officiel.' });
     }
   });
 

@@ -18,7 +18,7 @@ export const NATIONAL_PITFALLS: TrapItem[] = [
     penaltyEstimate: '-0.25 pt à chaque problème de mécanique',
     trapDescription: 'Beaucoup d\'élèves écrivent directement "D\'après la 2ème loi de Newton : $\\sum \\vec{F} = m\\vec{a}$" sans énoncer le système et le référentiel d\'étude.',
     badDraft: 'On applique la 2ème loi de Newton : P + f = m.a',
-    correctDraft: '1. Système étudié : {solide S de masse m}\n2. Référentiel : Terrestre, supposé galiléen\n3. Bilan des forces : Le poids P et la force de frottement f\n4. D\'après la 2ème loi de Newton : $\\sum \\vec{F}_{ext} = m \\vec{a}_G$',
+    correctDraft: '1. Système étudié : {solide S de masse m}\n2. Référentiel : Terrestre, supposé galiléen\n3. Bilan des forces : Le poids $\\vec{P}$ et la force de frottement $\\vec{f}$\n4. D\'après la 2ème loi de Newton : $\\sum \\vec{F}_{ext} = m \\vec{a}_G \\implies \\vec{P} + \\vec{f} = m \\vec{a}_G$',
     siDrissTip: 'Lah yerdi 3lik, cette phrase introductive est un réflexe automatique ! 0.25 pt gratuit ne se refuse jamais dans un National serré.',
   },
   {

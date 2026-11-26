@@ -466,10 +466,10 @@ export const GeminiSidebar: React.FC<GeminiSidebarProps> = ({
               className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                 hasApiKey
                   ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                  : 'bg-amber-500/10 text-amber-300 border border-amber-500/20 animate-pulse'
+                  : 'bg-[#282a2c] text-[#9aa0a6] border border-[#3c4043]'
               }`}
             >
-              {hasApiKey ? 'Active' : 'Configurer'}
+              {hasApiKey ? 'Active' : 'Chat IA'}
             </span>
           </button>
         </div>
