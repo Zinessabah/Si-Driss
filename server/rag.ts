@@ -919,6 +919,16 @@ const SLASH_COMMAND_ALIASES: { prefix: string; command: SlashCommandType }[] = [
   { prefix: '/help', command: 'aide' },
 ];
 
+export function hasExplicitSolveIntent(text: string): boolean {
+  const q = (text || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+  return /\b(resoudre|resous|solution|corrige|corriger|correction|reponse|reponses|reponds|traite|traiter|calculer|calcule|etablir|etablis|deduire|determiner|determine|demontrer|demontre|fais\s+l['’]exercice)\b/i.test(
+    q
+  );
+}
+
 export function parseSlashCommand(rawText: string): ParsedSlashCommand | null {
   const trimmed = (rawText || '').trim();
   if (!trimmed.startsWith('/')) return null;
@@ -943,11 +953,15 @@ export function parseSlashCommand(rawText: string): ParsedSlashCommand | null {
             ? `Affiche et corrige méthodiquement le sujet d'examen national : ${arg}.`
             : `Affiche un exercice officiel de l'Examen National du Baccalauréat.`;
           break;
-        case 'exercice':
+        case 'exercice': {
+          const wantsSolve = hasExplicitSolveIntent(arg);
           effectivePrompt = arg
-            ? `Affiche l'exercice ou la série officielle sur : ${arg}, et guide-moi dans sa résolution.`
-            : `Propose un exercice officiel du programme pour m'entraîner.`;
+            ? wantsSolve
+              ? `Affiche et résous l'exercice ou la série officielle demandé(e) : ${arg}.`
+              : `Affiche la série d'exercices officielle sur : ${arg}. Présente brièvement la série et la liste des exercices qu'elle contient, SANS donner aucune solution ni correction tant que l'élève ne le demande pas.`
+            : `Propose une série ou un exercice officiel du programme sans donner la solution d'emblée.`;
           break;
+        }
         case 'cadre':
           effectivePrompt = arg
             ? `Quelles sont les exigences exactes du Cadre de Référence officiel concernant : ${arg} ?`
@@ -1214,9 +1228,42 @@ function buildOfficialCourseResponse(
   doc: CachedDoc,
   branchUpper: 'PC' | 'SM',
   tokens: string[],
-  topic: ExamTopic | null
+  topic: ExamTopic | null,
+  exerciseNumber: number | null = null
 ): { contextText: string; officialSource: OfficialSourceRef; isScannedPdf: boolean } {
   const fullContent = readDocumentFullText(doc);
+  const markerIdx = fullContent.indexOf(SCIENTIFIC_VISION_MARKER);
+  const bodyOnly = markerIdx !== -1 ? fullContent.slice(0, markerIdx) : fullContent;
+
+  // Si un numéro d'exercice précis est demandé sur une série (ex: "résoudre l'exercice 2 de cette série")
+  if (doc.category === 'series' && exerciseNumber) {
+    const { exerciseText, visualText, rawStart, rawEnd, matchedSection } = extractExamExercise(
+      fullContent,
+      null,
+      exerciseNumber
+    );
+    if (matchedSection && exerciseText) {
+      const { pages, totalPages } = computeExamPageRange(bodyOnly, rawStart, rawEnd, true, null);
+      const isScannedPdf = isScannedPdfContent(bodyOnly, totalPages);
+      const officialSource: OfficialSourceRef = {
+        name: doc.name,
+        relativePath: doc.relativePath,
+        branch: doc.branch,
+        category: doc.category,
+        topic,
+        pages,
+        totalPages,
+        isPdf: true,
+      };
+      const contextText =
+        `[Cadre Officiel 2BAC ${branchUpper} - Série d'Exercices Officielle]\n` +
+        `Document officiel : ${doc.name} | Exercice ${exerciseNumber} | Page(s) PDF ciblée(s) : ${pages.join(', ')}/${totalPages}\n\n` +
+        `--- ÉNONCÉ DE L'EXERCICE ${exerciseNumber} ---\n${exerciseText}\n\n` +
+        (visualText ? `--- DONNÉES VISUELLES & SCHÉMAS DÉCODÉS ---\n${visualText}\n` : '');
+      return { contextText, officialSource, isScannedPdf };
+    }
+  }
+
   const { pages, totalPages, excerpt, visualText, isScannedPdf } = buildCourseExcerptAndPages(
     fullContent,
     doc.name,
@@ -1236,16 +1283,28 @@ function buildOfficialCourseResponse(
   };
 
   const scannedNotice = isScannedPdf
-    ? '\n[IMPORTANT — COURS PDF MANUSCRIT / SCANNÉ SANS OCR : Ce document officiel ne contient pas de texte extractible ; ses pages officielles sont directement affichées visuellement à l’élève dans la visionneuse PDF au-dessus de ta réponse. Ne jamais inventer le contenu absent : invite l’élève à consulter les pages affichées (< / > et Zoom) ou à joindre une capture d’écran d’une page précise.]\n'
+    ? '\n[IMPORTANT — PDF MANUSCRIT / SCANNÉ SANS OCR : Ce document officiel ne contient pas de texte extractible ; ses pages officielles sont directement affichées visuellement à l’élève dans la visionneuse PDF au-dessus de ta réponse. Ne jamais inventer le contenu absent : invite l’élève à consulter les pages affichées (< / > et Zoom) ou à joindre une capture d’écran d’une page précise.]\n'
     : '';
 
+  const docTypeLabel =
+    doc.category === 'series'
+      ? "Série d'Exercices Officielle"
+      : doc.category === 'cadres'
+      ? 'Cadre de Référence Officiel'
+      : 'Cours Officiel du Programme';
+
+  const sectionTitle =
+    doc.category === 'series'
+      ? "--- EXTRAIT DE LA SÉRIE D'EXERCICES ---"
+      : '--- EXTRAIT DU COURS OFFICIEL ---';
+
   const courseHeader =
-    `[Cadre Officiel 2BAC ${branchUpper} - Cours Officiel du Programme]\n` +
+    `[Cadre Officiel 2BAC ${branchUpper} - ${docTypeLabel}]\n` +
     `Document officiel : ${doc.name} | Page(s) PDF ciblée(s) : ${pages.join(', ')}/${totalPages}\n` +
     (topic ? `Thème détecté : ${topic.toUpperCase()}\n` : '');
 
   const contextText =
-    `${courseHeader}${scannedNotice}\n--- EXTRAIT DU COURS OFFICIEL ---\n${excerpt}\n\n` +
+    `${courseHeader}${scannedNotice}\n${sectionTitle}\n${excerpt}\n\n` +
     (visualText ? `--- DONNÉES VISUELLES & SCHÉMAS DÉCODÉS ---\n${visualText}\n` : '');
 
   return { contextText, officialSource, isScannedPdf };
@@ -1417,12 +1476,14 @@ export async function searchLocalDocumentsDetailed(
         findExplicitOfficialPdfByName(query, branchUpper, forcedCmd);
 
       if (explicitDoc) {
-        if (explicitDoc.category === 'cours') {
+        const requestedExNum = parsedFromLatest.exerciseNumber ?? parsed.exerciseNumber;
+        if (explicitDoc.category === 'cours' || explicitDoc.category === 'series') {
           return buildOfficialCourseResponse(
             explicitDoc,
             branchUpper,
             courseParsed.tokens,
-            courseParsed.topic || parsed.topic
+            courseParsed.topic || parsed.topic,
+            requestedExNum
           );
         }
 
@@ -1476,6 +1537,7 @@ export async function searchLocalDocumentsDetailed(
     }
 
     if (!shouldSkipOfficialSource && forcedCmd === 'exercice') {
+      const requestedExNum = parsedFromLatest.exerciseNumber ?? parsed.exerciseNumber;
       const matchedSeries = findBestPdfByCategory(
         'series',
         branchUpper,
@@ -1487,7 +1549,8 @@ export async function searchLocalDocumentsDetailed(
           matchedSeries.doc,
           branchUpper,
           courseParsed.tokens,
-          courseParsed.topic || parsed.topic
+          courseParsed.topic || parsed.topic,
+          requestedExNum
         );
       }
       // Repli vers la route des examens si aucune série dédiée ne correspond

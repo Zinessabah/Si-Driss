@@ -12,7 +12,7 @@ import {
 } from '../ai/providers';
 import { generateUnifiedCompletion, streamUnifiedChat, trimUpstreamError } from '../ai/completion';
 import { sseWrite } from '../ai/sse';
-import { extractTextFromPdf, parseSlashCommand, searchLocalDocumentsDetailed } from '../rag';
+import { extractTextFromPdf, hasExplicitSolveIntent, parseSlashCommand, searchLocalDocumentsDetailed } from '../rag';
 import { getSiDrissBasePrompt, getInstruction, normalizeBranchParam } from '../prompts';
 import { sanitizeStudentProfile, sanitizeStudentMemory } from '../personaLoader';
 import type { ClientAttachment, ClientMessage } from '../ai/adapters';
@@ -300,6 +300,26 @@ async function prepareChatContext(
   const lastUserText = lastUserMessage?.content || '';
   const slashCmd = parseSlashCommand(lastUserText);
 
+  // Suivi multi-tours : si l'élève enchaîne (ex: "résoudre l'exercice 2 de cette série") après un /exercice ou /examen,
+  // on rattache automatiquement le contexte du document précédent.
+  let inheritedSlash = slashCmd;
+  if (!inheritedSlash && lastUserIdx > 0) {
+    const looksLikeDocFollowUp =
+      /\b(cette\s+s[eé]rie|ce\s+sujet|ce\s+cours|cet\s+exercice|exercice\s*\d+|ex\s*\d+|question\s*\d+|partie\s*\d+|r[eé]soudre|corrig[eé]|correction|solution)\b/i.test(
+        lastUserText
+      );
+    if (looksLikeDocFollowUp) {
+      for (let i = lastUserIdx - 1; i >= 0; i--) {
+        if (enrichedMessages[i]?.role !== 'user') continue;
+        const prior = parseSlashCommand(enrichedMessages[i].content || '');
+        if (prior && ['exercice', 'examen', 'cours', 'cadre'].includes(prior.command)) {
+          inheritedSlash = prior;
+          break;
+        }
+      }
+    }
+  }
+
   const effectiveMessages =
     slashCmd && lastUserIdx >= 0
       ? enrichedMessages.map((m, idx) =>
@@ -309,19 +329,26 @@ async function prepareChatContext(
 
   const effectiveMode = slashCmd?.command === 'piege' ? 'trap' : mode;
   const effectiveSocratic = slashCmd?.command === 'piege' ? true : socraticEnabled;
+  const activeCommand = slashCmd?.command || inheritedSlash?.command;
+  const activeCommandArg = slashCmd
+    ? slashCmd.arg
+    : inheritedSlash
+    ? `${inheritedSlash.arg} ${lastUserText}`.trim()
+    : '';
+  const solveRequested = hasExplicitSolveIntent(slashCmd ? slashCmd.arg : lastUserText);
 
   const explicitExamRequested =
-    slashCmd?.command === 'examen' ||
+    activeCommand === 'examen' ||
     (/\b(20[012]\d)\b/.test(lastUserText) &&
       /\b(national|annale|epreuve|officiel|sn|sr)\b/i.test(lastUserText));
   const explicitOfficialRequested =
     explicitExamRequested ||
-    Boolean(slashCmd && ['cours', 'examen', 'exercice', 'cadre'].includes(slashCmd.command)) ||
+    Boolean(activeCommand && ['cours', 'examen', 'exercice', 'cadre'].includes(activeCommand)) ||
     /\.pdf\b/i.test(lastUserText) ||
     /\b(affiche|afficher|montre|montrer|ouvre|ouvrir|voir)\b[\s\S]{0,40}\b(cours|manuel|polycopie|document|officiel)\b/i.test(lastUserText);
 
-  const searchTerms = slashCmd?.arg
-    ? slashCmd.arg
+  const searchTerms = activeCommandArg
+    ? activeCommandArg
     : buildPersistentSearchTerms(effectiveMessages);
   const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(
     searchTerms,
@@ -330,9 +357,13 @@ async function prepareChatContext(
       hasUserAttachments,
       explicitExamRequested,
       explicitOfficialRequested,
-      latestUserText: slashCmd ? slashCmd.arg || slashCmd.effectivePrompt : lastUserText,
-      forcedCommand: slashCmd?.command,
-      commandArg: slashCmd?.arg,
+      latestUserText: slashCmd
+        ? slashCmd.arg || slashCmd.effectivePrompt
+        : inheritedSlash
+        ? `${inheritedSlash.arg} ${lastUserText}`.trim()
+        : lastUserText,
+      forcedCommand: activeCommand,
+      commandArg: inheritedSlash && !slashCmd ? inheritedSlash.arg : slashCmd?.arg,
     }
   );
   const validatedProfile = sanitizeStudentProfile(rawProfile);
@@ -342,6 +373,7 @@ async function prepareChatContext(
     hasOfficialPdf: Boolean(officialSource?.isPdf),
     isScannedPdf,
     officialCategory: officialSource?.category,
+    solveRequested,
     skillQuery: `${lastUserText} ${matchedDocs.slice(0, 400)}`,
     studentProfile: validatedProfile,
     studentMemory: validatedMemory,

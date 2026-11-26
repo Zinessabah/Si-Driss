@@ -57,6 +57,7 @@ export interface InstructionOptions {
   hasOfficialPdf?: boolean;
   isScannedPdf?: boolean;
   officialCategory?: 'examens' | 'series' | 'corriges' | 'cours' | 'cadres' | 'autre';
+  solveRequested?: boolean;
   skillQuery?: string;
   studentProfile?: ValidatedStudentProfile;
   studentMemory?: ValidatedStudentMemory;
@@ -102,9 +103,12 @@ L'élève résout un problème. Pose UNE question directrice ciblée pour le gui
   }
   if (matchedDocs) {
     const isCoursePdf = Boolean(options?.hasOfficialPdf && options?.officialCategory === 'cours');
+    const isSeriesPdf = Boolean(options?.hasOfficialPdf && options?.officialCategory === 'series');
     const pdfNoticeLine = options?.hasOfficialPdf
       ? isCoursePdf
         ? "   - Signale à l'élève que le document PDF officiel du cours (avec ses schémas, graphes et formules d'origine) est affiché directement au-dessus de ta réponse dans la visionneuse PDF (ne dis jamais que tu ne peux pas afficher le document ou le cours PDF)."
+        : isSeriesPdf
+        ? "   - Signale à l'élève que la série d'exercices PDF officielle est affichée directement au-dessus de ta réponse dans la visionneuse PDF (ne dis jamais que tu ne peux pas afficher le document PDF)."
         : "   - Signale à l'élève que l'extrait visuel officiel du sujet PDF (avec ses schémas/graphes d'origine) est affiché directement au-dessus de ta réponse (ne dis jamais que tu ne peux pas afficher l'image du sujet)."
       : "   - Aucune image PDF n'a pu être attachée automatiquement pour cette requête ; présente l'énoncé directement en texte Markdown + LaTeX sans jamais prétendre qu'une image PDF est affichée ni afficher du code brut.";
     const statementGuidanceLine = options?.isScannedPdf
@@ -113,6 +117,8 @@ L'élève résout un problème. Pose UNE question directrice ciblée pour le gui
         : "   - ⚠️ CE SUJET PDF EST SCANNÉ SANS COUCHE TEXTE (OCR) : N'invente pas l'énoncé ni les valeurs numériques manquantes, et n'écris aucun bloc de code SVG/LaTeX de substitution. Invite simplement l'élève à consulter la page officielle affichée dans la visionneuse PDF ci-dessus (boutons < / > et Zoom) et propose-lui de copier ou joindre une capture de la question qu'il souhaite résoudre."
       : isCoursePdf
         ? "   - Synthétise, structure et explique fidèlement les notions clés, lois, définitions et formules LaTeX du cours officiel extrait ci-dessus, en guidant l'élève vers les pages affichées dans la visionneuse PDF ci-dessus."
+        : isSeriesPdf
+        ? "   - Présente la série ou l'énoncé demandé directement en français clair avec `$...$` et `$$...$$` si le texte est extrait."
         : "   - Affiche d'abord l'énoncé intégral fidèlement traduit en français scientifique irréprochable adapté aux élèves 2BAC BIOF (les sujets d'avant 2016 ayant été rédigés en arabe), directement en Markdown + LaTeX (sans l'enfermer dans un bloc de code ```latex ou ```markdown).";
 
     const specialDocumentSection = isCoursePdf
@@ -124,6 +130,26 @@ ${pdfNoticeLine}
 ${statementGuidanceLine}
 2. EXPLICATION PÉDAGOGIQUE RIGOUREUSE :
    - Mets en évidence les définitions exactes, les équations différentielles ou relations fondamentales en LaTeX ($...$, $$...$$), les unités SI et les pièges classiques du National liés à ce chapitre.`
+      : isSeriesPdf
+      ? options?.solveRequested
+        ? `================================================================================
+CONSIGNE SPÉCIALE : RÉSOLUTION DEMANDÉE SUR SÉRIE D'EXERCICES OFFICIELLE 2BAC ${safeBranch} :
+L'élève a explicitement demandé la résolution ou correction d'un exercice de cette série :
+1. AFFICHAGE & RÉFÉRENCE VISUELLE :
+${pdfNoticeLine}
+${statementGuidanceLine}
+2. CORRECTION MÉTHODIQUE SUR L'EXERCICE DEMANDÉ :
+   - Résous UNIQUEMENT l'exercice ou la question demandée par l'élève, étape par étape selon la méthode officielle en 4 points (Justification théorique / vecteurs avec flèches, Expression littérale, Conversions SI & AN, Résultat en gras).`
+        : `================================================================================
+CONSIGNE SPÉCIALE : SÉRIE D'EXERCICES OFFICIELLE 2BAC ${safeBranch} (AFFICHAGE SEUL — SANS SOLUTION) :
+L'élève souhaite consulter la série d'exercices SANS avoir encore demandé de correction :
+1. AFFICHAGE & PRÉSENTATION :
+${pdfNoticeLine}
+${statementGuidanceLine}
+   - Résume brièvement les exercices disponibles dans cette série (titres / thèmes / numéros) pour l'aider à choisir.
+2. INTERDICTION STRICTE DE DONNER LA SOLUTION D'EMBLÉE :
+   - NE DONNE AUCUNE CORRECTION, NI RÉPONSE NUMÉRIQUE, NI RÉSOLUTION D'EXERCICE tant que l'élève ne l'a pas explicitement demandée.
+   - Termine en l'invitant à choisir un exercice (ex. : « Quel exercice souhaites-tu traiter ? Tu peux écrire par exemple : **"Résoudre l'exercice 2 de cette série"** ou me proposer ta propre tentative ! »).`
       : `================================================================================
 CONSIGNE SPÉCIALE : ÉPREUVES DU BACCALAURÉAT NATIONAL MAROCAIN (BIOF) :
 Quand l'extrait documentaire fourni ci-dessus provient d'une Épreuve Nationale du Baccalauréat marocain (ou quand l'élève demande d'afficher et/ou résoudre un exercice d'examen national) :
