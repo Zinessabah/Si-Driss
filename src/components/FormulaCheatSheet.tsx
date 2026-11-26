@@ -82,6 +82,7 @@ export const FormulaCheatSheet: React.FC<FormulaCheatSheetProps> = ({
     if (lower.includes('célérité') || lower.includes('v = \\frac{d}')) return 'ondes-celerite';
     if (lower.includes('longueur') || lower.includes('\\lambda = \\frac{v}')) return 'ondes-longueur-onde';
     if (lower.includes('écart angulaire') || lower.includes('\\theta = \\frac{\\lambda}{a}')) return 'ondes-diffraction-fente';
+    if (lower.includes('prisme')) return 'ondes-prisme-deviation';
     if (lower.includes('constante de temps tau') || lower.includes('\\tau = r \\cdot c') || lower.includes('\\tau = rc')) return 'electricite-rc-tau';
     if (lower.includes('dipôle rl') || lower.includes('\\tau = \\frac{l}{r')) return 'electricite-rl-tau';
     if (lower.includes('période propre') || lower.includes('t_0 = 2\\pi \\sqrt{l')) return 'electricite-rlc-t0';

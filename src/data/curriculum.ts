@@ -103,6 +103,30 @@ export const CURRICULUM: ChapterInfo[] = [
         latex: '\\nu = \\frac{c}{\\lambda_0} = \\frac{v}{\\lambda} = \\text{constante}',
         units: 'La couleur/fréquence ne change pas de milieu',
       },
+      {
+        name: 'Prisme (1/4) — 1re loi de Descartes (face d’entrée)',
+        latex: '\\sin i = n \\cdot \\sin r',
+        units: '$i$ angle d’incidence, $r$ angle de réfraction ($^\\circ$ ou $\\text{rad}$)',
+        condition: 'Passage air ($n_{\\text{air}} \\approx 1$) $\\to$ prisme d’indice $n$',
+      },
+      {
+        name: 'Prisme (2/4) — 2e loi de Descartes (face de sortie)',
+        latex: "\\sin i' = n \\cdot \\sin r'",
+        units: "$r'$ angle d’incidence interne, $i'$ angle d’émergence ($^\\circ$ ou $\\text{rad}$)",
+        condition: 'Passage prisme d’indice $n$ $\\to$ air ($n_{\\text{air}} \\approx 1$)',
+      },
+      {
+        name: 'Prisme (3/4) — Angle au sommet du prisme',
+        latex: "A = r + r'",
+        units: "$A$, $r$, $r'$ en degrés ($^\\circ$) ou radians ($\\text{rad}$)",
+        condition: 'Relation géométrique valable dans le triangle du prisme',
+      },
+      {
+        name: 'Prisme (4/4) — Angle de déviation du prisme',
+        latex: "D = i + i' - A",
+        units: "$D$ angle de déviation totale ($^\\circ$ ou $\\text{rad}$)",
+        condition: "Émergence possible si $n \\cdot \\sin r' \\le 1$ (sinon réflexion totale)",
+      },
     ],
     nationalChecklist: [
       'Tracer le schéma du dispositif de diffraction avec $\\theta$, $a$, $D$, $L$.',

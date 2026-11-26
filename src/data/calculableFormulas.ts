@@ -147,6 +147,52 @@ export const CALCULABLE_FORMULAS: CalculableFormula[] = [
       };
     }
   },
+  {
+    id: 'ondes-prisme-deviation',
+    name: 'Formules du prisme (r, r′, i′ et déviation D)',
+    domain: 'Ondes',
+    latex: "\\sin i = n\\sin r \\; ; \\; \\sin i' = n\\sin r' \\; ; \\; A = r + r' \\; ; \\; D = i + i' - A",
+    targetSymbol: 'D',
+    targetUnit: '°',
+    description: "Calcule r, r', i' et l'angle de déviation D d'un rayon traversant un prisme d'angle au sommet A et d'indice n.",
+    examNote: 'Vérifiez que la calculatrice est bien réglée en degrés (°) si A et i sont en degrés.',
+    variables: [
+      { symbol: 'i', label: "Angle d’incidence (i)", unit: '°', defaultVal: 45, step: 1, min: 0 },
+      { symbol: 'A', label: 'Angle au sommet du prisme (A)', unit: '°', defaultVal: 60, step: 1, min: 1 },
+      { symbol: 'n', label: 'Indice de réfraction (n)', unit: '', defaultVal: 1.5, step: 0.05, min: 1 }
+    ],
+    compute: (inputs) => {
+      const degToRad = Math.PI / 180;
+      const radToDeg = 180 / Math.PI;
+      const iDeg = inputs.i;
+      const aDeg = inputs.A;
+      const n = Math.max(1, inputs.n);
+      const rRad = Math.asin(Math.min(1, Math.max(-1, Math.sin(iDeg * degToRad) / n)));
+      const rDeg = rRad * radToDeg;
+      const rPrimeDeg = aDeg - rDeg;
+      const sinIPrime = n * Math.sin(rPrimeDeg * degToRad);
+
+      if (Math.abs(sinIPrime) > 1) {
+        return {
+          value: 0,
+          formatted: 'Réflexion totale interne (pas d’émergence)',
+          scientific: 'n \\cdot \\sin(r\') > 1',
+          unit: '°',
+          substitutionLatex: `r = ${rDeg.toFixed(2)}^\\circ,\\; r' = ${rPrimeDeg.toFixed(2)}^\\circ,\\; n\\sin r' = ${sinIPrime.toFixed(3)} > 1 \\implies \\text{Réflexion totale}`
+        };
+      }
+
+      const iPrimeDeg = Math.asin(sinIPrime) * radToDeg;
+      const dDeg = iDeg + iPrimeDeg - aDeg;
+      return {
+        value: dDeg,
+        formatted: `D = ${dDeg.toFixed(2)}° (r = ${rDeg.toFixed(2)}°, r' = ${rPrimeDeg.toFixed(2)}°, i' = ${iPrimeDeg.toFixed(2)}°)`,
+        scientific: `${dDeg.toFixed(2)}^\\circ`,
+        unit: '°',
+        substitutionLatex: `r = ${rDeg.toFixed(2)}^\\circ,\\; r' = ${rPrimeDeg.toFixed(2)}^\\circ,\\; i' = ${iPrimeDeg.toFixed(2)}^\\circ \\implies D = ${iDeg} + ${iPrimeDeg.toFixed(2)} - ${aDeg} = ${dDeg.toFixed(2)}^\\circ`
+      };
+    }
+  },
 
   // --- NUCLÉAIRE ---
   {

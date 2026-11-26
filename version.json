@@ -1,7 +1,7 @@
 {
   "version": "2.2.0",
-  "commit": "f80c023",
-  "commitDate": "2026-11-26T13:19:41+00:00",
-  "commitMessage": "feat(series): afficher la série /exercice sans solution d'emblée et résoudre sur demande",
-  "buildTime": "2026-11-26T13:40:43.980Z"
+  "commit": "43d64d3",
+  "commitDate": "2026-11-26T13:51:27+00:00",
+  "commitMessage": "fix(theme): corriger le fond sombre des formules mindmap et surfaces en mode clair",
+  "buildTime": "2026-11-26T14:35:55.266Z"
 }
