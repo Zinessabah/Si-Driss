@@ -97,3 +97,223 @@ code, pre, .font-mono {
   padding: 0.65em 0;
 }
 
+/* ============================================================================
+ * THÈME CLAIR (data-theme="light") — Lisibilité optimale en salle de classe
+ * ========================================================================== */
+html[data-theme="light"],
+html[data-theme="light"] body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] ::-webkit-scrollbar-track {
+  background: rgba(226, 232, 240, 0.7);
+}
+
+html[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.7);
+}
+
+html[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.85);
+}
+
+/* Surfaces principales */
+html[data-theme="light"] .bg-\[\#131314\],
+html[data-theme="light"] .bg-slate-950,
+html[data-theme="light"] .bg-slate-950\/60,
+html[data-theme="light"] .bg-slate-950\/70,
+html[data-theme="light"] .bg-slate-950\/80,
+html[data-theme="light"] .bg-slate-950\/85 {
+  background-color: #f8fafc !important;
+}
+
+html[data-theme="light"] .bg-\[\#131314\]\/95 {
+  background-color: rgba(248, 250, 252, 0.95) !important;
+}
+
+html[data-theme="light"] .from-\[\#131314\] {
+  --tw-gradient-from: #f8fafc !important;
+}
+
+html[data-theme="light"] .via-\[\#131314\]\/95 {
+  --tw-gradient-via: rgba(248, 250, 252, 0.95) !important;
+}
+
+html[data-theme="light"] .bg-\[\#141517\],
+html[data-theme="light"] .bg-\[\#17181c\],
+html[data-theme="light"] .bg-\[\#18191b\],
+html[data-theme="light"] .bg-slate-900,
+html[data-theme="light"] .bg-slate-900\/80,
+html[data-theme="light"] .bg-slate-900\/90 {
+  background-color: #ffffff !important;
+}
+
+html[data-theme="light"] .bg-\[\#111214\],
+html[data-theme="light"] .bg-\[\#131720\],
+html[data-theme="light"] .bg-\[\#1a202c\],
+html[data-theme="light"] .bg-\[\#1e1f20\],
+html[data-theme="light"] .bg-\[\#1e1f20\]\/95,
+html[data-theme="light"] .bg-\[\#202124\],
+html[data-theme="light"] .bg-slate-800,
+html[data-theme="light"] .bg-slate-800\/80 {
+  background-color: #f1f5f9 !important;
+}
+
+html[data-theme="light"] .bg-\[\#282a2c\],
+html[data-theme="light"] .bg-\[\#282a2c\]\/70,
+html[data-theme="light"] .bg-\[\#2d3748\],
+html[data-theme="light"] .bg-\[\#323538\],
+html[data-theme="light"] .bg-\[\#3c4043\],
+html[data-theme="light"] .bg-slate-700,
+html[data-theme="light"] .hover\:bg-\[\#202124\]:hover,
+html[data-theme="light"] .hover\:bg-\[\#282a2c\]:hover,
+html[data-theme="light"] .hover\:bg-\[\#282a2c\]\/70:hover,
+html[data-theme="light"] .hover\:bg-\[\#323538\]:hover,
+html[data-theme="light"] .hover\:bg-\[\#3c4043\]:hover,
+html[data-theme="light"] .hover\:bg-slate-700:hover,
+html[data-theme="light"] .focus-within\:bg-\[\#202124\]:focus-within {
+  background-color: #e2e8f0 !important;
+}
+
+html[data-theme="light"] .hover\:bg-\[\#1e1f20\]:hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* Bannières / cartes pastel */
+html[data-theme="light"] .bg-emerald-950\/40 { background-color: #ecfdf5 !important; }
+html[data-theme="light"] .bg-rose-950\/40,
+html[data-theme="light"] .bg-rose-950\/60,
+html[data-theme="light"] .hover\:bg-rose-950\/50:hover { background-color: #fff1f2 !important; }
+html[data-theme="light"] .bg-sky-950\/40 { background-color: #f0f9ff !important; }
+html[data-theme="light"] .bg-amber-950\/40 { background-color: #fffbeb !important; }
+
+html[data-theme="light"] .from-sky-950\/40 { --tw-gradient-from: #f0f9ff !important; }
+html[data-theme="light"] .via-\[\#18191b\] { --tw-gradient-via: #ffffff !important; }
+html[data-theme="light"] .to-purple-950\/40 { --tw-gradient-to: #faf5ff !important; }
+html[data-theme="light"] .from-rose-950\/60 { --tw-gradient-from: #fff1f2 !important; }
+html[data-theme="light"] .via-slate-900 { --tw-gradient-via: #ffffff !important; }
+html[data-theme="light"] .to-amber-950\/40 { --tw-gradient-to: #fffbeb !important; }
+html[data-theme="light"] .to-slate-900 { --tw-gradient-to: #ffffff !important; }
+
+/* Bordures */
+html[data-theme="light"] .border-\[\#282a2c\],
+html[data-theme="light"] .border-\[\#282a2c\]\/60,
+html[data-theme="light"] .border-\[\#282a2c\]\/80,
+html[data-theme="light"] .border-\[\#2e3034\],
+html[data-theme="light"] .border-\[\#222a38\],
+html[data-theme="light"] .border-slate-800,
+html[data-theme="light"] .border-slate-800\/80 {
+  border-color: #e2e8f0 !important;
+}
+
+html[data-theme="light"] .border-\[\#3c4043\],
+html[data-theme="light"] .border-\[\#3c4043\]\/80,
+html[data-theme="light"] .border-\[\#3c4043\]\/60,
+html[data-theme="light"] .border-slate-700,
+html[data-theme="light"] .hover\:border-\[\#3c4043\]:hover {
+  border-color: #cbd5e1 !important;
+}
+
+/* Textes & contrastes WCAG */
+html[data-theme="light"] .text-white,
+html[data-theme="light"] .text-\[\#e3e3e3\],
+html[data-theme="light"] .text-\[\#f8fafc\],
+html[data-theme="light"] .text-slate-100,
+html[data-theme="light"] .text-slate-200,
+html[data-theme="light"] .hover\:text-white:hover,
+html[data-theme="light"] .hover\:text-\[\#e3e3e3\]:hover {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .text-\[\#c4c7c5\],
+html[data-theme="light"] .text-slate-300 {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] .text-\[\#9aa0a6\],
+html[data-theme="light"] .text-\[\#8e918f\],
+html[data-theme="light"] .text-slate-400,
+html[data-theme="light"] .text-slate-500 {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .text-\[\#8ab4f8\],
+html[data-theme="light"] .group-hover\:text-\[\#8ab4f8\] {
+  color: #2563eb !important;
+}
+
+html[data-theme="light"] .text-sky-300,
+html[data-theme="light"] .text-sky-400,
+html[data-theme="light"] .hover\:text-sky-300:hover {
+  color: #0284c7 !important;
+}
+
+html[data-theme="light"] .text-emerald-200,
+html[data-theme="light"] .text-emerald-300,
+html[data-theme="light"] .text-emerald-400,
+html[data-theme="light"] .hover\:text-emerald-300:hover {
+  color: #059669 !important;
+}
+
+html[data-theme="light"] .text-amber-200,
+html[data-theme="light"] .text-amber-300,
+html[data-theme="light"] .text-amber-400 {
+  color: #b45309 !important;
+}
+
+html[data-theme="light"] .text-purple-300,
+html[data-theme="light"] .text-purple-400,
+html[data-theme="light"] .hover\:text-purple-300:hover {
+  color: #7e22ce !important;
+}
+
+html[data-theme="light"] .text-rose-200,
+html[data-theme="light"] .text-rose-300,
+html[data-theme="light"] .text-rose-400 {
+  color: #be123c !important;
+}
+
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Boutons d'accent colorés & avatars conservent un texte blanc lisible */
+html[data-theme="light"] [class*="bg-sky-500"].text-white,
+html[data-theme="light"] [class*="bg-blue-500"].text-white,
+html[data-theme="light"] [class*="bg-blue-600"].text-white,
+html[data-theme="light"] [class*="bg-purple-500"].text-white,
+html[data-theme="light"] [class*="bg-purple-600"].text-white,
+html[data-theme="light"] [class*="bg-rose-600"].text-white,
+html[data-theme="light"] [class*="bg-emerald-600"].text-white,
+html[data-theme="light"] [class*="bg-gradient-to-"].text-white,
+html[data-theme="light"] [class*="bg-gradient-to-"] .text-white,
+html[data-theme="light"] [class*="bg-sky-600"] .text-white,
+html[data-theme="light"] [class*="bg-blue-600"] .text-white,
+html[data-theme="light"] [class*="bg-purple-500"] .text-white,
+html[data-theme="light"] [class*="bg-rose-600"] .text-white {
+  color: #ffffff !important;
+}
+
+/* Bouton Envoyer (bg-white text-slate-950) inversé proprement en mode clair */
+html[data-theme="light"] button.bg-white {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="light"] button.bg-white:hover {
+  background-color: #1e293b !important;
+}
+
+/* Formules KaTeX en encre foncée */
+html[data-theme="light"] .katex {
+  color: #0f172a !important;
+}
+
+/* Préserver les écrans de schémas/oscilloscopes SVG en fond sombre lisible */
+html[data-theme="light"] svg text[fill="#f8fafc"] {
+  fill: #f8fafc;
+}
+
+

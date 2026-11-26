@@ -9,6 +9,7 @@ import { ChapterInfo } from './data/curriculum';
 import { TrapItem } from './data/pitfalls';
 import { useBranch } from './hooks/useBranch';
 import { useApiKey, setAccessToken, setAdminToken } from './hooks/useApiKey';
+import { useTheme } from './hooks/useTheme';
 import { BranchSelectorModal } from './components/BranchSelectorModal';
 import { GeminiSidebar } from './components/GeminiSidebar';
 import { SavedSession } from './types/chat';
@@ -28,6 +29,8 @@ import {
   Maximize2,
   Palette,
   Activity,
+  Sun,
+  Moon,
 } from 'lucide-react';
 
 // (H10) Code-splitting : les onglets secondaires, les simulateurs et le générateur
@@ -56,6 +59,7 @@ const TabSuspenseFallback = () => (
 export default function App() {
   const { branch, hasSelectedBranch, isSM } = useBranch();
   const { hasApiKey } = useApiKey();
+  const { theme, toggleTheme } = useTheme();
 
   const [activeTab, setActiveTab] = useState<'chat' | 'audit' | 'simulators' | 'formulas' | 'pitfalls' | 'documents'>('chat');
   const [activeSimulator, setActiveSimulator] = useState<'waves' | 'diffraction' | 'dispersion' | 'rlc' | 'rc-exao' | 'am' | 'mechanics' | 'titration'>('waves');
@@ -243,8 +247,25 @@ export default function App() {
               </div>
             )}
 
-            {/* Right: API Key Badge + New Chat Icon */}
-            <div className="flex items-center gap-2">
+            {/* Right: Theme Toggle + PWA + API Key Badge + New Chat Icon */}
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#1e1f20] hover:bg-[#282a2c] text-[#c4c7c5] hover:text-white border border-[#282a2c] transition touch-manipulation cursor-pointer text-xs font-medium"
+                title={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+                aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+              >
+                {theme === 'dark' ? (
+                  <Sun className="w-3.5 h-3.5 text-amber-400" />
+                ) : (
+                  <Moon className="w-3.5 h-3.5 text-[#8ab4f8]" />
+                )}
+                <span className="hidden md:inline">
+                  {theme === 'dark' ? 'Clair' : 'Sombre'}
+                </span>
+              </button>
+
               <PWAInstallButton variant="nav" />
 
               <ApiKeyStatusBadge compact onOpenModal={() => setIsApiKeyModalOpen(true)} />
