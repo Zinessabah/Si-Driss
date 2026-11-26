@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { Router } from 'express';
 import { validateKeyLimiter } from '../security';
 import { recordChatEvent } from '../metrics';
@@ -12,18 +13,45 @@ import {
 } from '../ai/providers';
 import { generateUnifiedCompletion, streamUnifiedChat, trimUpstreamError } from '../ai/completion';
 import { sseWrite } from '../ai/sse';
-import { extractTextFromPdf, hasExplicitSolveIntent, parseSlashCommand, searchLocalDocumentsDetailed } from '../rag';
+import {
+  extractTextFromPdf,
+  hasExplicitSolveIntent,
+  hasReadablePdfText,
+  parseSlashCommand,
+  renderPdfPagesAsPngAttachments,
+  resolveOfficialPdfPath,
+  searchLocalDocumentsDetailed,
+  transcribeScannedOfficialPdf,
+} from '../rag';
+import { extractOcrFromPdfBuffer, isLikelyGeminiKey } from '../visionExtractor';
 import { getSiDrissBasePrompt, getInstruction, normalizeBranchParam } from '../prompts';
 import { sanitizeStudentProfile, sanitizeStudentMemory } from '../personaLoader';
 import type { ClientAttachment, ClientMessage } from '../ai/adapters';
 
 const MAX_ATTACHED_PDF_TEXT_CHARS = 24_000;
+const MAX_INLINE_OFFICIAL_PDF_BYTES = 11 * 1024 * 1024;
+const VISION_IMAGE_PROVIDERS = new Set<SupportedProvider>(['openai', 'anthropic', 'openrouter']);
+
+function resolveGeminiVisionKey(aiConfig: ResolvedAIConfig): string {
+  if (aiConfig.provider === 'gemini' && isLikelyGeminiKey(aiConfig.apiKey)) {
+    return aiConfig.apiKey;
+  }
+  if (!aiConfig.clientProvidedKey) {
+    const envKey = sanitizeApiKey(process.env.GEMINI_API_KEY || '');
+    if (isLikelyGeminiKey(envKey)) return envKey;
+  }
+  return '';
+}
 
 /**
- * Extrait le texte des pièces jointes PDF (si absent) afin que le RAG et TOUS
- * les fournisseurs OpenAI/Anthropic/Groq/Ollama (pas seulement Gemini) puissent lire le PDF.
+ * Extrait le texte des pièces jointes PDF (ou lance un OCR / rendu pages pour les PDF scannés)
+ * afin que tous les fournisseurs puissent lire automatiquement les sujets PDF scannés.
  */
-async function enrichPdfAttachments(messages: ClientMessage[]): Promise<ClientMessage[]> {
+async function enrichPdfAttachments(
+  messages: ClientMessage[],
+  geminiOcrKey: string,
+  provider: SupportedProvider
+): Promise<ClientMessage[]> {
   if (!Array.isArray(messages)) return [];
   const enriched: ClientMessage[] = [];
 
@@ -37,21 +65,46 @@ async function enrichPdfAttachments(messages: ClientMessage[]): Promise<ClientMe
     const updatedAtts: ClientAttachment[] = [];
     for (const att of msg.attachments) {
       if (!att || typeof att !== 'object') continue;
-      if (att.mimeType === 'application/pdf' && typeof att.data === 'string' && !att.text) {
-        try {
-          const compact = att.data.replace(/\s+/g, '');
-          const commaIdx = compact.indexOf(',');
-          const rawBase64 = commaIdx >= 0 ? compact.slice(commaIdx + 1) : compact;
-          if (rawBase64) {
-            const pdfText = (await extractTextFromPdf(Buffer.from(rawBase64, 'base64'))).trim();
-            if (pdfText) {
-              updatedAtts.push({ ...att, text: pdfText.slice(0, MAX_ATTACHED_PDF_TEXT_CHARS) });
-              continue;
+      if (att.mimeType === 'application/pdf') {
+        const cleanExistingText = att.text && hasReadablePdfText(att.text) ? att.text : undefined;
+        if (!cleanExistingText && typeof att.data === 'string') {
+          try {
+            const compact = att.data.replace(/\s+/g, '');
+            const commaIdx = compact.indexOf(',');
+            const rawBase64 = commaIdx >= 0 ? compact.slice(commaIdx + 1) : compact;
+            if (rawBase64) {
+              const pdfBuffer = Buffer.from(rawBase64, 'base64');
+              const pdfText = (await extractTextFromPdf(pdfBuffer)).trim();
+              if (hasReadablePdfText(pdfText)) {
+                updatedAtts.push({ ...att, text: pdfText.slice(0, MAX_ATTACHED_PDF_TEXT_CHARS) });
+                continue;
+              }
+
+              // PDF scanné : tentative d'OCR automatique via Gemini Vision si une clé Gemini est disponible
+              if (geminiOcrKey) {
+                const ocr = await extractOcrFromPdfBuffer(pdfBuffer, att.name || 'document.pdf', geminiOcrKey, 45_000);
+                if (ocr.status === 'ok' && hasReadablePdfText(ocr.text)) {
+                  updatedAtts.push({ ...att, text: ocr.text.slice(0, MAX_ATTACHED_PDF_TEXT_CHARS) });
+                  continue;
+                }
+              }
+
+              // Secours multimodal pour OpenAI / Anthropic / OpenRouter : convertir les pages scannées en PNG
+              if (VISION_IMAGE_PROVIDERS.has(provider)) {
+                const pageImgs = await renderPdfPagesAsPngAttachments(pdfBuffer, undefined, 6);
+                updatedAtts.push({ ...att, text: undefined });
+                for (const img of pageImgs) {
+                  updatedAtts.push(img);
+                }
+                continue;
+              }
             }
+          } catch (pdfErr: any) {
+            console.warn('[Chat] Extraction PDF pièce jointe échouée:', pdfErr?.message || pdfErr);
           }
-        } catch (pdfErr: any) {
-          console.warn('[Chat] Extraction PDF pièce jointe échouée:', pdfErr?.message || pdfErr);
         }
+        updatedAtts.push(cleanExistingText ? att : { ...att, text: cleanExistingText });
+        continue;
       }
       updatedAtts.push(att);
     }
@@ -285,7 +338,8 @@ async function prepareChatContext(
   rawProfile?: unknown,
   rawMemory?: unknown
 ) {
-  const enrichedMessages = await enrichPdfAttachments(messages);
+  const geminiOcrKey = resolveGeminiVisionKey(aiConfig);
+  const enrichedMessages = await enrichPdfAttachments(messages, geminiOcrKey, aiConfig.provider);
   let lastUserIdx = -1;
   for (let i = enrichedMessages.length - 1; i >= 0; i--) {
     if (enrichedMessages[i]?.role === 'user') {
@@ -350,28 +404,88 @@ async function prepareChatContext(
   const searchTerms = activeCommandArg
     ? activeCommandArg
     : buildPersistentSearchTerms(effectiveMessages);
-  const { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(
+  const searchOpts = {
+    hasUserAttachments,
+    explicitExamRequested,
+    explicitOfficialRequested,
+    latestUserText: slashCmd
+      ? slashCmd.arg || slashCmd.effectivePrompt
+      : inheritedSlash
+      ? `${inheritedSlash.arg} ${lastUserText}`.trim()
+      : lastUserText,
+    forcedCommand: activeCommand,
+    commandArg: inheritedSlash && !slashCmd ? inheritedSlash.arg : slashCmd?.arg,
+  };
+  let { contextText: matchedDocs, officialSource, isScannedPdf } = await searchLocalDocumentsDetailed(
     searchTerms,
     branch,
-    {
-      hasUserAttachments,
-      explicitExamRequested,
-      explicitOfficialRequested,
-      latestUserText: slashCmd
-        ? slashCmd.arg || slashCmd.effectivePrompt
-        : inheritedSlash
-        ? `${inheritedSlash.arg} ${lastUserText}`.trim()
-        : lastUserText,
-      forcedCommand: activeCommand,
-      commandArg: inheritedSlash && !slashCmd ? inheritedSlash.arg : slashCmd?.arg,
-    }
+    searchOpts
   );
+
+  // Lecture automatique des PDF officiels scannés : OCR persistant en priorité (pour tous les moteurs),
+  // puis injection visuelle directe (PDF natif Gemini ou pages PNG pour OpenAI/Anthropic/OpenRouter).
+  let inlineOfficialPdfAttached = false;
+  let finalMessages = effectiveMessages;
+
+  if (officialSource?.isPdf && isScannedPdf) {
+    if (geminiOcrKey) {
+      const ocrOk = await transcribeScannedOfficialPdf(officialSource.relativePath, geminiOcrKey);
+      if (ocrOk) {
+        const refreshed = await searchLocalDocumentsDetailed(searchTerms, branch, searchOpts);
+        matchedDocs = refreshed.contextText;
+        officialSource = refreshed.officialSource;
+        isScannedPdf = refreshed.isScannedPdf;
+      }
+    }
+
+    if (officialSource?.isPdf && isScannedPdf && lastUserIdx >= 0) {
+      const absPdfPath = resolveOfficialPdfPath(officialSource.relativePath);
+      if (absPdfPath) {
+        const extraAttachments: ClientAttachment[] = [];
+        if (aiConfig.provider === 'gemini') {
+          try {
+            const stat = fs.statSync(absPdfPath);
+            if (stat.size <= MAX_INLINE_OFFICIAL_PDF_BYTES) {
+              extraAttachments.push({
+                name: officialSource.name,
+                type: 'pdf',
+                mimeType: 'application/pdf',
+                data: fs.readFileSync(absPdfPath).toString('base64'),
+              });
+            }
+          } catch {}
+        } else if (VISION_IMAGE_PROVIDERS.has(aiConfig.provider)) {
+          const targetPages =
+            officialSource.pages && officialSource.pages.length > 1
+              ? officialSource.pages
+              : Array.from({ length: Math.min(officialSource.totalPages || 1, 6) }, (_, idx) => idx + 1);
+          const pngPages = await renderPdfPagesAsPngAttachments(absPdfPath, targetPages, 6);
+          extraAttachments.push(...pngPages);
+        }
+
+        if (extraAttachments.length > 0) {
+          inlineOfficialPdfAttached = true;
+          matchedDocs = matchedDocs.replace(
+            /\n?\[IMPORTANT — PDF(?: MANUSCRIT \/)? SCANNÉ SANS OCR :[^\]]+\]\n?/g,
+            '\n[PDF SCANNÉ JOINT VISUELLEMENT — Lis directement les pages jointes pour extraire et traiter l’énoncé exact.]\n'
+          );
+          finalMessages = effectiveMessages.map((msg, idx) =>
+            idx === lastUserIdx
+              ? { ...msg, attachments: [...(msg.attachments || []), ...extraAttachments] }
+              : msg
+          );
+        }
+      }
+    }
+  }
+
   const validatedProfile = sanitizeStudentProfile(rawProfile);
   const validatedMemory = sanitizeStudentMemory(rawMemory, branch);
 
   const fullInstruction = getInstruction(effectiveMode, effectiveSocratic, matchedDocs, branch, typeof context === 'string' ? context : undefined, {
     hasOfficialPdf: Boolean(officialSource?.isPdf),
     isScannedPdf,
+    inlineOfficialPdfAttached,
     officialCategory: officialSource?.category,
     solveRequested,
     skillQuery: `${lastUserText} ${matchedDocs.slice(0, 400)}`,
@@ -390,7 +504,7 @@ async function prepareChatContext(
   });
 
   return {
-    effectiveMessages,
+    effectiveMessages: finalMessages,
     fullInstruction,
     matchedDocs,
     officialSource,

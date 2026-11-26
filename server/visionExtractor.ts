@@ -112,12 +112,40 @@ Important :
 3. Sois d'une précision mathématique irréprochable sur les valeurs numériques lues sur les axes.`;
 
 /**
- * Analyse visuellement un PDF avec un modèle de vision multimodal (Gemini)
- * avec gestion fine des quotas (429), pannes amont (502/503) et délais d'attente.
+ * Prompt complet d'OCR scientifique + décodage de schémas pour les PDF scannés (images sans couche texte).
+ * Produit un texte structuré page par page (-- 1 of N --) puis la section de transcription visuelle.
  */
-export async function extractVisualDataFromPdfDetailed(
-  pdfPath: string,
-  apiKey: string
+export const SCANNED_PDF_OCR_PROMPT = `Tu es un professeur agrégé et inspecteur national de Physique-Chimie du baccalauréat marocain (2BAC BIOF).
+Ce document PDF est un SCAN D'EXAMEN OU D'EXERCICE (aucune couche texte n'est extractible).
+Tu dois le lire intégralement et produire une transcription EXHAUSTIVE, FIDÈLE et DIRECTEMENT EXPLOITABLE :
+
+PARTIE 1 — TRANSCRIPTION INTÉGRALE DE L'ÉNONCÉ PAGE PAR PAGE :
+- Indique chaque changement de page exactement sous la forme :
+  -- 1 of N --
+  (puis -- 2 of N --, etc.)
+- Transcris mot pour mot tous les titres (ex: EXERCICE 1, EXERCICE 2, Chimie, Physique, Partie I...), toutes les questions, données numériques, constantes, unités et propositions de choix (QCM).
+- Si le document original est en arabe, traduis-le fidèlement en français scientifique BIOF en conservant la numérotation et toutes les valeurs exactes.
+- Formate toutes les équations, réactions chimiques, vecteurs (\\vec{P}, \\vec{R}, \\vec{f}) et grandeurs en LaTeX ($...$ et $$...$$).
+
+PARTIE 2 — TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES :
+Juste après le texte de la dernière page, ajoute obligatoirement une ligne contenant exactement :
+${SCIENTIFIC_VISION_MARKER}
+suivie, pour CHAQUE figure, montage, circuit, tableau de mesures ou courbe du document, d'un bloc structuré :
+--- [FIGURE / SCHÉMA DÉCODÉ : <Nom ou Numéro exact>] ---
+- **Contexte de l'exercice** : <discipline et chapitre>
+- **Description du dispositif ou montage** : <composants, notations, orientation des axes, vecteurs>
+- **Analyse détaillée du graphe / courbe / tableau** : <axes, unités, échelles, valeurs initiales, tangentes, asymptotes, points remarquables, périodes>
+--------------------------------------------------------------------------------
+
+RÈGLE ABSOLUE : N'invente aucune valeur absente du scan et ne saute aucune question.`;
+
+async function runGeminiPdfVision(
+  base64Data: string,
+  byteSize: number,
+  fileName: string,
+  prompt: string,
+  apiKey: string,
+  timeoutMs: number = VISION_REQUEST_TIMEOUT_MS
 ): Promise<VisionExtractionOutcome> {
   const cleanKey = String(apiKey || '').trim();
   if (!cleanKey || !isLikelyGeminiKey(cleanKey)) {
@@ -128,30 +156,15 @@ export async function extractVisualDataFromPdfDetailed(
     };
   }
 
-  if (!fs.existsSync(pdfPath)) {
-    console.warn(`[VisionExtractor] Fichier introuvable: ${pdfPath}`);
-    return { text: '', status: 'skipped', errorMessage: 'Fichier introuvable.' };
-  }
-
-  let stat: fs.Stats;
-  try {
-    stat = fs.statSync(pdfPath);
-  } catch {
-    return { text: '', status: 'skipped', errorMessage: 'Impossible de lire les métadonnées du PDF.' };
-  }
-
-  if (stat.size > MAX_INLINE_PDF_BYTES) {
+  if (byteSize > MAX_INLINE_PDF_BYTES) {
     console.warn(
-      `[VisionExtractor] Fichier "${path.basename(pdfPath)}" ignoré pour la vision (${(
-        stat.size /
+      `[VisionExtractor] Fichier "${fileName}" ignoré pour la vision (${(
+        byteSize /
         (1024 * 1024)
-      ).toFixed(1)} Mo > 14 Mo inline max). Texte déjà indexé.`
+      ).toFixed(1)} Mo > 11 Mo inline max).`
     );
-    return { text: '', status: 'skipped', errorMessage: 'PDF trop volumineux pour analyse vision inline (>14 Mo).' };
+    return { text: '', status: 'skipped', errorMessage: 'PDF trop volumineux pour analyse vision inline (>11 Mo).' };
   }
-
-  const base64Data = fs.readFileSync(pdfPath).toString('base64');
-  const fileName = path.basename(pdfPath);
 
   const ai = new GoogleGenAI({
     apiKey: cleanKey,
@@ -167,7 +180,7 @@ export async function extractVisualDataFromPdfDetailed(
   for (let i = 0; i < candidateModels.length; i++) {
     const model = candidateModels[i];
     try {
-      console.log(`[VisionExtractor] Décodage visuel pour "${fileName}" via ${model}...`);
+      console.log(`[VisionExtractor] Analyse PDF "${fileName}" via ${model}...`);
       const response = await ai.models.generateContent({
         model,
         contents: [
@@ -181,14 +194,14 @@ export async function extractVisualDataFromPdfDetailed(
                 },
               },
               {
-                text: SCIENTIFIC_VISION_PROMPT,
+                text: prompt,
               },
             ],
           },
         ],
         config: {
           ...(!model.startsWith('gemini-4-') ? { temperature: 0.1 } : {}),
-          abortSignal: AbortSignal.timeout(VISION_REQUEST_TIMEOUT_MS),
+          abortSignal: AbortSignal.timeout(timeoutMs),
         },
       });
 
@@ -197,7 +210,7 @@ export async function extractVisualDataFromPdfDetailed(
         console.log(`[VisionExtractor] Succès pour "${fileName}": ${visualText.length} caractères.`);
         return { text: visualText.trim(), status: 'ok' };
       }
-      return { text: '', status: 'skipped', errorMessage: 'Aucune figure détectée.' };
+      return { text: '', status: 'skipped', errorMessage: 'Aucun contenu exploitable détecté.' };
     } catch (err: any) {
       const httpStatus = extractHttpStatus(err);
       const errMsg = String(err?.message || err || '').slice(0, 220);
@@ -213,12 +226,11 @@ export async function extractVisualDataFromPdfDetailed(
 
       if (isRateLimitError(err, httpStatus)) {
         const retryAfterMs = extractRetryAfterMs(err);
-        // Un seul essai après pause si quota par minute ; au deuxième 429 on arrête le lot proprement
         if (!retried429 && retryAfterMs <= 20_000) {
           retried429 = true;
           console.log(`[VisionExtractor] Pause quota 429 de ${Math.round(retryAfterMs / 1000)}s avant réessai...`);
           await sleep(retryAfterMs + Math.floor(Math.random() * 1000));
-          i--; // réessayer le même modèle une seule fois
+          i--;
           continue;
         }
         return {
@@ -237,7 +249,6 @@ export async function extractVisualDataFromPdfDetailed(
         continue;
       }
 
-      // Erreur 400 payload invalide sur ce PDF ou 404 modèle inconnu : essayer modèle suivant si 404, sinon abandonner ce PDF
       if (httpStatus === 404 && i < candidateModels.length - 1) {
         continue;
       }
@@ -254,6 +265,72 @@ export async function extractVisualDataFromPdfDetailed(
     status: lastTransientMsg ? 'transient_error' : 'skipped',
     errorMessage: lastTransientMsg || undefined,
   };
+}
+
+/**
+ * Analyse visuellement un PDF avec un modèle de vision multimodal (Gemini)
+ * avec gestion fine des quotas (429), pannes amont (502/503) et délais d'attente.
+ */
+export async function extractVisualDataFromPdfDetailed(
+  pdfPath: string,
+  apiKey: string
+): Promise<VisionExtractionOutcome> {
+  if (!fs.existsSync(pdfPath)) {
+    console.warn(`[VisionExtractor] Fichier introuvable: ${pdfPath}`);
+    return { text: '', status: 'skipped', errorMessage: 'Fichier introuvable.' };
+  }
+
+  let stat: fs.Stats;
+  try {
+    stat = fs.statSync(pdfPath);
+  } catch {
+    return { text: '', status: 'skipped', errorMessage: 'Impossible de lire les métadonnées du PDF.' };
+  }
+
+  const base64Data = fs.readFileSync(pdfPath).toString('base64');
+  return runGeminiPdfVision(base64Data, stat.size, path.basename(pdfPath), SCIENTIFIC_VISION_PROMPT, apiKey);
+}
+
+/**
+ * Effectue l'OCR complet + transcription visuelle d'un PDF scanné (sur disque) via Gemini Vision.
+ */
+export async function extractScannedPdfFullContent(
+  pdfPath: string,
+  apiKey: string,
+  timeoutMs: number = VISION_REQUEST_TIMEOUT_MS
+): Promise<VisionExtractionOutcome> {
+  if (!fs.existsSync(pdfPath)) {
+    return { text: '', status: 'skipped', errorMessage: 'Fichier introuvable.' };
+  }
+
+  let stat: fs.Stats;
+  try {
+    stat = fs.statSync(pdfPath);
+  } catch {
+    return { text: '', status: 'skipped', errorMessage: 'Impossible de lire les métadonnées du PDF.' };
+  }
+
+  const base64Data = fs.readFileSync(pdfPath).toString('base64');
+  return runGeminiPdfVision(base64Data, stat.size, path.basename(pdfPath), SCANNED_PDF_OCR_PROMPT, apiKey, timeoutMs);
+}
+
+/**
+ * Effectue l'OCR complet d'un PDF scanné transmis sous forme de Buffer (pièce jointe chat).
+ */
+export async function extractOcrFromPdfBuffer(
+  pdfBuffer: Buffer,
+  fileName: string,
+  apiKey: string,
+  timeoutMs: number = VISION_REQUEST_TIMEOUT_MS
+): Promise<VisionExtractionOutcome> {
+  return runGeminiPdfVision(
+    pdfBuffer.toString('base64'),
+    pdfBuffer.length,
+    fileName,
+    SCANNED_PDF_OCR_PROMPT,
+    apiKey,
+    timeoutMs
+  );
 }
 
 /**

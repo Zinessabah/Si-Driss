@@ -31,6 +31,7 @@ import { MathView } from './MathView';
 import { OfficialExamPageViewer } from './OfficialExamPageViewer';
 import { SavedSession, ChatMessage, ChatAttachment, OfficialSourceRef } from '../types/chat';
 import { compressImageFile, safeSaveSessions, safeLoadSessions } from '../utils/chatStorage';
+import { extractClientPdfText, hasMeaningfulPdfText } from '../utils/pdfClientExtractor';
 import { useModalA11y } from '../hooks/useModalA11y';
 import { ExercisePickerModal } from './ExercisePickerModal';
 import { GraphicsGalleryModal } from './GraphicsGalleryModal';
@@ -537,14 +538,16 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
           });
       } else if (isPdf) {
         const reader = new FileReader();
-        reader.onload = (event) => {
+        reader.onload = async (event) => {
           const dataUrl = event.target?.result as string;
+          const extractedText = await extractClientPdfText(file);
           const newAtt: ChatAttachment = {
             id: `att_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
             name: file.name,
             type: 'pdf',
             mimeType: 'application/pdf',
             data: dataUrl,
+            ...(extractedText ? { text: extractedText } : {}),
             size: file.size,
           };
           setPendingAttachments((prev) => [...prev, newAtt]);
@@ -875,9 +878,9 @@ export const SocraticChat: React.FC<SocraticChatProps> = ({
 
       const isCurrentTurn = idx === lastUserMsgIndex;
       const cleanAttachments = m.attachments.map((att) => {
-        // Pour les PDF dont le texte extrait est déjà disponible, transmettre le texte extrait
-        // sur les anciens tours suffit largement et allège les requêtes.
-        if (!isCurrentTurn && att.text && att.mimeType === 'application/pdf') {
+        // Pour les PDF dont un véritable texte extrait est disponible, transmettre le texte extrait
+        // sur les anciens tours allège les requêtes ; sinon on conserve le binaire pour les PDF scannés.
+        if (!isCurrentTurn && hasMeaningfulPdfText(att.text) && att.mimeType === 'application/pdf') {
           return {
             name: att.name,
             type: att.type,

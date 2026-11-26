@@ -5,6 +5,7 @@ import { PDFParse } from 'pdf-parse';
 import { DOCS_DIR } from './config';
 import {
   SCIENTIFIC_VISION_MARKER,
+  extractScannedPdfFullContent,
   extractVisualDataFromPdfDetailed,
   isLikelyGeminiKey,
 } from './visionExtractor';
@@ -1116,10 +1117,83 @@ function splitPdfIntoPages(bodyOnly: string): { pages: PdfPageSlice[]; totalPage
   return { pages, totalPages };
 }
 
-function isScannedPdfContent(bodyOnly: string, totalPages: number): boolean {
+export function isScannedPdfContent(bodyOnly: string, totalPages: number): boolean {
   const cleanTextLen = bodyOnly.replace(/^--\s*\d+\s+of\s+\d+\s*--$/gm, '').trim().length;
   const avgCharsPerPage = totalPages > 0 ? cleanTextLen / totalPages : cleanTextLen;
   return cleanTextLen < 150 || (totalPages > 1 && avgCharsPerPage < 50);
+}
+
+/**
+ * Vérifie si un texte extrait de PDF contient un véritable énoncé lisible
+ * (et non uniquement des marqueurs de pages vides "-- 1 of N --").
+ */
+export function hasReadablePdfText(rawText: string): boolean {
+  if (!rawText) return false;
+  const markerIdx = rawText.indexOf(SCIENTIFIC_VISION_MARKER);
+  const bodyOnly = markerIdx !== -1 ? rawText.slice(0, markerIdx) : rawText;
+  const { totalPages } = splitPdfIntoPages(bodyOnly);
+  return !isScannedPdfContent(bodyOnly, totalPages);
+}
+
+/**
+ * Résout de manière sécurisée le chemin absolu d'un document officiel dans DOCS_DIR.
+ */
+export function resolveOfficialPdfPath(relativePath: string): string | null {
+  if (!relativePath) return null;
+  const root = path.resolve(DOCS_DIR);
+  const resolved = path.resolve(root, relativePath);
+  const rootWithSep = root.endsWith(path.sep) ? root : root + path.sep;
+  if (!resolved.startsWith(rootWithSep)) return null;
+  if (!fs.existsSync(resolved)) return null;
+  return resolved;
+}
+
+/**
+ * Rend une sélection de pages d'un PDF scanné en images PNG (sans outil externe)
+ * pour les modèles multimodaux (OpenAI / Anthropic / OpenRouter) ou en secours.
+ */
+export async function renderPdfPagesAsPngAttachments(
+  pdfSource: string | Buffer,
+  pageNumbers?: number[],
+  maxPages: number = 6
+): Promise<{ name: string; type: 'image'; mimeType: 'image/png'; data: string }[]> {
+  let parser: PDFParse | null = null;
+  try {
+    const buf = typeof pdfSource === 'string' ? fs.readFileSync(pdfSource) : pdfSource;
+    const baseName = typeof pdfSource === 'string' ? path.basename(pdfSource) : 'document.pdf';
+    parser = new PDFParse({ data: buf });
+    const partial =
+      pageNumbers && pageNumbers.length > 0
+        ? Array.from(new Set(pageNumbers.filter((p) => Number.isInteger(p) && p >= 1))).slice(0, maxPages)
+        : undefined;
+    const shot = await parser.getScreenshot({
+      ...(partial && partial.length > 0 ? { partial } : { first: maxPages }),
+      scale: 1.35,
+      imageDataUrl: true,
+      imageBuffer: false,
+    });
+    const out: { name: string; type: 'image'; mimeType: 'image/png'; data: string }[] = [];
+    for (const p of (shot?.pages || []).slice(0, maxPages)) {
+      if (p?.dataUrl) {
+        out.push({
+          name: `${baseName} (p.${p.pageNumber})`,
+          type: 'image',
+          mimeType: 'image/png',
+          data: p.dataUrl,
+        });
+      }
+    }
+    return out;
+  } catch (err: any) {
+    console.warn('[RAG] Échec rendu PNG des pages PDF:', err?.message || err);
+    return [];
+  } finally {
+    if (parser) {
+      try {
+        await parser.destroy();
+      } catch {}
+    }
+  }
 }
 
 function buildCourseExcerptAndPages(
@@ -1896,9 +1970,10 @@ export async function getFreshExtractedPdfText(
   const existingContent = isFresh ? fs.readFileSync(txtPath, 'utf-8') : '';
 
   const alreadyHasVisuals = existingContent.includes(SCIENTIFIC_VISION_MARKER);
+  const alreadyHasReadableBody = isFresh ? hasReadablePdfText(existingContent) : false;
 
-  // Si le cache est à jour et possède déjà la transcription visuelle, ou si aucune clé vision valide n'est fournie
-  if (isFresh && (alreadyHasVisuals || !apiKey || !isLikelyGeminiKey(apiKey))) {
+  // Si le cache est à jour et possède déjà un texte exploitable + transcription visuelle, ou aucune clé vision valide
+  if (isFresh && ((alreadyHasReadableBody && alreadyHasVisuals) || !apiKey || !isLikelyGeminiKey(apiKey))) {
     return existingContent;
   }
 
@@ -1906,7 +1981,6 @@ export async function getFreshExtractedPdfText(
   let rawText = existingContent;
   if (!isFresh || !rawText) {
     rawText = await extractTextFromPdf(fs.readFileSync(pdfPath));
-    // Sauvegarde immédiate du texte brut pour éviter de re-parser le PDF en cas d'erreur Vision ultérieure
     try {
       fs.writeFileSync(txtPath, rawText, 'utf-8');
     } catch (err) {
@@ -1914,14 +1988,21 @@ export async function getFreshExtractedPdfText(
     }
   }
 
-  // 2. Transcription visuelle IA des schémas, circuits et graphes si clé Gemini valide fournie
+  // 2. OCR complet (si PDF scanné) ou transcription visuelle IA des schémas/graphes
+  const isScanned = !hasReadablePdfText(rawText);
   let fullContent = rawText;
-  if (apiKey && isLikelyGeminiKey(apiKey) && !alreadyHasVisuals) {
+  if (apiKey && isLikelyGeminiKey(apiKey) && (isScanned || !alreadyHasVisuals)) {
     try {
-      const outcome = await extractVisualDataFromPdfDetailed(pdfPath, apiKey);
+      const outcome = isScanned
+        ? await extractScannedPdfFullContent(pdfPath, apiKey)
+        : await extractVisualDataFromPdfDetailed(pdfPath, apiKey);
       if (outcome.status === 'ok' && outcome.text.trim().length > 30) {
-        fullContent = `${rawText}\n\n================================================================================\n${SCIENTIFIC_VISION_MARKER}\n================================================================================\n\n${outcome.text}\n`;
-        console.log(`[RAG] Document "${path.basename(pdfPath)}" enrichi avec succès avec le décodage des schémas/graphes.`);
+        fullContent = isScanned
+          ? `${outcome.text.trim()}\n`
+          : `${rawText}\n\n================================================================================\n${SCIENTIFIC_VISION_MARKER}\n================================================================================\n\n${outcome.text}\n`;
+        console.log(
+          `[RAG] Document "${path.basename(pdfPath)}" enrichi avec succès (${isScanned ? 'OCR complet + schémas' : 'décodage schémas/graphes'}).`
+        );
         try {
           fs.writeFileSync(txtPath, fullContent, 'utf-8');
         } catch (err) {
@@ -1934,6 +2015,58 @@ export async function getFreshExtractedPdfText(
   }
 
   return fullContent;
+}
+
+const inflightScannedOcr = new Map<string, Promise<boolean>>();
+
+/**
+ * Effectue à la demande l'OCR + transcription visuelle d'un PDF officiel scanné,
+ * met à jour son cache .extracted.txt et l'index RAG en mémoire.
+ */
+export async function transcribeScannedOfficialPdf(relativePath: string, apiKey: string): Promise<boolean> {
+  if (!relativePath || !isLikelyGeminiKey(apiKey)) return false;
+
+  const existingPromise = inflightScannedOcr.get(relativePath);
+  if (existingPromise) return existingPromise;
+
+  const job = (async () => {
+    const absPath = resolveOfficialPdfPath(relativePath);
+    if (!absPath) return false;
+    const txtPath = `${absPath}.extracted.txt`;
+
+    if (fs.existsSync(txtPath) && isExtractedTextFresh(absPath, txtPath)) {
+      const cachedTxt = fs.readFileSync(txtPath, 'utf-8');
+      if (hasReadablePdfText(cachedTxt)) return true;
+    }
+
+    const outcome = await extractScannedPdfFullContent(absPath, apiKey, 50_000);
+    if (outcome.status !== 'ok' || !hasReadablePdfText(outcome.text)) {
+      return false;
+    }
+
+    const finalContent = outcome.text.includes(SCIENTIFIC_VISION_MARKER)
+      ? `${outcome.text.trim()}\n`
+      : `${outcome.text.trim()}\n\n================================================================================\n${SCIENTIFIC_VISION_MARKER}\n================================================================================\n`;
+
+    try {
+      fs.writeFileSync(txtPath, finalContent, 'utf-8');
+    } catch (err) {
+      console.warn('[RAG] Impossible de sauvegarder le cache OCR scanné:', err);
+    }
+
+    const discovered = discoverProgrammeFiles(DOCS_DIR).find(
+      (f) => f.relativePath === relativePath || f.absolutePath === absPath
+    );
+    if (discovered) {
+      upsertCachedDoc(discovered, finalContent);
+    }
+    return true;
+  })().finally(() => {
+    inflightScannedOcr.delete(relativePath);
+  });
+
+  inflightScannedOcr.set(relativePath, job);
+  return job;
 }
 
 const VISION_PACING_DELAY_MS = 4_500;
@@ -2086,19 +2219,26 @@ export function startBackgroundOfficialSync(params: {
           continue;
         }
 
-        let outcome = await extractVisualDataFromPdfDetailed(file.absolutePath, cleanVisionKey);
+        const isScanned = !hasReadablePdfText(rawText);
+        let outcome = isScanned
+          ? await extractScannedPdfFullContent(file.absolutePath, cleanVisionKey)
+          : await extractVisualDataFromPdfDetailed(file.absolutePath, cleanVisionKey);
 
         if (outcome.status === 'rate_limited' && !usedQuotaPause) {
           usedQuotaPause = true;
           const waitMs = Math.min(25_000, outcome.retryAfterMs || 15_000);
           syncJobState.message = `Quota Gemini atteint (429) — pause automatique de ${Math.round(waitMs / 1000)}s avant reprise…`;
           await sleep(waitMs);
-          outcome = await extractVisualDataFromPdfDetailed(file.absolutePath, cleanVisionKey);
+          outcome = isScanned
+            ? await extractScannedPdfFullContent(file.absolutePath, cleanVisionKey)
+            : await extractVisualDataFromPdfDetailed(file.absolutePath, cleanVisionKey);
         }
 
         if (outcome.status === 'ok') {
           consecutiveTransientErrors = 0;
-          const fullContent = `${rawText}\n\n================================================================================\n${SCIENTIFIC_VISION_MARKER}\n================================================================================\n\n${outcome.text}\n`;
+          const fullContent = isScanned
+            ? `${outcome.text.trim()}\n`
+            : `${rawText}\n\n================================================================================\n${SCIENTIFIC_VISION_MARKER}\n================================================================================\n\n${outcome.text}\n`;
           try {
             fs.writeFileSync(txtPath, fullContent, 'utf-8');
           } catch {}

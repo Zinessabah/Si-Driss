@@ -56,6 +56,7 @@ ${soul}
 export interface InstructionOptions {
   hasOfficialPdf?: boolean;
   isScannedPdf?: boolean;
+  inlineOfficialPdfAttached?: boolean;
   officialCategory?: 'examens' | 'series' | 'corriges' | 'cours' | 'cadres' | 'autre';
   solveRequested?: boolean;
   skillQuery?: string;
@@ -112,7 +113,9 @@ L'élève résout un problème. Pose UNE question directrice ciblée pour le gui
         : "   - Signale à l'élève que l'extrait visuel officiel du sujet PDF (avec ses schémas/graphes d'origine) est affiché directement au-dessus de ta réponse (ne dis jamais que tu ne peux pas afficher l'image du sujet)."
       : "   - Aucune image PDF n'a pu être attachée automatiquement pour cette requête ; présente l'énoncé directement en texte Markdown + LaTeX sans jamais prétendre qu'une image PDF est affichée ni afficher du code brut.";
     const statementGuidanceLine = options?.isScannedPdf
-      ? isCoursePdf
+      ? options?.inlineOfficialPdfAttached
+        ? "   - 📄 DOCUMENT PDF SCANNÉ JOINT POUR LECTURE VISUELLE DIRECTE : Les pages officielles du PDF sont directement jointes visuellement à ce message. Lis directement ces pages/images, transcris fidèlement l'énoncé demandé (avec traduction en français BIOF si l'original est en arabe, formules en LaTeX `$...$` / `$$...$$` et valeurs numériques exactes) et réponds à l'élève SANS lui dire que le document manque de couche texte ou lui demander une capture."
+        : isCoursePdf
         ? "   - ⚠️ CE COURS PDF EST MANUSCRIT OU SCANNÉ SANS COUCHE TEXTE (OCR) : N'invente pas le contenu manuscrit non extrait et n'écris aucun bloc de code SVG/LaTeX de substitution inventé. Invite l'élève à feuilleter les pages du cours affichées dans la visionneuse PDF ci-dessus (boutons < / > et Zoom) et propose-lui de joindre une capture d'une page ou de te poser une question sur une notion précise du chapitre."
         : "   - ⚠️ CE SUJET PDF EST SCANNÉ SANS COUCHE TEXTE (OCR) : N'invente pas l'énoncé ni les valeurs numériques manquantes, et n'écris aucun bloc de code SVG/LaTeX de substitution. Invite simplement l'élève à consulter la page officielle affichée dans la visionneuse PDF ci-dessus (boutons < / > et Zoom) et propose-lui de copier ou joindre une capture de la question qu'il souhaite résoudre."
       : isCoursePdf

@@ -1,7 +1,7 @@
 {
   "version": "2.2.0",
-  "commit": "43d64d3",
-  "commitDate": "2026-11-26T13:51:27+00:00",
-  "commitMessage": "fix(theme): corriger le fond sombre des formules mindmap et surfaces en mode clair",
-  "buildTime": "2026-11-26T14:35:55.266Z"
+  "commit": "4c3da35",
+  "commitDate": "2026-11-26T14:38:10+00:00",
+  "commitMessage": "chore(examens): ajouter les fichiers renommés SN_2025_PC",
+  "buildTime": "2026-11-26T14:53:57.292Z"
 }
