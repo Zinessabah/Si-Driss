@@ -120,11 +120,18 @@ html[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
 
 /* Surfaces principales */
 html[data-theme="light"] .bg-\[\#131314\],
+html[data-theme="light"] .bg-\[\#131314\]\/70,
+html[data-theme="light"] .bg-\[\#131314\]\/80,
 html[data-theme="light"] .bg-slate-950,
+html[data-theme="light"] .bg-slate-950\/30,
+html[data-theme="light"] .bg-slate-950\/40,
+html[data-theme="light"] .bg-slate-950\/50,
 html[data-theme="light"] .bg-slate-950\/60,
 html[data-theme="light"] .bg-slate-950\/70,
 html[data-theme="light"] .bg-slate-950\/80,
-html[data-theme="light"] .bg-slate-950\/85 {
+html[data-theme="light"] .bg-slate-950\/85,
+html[data-theme="light"] .bg-slate-950\/90,
+html[data-theme="light"] .bg-slate-950\/95 {
   background-color: #f8fafc !important;
 }
 
@@ -141,22 +148,35 @@ html[data-theme="light"] .via-\[\#131314\]\/95 {
 }
 
 html[data-theme="light"] .bg-\[\#141517\],
+html[data-theme="light"] .bg-\[\#16171a\],
 html[data-theme="light"] .bg-\[\#17181c\],
+html[data-theme="light"] .bg-\[\#17191b\],
+html[data-theme="light"] .bg-\[\#18191a\],
 html[data-theme="light"] .bg-\[\#18191b\],
+html[data-theme="light"] .bg-\[\#181a1b\],
+html[data-theme="light"] .bg-\[\#1a1b1e\],
 html[data-theme="light"] .bg-slate-900,
+html[data-theme="light"] .bg-slate-900\/20,
+html[data-theme="light"] .bg-slate-900\/40,
+html[data-theme="light"] .bg-slate-900\/60,
+html[data-theme="light"] .bg-slate-900\/70,
 html[data-theme="light"] .bg-slate-900\/80,
 html[data-theme="light"] .bg-slate-900\/90 {
   background-color: #ffffff !important;
 }
 
 html[data-theme="light"] .bg-\[\#111214\],
+html[data-theme="light"] .bg-\[\#121824\],
 html[data-theme="light"] .bg-\[\#131720\],
 html[data-theme="light"] .bg-\[\#1a202c\],
 html[data-theme="light"] .bg-\[\#1e1f20\],
+html[data-theme="light"] .bg-\[\#1e1f20\]\/60,
 html[data-theme="light"] .bg-\[\#1e1f20\]\/95,
 html[data-theme="light"] .bg-\[\#202124\],
 html[data-theme="light"] .bg-slate-800,
-html[data-theme="light"] .bg-slate-800\/80 {
+html[data-theme="light"] .bg-slate-800\/50,
+html[data-theme="light"] .bg-slate-800\/80,
+html[data-theme="light"] .bg-slate-800\/90 {
   background-color: #f1f5f9 !important;
 }
 
@@ -171,6 +191,7 @@ html[data-theme="light"] .hover\:bg-\[\#282a2c\]:hover,
 html[data-theme="light"] .hover\:bg-\[\#282a2c\]\/70:hover,
 html[data-theme="light"] .hover\:bg-\[\#323538\]:hover,
 html[data-theme="light"] .hover\:bg-\[\#3c4043\]:hover,
+html[data-theme="light"] .hover\:bg-slate-800\/50:hover,
 html[data-theme="light"] .hover\:bg-slate-700:hover,
 html[data-theme="light"] .focus-within\:bg-\[\#202124\]:focus-within {
   background-color: #e2e8f0 !important;
@@ -203,7 +224,10 @@ html[data-theme="light"] .border-\[\#282a2c\]\/80,
 html[data-theme="light"] .border-\[\#2e3034\],
 html[data-theme="light"] .border-\[\#222a38\],
 html[data-theme="light"] .border-slate-800,
-html[data-theme="light"] .border-slate-800\/80 {
+html[data-theme="light"] .border-slate-800\/50,
+html[data-theme="light"] .border-slate-800\/60,
+html[data-theme="light"] .border-slate-800\/80,
+html[data-theme="light"] .border-slate-800\/90 {
   border-color: #e2e8f0 !important;
 }
 
@@ -211,6 +235,7 @@ html[data-theme="light"] .border-\[\#3c4043\],
 html[data-theme="light"] .border-\[\#3c4043\]\/80,
 html[data-theme="light"] .border-\[\#3c4043\]\/60,
 html[data-theme="light"] .border-slate-700,
+html[data-theme="light"] .border-slate-700\/80,
 html[data-theme="light"] .hover\:border-\[\#3c4043\]:hover {
   border-color: #cbd5e1 !important;
 }
@@ -243,6 +268,7 @@ html[data-theme="light"] .group-hover\:text-\[\#8ab4f8\] {
   color: #2563eb !important;
 }
 
+html[data-theme="light"] .text-sky-200,
 html[data-theme="light"] .text-sky-300,
 html[data-theme="light"] .text-sky-400,
 html[data-theme="light"] .hover\:text-sky-300:hover {
@@ -256,12 +282,14 @@ html[data-theme="light"] .hover\:text-emerald-300:hover {
   color: #059669 !important;
 }
 
+html[data-theme="light"] .text-amber-100,
 html[data-theme="light"] .text-amber-200,
 html[data-theme="light"] .text-amber-300,
 html[data-theme="light"] .text-amber-400 {
   color: #b45309 !important;
 }
 
+html[data-theme="light"] .text-purple-200,
 html[data-theme="light"] .text-purple-300,
 html[data-theme="light"] .text-purple-400,
 html[data-theme="light"] .hover\:text-purple-300:hover {

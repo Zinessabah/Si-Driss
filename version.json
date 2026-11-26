@@ -1,7 +1,7 @@
 {
   "version": "2.2.0",
-  "commit": "3b66b42",
-  "commitDate": "2026-11-26T13:05:34+00:00",
-  "commitMessage": "feat(ui): ajouter bouton bascule affichage clair/sombre dans la barre principale",
-  "buildTime": "2026-11-26T13:17:04.340Z"
+  "commit": "f80c023",
+  "commitDate": "2026-11-26T13:19:41+00:00",
+  "commitMessage": "feat(series): afficher la série /exercice sans solution d'emblée et résoudre sur demande",
+  "buildTime": "2026-11-26T13:40:43.980Z"
 }
