@@ -293,9 +293,11 @@ export interface OfficialSyncJobStatus {
   finishedAt?: string;
 }
 
+const VISION_SYNC_PROVIDERS = new Set(['gemini', 'nvidia', 'openai', 'anthropic', 'openrouter']);
+
 /**
  * Déclenche la synchronisation et la ré-indexation des documents officiels en tâche de fond cadencée.
- * N'envoie la clé client pour le décodage visuel que si le fournisseur actif est Gemini.
+ * Transmet la clé client lorsque le fournisseur actif supporte la lecture visuelle/OCR des scans.
  */
 export async function syncOfficialDocuments(
   branch: 'PC' | 'SM',
@@ -315,8 +317,10 @@ export async function syncOfficialDocuments(
   hasVisionKey?: boolean;
   message: string;
 }> {
-  const normalizedProvider = provider ? provider.toLowerCase() : '';
-  const shouldSendVisionKey = Boolean(apiKey && (!normalizedProvider || normalizedProvider === 'gemini'));
+  const normalizedProvider = provider ? provider.toLowerCase().trim() : '';
+  const shouldSendVisionKey = Boolean(
+    apiKey && (!normalizedProvider || VISION_SYNC_PROVIDERS.has(normalizedProvider))
+  );
 
   const extraHeaders: Record<string, string> = {
     'Content-Type': 'application/json',

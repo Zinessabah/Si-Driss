@@ -9,12 +9,19 @@ import {
   getLocalRagStatus,
   discoverProgrammeFiles,
   refreshDocumentsCache,
+  hasReadablePdfText,
   hasVisualMarker,
   startBackgroundOfficialSync,
   getOfficialSyncStatus,
   parseSlashCommand,
   searchLocalDocumentsDetailed,
 } from '../rag';
+import { sanitizeApiKey, type SupportedProvider } from '../ai/providers';
+import {
+  buildSyncVisionOptions,
+  ensureScannedPdfConverted,
+  isVisionCapableProvider,
+} from '../scannedPdfGuard';
 import { isLikelyGeminiKey } from '../visionExtractor';
 import { syncGoogleDriveBranch, extractDriveFolderId } from '../driveSync';
 
@@ -243,33 +250,41 @@ export function createDocumentsRouter(): Router {
   router.post('/documents/sync', documentMutationLimiter, async (req, res) => {
     try {
       const adminToken = String(req.headers['x-admin-token'] || '').trim();
-      const clientProvider = String(req.headers['x-ai-provider'] || req.body?.provider || '').toLowerCase();
-      const clientApiKey = String(
+      const clientProvider = String(req.headers['x-ai-provider'] || req.body?.provider || '')
+        .toLowerCase()
+        .trim() as SupportedProvider;
+      const clientModel = String(req.headers['x-ai-model'] || req.body?.model || '').trim();
+      const clientApiKey = sanitizeApiKey(
         (req.headers['x-ai-key'] as string) ||
           (req.headers['x-gemini-api-key'] as string) ||
           (req.headers['x-ai-api-key'] as string) ||
-          req.body?.apiKey ||
-          ''
-      ).trim();
+          String(req.body?.apiKey || '')
+      );
 
-      // N'utiliser la clé client pour Gemini Vision que si elle est compatible Gemini
-      const validClientVisionKey =
-        clientApiKey &&
-        (!clientProvider || clientProvider === 'gemini') &&
-        isLikelyGeminiKey(clientApiKey)
-          ? clientApiKey
-          : '';
+      const effectiveClientProvider: SupportedProvider | undefined =
+        clientProvider && isVisionCapableProvider(clientProvider)
+          ? clientProvider
+          : isLikelyGeminiKey(clientApiKey)
+          ? 'gemini'
+          : undefined;
 
       const isAdminAuthorized = ADMIN_TOKEN
         ? safeTokenEqual(adminToken, ADMIN_TOKEN)
         : process.env.NODE_ENV !== 'production';
 
-      // En production avec ADMIN_TOKEN défini (ou sans ADMIN_TOKEN configuré), seuls les admins
-      // authentifiés utilisent la clé GEMINI_API_KEY serveur ou lancent la synchro Drive ; les
-      // autres appels peuvent indexer localement ou utiliser leur propre clé Gemini fournie par le client.
-      const serverEnvGeminiKey = resolveServerVisionKey(isAdminAuthorized);
-
-      const visionApiKey = validClientVisionKey || serverEnvGeminiKey;
+      // Utilise d'abord la clé client si son fournisseur supporte la Vision (Gemini, NVIDIA NIM,
+      // OpenRouter, OpenAI, Claude), sinon bascule sur les clés Vision serveur pour les admins.
+      const syncVision = buildSyncVisionOptions(
+        effectiveClientProvider && clientApiKey
+          ? {
+              provider: effectiveClientProvider,
+              apiKey: clientApiKey,
+              model: clientModel || undefined,
+              clientProvidedKey: true,
+            }
+          : undefined,
+        { allowServerFallback: isAdminAuthorized }
+      );
       const branch = (String(req.body?.branch || 'PC').toUpperCase() === 'SM' ? 'SM' : 'PC') as 'PC' | 'SM';
 
       const isAuthorizedForDriveSync = Boolean(
@@ -284,7 +299,9 @@ export function createDocumentsRouter(): Router {
 
       const { started, alreadyRunning, syncJob } = startBackgroundOfficialSync({
         branch,
-        visionApiKey,
+        visionApiKey: syncVision.visionApiKey,
+        customScannedOcr: syncVision.customScannedOcr,
+        visionProviderLabel: syncVision.visionProviderLabel,
         runDriveSync,
       });
 
@@ -297,7 +314,7 @@ export function createDocumentsRouter(): Router {
         syncJob,
         ...status,
         driveSyncCount: syncJob.driveSyncCount,
-        hasVisionKey: Boolean(visionApiKey),
+        hasVisionKey: Boolean(syncVision.visionApiKey || syncVision.customScannedOcr),
         message: syncJob.message,
       });
     } catch (err: any) {
@@ -440,11 +457,13 @@ export function createDocumentsRouter(): Router {
         });
       }
 
-      const visionApiKey = resolveServerVisionKey(true);
+      const syncVision = buildSyncVisionOptions(undefined, { allowServerFallback: true });
 
       const { started, alreadyRunning, syncJob } = startBackgroundOfficialSync({
         branch,
-        visionApiKey,
+        visionApiKey: syncVision.visionApiKey || resolveServerVisionKey(true),
+        customScannedOcr: syncVision.customScannedOcr,
+        visionProviderLabel: syncVision.visionProviderLabel,
         runDriveSync: async () => {
           const driveResult = await syncGoogleDriveBranch({
             branch,
@@ -527,7 +546,9 @@ export function createDocumentsRouter(): Router {
       }
 
       const filePath = path.join(targetDir, safeName);
+      const relativePath = branchFolder ? `${branchFolder}/${safeName}` : safeName;
       const isPdf = ext === '.pdf';
+      let convertedFromScan = false;
 
       if (base64) {
         const buf = Buffer.from(base64, 'base64');
@@ -538,6 +559,23 @@ export function createDocumentsRouter(): Router {
             const text = await extractTextFromPdf(buf);
             const txtPath = `${filePath}.extracted.txt`;
             fs.writeFileSync(txtPath, text, 'utf-8');
+            if (!hasReadablePdfText(text)) {
+              const clientProvider = String(req.headers['x-ai-provider'] || req.body?.provider || '')
+                .toLowerCase()
+                .trim() as SupportedProvider;
+              const clientKey = sanitizeApiKey(
+                (req.headers['x-ai-key'] as string) ||
+                  (req.headers['x-ai-api-key'] as string) ||
+                  String(req.body?.aiApiKey || '')
+              );
+              const clientCfg =
+                clientProvider && isVisionCapableProvider(clientProvider) && clientKey
+                  ? { provider: clientProvider, apiKey: clientKey, clientProvidedKey: true }
+                  : undefined;
+              convertedFromScan = await ensureScannedPdfConverted(relativePath, clientCfg, {
+                allowServerFallback: true,
+              });
+            }
           } catch (pdfErr) {
             console.warn('Extraction PDF échouée:', pdfErr);
           }
@@ -550,12 +588,15 @@ export function createDocumentsRouter(): Router {
 
       return res.json({
         success: true,
+        convertedFromScan,
         message: isPdf
-          ? `Document PDF "${safeName}" indexé et texte extrait pour le RAG (${branchFolder || 'Général'}) !`
+          ? convertedFromScan
+            ? `Document PDF scanné "${safeName}" converti automatiquement par OCR et indexé pour le RAG (${branchFolder || 'Général'}) !`
+            : `Document PDF "${safeName}" indexé et texte extrait pour le RAG (${branchFolder || 'Général'}) !`
           : `Document "${safeName}" indexé avec succès dans /docs/programme/${branchFolder ? branchFolder + '/' : ''}`,
         file: {
           name: safeName,
-          relativePath: branchFolder ? `${branchFolder}/${safeName}` : safeName,
+          relativePath,
           branch: branchFolder || 'ALL',
         },
       });

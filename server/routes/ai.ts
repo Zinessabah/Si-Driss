@@ -6,6 +6,7 @@ import {
   DEFAULT_BASE_URLS,
   DEFAULT_MODELS,
   isAllowedLocalBaseUrl,
+  remapProviderModel,
   resolveAIConfig,
   sanitizeApiKey,
   type ResolvedAIConfig,
@@ -21,36 +22,26 @@ import {
   renderPdfPagesAsPngAttachments,
   resolveOfficialPdfPath,
   searchLocalDocumentsDetailed,
-  transcribeScannedOfficialPdf,
 } from '../rag';
-import { extractOcrFromPdfBuffer, isLikelyGeminiKey } from '../visionExtractor';
+import {
+  convertScannedPdfBufferWithGuard,
+  ensureScannedPdfConverted,
+  isVisionCapableModel,
+} from '../scannedPdfGuard';
 import { getSiDrissBasePrompt, getInstruction, normalizeBranchParam } from '../prompts';
 import { sanitizeStudentProfile, sanitizeStudentMemory } from '../personaLoader';
 import type { ClientAttachment, ClientMessage } from '../ai/adapters';
 
 const MAX_ATTACHED_PDF_TEXT_CHARS = 24_000;
 const MAX_INLINE_OFFICIAL_PDF_BYTES = 11 * 1024 * 1024;
-const VISION_IMAGE_PROVIDERS = new Set<SupportedProvider>(['openai', 'anthropic', 'openrouter']);
-
-function resolveGeminiVisionKey(aiConfig: ResolvedAIConfig): string {
-  if (aiConfig.provider === 'gemini' && isLikelyGeminiKey(aiConfig.apiKey)) {
-    return aiConfig.apiKey;
-  }
-  if (!aiConfig.clientProvidedKey) {
-    const envKey = sanitizeApiKey(process.env.GEMINI_API_KEY || '');
-    if (isLikelyGeminiKey(envKey)) return envKey;
-  }
-  return '';
-}
 
 /**
- * Extrait le texte des pièces jointes PDF (ou lance un OCR / rendu pages pour les PDF scannés)
- * afin que tous les fournisseurs puissent lire automatiquement les sujets PDF scannés.
+ * Extrait le texte des pièces jointes PDF (ou lance automatiquement le garde-fou OCR / VLM pour les PDF scannés)
+ * afin que tous les fournisseurs — même purement textuels — puissent lire automatiquement les sujets PDF scannés.
  */
 async function enrichPdfAttachments(
   messages: ClientMessage[],
-  geminiOcrKey: string,
-  provider: SupportedProvider
+  aiConfig: ResolvedAIConfig
 ): Promise<ClientMessage[]> {
   if (!Array.isArray(messages)) return [];
   const enriched: ClientMessage[] = [];
@@ -80,17 +71,19 @@ async function enrichPdfAttachments(
                 continue;
               }
 
-              // PDF scanné : tentative d'OCR automatique via Gemini Vision si une clé Gemini est disponible
-              if (geminiOcrKey) {
-                const ocr = await extractOcrFromPdfBuffer(pdfBuffer, att.name || 'document.pdf', geminiOcrKey, 45_000);
-                if (ocr.status === 'ok' && hasReadablePdfText(ocr.text)) {
-                  updatedAtts.push({ ...att, text: ocr.text.slice(0, MAX_ATTACHED_PDF_TEXT_CHARS) });
-                  continue;
-                }
+              // Garde-fou PDF scanné : conversion OCR via Gemini natif ou VLM (NVIDIA, OpenRouter, OpenAI, Anthropic)
+              const ocrText = await convertScannedPdfBufferWithGuard(
+                pdfBuffer,
+                att.name || 'document.pdf',
+                aiConfig
+              );
+              if (ocrText) {
+                updatedAtts.push({ ...att, text: ocrText.slice(0, MAX_ATTACHED_PDF_TEXT_CHARS) });
+                continue;
               }
 
-              // Secours multimodal pour OpenAI / Anthropic / OpenRouter : convertir les pages scannées en PNG
-              if (VISION_IMAGE_PROVIDERS.has(provider)) {
+              // Secours multimodal direct si le modèle actif accepte nativement les images
+              if (aiConfig.provider !== 'gemini' && isVisionCapableModel(aiConfig.provider, aiConfig.model)) {
                 const pageImgs = await renderPdfPagesAsPngAttachments(pdfBuffer, undefined, 6);
                 updatedAtts.push({ ...att, text: undefined });
                 for (const img of pageImgs) {
@@ -264,7 +257,8 @@ router.post('/validate-key', validateKeyLimiter, async (req, res) => {
     ).trim();
     const apiKey = sanitizeApiKey(rawKey);
 
-    const model = (req.headers['x-ai-model'] || req.body?.model || DEFAULT_MODELS[provider]) as string;
+    const rawModel = (req.headers['x-ai-model'] || req.body?.model || DEFAULT_MODELS[provider]) as string;
+    const model = remapProviderModel(provider, rawModel);
     const baseUrl = (req.headers['x-ai-base-url'] || req.body?.baseUrl || DEFAULT_BASE_URLS[provider] || '') as string;
 
     // SSRF guard: local/custom endpoints only, loopback/RFC1918 hosts
@@ -435,7 +429,7 @@ router.post('/list-models', validateKeyLimiter, async (req, res) => {
     }
 
     // OpenAI-compatible providers (groq, nvidia, mistral, deepseek, openai, custom/Ollama)
-    if (provider !== 'custom' && !apiKey) {
+    if (provider !== 'custom' && provider !== 'nvidia' && !apiKey) {
       return res.status(400).json({ error: `Renseigne ta clé ${provider.toUpperCase()} pour actualiser les modèles.` });
     }
     const targetUrl = baseUrl.endsWith('/models') ? baseUrl : `${baseUrl}/models`;
@@ -449,7 +443,13 @@ router.post('/list-models', validateKeyLimiter, async (req, res) => {
     const rawList = Array.isArray(json?.data) ? json.data : Array.isArray(json?.models) ? json.models : [];
     const models = rawList
       .map((m: any) => String(m?.id || m?.name || ''))
-      .filter((id: string) => id && !/embed|whisper|tts|dall-e|moderation|guard|rerank|bge-|e5-|clip|deplot|paligemma|kosmos/i.test(id))
+      .filter(
+        (id: string) =>
+          id &&
+          !/embed|whisper|tts|dall-e|moderation|guard|rerank|bge-|e5-|clip|deplot|paligemma|kosmos|safety-guard|topic-control|content-safety|synthetic-video|gliner2|cosmos-reason|ising-calibration|riva-translate|lyria/i.test(
+            id
+          )
+      )
       .sort()
       .slice(0, 60)
       .map((id: string) => ({
@@ -475,8 +475,7 @@ async function prepareChatContext(
   rawProfile?: unknown,
   rawMemory?: unknown
 ) {
-  const geminiOcrKey = resolveGeminiVisionKey(aiConfig);
-  const enrichedMessages = await enrichPdfAttachments(messages, geminiOcrKey, aiConfig.provider);
+  const enrichedMessages = await enrichPdfAttachments(messages, aiConfig);
   let lastUserIdx = -1;
   for (let i = enrichedMessages.length - 1; i >= 0; i--) {
     if (enrichedMessages[i]?.role === 'user') {
@@ -559,20 +558,19 @@ async function prepareChatContext(
     searchOpts
   );
 
-  // Lecture automatique des PDF officiels scannés : OCR persistant en priorité (pour tous les moteurs),
-  // puis injection visuelle directe (PDF natif Gemini ou pages PNG pour OpenAI/Anthropic/OpenRouter).
+  // Garde-fou automatique des PDF officiels scannés : conversion OCR persistante multi-fournisseurs
+  // (Gemini, NVIDIA NIM VLM, OpenRouter, OpenAI, Claude) mise en cache dans .extracted.txt pour tous les modèles,
+  // puis injection visuelle directe en dernier recours si le modèle actif est multimodal.
   let inlineOfficialPdfAttached = false;
   let finalMessages = effectiveMessages;
 
   if (officialSource?.isPdf && isScannedPdf) {
-    if (geminiOcrKey) {
-      const ocrOk = await transcribeScannedOfficialPdf(officialSource.relativePath, geminiOcrKey);
-      if (ocrOk) {
-        const refreshed = await searchLocalDocumentsDetailed(searchTerms, branch, searchOpts);
-        matchedDocs = refreshed.contextText;
-        officialSource = refreshed.officialSource;
-        isScannedPdf = refreshed.isScannedPdf;
-      }
+    const ocrOk = await ensureScannedPdfConverted(officialSource.relativePath, aiConfig);
+    if (ocrOk) {
+      const refreshed = await searchLocalDocumentsDetailed(searchTerms, branch, searchOpts);
+      matchedDocs = refreshed.contextText;
+      officialSource = refreshed.officialSource;
+      isScannedPdf = refreshed.isScannedPdf;
     }
 
     if (officialSource?.isPdf && isScannedPdf && lastUserIdx >= 0) {
@@ -591,7 +589,7 @@ async function prepareChatContext(
               });
             }
           } catch {}
-        } else if (VISION_IMAGE_PROVIDERS.has(aiConfig.provider)) {
+        } else if (isVisionCapableModel(aiConfig.provider, aiConfig.model)) {
           const targetPages =
             officialSource.pages && officialSource.pages.length > 1
               ? officialSource.pages

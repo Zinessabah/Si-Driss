@@ -8,10 +8,76 @@ const EVENT_NAME = 'sidriss_ai_config_changed';
 const ACCESS_TOKEN_KEY = 'sidriss_access_token_v1';
 const ADMIN_TOKEN_KEY = 'sidriss_admin_token_v1';
 
+const RETIRED_GEMINI_MODELS = new Set([
+  'gemini-2.0-flash',
+  'gemini-2.0-pro',
+  'gemini-2.0-flash-lite',
+  'gemini-2.0-flash-thinking',
+  'gemini-1.5-flash',
+  'gemini-1.5-pro',
+  'gemini-pro',
+]);
+
+const LEGACY_DEEPSEEK_MODELS: Record<string, string> = {
+  'deepseek-chat': 'deepseek-flash',
+  'deepseek-reasoner': 'deepseek-v4-pro',
+};
+
+const LEGACY_GROQ_MODELS: Record<string, string> = {
+  'llama-3.3-70b-versatile': 'openai/gpt-oss-120b',
+  'deepseek-r1-distill-llama-70b': 'openai/gpt-oss-120b',
+  'llama-3.1-8b-instant': 'openai/gpt-oss-20b',
+  'mixtral-8x7b-32768': 'openai/gpt-oss-20b',
+  'qwen/qwen3.6-27b': 'qwen/qwen3.8-27b',
+  'qwen/qwen3-32b': 'qwen/qwen3.8-27b',
+};
+
+const LEGACY_NVIDIA_MODELS = new Set([
+  'meta/llama-3.3-70b-instruct',
+  'meta/llama-4-maverick',
+  'meta/llama-3.1-8b-instruct',
+  'deepseek-ai/deepseek-v3',
+  'deepseek-ai/deepseek-v3.2',
+  'deepseek-ai/deepseek-r1',
+  'deepseek-ai/deepseek-v4.1-flash',
+  'qwen/qwen3-235b-a22b',
+]);
+
+function remapLegacyClientModel(provider: AIProviderId | string, rawModel?: string): string {
+  const effectiveModel = rawModel || getProviderDef(provider as AIProviderId).defaultModel;
+  if (provider === 'gemini') {
+    if (RETIRED_GEMINI_MODELS.has(effectiveModel) || !effectiveModel.startsWith('gemini-')) {
+      return 'gemini-3.8-flash';
+    }
+  } else if (provider === 'groq') {
+    if (LEGACY_GROQ_MODELS[effectiveModel]) return LEGACY_GROQ_MODELS[effectiveModel];
+  } else if (provider === 'nvidia') {
+    if (LEGACY_NVIDIA_MODELS.has(effectiveModel)) return 'nvidia/nemotron-3.5-super-vl-120b-a12b';
+  } else if (provider === 'deepseek') {
+    if (LEGACY_DEEPSEEK_MODELS[effectiveModel]) return LEGACY_DEEPSEEK_MODELS[effectiveModel];
+    if (effectiveModel !== 'deepseek-flash' && effectiveModel !== 'deepseek-v4-pro') return 'deepseek-flash';
+  } else if (
+    provider === 'openrouter' &&
+    (effectiveModel === 'google/gemini-2.5-flash' ||
+      effectiveModel === 'google/gemini-4-carbon' ||
+      effectiveModel === 'meta-llama/llama-3.3-70b-instruct:free' ||
+      effectiveModel === 'meta-llama/llama-3.2-3b-instruct:free')
+  ) {
+    return 'openrouter/free';
+  }
+  return effectiveModel;
+}
+
 export function getSavedProvidersMap(): Record<string, { apiKey?: string; model?: string; baseUrl?: string }> {
   try {
     const raw = localStorage.getItem(SAVED_PROVIDERS_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    const parsed = raw ? JSON.parse(raw) : {};
+    for (const [prov, entry] of Object.entries(parsed)) {
+      if (entry && typeof entry === 'object' && (entry as any).model) {
+        (entry as any).model = remapLegacyClientModel(prov, (entry as any).model);
+      }
+    }
+    return parsed;
   } catch {
     return {};
   }
@@ -124,58 +190,9 @@ function getInitialConfig(): AIProviderConfig {
     if (stored) {
       const parsed = JSON.parse(stored);
       if (parsed && parsed.provider) {
-        // Retired Gemini models remapped automatically to active Gemini 4 Flash (Hydrogen)
-        const retiredGemini = new Set([
-          'gemini-2.0-flash',
-          'gemini-2.0-pro',
-          'gemini-2.0-flash-lite',
-          'gemini-2.0-flash-thinking',
-          'gemini-1.5-flash',
-          'gemini-1.5-pro',
-          'gemini-pro',
-        ]);
-        // Legacy DeepSeek & retired Groq names remapped to current active lineups
-        const legacyDeepSeek: Record<string, string> = {
-          'deepseek-chat': 'deepseek-flash',
-          'deepseek-reasoner': 'deepseek-v4-pro',
-        };
-        const legacyGroq: Record<string, string> = {
-          'llama-3.3-70b-versatile': 'openai/gpt-oss-120b',
-          'deepseek-r1-distill-llama-70b': 'openai/gpt-oss-120b',
-          'llama-3.1-8b-instant': 'openai/gpt-oss-20b',
-          'mixtral-8x7b-32768': 'openai/gpt-oss-20b',
-          'qwen/qwen3.6-27b': 'qwen/qwen3.8-27b',
-          'qwen/qwen3-32b': 'qwen/qwen3.8-27b',
-        };
-
-        let effectiveModel = parsed.model || getProviderDef(parsed.provider).defaultModel;
-        let changed = false;
-
-        if (parsed.provider === 'gemini') {
-          if (retiredGemini.has(effectiveModel) || !effectiveModel.startsWith('gemini-')) {
-            effectiveModel = 'gemini-3.8-flash';
-            changed = true;
-          }
-        } else if (parsed.provider === 'groq') {
-          if (legacyGroq[effectiveModel]) {
-            effectiveModel = legacyGroq[effectiveModel];
-            changed = true;
-          }
-        } else if (parsed.provider === 'deepseek') {
-          if (legacyDeepSeek[effectiveModel]) {
-            effectiveModel = legacyDeepSeek[effectiveModel];
-            changed = true;
-          } else if (effectiveModel !== 'deepseek-flash' && effectiveModel !== 'deepseek-v4-pro') {
-            effectiveModel = 'deepseek-flash';
-            changed = true;
-          }
-        } else if (
-          parsed.provider === 'openrouter' &&
-          (effectiveModel === 'google/gemini-2.5-flash' || effectiveModel === 'google/gemini-4-carbon')
-        ) {
-          effectiveModel = 'openrouter/free';
-          changed = true;
-        }
+        const currentModel = parsed.model || getProviderDef(parsed.provider).defaultModel;
+        const effectiveModel = remapLegacyClientModel(parsed.provider, currentModel);
+        const changed = effectiveModel !== parsed.model;
 
         const newConfig: AIProviderConfig = {
           provider: parsed.provider,

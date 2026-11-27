@@ -1,7 +1,7 @@
 {
   "version": "2.2.0",
-  "commit": "16baab6",
-  "commitDate": "2026-11-27T17:20:07+00:00",
-  "commitMessage": "fix(physique,examens): préserver les flèches SVG KaTeX et afficher /examen sans solution d'emblée",
-  "buildTime": "2026-11-27T18:25:13.207Z"
+  "commit": "1ab1e7d",
+  "commitDate": "2026-11-27T18:29:14+00:00",
+  "commitMessage": "feat(ai): ajouter NVIDIA NIM, actualiser les modèles gratuits actifs et ajouter /api/list-models",
+  "buildTime": "2026-11-27T23:01:32.107Z"
 }

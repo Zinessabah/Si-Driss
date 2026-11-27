@@ -71,10 +71,39 @@ async function startServer() {
     console.log(`=======================================================`);
 
     // RAG local 100% autonome et confidentiel (dossiers docs/programme/PC et SM)
-    import('./server/rag').then(({ getLocalRagStatus }) => {
+    import('./server/rag').then(({ getLocalRagStatus, startBackgroundOfficialSync }) => {
       const rag = getLocalRagStatus();
       console.log(`📚 RAG Local Actif : ${rag.pcCount} document(s) 2BAC PC, ${rag.smCount} document(s) 2BAC SM`);
       console.log(`🔒 Étanchéité pédagogique stricte : PC et SM 100% isolés (sans dossier commun)`);
+
+      // Garde-fou automatique : détecte les PDF scannés sans texte lisible et lance
+      // la pré-conversion en tâche de fond si une clé Vision serveur est configurée.
+      import('./server/scannedPdfGuard')
+        .then(({ findPendingScannedPdfs, buildSyncVisionOptions }) => {
+          const pendingScans = findPendingScannedPdfs();
+          if (pendingScans.length === 0) return;
+
+          const syncVision = buildSyncVisionOptions(undefined, { allowServerFallback: true });
+          if (syncVision.visionApiKey || syncVision.customScannedOcr) {
+            console.log(
+              `📄 Garde-fou scans : ${pendingScans.length} PDF scanné(s) sans OCR détecté(s) — conversion automatique cadencée via ${syncVision.visionProviderLabel}...`
+            );
+            const timer = setTimeout(() => {
+              startBackgroundOfficialSync({
+                branch: 'PC',
+                visionApiKey: syncVision.visionApiKey,
+                customScannedOcr: syncVision.customScannedOcr,
+                visionProviderLabel: syncVision.visionProviderLabel,
+              });
+            }, 4000);
+            timer.unref?.();
+          } else {
+            console.log(
+              `📄 Garde-fou scans : ${pendingScans.length} PDF scanné(s) sans texte — conversion automatique à la demande dès qu'un utilisateur consulte un scan avec Gemini, NVIDIA NIM, OpenRouter, OpenAI ou Claude.`
+            );
+          }
+        })
+        .catch(() => {});
     });
 
     // Planificateur biquotidien Drive (actif lorsque les dossiers Drive sont configurés)

@@ -8,6 +8,7 @@ import {
   extractScannedPdfFullContent,
   extractVisualDataFromPdfDetailed,
   isLikelyGeminiKey,
+  type VisionExtractionOutcome,
 } from './visionExtractor';
 
 interface CachedDocSection {
@@ -749,7 +750,7 @@ function buildCachedDoc(file: DiscoveredFile, content: string): CachedDoc {
   };
 }
 
-function upsertCachedDoc(file: DiscoveredFile, content: string): void {
+export function upsertCachedDoc(file: DiscoveredFile, content: string): void {
   if (!content) return;
   const cached = buildCachedDoc(file, content);
   const idx = documentsCache.findIndex((d) => d.relativePath === file.relativePath);
@@ -1952,7 +1953,7 @@ export async function extractTextFromPdf(buf: Buffer): Promise<string> {
  * Vérifie si le fichier texte extrait (.extracted.txt) est aussi récent que le PDF
  * (avec tolérance de 2 s pour l'ordre de décompression git checkout / Docker).
  */
-function isExtractedTextFresh(pdfPath: string, txtPath: string): boolean {
+export function isExtractedTextFresh(pdfPath: string, txtPath: string): boolean {
   try {
     const txtStat = fs.statSync(txtPath);
     if (txtStat.size === 0) return false;
@@ -2105,6 +2106,8 @@ export function getOfficialSyncStatus(): OfficialSyncStatus {
 export function startBackgroundOfficialSync(params: {
   branch: 'PC' | 'SM';
   visionApiKey?: string;
+  customScannedOcr?: (absPath: string, fileName: string) => Promise<VisionExtractionOutcome>;
+  visionProviderLabel?: string;
   runDriveSync?: () => Promise<number>;
 }): { started: boolean; alreadyRunning: boolean; syncJob: OfficialSyncStatus } {
   if (syncJobState.running) {
@@ -2117,6 +2120,9 @@ export function startBackgroundOfficialSync(params: {
 
   const branch = params.branch === 'SM' ? 'SM' : 'PC';
   const cleanVisionKey = isLikelyGeminiKey(params.visionApiKey) ? String(params.visionApiKey).trim() : '';
+  const customScannedOcr = params.customScannedOcr;
+  const hasAnyVisionRunner = Boolean(cleanVisionKey || customScannedOcr);
+  const visionLabel = params.visionProviderLabel || (cleanVisionKey ? 'Gemini' : 'Vision');
 
   syncJobState = {
     running: true,
@@ -2158,21 +2164,27 @@ export function startBackgroundOfficialSync(params: {
 
       const discovered = discoverProgrammeFiles(DOCS_DIR);
       const allPdfs = discovered.filter((f) => f.name.toLowerCase().endsWith('.pdf'));
-      const pendingVision = allPdfs.filter((f) => !hasVisualMarker(f.absolutePath));
+      const pendingVision = cleanVisionKey
+        ? allPdfs.filter((f) => !hasVisualMarker(f.absolutePath))
+        : allPdfs.filter((f) => {
+            const txtPath = `${f.absolutePath}.extracted.txt`;
+            if (!fs.existsSync(txtPath)) return true;
+            return !hasReadablePdfText(fs.readFileSync(txtPath, 'utf-8'));
+          });
       const alreadyDecoded = allPdfs.length - pendingVision.length;
 
       syncJobState.alreadyDecodedCount = alreadyDecoded;
       syncJobState.totalPdfs = pendingVision.length;
 
-      // Phase 3 : Décodage visuel Gemini cadencé (uniquement pour les PDF non encore décodés)
-      if (!cleanVisionKey || pendingVision.length === 0) {
+      // Phase 3 : Décodage visuel cadencé (Gemini complet, ou garde-fou OCR VLM sur les scans manquants)
+      if (!hasAnyVisionRunner || pendingVision.length === 0) {
         const rag = getLocalRagStatus();
         syncJobState.running = false;
         syncJobState.phase = 'completed';
         syncJobState.currentFile = '';
         syncJobState.finishedAt = new Date().toISOString();
-        syncJobState.message = !cleanVisionKey && pendingVision.length > 0
-          ? `Base officielle synchronisée (texte) : ${rag.totalIndexedFiles} document(s) indexé(s) (${rag.pcCount} PC, ${rag.smCount} SM). Ajoutez une clé Gemini pour décoder les ${pendingVision.length} PDF restants.`
+        syncJobState.message = !hasAnyVisionRunner && pendingVision.length > 0
+          ? `Base officielle synchronisée (texte) : ${rag.totalIndexedFiles} document(s) indexé(s) (${rag.pcCount} PC, ${rag.smCount} SM). Activez un moteur Vision (Gemini, NVIDIA NIM, OpenRouter, OpenAI ou Claude) pour convertir les ${pendingVision.length} PDF scanné(s) restants.`
           : `Base officielle entièrement à jour : ${rag.totalIndexedFiles} document(s) indexé(s) (${rag.pcCount} PC, ${rag.smCount} SM dont ${rag.visuallyDecodedCount} avec graphes décodés).`;
         return;
       }
@@ -2198,16 +2210,16 @@ export function startBackgroundOfficialSync(params: {
       for (let idx = 0; idx < pendingVision.length; idx++) {
         const file = pendingVision[idx];
         syncJobState.currentFile = file.name;
-        syncJobState.message = `Décodage visuel (${idx + 1}/${pendingVision.length}) : ${file.name}…`;
+        syncJobState.message = `Conversion OCR / Visuelle ${visionLabel} (${idx + 1}/${pendingVision.length}) : ${file.name}…`;
 
         // Double vérification au cas où le sidecar aurait été enrichi entretemps
-        if (hasVisualMarker(file.absolutePath)) {
+        const txtPath = `${file.absolutePath}.extracted.txt`;
+        if (cleanVisionKey ? hasVisualMarker(file.absolutePath) : (fs.existsSync(txtPath) && hasReadablePdfText(fs.readFileSync(txtPath, 'utf-8')))) {
           syncJobState.alreadyDecodedCount++;
           syncJobState.processedPdfs++;
           continue;
         }
 
-        const txtPath = `${file.absolutePath}.extracted.txt`;
         let rawText = '';
         try {
           if (fs.existsSync(txtPath)) {
@@ -2224,24 +2236,37 @@ export function startBackgroundOfficialSync(params: {
         }
 
         const isScanned = !hasReadablePdfText(rawText);
-        let outcome = isScanned
-          ? await extractScannedPdfFullContent(file.absolutePath, cleanVisionKey)
-          : await extractVisualDataFromPdfDetailed(file.absolutePath, cleanVisionKey);
+        if (!isScanned && !cleanVisionKey) {
+          syncJobState.skippedCount++;
+          syncJobState.processedPdfs++;
+          continue;
+        }
+
+        const runStep = async (): Promise<VisionExtractionOutcome> => {
+          if (cleanVisionKey) {
+            return isScanned
+              ? extractScannedPdfFullContent(file.absolutePath, cleanVisionKey)
+              : extractVisualDataFromPdfDetailed(file.absolutePath, cleanVisionKey);
+          }
+          return customScannedOcr!(file.absolutePath, file.name);
+        };
+
+        let outcome = await runStep();
 
         if (outcome.status === 'rate_limited' && !usedQuotaPause) {
           usedQuotaPause = true;
           const waitMs = Math.min(25_000, outcome.retryAfterMs || 15_000);
-          syncJobState.message = `Quota Gemini atteint (429) — pause automatique de ${Math.round(waitMs / 1000)}s avant reprise…`;
+          syncJobState.message = `Quota ${visionLabel} atteint (429) — pause automatique de ${Math.round(waitMs / 1000)}s avant reprise…`;
           await sleep(waitMs);
-          outcome = isScanned
-            ? await extractScannedPdfFullContent(file.absolutePath, cleanVisionKey)
-            : await extractVisualDataFromPdfDetailed(file.absolutePath, cleanVisionKey);
+          outcome = await runStep();
         }
 
         if (outcome.status === 'ok') {
           consecutiveTransientErrors = 0;
           const fullContent = isScanned
-            ? `${outcome.text.trim()}\n`
+            ? (outcome.text.includes(SCIENTIFIC_VISION_MARKER)
+                ? `${outcome.text.trim()}\n`
+                : `${outcome.text.trim()}\n\n================================================================================\n${SCIENTIFIC_VISION_MARKER}\n================================================================================\n`)
             : `${rawText}\n\n================================================================================\n${SCIENTIFIC_VISION_MARKER}\n================================================================================\n\n${outcome.text}\n`;
           try {
             fs.writeFileSync(txtPath, fullContent, 'utf-8');
@@ -2254,12 +2279,12 @@ export function startBackgroundOfficialSync(params: {
           syncJobState.skippedCount++;
           syncJobState.processedPdfs++;
         } else if (outcome.status === 'invalid_key') {
-          stoppedEarlyReason = outcome.errorMessage || 'Clé Gemini invalide ou refusée.';
+          stoppedEarlyReason = outcome.errorMessage || `Clé ${visionLabel} invalide ou refusée.`;
           syncJobState.lastError = stoppedEarlyReason;
           break;
         } else if (outcome.status === 'rate_limited') {
           stoppedByRateLimit = true;
-          stoppedEarlyReason = 'Quota API Gemini temporairement atteint (429). Les documents déjà décodés sont sauvegardés ; relancez plus tard pour continuer les restants.';
+          stoppedEarlyReason = `Quota API ${visionLabel} temporairement atteint (429). Les documents déjà décodés sont sauvegardés ; relancez plus tard pour continuer les restants.`;
           syncJobState.lastError = stoppedEarlyReason;
           break;
         } else {

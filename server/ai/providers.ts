@@ -30,7 +30,7 @@ export const DEFAULT_MODELS: Record<SupportedProvider, string> = {
   anthropic: 'claude-3-7-sonnet-20250219',
   deepseek: 'deepseek-flash',
   mistral: 'mistral-small-latest',
-  nvidia: 'meta/llama-3.3-70b-instruct',
+  nvidia: 'nvidia/nemotron-3.5-super-vl-120b-a12b',
   openrouter: 'openrouter/free',
   custom: 'llama3.3',
 };
@@ -62,6 +62,18 @@ export const LEGACY_GROQ_MODELS: Record<string, string> = {
   'qwen/qwen3.6-27b': 'qwen/qwen3.8-27b',
   'qwen/qwen3-32b': 'qwen/qwen3.8-27b',
 };
+
+// Remap deprecated NVIDIA NIM endpoints (404/410) to verified active endpoints
+export const LEGACY_NVIDIA_MODELS = new Set([
+  'meta/llama-3.3-70b-instruct',
+  'meta/llama-4-maverick',
+  'meta/llama-3.1-8b-instruct',
+  'deepseek-ai/deepseek-v3',
+  'deepseek-ai/deepseek-v3.2',
+  'deepseek-ai/deepseek-r1',
+  'deepseek-ai/deepseek-v4.1-flash',
+  'qwen/qwen3-235b-a22b',
+]);
 
 const DEEPSEEK_REASONING_EFFORTS = new Set(['none', 'low', 'high', 'max', 'minimal', 'medium', 'xhigh']);
 
@@ -122,6 +134,33 @@ export function isAllowedLocalBaseUrl(rawUrl: string): boolean {
   } catch {
     return false;
   }
+}
+
+export function remapProviderModel(provider: SupportedProvider, rawModel?: string): string {
+  let model = rawModel || DEFAULT_MODELS[provider] || 'gemini-3.8-flash';
+  if (provider === 'gemini' && (RETIRED_GEMINI_MODELS.has(model) || !model.startsWith('gemini-'))) {
+    return 'gemini-3.8-flash';
+  }
+  if (provider === 'groq' && LEGACY_GROQ_MODELS[model]) {
+    return LEGACY_GROQ_MODELS[model];
+  }
+  if (provider === 'nvidia' && LEGACY_NVIDIA_MODELS.has(model)) {
+    return DEFAULT_MODELS.nvidia;
+  }
+  if (provider === 'deepseek') {
+    if (LEGACY_DEEPSEEK_MODELS[model]) return LEGACY_DEEPSEEK_MODELS[model];
+    if (model !== 'deepseek-flash' && model !== 'deepseek-v4-pro') return 'deepseek-flash';
+  }
+  if (
+    provider === 'openrouter' &&
+    (model === 'google/gemini-2.5-flash' ||
+      model === 'google/gemini-4-carbon' ||
+      model === 'meta-llama/llama-3.3-70b-instruct:free' ||
+      model === 'meta-llama/llama-3.2-3b-instruct:free')
+  ) {
+    return 'openrouter/free';
+  }
+  return model;
 }
 
 export function resolveAIConfig(req: Request): ResolvedAIConfig {
@@ -186,24 +225,7 @@ export function resolveAIConfig(req: Request): ResolvedAIConfig {
   // Model
   const headerModel = (req.headers['x-ai-model'] as string) || '';
   const bodyModel = (req.body?.model as string) || '';
-  let model = headerModel || bodyModel || process.env.AI_MODEL || DEFAULT_MODELS[provider] || 'gemini-3.8-flash';
-  if (provider === 'gemini' && (RETIRED_GEMINI_MODELS.has(model) || !model.startsWith('gemini-'))) {
-    model = 'gemini-3.8-flash';
-  }
-  if (provider === 'groq' && LEGACY_GROQ_MODELS[model]) {
-    model = LEGACY_GROQ_MODELS[model];
-  }
-  // Remap retired DeepSeek V3/R1 models (deepseek-chat -> deepseek-flash, deepseek-reasoner -> deepseek-v4-pro)
-  if (provider === 'deepseek') {
-    if (LEGACY_DEEPSEEK_MODELS[model]) {
-      model = LEGACY_DEEPSEEK_MODELS[model];
-    } else if (model !== 'deepseek-flash' && model !== 'deepseek-v4-pro') {
-      model = 'deepseek-flash';
-    }
-  }
-  if (provider === 'openrouter' && model === 'google/gemini-2.5-flash') {
-    model = 'openrouter/free';
-  }
+  const model = remapProviderModel(provider, headerModel || bodyModel || process.env.AI_MODEL || DEFAULT_MODELS[provider]);
 
   // DeepSeek thinking-mode effort control (header/body/env), validated against the API vocabulary
   let reasoningEffort: string | undefined;
