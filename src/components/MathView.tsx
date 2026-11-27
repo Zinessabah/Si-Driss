@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import katex from 'katex';
-import DOMPurify from 'dompurify';
 import {
   ScientificGraphicsRenderer,
   ScientificSvgCard,
@@ -8,7 +7,7 @@ import {
   MindMapSpec,
   MindMapNode,
 } from './ScientificGraphicsRenderer';
-import { enforceMoroccanVectorNotation } from '../utils/vectorNotation';
+import { enforceMoroccanVectorNotation, sanitizeKatexHtml } from '../utils/vectorNotation';
 
 interface MathViewProps {
   content: string;
@@ -144,7 +143,7 @@ function renderKatexToSafeHtml(code: string, displayMode: boolean): string {
       trust: false,
       macros: { ...KATEX_MACROS },
     });
-    return DOMPurify.sanitize(html, { USE_PROFILES: { html: true, mathMl: true } });
+    return sanitizeKatexHtml(html);
   } catch {
     return '';
   }

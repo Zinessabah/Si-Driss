@@ -1,7 +1,7 @@
 {
   "version": "2.2.0",
-  "commit": "ed667db",
-  "commitDate": "2026-11-26T14:56:58+00:00",
-  "commitMessage": "feat(ocr): lecture et transcription automatiques des examens PDF scannés",
-  "buildTime": "2026-11-27T16:58:38.150Z"
+  "commit": "c04670e",
+  "commitDate": "2026-11-27T17:01:51+00:00",
+  "commitMessage": "fix(physique): étendre et généraliser la notation vectorielle BIOF (MathView, MindMap, exports, prompts)",
+  "buildTime": "2026-11-27T17:16:58.477Z"
 }

@@ -45,7 +45,7 @@ export const SLASH_COMMANDS: SlashCommandDef[] = [
     id: 'examen',
     command: '/examen',
     usage: '/examen <année / session / thème>',
-    description: 'Afficher un sujet officiel du Bac National (2008–2026) et sa correction',
+    description: 'Afficher un sujet officiel du Bac National (2008–2026) — solution sur demande',
     aliases: ['/affiche examen', '/affiche sujet', '/annale'],
     badgeColor: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
     docCategories: ['examens'],

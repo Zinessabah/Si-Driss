@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify';
+
 const VECTOR_SINGLE_SYMBOLS = new Set([
   'P', 'F', 'R', 'T', 'f', 'v', 'a', 'g', 'E', 'B', 'p', 'i', 'j', 'k', 'u', 'n', 'e',
 ]);
@@ -136,6 +138,12 @@ export function enforceMoroccanVectorNotation(rawCode: string): string {
     (_m, inner: string) => `\\vec{${inner.trim()}}`
   );
 
+  // 1b. Corrige \vec{OM} ou \vec{AB} (2 majuscules) en flèche couvrante \overrightarrow{OM}
+  code = code.replace(
+    /\\vec\s*\{\s*([A-Z]{2})\s*\}/g,
+    (_m, pair: string) => `\\overrightarrow{${pair}}`
+  );
+
   // 2. Vecteurs anglo-saxons en gras : \mathbf{F}, \mathbf{F_A}, \boldsymbol{a_G}, \mathbf{AB} -> \vec{...} / \overrightarrow{...}
   code = code.replace(
     /\\(?:mathbf|boldsymbol)\s*\{\s*([A-Za-z]+)((?:_(?:\{[^{}\n]+\}|[A-Za-z0-9]+))?)\s*\}/g,
@@ -200,4 +208,17 @@ export function enforceMoroccanVectorNotation(rawCode: string): string {
   }
 
   return code;
+}
+
+/**
+ * Sanitisation sécurisée du HTML produit par KaTeX en préservant ses <svg> natifs
+ * (indispensables pour les flèches vectorielles \vec{...}, \overrightarrow{...} et racines \sqrt{...}).
+ */
+export function sanitizeKatexHtml(katexHtml: string): string {
+  return DOMPurify.sanitize(katexHtml, {
+    USE_PROFILES: { html: true, mathMl: true, svg: true },
+    ADD_ATTR: ['viewBox', 'preserveAspectRatio'],
+    FORBID_TAGS: ['script', 'foreignObject', 'iframe', 'object', 'embed', 'animate', 'set'],
+    FORBID_ATTR: ['onload', 'onerror', 'onclick', 'onmouseover', 'onfocus', 'href', 'xlink:href'],
+  });
 }

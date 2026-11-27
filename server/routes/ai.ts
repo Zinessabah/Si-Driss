@@ -359,7 +359,7 @@ async function prepareChatContext(
   let inheritedSlash = slashCmd;
   if (!inheritedSlash && lastUserIdx > 0) {
     const looksLikeDocFollowUp =
-      /\b(cette\s+s[eé]rie|ce\s+sujet|ce\s+cours|cet\s+exercice|exercice\s*\d+|ex\s*\d+|question\s*\d+|partie\s*\d+|r[eé]soudre|corrig[eé]|correction|solution)\b/i.test(
+      /\b(cette\s+s[eé]rie|cet\s+examen|de\s+l['’]examen|ce\s+sujet|ce\s+cours|ce\s+chapitre|cet\s+exercice|exercice\s*(?:\d+|[IV]+)|ex\s*\d+|question\s*\d+|partie\s*\d+|r[eé]soudre|r[eé]sous|corrig[eé]|corriger|correction|solution|r[eé]ponse|r[eé]ponds)\b/i.test(
         lastUserText
       );
     if (looksLikeDocFollowUp) {

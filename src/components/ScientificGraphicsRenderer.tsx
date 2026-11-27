@@ -2,7 +2,7 @@ import React, { useState, useMemo, useRef } from 'react';
 import { Download, RefreshCw, ZoomIn, ZoomOut, Info, Activity, GitFork, Copy, Check, Sun, Moon, Layers } from 'lucide-react';
 import katex from 'katex';
 import DOMPurify from 'dompurify';
-import { enforceMoroccanVectorNotation } from '../utils/vectorNotation';
+import { enforceMoroccanVectorNotation, sanitizeKatexHtml } from '../utils/vectorNotation';
 
 const KATEX_MACROS: Record<string, string> = {
   '\\unit': '\\text{#1}',
@@ -87,7 +87,7 @@ export function renderLatexHtml(code: string, displayMode: boolean): string {
       trust: false,
       macros: KATEX_MACROS,
     });
-    return DOMPurify.sanitize(html, { USE_PROFILES: { html: true, mathMl: true } });
+    return sanitizeKatexHtml(html);
   } catch {
     return '';
   }

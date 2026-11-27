@@ -925,7 +925,7 @@ export function hasExplicitSolveIntent(text: string): boolean {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
-  return /\b(resoudre|resous|solution|corrige|corriger|correction|reponse|reponses|reponds|traite|traiter|calculer|calcule|etablir|etablis|deduire|determiner|determine|demontrer|demontre|fais\s+l['’]exercice)\b/i.test(
+  return /\b(resoudre|resous|resouds|solution|corrige|corriger|corriges|correction|reponse|reponses|reponds|repondre|traite|traiter|calculer|calcule|etablir|etablis|deduire|determiner|determine|demontrer|demontre|fais\s+l['’]exercice)\b/i.test(
     q
   );
 }
@@ -949,11 +949,15 @@ export function parseSlashCommand(rawText: string): ParsedSlashCommand | null {
             ? `Affiche le cours officiel "${arg}" et explique ses notions clés, définitions et formules essentielles.`
             : `Explique les notions clés du cours officiel du programme.`;
           break;
-        case 'examen':
+        case 'examen': {
+          const wantsSolve = hasExplicitSolveIntent(arg);
           effectivePrompt = arg
-            ? `Affiche et corrige méthodiquement le sujet d'examen national : ${arg}.`
-            : `Affiche un exercice officiel de l'Examen National du Baccalauréat.`;
+            ? wantsSolve
+              ? `Affiche et corrige méthodiquement l'exercice ou le sujet d'examen national demandé : ${arg}.`
+              : `Affiche le sujet d'examen national officiel : ${arg}. Présente l'énoncé et liste brièvement les exercices disponibles, SANS donner aucune solution, réponse numérique ni correction tant que l'élève ne le demande pas.`
+            : `Affiche un sujet officiel de l'Examen National du Baccalauréat sans donner la solution d'emblée.`;
           break;
+        }
         case 'exercice': {
           const wantsSolve = hasExplicitSolveIntent(arg);
           effectivePrompt = arg

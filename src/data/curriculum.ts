@@ -551,8 +551,8 @@ export const CURRICULUM: ChapterInfo[] = [
       },
     ],
     nationalChecklist: [
-      'Poser les conditions initiales à $t = 0$ pour $\\vec{OM}_0$ et $\\vec{v}_0$.',
-      'Intégrer les composantes de $\\vec{a}$ pour trouver $\\vec{v}(t)$ puis $\\vec{OM}(t)$ en justifiant les constantes d\'intégration.',
+      'Poser les conditions initiales à $t = 0$ pour $\\overrightarrow{OM}_0$ et $\\vec{v}_0$.',
+      'Intégrer les composantes de $\\vec{a}$ pour trouver $\\vec{v}(t)$ puis $\\overrightarrow{OM}(t)$ en justifiant les constantes d\'intégration.',
       'Calculer la portée $x_P$ ($y=0$) ou la flèche $y_S$ ($v_y = 0$).',
       'Démontrer que le mouvement d\'un satellite circulaire est uniforme ($a_t = dv/dt = 0$) et déduire la vitesse orbitale $v = \\sqrt{GM/r}$.',
       'Démontrer que la trajectoire d\'une particule dans un champ magnétique uniforme $\\vec{B}$ est circulaire uniforme de rayon $R = \\frac{mv}{|q|B}$ (PC & SM).',

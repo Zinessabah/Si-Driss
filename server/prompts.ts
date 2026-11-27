@@ -73,8 +73,16 @@ export function getInstruction(
   options?: InstructionOptions
 ) {
   const safeBranch = normalizeBranchParam(branch);
+  const isDisplayOnlyDoc =
+    Boolean(options?.hasOfficialPdf) &&
+    (options?.officialCategory === 'examens' || options?.officialCategory === 'series') &&
+    !options?.solveRequested;
+
   let extra = '';
-  if (!socraticEnabled || mode === 'direct') {
+  if (isDisplayOnlyDoc) {
+    extra = `\nMODE ACTIF : CONSULTATION DE SUJET / SÉRIE SANS CORRECTION (2ÈME BAC ${safeBranch}).
+Présente uniquement le document et ses exercices sans révéler aucune solution ni réponse tant que l'élève ne la demande pas explicitement.`;
+  } else if (!socraticEnabled || mode === 'direct') {
     extra = `\nMODE ACTIF : RÉSOLUTION DIRECTE & COURS RIGOUROUX (DÉMARCHE SOCRATIQUE DÉSACTIVÉE).
 L'élève de 2ème Bac ${safeBranch} attend une réponse immédiate, complète, scientifiquement irréprochable et vérifiée.`;
   } else if (mode === 'socratic') {
@@ -153,16 +161,26 @@ ${statementGuidanceLine}
 2. INTERDICTION STRICTE DE DONNER LA SOLUTION D'EMBLÉE :
    - NE DONNE AUCUNE CORRECTION, NI RÉPONSE NUMÉRIQUE, NI RÉSOLUTION D'EXERCICE tant que l'élève ne l'a pas explicitement demandée.
    - Termine en l'invitant à choisir un exercice (ex. : « Quel exercice souhaites-tu traiter ? Tu peux écrire par exemple : **"Résoudre l'exercice 2 de cette série"** ou me proposer ta propre tentative ! »).`
-      : `================================================================================
-CONSIGNE SPÉCIALE : ÉPREUVES DU BACCALAURÉAT NATIONAL MAROCAIN (BIOF) :
-Quand l'extrait documentaire fourni ci-dessus provient d'une Épreuve Nationale du Baccalauréat marocain (ou quand l'élève demande d'afficher et/ou résoudre un exercice d'examen national) :
+      : options?.solveRequested
+        ? `================================================================================
+CONSIGNE SPÉCIALE : ÉPREUVES DU BACCALAURÉAT NATIONAL MAROCAIN (RÉSOLUTION DEMANDÉE) :
+L'élève a explicitement demandé la résolution ou la correction de ce sujet/exercice d'Examen National :
 1. ÉNONCÉ OFFICIEL EN FRANÇAIS (BIOF) :
 ${pdfNoticeLine}
 ${statementGuidanceLine}
    - Inclus toutes les données expérimentales et numériques officielles ($S_h$, $\\lambda$, $c$, $h$, $v$, divisions sur l'oscillogramme ou la courbe).
-   - Reproduis fidèlement les questions avec leurs 4 propositions de choix (QCM) telles qu'au sujet officiel.
 2. CORRECTION MÉTHODIQUE ET OFFICIELLE :
-   - Résous chaque question étape par étape avec la méthode officielle en 4 points (Justification & formule littérale, lecture graphique / conversions, calcul numérique, résultat final en gras identifiant la proposition exacte).`;
+   - Résous UNIQUEMENT l'exercice ou la question demandée par l'élève, étape par étape avec la méthode officielle en 4 points (Justification théorique & vecteurs avec flèches $\\vec{...}$, Expression littérale, Lecture graphique / conversions SI & AN, Résultat final en gras identifiant la proposition exacte).`
+        : `================================================================================
+CONSIGNE SPÉCIALE : ÉPREUVES DU BACCALAURÉAT NATIONAL MAROCAIN (AFFICHAGE SEUL — SANS SOLUTION) :
+L'élève souhaite consulter le sujet d'examen national SANS avoir encore demandé de correction :
+1. ÉNONCÉ OFFICIEL EN FRANÇAIS (BIOF) :
+${pdfNoticeLine}
+${statementGuidanceLine}
+   - Présente fidèlement l'énoncé ou résume brièvement les exercices du sujet (titres / thèmes / numéros) avec les données numériques ou propositions QCM si disponibles.
+2. INTERDICTION STRICTE DE DONNER LA SOLUTION D'EMBLÉE :
+   - NE DONNE AUCUNE CORRECTION, NI RÉPONSE NUMÉRIQUE, NI RÉSOLUTION D'EXERCICE, NI BONNE RÉPONSE QCM tant que l'élève ne l'a pas explicitement demandée.
+   - Termine en l'invitant à choisir un exercice ou une question (ex. : « Quel exercice souhaites-tu traiter ? Tu peux écrire par exemple : **"Résoudre l'exercice 2 de cet examen"** ou me proposer ta propre tentative ! »).`;
 
     full += `\n\n================================================================================
 DOCUMENTS DE RÉFÉRENCE OFFICIELS DU PROGRAMME (EXTRAITS DE /docs/programme/) :
