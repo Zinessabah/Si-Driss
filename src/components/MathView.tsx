@@ -8,11 +8,13 @@ import {
   MindMapSpec,
   MindMapNode,
 } from './ScientificGraphicsRenderer';
+import { enforceMoroccanVectorNotation } from '../utils/vectorNotation';
 
 interface MathViewProps {
   content: string;
   className?: string;
   block?: boolean;
+  preserveRawNotation?: boolean;
 }
 
 const KATEX_MACROS: Record<string, string> = {
@@ -76,7 +78,11 @@ function unwrapBoxedLatex(input: string): string {
 /**
  * Nettoie et prépare une expression LaTeX avant de la confier à KaTeX
  */
-function sanitizeLatexForKatex(rawMath: string, isDisplay: boolean): { code: string; forceDisplay: boolean } {
+function sanitizeLatexForKatex(
+  rawMath: string,
+  isDisplay: boolean,
+  preserveRawNotation: boolean = false
+): { code: string; forceDisplay: boolean } {
   let code = unwrapBoxedLatex(rawMath.trim());
   let forceDisplay = isDisplay;
 
@@ -93,17 +99,9 @@ function sanitizeLatexForKatex(rawMath: string, isDisplay: boolean): { code: str
   code = code.replace(/(^|[^\\])\b(cdot|implies|iff|mathrm|mathbf|mathit|sqrt|left|right|quad|qquad|approx|equiv)\b/g, '$1\\$2');
 
   // Filet de sécurité notation vectorielle marocaine (BIOF) :
-  // Convertit les vecteurs anglo-saxons en gras (\mathbf{F}, \boldsymbol{a}) ou à chapeau (\hat{i}) en flèches \vec{...}
-  code = code.replace(/\\(?:mathbf|boldsymbol)\{([PFRTfavgEBijkun])\}/g, '\\vec{$1}');
-  code = code.replace(/\\(?:mathbf|boldsymbol)\{([A-Z]{2})\}/g, '\\overrightarrow{$1}');
-  code = code.replace(/\\hat\{\\?(i(?:math)?|j(?:math)?|k|u|n)\}/g, (_m, sym: string) => {
-    const clean = sym.startsWith('i') ? 'i' : sym.startsWith('j') ? 'j' : sym;
-    return `\\vec{${clean}}`;
-  });
-  code = code.replace(/\\sum\s*F(\s*(?:_\{?(?:\\text\{)?ext\}?\}?))?\s*=/g, (_m, sub = '') => `\\sum \\vec{F}${sub} =`);
-  code = code.replace(/(\\sum\s*\\vec\{F\}[^=]*=\s*m\s*(?:\\cdot\s*)?)(?<!\\vec\{)a(_\{?[G0-9a-zA-Z]*\}?)?/g, (_m, lhs, sub = '') => `${lhs}\\vec{a}${sub}`);
-  code = code.replace(/(\\mathcal\{M\}|M)_(\\Delta)\(F\)/g, '$1_$2(\\vec{F})');
-  code = code.replace(/\bW(_\{[^}]*\})?\(F\)/g, 'W$1(\\vec{F})');
+  if (!preserveRawNotation) {
+    code = enforceMoroccanVectorNotation(code);
+  }
 
   // Convertit \begin{align} ou \begin{align*} en \begin{aligned} (compatible partout dans KaTeX)
   if (/\\begin\{align\*?\}/.test(code)) {
@@ -157,9 +155,14 @@ function renderKatexToSafeHtml(code: string, displayMode: boolean): string {
  * changement de contenu (plus de double rendu « initial + effet »), et composant
  * mémoïsé pour ignorer les re-rendus du parent pendant le streaming du chat.
  */
-const KatexContainer: React.FC<{ math: string; displayMode: boolean; className?: string }> = React.memo(
-  function KatexContainer({ math, displayMode, className = '' }) {
-    const { code, forceDisplay } = sanitizeLatexForKatex(math, displayMode);
+const KatexContainer: React.FC<{
+  math: string;
+  displayMode: boolean;
+  className?: string;
+  preserveRawNotation?: boolean;
+}> = React.memo(
+  function KatexContainer({ math, displayMode, className = '', preserveRawNotation = false }) {
+    const { code, forceDisplay } = sanitizeLatexForKatex(math, displayMode, preserveRawNotation);
     const effectiveDisplay = displayMode || forceDisplay;
 
     // Rendu synchrone initial pour éviter tout clignotement — calculé UNE fois par contenu
@@ -234,7 +237,7 @@ function autoWrapBareLatexInText(text: string): string {
  * - \begin{equation|align|aligned|cases|...} hors $$ -> $$ ... $$
  * - Formules entourées de backticks `$...$` ou `\frac...` -> $...$
  */
-function normalizeAllMathDelimiters(raw: string): string {
+function normalizeAllMathDelimiters(raw: string, preserveRawNotation: boolean = false): string {
   if (!raw) return '';
 
   let normalized = raw
@@ -272,6 +275,17 @@ function normalizeAllMathDelimiters(raw: string): string {
     /(^|[^$])(\\begin\{(aligned|align\*?|equation\*?|cases|matrix|pmatrix|bmatrix|vmatrix)\}[\s\S]*?\\end\{\3\})(?!\$)/g,
     (_m, prefix, envBlock) => `${prefix}$$${envBlock}$$`
   );
+
+  // Convertit les sommes Unicode brutes hors délimiteurs (ex: ∑ F_ext = m a_G) vers LaTeX vectoriel
+  if (!preserveRawNotation) {
+    normalized = normalized.replace(
+      /(^|[^$\n])([∑Σ]\s*F(?:_(?:\{[^{}\n]+\}|[A-Za-z0-9]+))?(?:\s*=\s*[^\n.,;)]+)?)/g,
+      (_m, prefix: string, expr: string) => {
+        const asLatex = expr.replace(/^[∑Σ]\s*/, '\\sum ').replace(/·/g, ' \\cdot ');
+        return `${prefix}$${enforceMoroccanVectorNotation(asLatex)}$`;
+      }
+    );
+  }
 
   return normalized;
 }
@@ -350,7 +364,12 @@ function stableHash(s: string): string {
 /**
  * Rend une chaîne contenant des formules ($...$ et $$...$$) ainsi que du texte enrichi
  */
-function renderMathAndTextNodes(input: string, forceBlock: boolean, keyPrefix: string): React.ReactNode[] {
+function renderMathAndTextNodes(
+  input: string,
+  forceBlock: boolean,
+  keyPrefix: string,
+  preserveRawNotation: boolean = false
+): React.ReactNode[] {
   // 1. Découpe d'abord sur les délimiteurs explicites $$...$$ et $...$ (inline mono-ligne pour éviter qu'un $ isolé n'avale le texte)
   const explicitMathRegex = /(\$\$[\s\S]*?\$\$|\$(?:\\.|[^$\\\n])+?\$)/g;
   const preliminarySegments: { type: 'math' | 'text'; value: string; display: boolean }[] = [];
@@ -398,6 +417,7 @@ function renderMathAndTextNodes(input: string, forceBlock: boolean, keyPrefix: s
           key={`${keyPrefix}-m-${idx}-${stableHash(seg.value)}`}
           math={seg.value}
           displayMode={seg.display}
+          preserveRawNotation={preserveRawNotation}
         />
       );
       return;
@@ -430,6 +450,7 @@ function renderMathAndTextNodes(input: string, forceBlock: boolean, keyPrefix: s
           key={`${keyPrefix}-ak-${idx}-${subCount}-${stableHash(subMatch[1])}`}
           math={subMatch[1]}
           displayMode={false}
+          preserveRawNotation={preserveRawNotation}
         />
       );
       subLast = subRegex.lastIndex;
@@ -458,6 +479,7 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
   content,
   className = '',
   block = false,
+  preserveRawNotation = false,
 }) {
   if (!content) return null;
 
@@ -475,6 +497,7 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
         math={trimmed.slice(2, -2)}
         displayMode={true}
         className={className}
+        preserveRawNotation={preserveRawNotation}
       />
     );
   }
@@ -490,6 +513,7 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
         math={trimmed.slice(1, -1)}
         displayMode={block}
         className={className}
+        preserveRawNotation={preserveRawNotation}
       />
     );
   }
@@ -510,6 +534,7 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
         math={trimmed}
         displayMode={block}
         className={className}
+        preserveRawNotation={preserveRawNotation}
       />
     );
   }
@@ -530,8 +555,8 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
     while ((match = graphicBlockRegex.exec(content)) !== null) {
       if (match.index > lastIndex) {
         const textChunk = content.slice(lastIndex, match.index);
-        const normalizedChunk = normalizeAllMathDelimiters(textChunk);
-        elements.push(...renderMathAndTextNodes(normalizedChunk, block, `mv-txt-${lastIndex}`));
+        const normalizedChunk = normalizeAllMathDelimiters(textChunk, preserveRawNotation);
+        elements.push(...renderMathAndTextNodes(normalizedChunk, block, `mv-txt-${lastIndex}`, preserveRawNotation));
       }
 
       const explicitLang = (match[1] || match[3] || match[5] || '').toLowerCase();
@@ -582,7 +607,7 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
 
         if (visibleText.trim()) {
           elements.push(
-            ...renderMathAndTextNodes(normalizeAllMathDelimiters(visibleText), block, `mv-txt-tail-${lastIndex}`)
+            ...renderMathAndTextNodes(normalizeAllMathDelimiters(visibleText, preserveRawNotation), block, `mv-txt-tail-${lastIndex}`, preserveRawNotation)
           );
         }
 
@@ -604,8 +629,8 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
           );
         }
       } else {
-        const normalizedChunk = normalizeAllMathDelimiters(tailChunk);
-        elements.push(...renderMathAndTextNodes(normalizedChunk, block, `mv-txt-end-${lastIndex}`));
+        const normalizedChunk = normalizeAllMathDelimiters(tailChunk, preserveRawNotation);
+        elements.push(...renderMathAndTextNodes(normalizedChunk, block, `mv-txt-end-${lastIndex}`, preserveRawNotation));
       }
     }
 
@@ -617,12 +642,12 @@ export const MathView: React.FC<MathViewProps> = React.memo(function MathView({
   }
 
   // Contenu standard sans blocs graphiques
-  const normalized = normalizeAllMathDelimiters(content);
+  const normalized = normalizeAllMathDelimiters(content, preserveRawNotation);
   const Container = block ? 'div' : 'span';
 
   return (
     <Container className={`leading-relaxed ${className}`}>
-      {renderMathAndTextNodes(normalized, block, 'mv')}
+      {renderMathAndTextNodes(normalized, block, 'mv', preserveRawNotation)}
     </Container>
   );
 });

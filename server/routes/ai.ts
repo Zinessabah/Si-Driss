@@ -672,7 +672,7 @@ Fournis une évaluation structurée au format JSON suivant :
     {"name": "Unités SI obligatoires", "status": "ok" | "warning" | "error", "feedback": "..."}
   ],
   "nationalTips": "Le conseil clé attendu par le barème national ${branch}",
-  "correctedDraft": "La rédaction modèle idéale attendue par le barème ministériel ${branch} avec LaTeX"
+  "correctedDraft": "La rédaction modèle idéale attendue par le barème ministériel ${branch} avec LaTeX et flèches obligatoires sur tout vecteur/somme des forces ($\\sum \\vec{F}_{\\text{ext}} = m\\vec{a}_G$, $\\vec{P} + \\vec{R} = m\\vec{a}_G$, zéro \\mathbf{...}) avant projection"
 }
 `;
 
@@ -740,6 +740,7 @@ L'exercice doit comporter :
 - Données précises avec unités et constantes physiques officielles.
 - 3 à 4 questions progressives et numérotées selon le standard du National.
 - Une question piège classique de 2ème Bac ${branch}.
+- Notation marocaine BIOF obligatoire : flèches $\\vec{...}$ sur toute somme des forces et grandeur vectorielle (jamais de notation anglo-saxonne $\\mathbf{F}$ ou $\\hat{i}$).
 
 Réponds UNIQUEMENT au format JSON :
 {

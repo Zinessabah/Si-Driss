@@ -1,7 +1,7 @@
 {
   "version": "2.2.0",
-  "commit": "4c3da35",
-  "commitDate": "2026-11-26T14:38:10+00:00",
-  "commitMessage": "chore(examens): ajouter les fichiers renommés SN_2025_PC",
-  "buildTime": "2026-11-26T14:53:57.292Z"
+  "commit": "ed667db",
+  "commitDate": "2026-11-26T14:56:58+00:00",
+  "commitMessage": "feat(ocr): lecture et transcription automatiques des examens PDF scannés",
+  "buildTime": "2026-11-27T16:58:38.150Z"
 }

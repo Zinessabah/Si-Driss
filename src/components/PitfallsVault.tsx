@@ -83,7 +83,7 @@ export const PitfallsVault: React.FC<PitfallsVaultProps> = ({ onChallengeTrap })
                     <XCircle className="w-3.5 h-3.5" />
                     Rédaction bâclée (Sanctionnée au barème) :
                   </div>
-                  <MathView content={trap.badDraft} className="text-slate-300 font-mono text-[11px]" />
+                  <MathView content={trap.badDraft} preserveRawNotation className="text-slate-300 font-mono text-[11px]" />
                 </div>
 
                 {/* Good draft */}

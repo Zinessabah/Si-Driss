@@ -1,6 +1,7 @@
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import katex from 'katex';
+import { enforceMoroccanVectorNotation } from './vectorNotation';
 import {
   Document,
   Packer,
@@ -283,7 +284,8 @@ export function latexToReadableMath(latex: string): string {
   if (s.startsWith('$$') && s.endsWith('$$')) s = s.slice(2, -2).trim();
   else if (s.startsWith('$') && s.endsWith('$')) s = s.slice(1, -1).trim();
 
-  // Déballe \boxed{...}, \text{...}, \mathrm{...}, \mathbf{...}
+  // Déballe \boxed{...}, \text{...}, \mathrm{...}, \mathbf{...} après normalisation vectorielle BIOF
+  s = enforceMoroccanVectorNotation(s);
   let prev = '';
   let guard = 0;
   while (s !== prev && guard < 12) {
@@ -660,14 +662,15 @@ function parseLatexToDocxMathNodes(latex: string): DocxMathComponent[] {
  * Construit un objet natif Word `DocxMath` en gras à partir d'une chaîne LaTeX
  */
 function buildDocxMath(latex: string): DocxMath {
+  const safeLatex = enforceMoroccanVectorNotation(latex);
   try {
-    const nodes = parseLatexToDocxMathNodes(latex);
+    const nodes = parseLatexToDocxMathNodes(safeLatex);
     return new DocxMath({
       children: nodes,
     });
   } catch {
     return new DocxMath({
-      children: [createBoldMathRun(latexToReadableMath(latex))],
+      children: [createBoldMathRun(latexToReadableMath(safeLatex))],
     });
   }
 }
@@ -1019,7 +1022,9 @@ function renderInlineMarkdownAndMathToHtml(rawText: string): string {
         (part.startsWith('$') && part.endsWith('$') && part.length > 2)
       ) {
         const isDisplay = part.startsWith('$$');
-        const latexCode = unwrapBoxedLatex((isDisplay ? part.slice(2, -2) : part.slice(1, -1)).trim());
+        const latexCode = enforceMoroccanVectorNotation(
+          unwrapBoxedLatex((isDisplay ? part.slice(2, -2) : part.slice(1, -1)).trim())
+        );
         try {
           const rendered = katex.renderToString(latexCode, {
             displayMode: isDisplay,

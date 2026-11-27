@@ -2,6 +2,7 @@ import React, { useState, useMemo, useRef } from 'react';
 import { Download, RefreshCw, ZoomIn, ZoomOut, Info, Activity, GitFork, Copy, Check, Sun, Moon, Layers } from 'lucide-react';
 import katex from 'katex';
 import DOMPurify from 'dompurify';
+import { enforceMoroccanVectorNotation } from '../utils/vectorNotation';
 
 const KATEX_MACROS: Record<string, string> = {
   '\\unit': '\\text{#1}',
@@ -71,7 +72,7 @@ export function normalizePhysicsMathToLatex(input: string): string {
   s = s.replace(/\s*~\s*/g, ' \\approx ');
   s = s.replace(/!=/g, ' \\neq ');
 
-  return s;
+  return enforceMoroccanVectorNotation(s);
 }
 
 /**
