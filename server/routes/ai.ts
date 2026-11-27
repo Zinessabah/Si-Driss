@@ -218,6 +218,7 @@ router.get('/ai-status', (_req, res) => {
     process.env.ANTHROPIC_API_KEY ||
     process.env.DEEPSEEK_API_KEY ||
     process.env.MISTRAL_API_KEY ||
+    process.env.NVIDIA_API_KEY ||
     process.env.OPENROUTER_API_KEY ||
     process.env.AI_API_KEY ||
     '';
@@ -232,6 +233,8 @@ router.get('/ai-status', (_req, res) => {
       ? 'anthropic'
       : process.env.GEMINI_API_KEY
       ? 'gemini'
+      : process.env.NVIDIA_API_KEY
+      ? 'nvidia'
       : process.env.OLLAMA_BASE_URL
       ? 'custom'
       : '');
@@ -324,6 +327,140 @@ router.post('/validate-key', validateKeyLimiter, async (req, res) => {
       valid: false,
       error: err?.message || 'Erreur inattendue lors de la vérification.',
     });
+  }
+});
+
+// Live provider model listing (filters free models when possible, avoids stale endpoints)
+router.post('/list-models', validateKeyLimiter, async (req, res) => {
+  try {
+    const rawProvider = (req.headers['x-ai-provider'] || req.body?.provider || 'gemini') as string;
+    const provider = rawProvider.toLowerCase() as SupportedProvider;
+    const rawKey = (
+      (req.headers['x-ai-key'] as string) ||
+      (req.headers['x-gemini-api-key'] as string) ||
+      req.body?.apiKey ||
+      ''
+    ).trim();
+    const clientKey = sanitizeApiKey(rawKey);
+    const clientBaseUrl = ((req.headers['x-ai-base-url'] as string) || req.body?.baseUrl || '').trim();
+
+    if (clientBaseUrl) {
+      if (provider === 'custom' && !isAllowedLocalBaseUrl(clientBaseUrl)) {
+        return res.status(400).json({ error: 'URL locale non autorisée pour Ollama/Custom.' });
+      }
+      if (provider !== 'custom' && !clientKey) {
+        return res.status(400).json({ error: 'URL personnalisée interdite sans clé API client.' });
+      }
+    }
+
+    const baseUrl = (clientBaseUrl || DEFAULT_BASE_URLS[provider] || '').replace(/\/+$/, '');
+    const apiKey = clientKey;
+
+    if (provider === 'openrouter') {
+      const headers: Record<string, string> = {};
+      if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
+      const r = await fetch(`${baseUrl || 'https://openrouter.ai/api/v1'}/models`, {
+        headers,
+        signal: AbortSignal.timeout(12_000),
+      });
+      if (!r.ok) {
+        return res.status(r.status).json({ error: `OpenRouter (${r.status})` });
+      }
+      const json: any = await r.json();
+      const rawList = Array.isArray(json?.data) ? json.data : [];
+      const freeModels = rawList
+        .filter((m: any) => {
+          const id = String(m?.id || '');
+          const isZero = String(m?.pricing?.prompt) === '0' && String(m?.pricing?.completion) === '0';
+          return id === 'openrouter/free' || id.endsWith(':free') || isZero;
+        })
+        .slice(0, 40)
+        .map((m: any) => ({
+          id: String(m.id),
+          name: String(m.name || m.id),
+          tag: 'Gratuit En Ligne',
+          description: 'Endpoint gratuit actif détecté via API OpenRouter',
+        }));
+      return res.json({ models: freeModels });
+    }
+
+    if (provider === 'gemini') {
+      const envKey = !clientKey ? sanitizeApiKey(process.env.GEMINI_API_KEY || '') : '';
+      const key = apiKey || envKey;
+      if (!key) {
+        return res.status(400).json({ error: 'Renseigne ta clé Gemini pour lister les modèles actifs.' });
+      }
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(key)}`, {
+        signal: AbortSignal.timeout(12_000),
+      });
+      if (!r.ok) {
+        return res.status(r.status).json({ error: `Gemini (${r.status})` });
+      }
+      const json: any = await r.json();
+      const rawList = Array.isArray(json?.models) ? json.models : [];
+      const models = rawList
+        .filter((m: any) => Array.isArray(m?.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent'))
+        .map((m: any) => String(m.name || '').replace(/^models\//, ''))
+        .filter((id: string) => id && !/embedding|aqa|imagen|veo|tts|audio|robotics/i.test(id))
+        .slice(0, 30)
+        .map((id: string) => ({
+          id,
+          name: id,
+          tag: /flash|gemma/i.test(id) ? 'Gratuit / Rapide' : 'Actif API',
+          description: 'Modèle actif retourné par Google AI Studio',
+        }));
+      return res.json({ models });
+    }
+
+    if (provider === 'anthropic') {
+      if (!apiKey) {
+        return res.status(400).json({ error: 'Renseigne ta clé Anthropic pour lister les modèles.' });
+      }
+      const r = await fetch(`${baseUrl || 'https://api.anthropic.com/v1'}/models`, {
+        headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+        signal: AbortSignal.timeout(12_000),
+      });
+      if (!r.ok) {
+        return res.status(r.status).json({ error: `Anthropic (${r.status})` });
+      }
+      const json: any = await r.json();
+      const rawList = Array.isArray(json?.data) ? json.data : [];
+      const models = rawList.slice(0, 25).map((m: any) => ({
+        id: String(m.id),
+        name: String(m.display_name || m.id),
+        tag: 'Actif API',
+        description: 'Modèle actif détecté sur Anthropic',
+      }));
+      return res.json({ models });
+    }
+
+    // OpenAI-compatible providers (groq, nvidia, mistral, deepseek, openai, custom/Ollama)
+    if (provider !== 'custom' && !apiKey) {
+      return res.status(400).json({ error: `Renseigne ta clé ${provider.toUpperCase()} pour actualiser les modèles.` });
+    }
+    const targetUrl = baseUrl.endsWith('/models') ? baseUrl : `${baseUrl}/models`;
+    const headers: Record<string, string> = {};
+    if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
+    const r = await fetch(targetUrl, { headers, signal: AbortSignal.timeout(12_000) });
+    if (!r.ok) {
+      return res.status(r.status).json({ error: `${provider.toUpperCase()} (${r.status})` });
+    }
+    const json: any = await r.json();
+    const rawList = Array.isArray(json?.data) ? json.data : Array.isArray(json?.models) ? json.models : [];
+    const models = rawList
+      .map((m: any) => String(m?.id || m?.name || ''))
+      .filter((id: string) => id && !/embed|whisper|tts|dall-e|moderation|guard|rerank|bge-|e5-|clip|deplot|paligemma|kosmos/i.test(id))
+      .sort()
+      .slice(0, 60)
+      .map((id: string) => ({
+        id,
+        name: id,
+        tag: 'Endpoint Actif',
+        description: `Détecté en direct sur ${provider.toUpperCase()}`,
+      }));
+    return res.json({ models });
+  } catch (err: any) {
+    return res.status(400).json({ error: trimUpstreamError(err?.message || 'Impossible de lister les modèles.') });
   }
 });
 

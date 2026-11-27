@@ -8,6 +8,7 @@ export type SupportedProvider =
   | 'anthropic'
   | 'deepseek'
   | 'mistral'
+  | 'nvidia'
   | 'openrouter'
   | 'custom';
 
@@ -23,13 +24,14 @@ export function sanitizeApiKey(raw: string): string {
 }
 
 export const DEFAULT_MODELS: Record<SupportedProvider, string> = {
-  gemini: 'gemini-4-hydrogen',
-  groq: 'llama-3.3-70b-versatile',
+  gemini: 'gemini-3.8-flash',
+  groq: 'openai/gpt-oss-120b',
   openai: 'gpt-4o-mini',
   anthropic: 'claude-3-7-sonnet-20250219',
   deepseek: 'deepseek-flash',
   mistral: 'mistral-small-latest',
-  openrouter: 'google/gemini-4-carbon',
+  nvidia: 'meta/llama-3.3-70b-instruct',
+  openrouter: 'openrouter/free',
   custom: 'llama3.3',
 };
 
@@ -40,6 +42,7 @@ export const DEFAULT_BASE_URLS: Partial<Record<SupportedProvider, string>> = {
   // Canonical DeepSeek endpoint (no /v1): https://api.deepseek.com/chat/completions
   deepseek: 'https://api.deepseek.com',
   mistral: 'https://api.mistral.ai/v1',
+  nvidia: 'https://integrate.api.nvidia.com/v1',
   openrouter: 'https://openrouter.ai/api/v1',
   custom: process.env.OLLAMA_BASE_URL || 'http://localhost:11434/v1',
 };
@@ -50,23 +53,30 @@ export const LEGACY_DEEPSEEK_MODELS: Record<string, string> = {
   'deepseek-reasoner': 'deepseek-v4-pro',
 };
 
+// Remap deprecated Groq models to active free production equivalents
+export const LEGACY_GROQ_MODELS: Record<string, string> = {
+  'llama-3.3-70b-versatile': 'openai/gpt-oss-120b',
+  'deepseek-r1-distill-llama-70b': 'openai/gpt-oss-120b',
+  'llama-3.1-8b-instant': 'openai/gpt-oss-20b',
+  'mixtral-8x7b-32768': 'openai/gpt-oss-20b',
+  'qwen/qwen3.6-27b': 'qwen/qwen3.8-27b',
+  'qwen/qwen3-32b': 'qwen/qwen3.8-27b',
+};
+
 const DEEPSEEK_REASONING_EFFORTS = new Set(['none', 'low', 'high', 'max', 'minimal', 'medium', 'xhigh']);
 
-// Fallback models for Gemini — active public IDs (free-tier compatible)
+// Fallback models for Gemini — active free-tier compatible IDs
 export const GEMINI_FAST_MODELS = [
-  'gemini-4-hydrogen',
-  'gemini-4-carbon',
   'gemini-3.8-flash',
+  'gemini-3.6-flash',
   'gemini-3.5-flash-lite',
-  'gemini-3.1-flash-lite',
+  'gemini-4-hydrogen',
+  'gemini-2.5-flash',
   'gemini-flash-latest',
 ];
 
-// Retired or unsupported Gemini models silently rewritten to the active default.
+// Retired or unsupported Gemini models silently rewritten to the active free default.
 const RETIRED_GEMINI_MODELS = new Set([
-  'gemini-2.5-flash',
-  'gemini-2.5-pro',
-  'gemini-2.5-flash-lite',
   'gemini-2.0-flash',
   'gemini-2.0-pro',
   'gemini-2.0-flash-lite',
@@ -128,6 +138,7 @@ export function resolveAIConfig(req: Request): ResolvedAIConfig {
     else if (process.env.ANTHROPIC_API_KEY) provider = 'anthropic';
     else if (process.env.DEEPSEEK_API_KEY) provider = 'deepseek';
     else if (process.env.MISTRAL_API_KEY) provider = 'mistral';
+    else if (process.env.NVIDIA_API_KEY) provider = 'nvidia';
     else if (process.env.OPENROUTER_API_KEY) provider = 'openrouter';
     else if (process.env.OLLAMA_BASE_URL) provider = 'custom';
     else provider = 'gemini';
@@ -160,6 +171,9 @@ export function resolveAIConfig(req: Request): ResolvedAIConfig {
       case 'mistral':
         apiKey = sanitizeApiKey(process.env.MISTRAL_API_KEY || process.env.AI_API_KEY || '');
         break;
+      case 'nvidia':
+        apiKey = sanitizeApiKey(process.env.NVIDIA_API_KEY || process.env.AI_API_KEY || '');
+        break;
       case 'openrouter':
         apiKey = sanitizeApiKey(process.env.OPENROUTER_API_KEY || process.env.AI_API_KEY || '');
         break;
@@ -172,9 +186,12 @@ export function resolveAIConfig(req: Request): ResolvedAIConfig {
   // Model
   const headerModel = (req.headers['x-ai-model'] as string) || '';
   const bodyModel = (req.body?.model as string) || '';
-  let model = headerModel || bodyModel || process.env.AI_MODEL || DEFAULT_MODELS[provider] || 'gemini-4-hydrogen';
+  let model = headerModel || bodyModel || process.env.AI_MODEL || DEFAULT_MODELS[provider] || 'gemini-3.8-flash';
   if (provider === 'gemini' && (RETIRED_GEMINI_MODELS.has(model) || !model.startsWith('gemini-'))) {
-    model = 'gemini-4-hydrogen';
+    model = 'gemini-3.8-flash';
+  }
+  if (provider === 'groq' && LEGACY_GROQ_MODELS[model]) {
+    model = LEGACY_GROQ_MODELS[model];
   }
   // Remap retired DeepSeek V3/R1 models (deepseek-chat -> deepseek-flash, deepseek-reasoner -> deepseek-v4-pro)
   if (provider === 'deepseek') {
@@ -185,7 +202,7 @@ export function resolveAIConfig(req: Request): ResolvedAIConfig {
     }
   }
   if (provider === 'openrouter' && model === 'google/gemini-2.5-flash') {
-    model = 'google/gemini-3.8-flash';
+    model = 'openrouter/free';
   }
 
   // DeepSeek thinking-mode effort control (header/body/env), validated against the API vocabulary

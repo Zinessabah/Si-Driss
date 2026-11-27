@@ -61,7 +61,7 @@ function migrateLegacyGeminiKey(): void {
     if (!cleaned) return;
     localStorage.setItem(
       NEW_STORAGE_KEY,
-      JSON.stringify({ provider: 'gemini', apiKey: cleaned, model: 'gemini-4-hydrogen', baseUrl: '' })
+      JSON.stringify({ provider: 'gemini', apiKey: cleaned, model: 'gemini-3.8-flash', baseUrl: '' })
     );
   } catch {
     /* stockage indisponible */
@@ -126,9 +126,6 @@ function getInitialConfig(): AIProviderConfig {
       if (parsed && parsed.provider) {
         // Retired Gemini models remapped automatically to active Gemini 4 Flash (Hydrogen)
         const retiredGemini = new Set([
-          'gemini-2.5-flash',
-          'gemini-2.5-pro',
-          'gemini-2.5-flash-lite',
           'gemini-2.0-flash',
           'gemini-2.0-pro',
           'gemini-2.0-flash-lite',
@@ -137,10 +134,18 @@ function getInitialConfig(): AIProviderConfig {
           'gemini-1.5-pro',
           'gemini-pro',
         ]);
-        // Legacy DeepSeek names remapped to current V4 lineup
+        // Legacy DeepSeek & retired Groq names remapped to current active lineups
         const legacyDeepSeek: Record<string, string> = {
           'deepseek-chat': 'deepseek-flash',
           'deepseek-reasoner': 'deepseek-v4-pro',
+        };
+        const legacyGroq: Record<string, string> = {
+          'llama-3.3-70b-versatile': 'openai/gpt-oss-120b',
+          'deepseek-r1-distill-llama-70b': 'openai/gpt-oss-120b',
+          'llama-3.1-8b-instant': 'openai/gpt-oss-20b',
+          'mixtral-8x7b-32768': 'openai/gpt-oss-20b',
+          'qwen/qwen3.6-27b': 'qwen/qwen3.8-27b',
+          'qwen/qwen3-32b': 'qwen/qwen3.8-27b',
         };
 
         let effectiveModel = parsed.model || getProviderDef(parsed.provider).defaultModel;
@@ -148,7 +153,12 @@ function getInitialConfig(): AIProviderConfig {
 
         if (parsed.provider === 'gemini') {
           if (retiredGemini.has(effectiveModel) || !effectiveModel.startsWith('gemini-')) {
-            effectiveModel = 'gemini-4-hydrogen';
+            effectiveModel = 'gemini-3.8-flash';
+            changed = true;
+          }
+        } else if (parsed.provider === 'groq') {
+          if (legacyGroq[effectiveModel]) {
+            effectiveModel = legacyGroq[effectiveModel];
             changed = true;
           }
         } else if (parsed.provider === 'deepseek') {
@@ -159,8 +169,11 @@ function getInitialConfig(): AIProviderConfig {
             effectiveModel = 'deepseek-flash';
             changed = true;
           }
-        } else if (parsed.provider === 'openrouter' && effectiveModel === 'google/gemini-2.5-flash') {
-          effectiveModel = 'google/gemini-3.8-flash';
+        } else if (
+          parsed.provider === 'openrouter' &&
+          (effectiveModel === 'google/gemini-2.5-flash' || effectiveModel === 'google/gemini-4-carbon')
+        ) {
+          effectiveModel = 'openrouter/free';
           changed = true;
         }
 
@@ -184,11 +197,11 @@ function getInitialConfig(): AIProviderConfig {
     console.warn('Erreur lecture configuration IA locale:', err);
   }
 
-  // Default to Gemini with active fast model (gemini-4-hydrogen)
+  // Default to Gemini free active model (gemini-3.8-flash)
   return {
     provider: 'gemini',
     apiKey: '',
-    model: 'gemini-4-hydrogen',
+    model: 'gemini-3.8-flash',
     baseUrl: '',
   };
 }

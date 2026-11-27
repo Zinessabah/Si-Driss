@@ -22,11 +22,13 @@ import {
   Globe,
   HelpCircle,
   Terminal,
+  RefreshCw,
 } from 'lucide-react';
-import { useApiKey, sanitizeKeyString } from '../hooks/useApiKey';
+import { useApiKey, sanitizeKeyString, getAccessToken } from '../hooks/useApiKey';
 import {
   AIProviderId,
   AI_PROVIDERS,
+  ModelOption,
   getProviderDef,
 } from '../types/aiProviders';
 
@@ -63,8 +65,24 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
     text: string;
     canSaveAnyway?: boolean;
   } | null>(null);
+  const [liveModelsByProvider, setLiveModelsByProvider] = useState<Record<string, ModelOption[]>>({});
+  const [isLoadingModels, setIsLoadingModels] = useState<boolean>(false);
+  const [modelsFeedback, setModelsFeedback] = useState<string | null>(null);
 
   const activeProviderDef = getProviderDef(selectedProvider);
+  const displayedModels: ModelOption[] = React.useMemo(() => {
+    const live = liveModelsByProvider[selectedProvider];
+    if (!live || live.length === 0) return activeProviderDef.models;
+    const seen = new Set<string>();
+    const curatedMap = new Map(activeProviderDef.models.map((m) => [m.id, m]));
+    const merged: ModelOption[] = [];
+    for (const m of live) {
+      if (seen.has(m.id)) continue;
+      seen.add(m.id);
+      merged.push(curatedMap.get(m.id) || m);
+    }
+    return merged;
+  }, [activeProviderDef, liveModelsByProvider, selectedProvider]);
 
   // Sync state on open
   useEffect(() => {
@@ -135,6 +153,42 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
     }
 
     setStatusMessage(null);
+    setModelsFeedback(null);
+  };
+
+  const handleFetchLiveModels = async () => {
+    setIsLoadingModels(true);
+    setModelsFeedback(null);
+    try {
+      const accessToken = getAccessToken();
+      const cleanedKey = sanitizeKeyString(apiKeyInput);
+      const res = await fetch('/api/list-models', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(accessToken ? { 'x-access-token': accessToken } : {}),
+        },
+        body: JSON.stringify({
+          provider: selectedProvider,
+          apiKey: cleanedKey,
+          baseUrl: baseUrlInput.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !Array.isArray(data.models) || data.models.length === 0) {
+        setModelsFeedback(data?.error || 'Aucun modèle actif renvoyé par l’API.');
+        return;
+      }
+      setLiveModelsByProvider((prev) => ({ ...prev, [selectedProvider]: data.models }));
+      if (!isCustomModelActive && !data.models.some((m: ModelOption) => m.id === selectedModel)) {
+        setSelectedModel(data.models[0].id);
+      }
+      setModelsFeedback(`${data.models.length} modèle(s) actif(s) chargé(s) en direct.`);
+    } catch {
+      setModelsFeedback('Impossible de récupérer les modèles en ligne.');
+    } finally {
+      setIsLoadingModels(false);
+    }
   };
 
   const handleQuickSwitch = (providerId: AIProviderId) => {
@@ -349,7 +403,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
               </span>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {AI_PROVIDERS.map((prov) => {
                 const isSelected = selectedProvider === prov.id;
                 const isCurrentlyActive = config.provider === prov.id;
@@ -483,26 +537,42 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
 
           {/* Model selection */}
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <label className="block text-xs font-semibold text-slate-200">
                 2. Modèle pour {activeProviderDef.name} :
               </label>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsCustomModelActive(!isCustomModelActive);
-                  if (!isCustomModelActive) {
-                    setCustomModelInput(selectedModel);
-                    setSelectedModel('__custom__');
-                  } else {
-                    setSelectedModel(activeProviderDef.defaultModel);
-                  }
-                }}
-                className="text-[10px] text-amber-400 hover:underline"
-              >
-                {isCustomModelActive ? 'Choisir un modèle prédéfini' : 'Saisir un modèle personnalisé'}
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleFetchLiveModels}
+                  disabled={isLoadingModels}
+                  className="text-[10px] text-emerald-400 hover:underline inline-flex items-center gap-1 disabled:opacity-50"
+                  title="Interroger l'API pour récupérer les modèles gratuits actifs"
+                >
+                  <RefreshCw className={`w-3 h-3 ${isLoadingModels ? 'animate-spin' : ''}`} />
+                  <span>{isLoadingModels ? 'Chargement...' : 'Actualiser (API)'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsCustomModelActive(!isCustomModelActive);
+                    if (!isCustomModelActive) {
+                      setCustomModelInput(selectedModel);
+                      setSelectedModel('__custom__');
+                    } else {
+                      setSelectedModel(displayedModels[0]?.id || activeProviderDef.defaultModel);
+                    }
+                  }}
+                  className="text-[10px] text-amber-400 hover:underline"
+                >
+                  {isCustomModelActive ? 'Choisir un modèle prédéfini' : 'Saisir un modèle personnalisé'}
+                </button>
+              </div>
             </div>
+
+            {modelsFeedback && (
+              <p className="text-[10px] text-emerald-400/90 font-mono">{modelsFeedback}</p>
+            )}
 
             {isCustomModelActive ? (
               <div className="relative">
@@ -521,7 +591,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, onSuc
                   onChange={(e) => setSelectedModel(e.target.value)}
                   className="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl px-3.5 py-2.5 text-xs text-white appearance-none cursor-pointer transition outline-none pr-8"
                 >
-                  {activeProviderDef.models.map((m) => (
+                  {displayedModels.map((m) => (
                     <option key={m.id} value={m.id}>
                       {m.name} {m.tag ? `[${m.tag}]` : ''} — {m.description}
                     </option>

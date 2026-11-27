@@ -23,7 +23,7 @@ export interface VisionExtractionOutcome {
 export function isLikelyGeminiKey(apiKey?: string): boolean {
   const clean = String(apiKey || '').trim();
   if (!clean) return false;
-  if (/^(gsk_|sk-ant-|sk-or-|sk-proj-|xai-)/i.test(clean)) return false;
+  if (/^(gsk_|sk-ant-|sk-or-|sk-proj-|xai-|nvapi-)/i.test(clean)) return false;
   // Durcissement : exiger le préfixe 'AIza' caractéristique des clés Google AI Studio
   // et une longueur minimale de 35 caractères (longueur réelle des clés Gemini)
   return clean.startsWith('AIza') && clean.length >= 35;

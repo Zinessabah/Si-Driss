@@ -220,6 +220,7 @@ function normalizeProviderName(provider: string): string {
   if (p.includes('groq')) return 'Groq Cloud';
   if (p.includes('ollama') || p.includes('local')) return 'Ollama (Local)';
   if (p.includes('deepseek')) return 'DeepSeek';
+  if (p.includes('nvidia') || p.includes('nvapi')) return 'NVIDIA NIM';
   if (p.includes('claude') || p.includes('openai') || p.includes('anthropic')) return 'OpenAI / Claude';
   return 'Google Gemini';
 }
