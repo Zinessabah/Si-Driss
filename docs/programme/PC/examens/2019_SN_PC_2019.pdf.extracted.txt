@@ -1,24 +1,289 @@
-
-
 -- 1 of 6 --
+الصفحة
+1
+8
+NS30E
+الامتحان الوطني الموحد - الدورة العادية - 2019 - الشعبة: العلوم التجريبية
+مادة الحياة والأرض
+اللغة العربية
+العربية
+4
+مادة الحياة والأرض
+اللغة العربية
+7
+الفلسفة
+شعبة: العلوم التجريبية (فرع: (ب) و (i))
+اللغة العربية
+The use of the non-programmable scientific calculator is allowed.
+This exam paper consists of four exercises, one in Chemistry and three in Physics.
 
+**Exercise 1 : Chemistry (7 points)**
+- Volumetric rate of a reaction and half-life of a chemical reaction
+- Acid-base titration
+- The electrolysis of an aqueous solution
 
+**Exercise 2 : Nuclear transformations (2,5 points)**
+- Study of a fusion reaction
+
+**Exercise 3 : Electricity (5 points)**
+- Charge of a capacitor
+- Free oscillations and forced oscillations in RLC series circuit
+- Reception of a hertzian wave
+
+**Exercise 4 : Mechanics (5,5 points)**
+- Fall of a ball
+- Motion of an oscillator
 
 -- 2 of 6 --
+الصفحة
+2
+8
+NS30E
+الامتحان الوطني الموحد - الدورة العادية - 2019 - الشعبة: العلوم التجريبية - مادة: الفلسفة والعلوم الطبيعية - شعبة: العلوم التجريبية (فرع: (ب) و (i)) - اللغة العربية
+8
+Exercise 1 : Chemistry (7 points)
+Parts I, II and III are independent
 
+The hydrochloric acid has several uses such as the elimination of calcareous deposits in various devices and in water pipes, the basic titration and the preparation of some gases in the laboratory....
+In this exercise we study some chemical transformations which involve hydrochloric acid.
 
+**I- Kinetic Monitoring by a gas volume measurement**
+The limestone, mainly constituted of calcium carbonate CaCO$_3$, reacts with a solution of the hydrochloric acid according to the equation:
+$$CaCO_{3(s)} + 2H_3O^+_{(aq)} \longrightarrow Ca^{2+}_{(aq)} + CO_{2(g)} + 3H_2O_{(l)}$$
+In this first part of the exercise we propose to study the kinetic of this reaction. For that we perform in a balloon, at the date t = 0, the mixture of an amount n$_{0}$ of a calcium carbonate CaCO$_{3(s)}$ with an excess of an aqueous solution of the hydrochloric acid H$_3$O$^+_{(aq)}$ + Cl$^-_{(aq)}$. We obtain a mixture of a volume V$_0$=100mL. The formed carbon dioxide is collected in a graduated test tube. The graph shown in figure 1 represents the variation of the volume V(CO$_2$) of the cleared carbon dioxide in function of the time.
+During the experiment we keep the temperature and the pressure of the cleared gas constant: T= 25$^\circ$C =298K and P=1,02.10$^5$ Pa. We consider the volume of the reaction mixture remains constant.
+We assume that the carbon dioxide collected is an ideal gas and we remind that the equation of state of the ideal gas is:
+PV = nRT. We give the constant of the ideal gas: R= 8,31J.K$^{-1}$.mol$^{-1}$.
+
+1- Using the progress table of the reaction and the equation of state of the ideal gas, show, in the international system of units, that the expression of the progress x of the reaction at a date t is written as:
+x = 41,2V(CO$_2$). (0,5 pt)
+
+2- Determine graphically t$_{1/2}$ the half-life of a chemical reaction. (0,5 pt)
+
+3- Determine, in the international system of units, the volumetric rate of the reaction, at the instant of date t$_1$ = 390s. Line (T) represents the tangent of the curve at the instant t$_1$. (0,5 pt)
+
+**II- Titration of an aqueous solution of ammonia by an aqueous solution of hydrochloric acid**
+In this second part of the exercise, we propose to study, the titration of an aqueous solution of the ammonia NH$_3$, contained in a detergent, by an aqueous solution of the hydrochloric acid.
+The detergent is concentrated to be titrated. For that, we take a volume of this detergent and we dilute it 100 times, thus obtain a solution denoted(S).
+
+Given: - All measurements are performed at 25$^\circ$C ;
+- The ionic product of water: K$_e$=10$^{-14}$ ;
 
 -- 3 of 6 --
+الصفحة
+3
+8
+NS30E
+الامتحان الوطني الموحد - الدورة العادية - 2019 - الشعبة: العلوم التجريبية - مادة: الفلسفة والعلوم الطبيعية - شعبة: العلوم التجريبية (فرع: (ب) و (i)) - اللغة العربية
+8
+We titrate a volume V$_b$ = 20mL of the solution (S), by following the variations of the pH of the reaction mixture in function of the volume V$_a$ poured of an aqueous solution of the hydrochloric acid H$_3$O$^+_{(aq)}$ + Cl$^-_{(aq)}$ of molar concentration C$_a$ = 2.10$^{-2}$mol.L$^{-1}$.
+The pH-metric monitoring of the transformation allowing obtaining curve (1) of figure 2. Otherwise, an adapted software allowed obtaining curves (2) and (3) which show the variations of the concentration of the acid species and that of the base species of the pair NH$_4^+_{(aq)}$ / NH$_3_{(aq)}$ in function of the volume V$_a$ poured (figure 3).
 
+1- Write the chemical equation of the reaction of the titration. (0,5 pt)
 
+2- Determine graphically the volume V$_{aE}$ of the aqueous solution of hydrochloric acid poured at the equivalence point. (0,25 pt)
+
+3- Show that the molar concentration C$_D$ of the ammonia brought from the detergent is C$_D$ =1mol.L$^{-1}$. (0,5 pt)
+
+4- For the previously dosed solution (S) :
+4-1- Write the chemical equation of the reaction of the ammonia with water. (0,25 pt)
+4-2- With the help of the curve (1), determine the pH of the solution (S). (0,25 pt)
+4-3- By calculation, determine the molar concentrations [NH$_3_{(aq)}$] and [NH$_4^+_{(aq)}$] in the solution (S). (0,5pt)
+4-4- Deduce the value of the pK$_a$(NH$_4^+_{(aq)}$ / NH$_3_{(aq)}$). (0,5 pt)
+
+5- Find out again, by using the 3 curves, the value of the pK$_a$(NH$_4^+_{(aq)}$ / NH$_3_{(aq)}$) deduced previously. (0,5 pt)
+
+6/6-1- Indicate the curve that corresponds to the evolution of [NH$_4^+_{(aq)}$] with the volume V$_a$ poured.(0,25 pt)
+6-2- Find out, by using curve (1) and one of the two curves (2) or (3), the molar concentration [NH$_4^+_{(aq)}$] when the pH of the reaction mixture is pH=8,8. (0,5 pt)
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1] ---
+- **Contexte de l'exercice** : Chimie - Cinétique chimique (Partie I)
+- **Description du dispositif ou montage** : Graphique représentant le volume de dioxyde de carbone collecté en fonction du temps. Axe des abscisses : t (s). Axe des ordonnées : V(CO$_2$)(mL).
+- **Analyse détaillée du graphe / courbe / tableau** : La courbe commence à l'origine (0,0), augmente rapidement puis tend vers une asymptote horizontale autour de 60 mL. Une tangente (T) est tracée au point d'abscisse t$_1$ = 390 s.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2] ---
+- **Contexte de l'exercice** : Chimie - Titrage acido-basique (Partie II)
+- **Description du dispositif ou montage** : Graphique représentant le pH du mélange en fonction du volume d'acide versé. Axe des abscisses : V$_a$ (mL). Axe des ordonnées : pH.
+- **Analyse détaillée du graphe / courbe / tableau** : Courbe (1) montrant une chute de pH. La courbe commence à un pH élevé (autour de 12) pour V$_a$=0, descend brusquement vers l'équivalence, puis se stabilise à un pH faible (autour de 2).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3] ---
+- **Contexte de l'exercice** : Chimie - Titrage acido-basique (Partie II)
+- **Description du dispositif ou montage** : Graphique représentant les concentrations molaires des espèces en fonction du volume d'acide versé. Axe des abscisses : V$_a$ (mL). Axe des ordonnées : [NH$_3_{(aq)}$] ; [NH$_4^+_{(aq)}$] (mmol L$^{-1}$).
+- **Analyse détaillée du graphe / courbe / tableau** : Deux courbes (2) et (3). L'une décroît, l'autre croît puis décroît (ou inversement selon l'interprétation des espèces). Les courbes se coupent au point d'équivalence.
 
 -- 4 of 6 --
 
+**Exercise 4 : Mechanics (5.5 points)**
 
+**Parts I and II are independent**
+
+**Part I : Study of the fall of a ball**
+
+In the gravitational field, we give up from a point O, without initial velocity at the instant $t=0$, a small ball (S) of mass m, (figure1).
+
+The ball obeys to two forces:
+- Its weight $\vec{P}$;
+- The air resistance which is model by the force $\vec{R}=-\lambda.\vec{v}$, with $\lambda$ is a positive coefficient and $\vec{v}=v.\vec{k}$ is the velocity vector of the ball.
+
+We study the motion of the ball in the frame of reference $(O,\vec{k})$ linked to the earth assumed Galilean.
+
+**Given :** m=100g ; g=10ms$^{-2}$ (the gravitational field strength ).
+
+The graph shown in figure 2 represents the evolution, during the time, of the velocity of the ball.
+
+1- Show that the differential equation of the motion of the ball verified by velocity v is written as:
+$$ \frac{dv}{dt} + \frac{\lambda}{m}.v = g \quad \text{(0.5 pt)} $$
+
+2- Find out the value of $\frac{\lambda}{m}$. (0.5 pt)
+
+3- Compare the magnitude of the resistance $\vec{R}$ and that of the weight $\vec{P}$ during the transient state and during the steady state. (0.5 pt)
+
+4- We now launch the ball from the point O at the instant t=0, vertically down, by a velocity $\vec{V}_o=V_o.\vec{k}$ where $V_o > v_t$ ($v_t$ being the terminal velocity of the motion of the ball)
+
+The solution of the differential equation is written: $v(t)=A+Be^{-\frac{t}{\tau}}$ where A and B are two constants and $\tau$ the characteristic time of the motion.
+
+Trace the shape of the curve representing the evolution of the velocity v(t) of the ball during its motion.(0.5pt)
+
+**Part II: Study of the motion of an oscillator: the gravimeter**
+
+A gravimeter is an instrument which allows the measurement of the magnitude of the gravity g with a high precision.
+
+We model a gravimeter by an oscillator constituted by :
+
+- A rod OA of center of inertia G, of mass m and of moment of inertia $J_\Delta$ about the horizontal rotation axis through point O. The rod is able to rotate around the axis ($\Delta$) at the vertical plane (Oxy) and its center of inertia G is at the distance $OG=\ell$ from the axis ($\Delta$) (figure3).
+
+- A spiral spring tends to bring back the rod into the vertical position acting on it by couples of moment $M_\Delta = -C.\theta$ about the axis of rotation ($\Delta$) where C is a positive constant and $\theta$ is the angle of rotation expressed in radian.
 
 -- 5 of 6 --
 
+**Given:**
+- m=0,1kg ; $\ell=58,4$cm ;
+- $J_\Delta=2,5.10^2 kg.m^2$ ; C=1,4 N.m.rad$^{-1}$
+- For small angles: $cos\theta \approx 1-\frac{\theta^2}{2}$ and $sin\theta=\theta$ where $\theta$ is expressed in radian unit ;
+- We take : $\pi^2=10$ .
 
+We neglect frictions.
+
+We locate the position of the rod OA at every instant t by its angular displacement $\theta$ about its stable equilibrium position.
+
+We move the rod from its vertical equilibrium position with a small angle $\theta_m$ in the positive direction and we liberate it without an initial velocity at the instant of date t=0.
+
+We study the motion of the oscillator in a frame of reference linked to the earth assumed Galilean.
+
+1- By applying the fundamental relationship of dynamics in the case of rotation; establish the differential equation of the angular displacement $\theta$ in the case of small amplitudes. (0.5 pt)
+
+2- We choose the position where $\theta=0$ as a reference level of the torsional potential energy ($E_p=0$) and the horizontal plane passes through O as reference level of the gravitational potential energy ($E_{pp}=0$).
+
+2-1- Show that the expression of the total potential energy of the oscillator $E_p$ at an instant t is :
+$$ E_p=\frac{1}{2}(C-mg\ell).\theta^2+mg\ell \quad \text{(0,75 pt)} $$
+
+2-2- By using an energetic study, establish the differential equation of the motion, in the case of small amplitudes. (0.5 pt)
+
+2-3-In the case where $C > mg\ell$, the solution of the differential equation is written as:
+$$ \theta(t)=\theta_m cos\left(\frac{2\pi}{T_0}t+\phi\right) $$
+
+2-3-1- Find out the expression of the natural period $T_0$ in terms of C, m, $\ell$, $J_\Delta$ and g. (0.5 pt)
+
+2-3-2- Calculate g knowing that $T_0=1,1s$. (0.5 pt)
+
+2-4- The curve shown in figure 4 represents the variation of the total potential energy $E_p$ in function of $\theta$.
+
+2-4-1- Determine graphically the value of the mechanical energy. (0,25 pt)
+
+2-4-2- Find out the absolute value of the angular velocity $\dot{\theta}$ for $\theta=0,125rad$. (0,5 pt)
 
 -- 6 of 6 --
 
+**Exercice1 : Chemistry ( 7 points)**
+
+| Question | Answer elements | Marking scheme | Reference of the answer in the reference framework |
+| :--- | :--- | :--- | :--- |
+| 1- 1 | Lead to the expression. | 0,5 | -Draw the progress table of reaction and exploit it. |
+| 2 | Method : $t_{1/2}=2$min | 2x0,25 | -Exploitithe different curves of time-evolution of the following: theamountof substance of a chemical specie, its concentration, the progress of a reaction, conductivity, conductance pressure and volume. |
+| 3 | Method ; v≈1,5.10$^{-3}$ mol.m$^{-3}$.s$^{-1}$. | 2x0,25 | -Determine the half-time t$_{1/2}$of a chemical reaction. -Determine the half-fit$_{1/2}$of the chemical reaction graphically or through exploiting the experimental results. -Know the expression of the volume rate of reaction. -Determine graphically the value of the volumetric rate of reaction |
+| II- 1 | Equation of the reaction. | 0,5 | -Write the equation of titration reaction (unevenly one arrow) |
+| 2 | $V_{AE}$=10mL . | 0,25 | -Exploit the curve or the results of the titration. -Determine and exploit the point of equivalence. |
+| 3 | $C_D$=100-$\frac{C_A.V_{AE}}{V_B}$ ; $C_D$=1mol.L$^{-1}$ | 0,25+0,25 | |
+| 4-1 | Equation of the reaction. | 0,25 | -Exploit the curve or the results of the titration. -Draw the progress table of a reaction and exploit it. -Write the equation of the acid-base reaction and identify the two pairs involved. |
+| 4-2 | pH=10,6 . | 0,25 | -Find out the pH for an aqueous solution. -Know that the ionic product of water $K_w$ is the equilibrium constant associated with the equation of the reaction of water autoprotolysis (self-ionization of water). |
+| 4-3 | $\left[NH_{4(aq)}^+\right]$=9,6.10$^{-5}$ mol.L$^{-1}$ , $\left[NH_{3(aq)}\right]$=4.10$^{-4}$ mol.L$^{-1}$ | 0,25 0,25 | |
+| 4-4 | Method $pK_a\left(NH_{4(aq)}^+/NH_{3(aq)}\right)$=9,2 | 0,25 0,25 | -Write and use the expression of the acid dissociation constant$K_a$ associated with the reaction of an acid with water. -Know the relationship $pK_a$=-log$K_a$. |
+| 5 | Check of $pK_a\left(NH_{4(aq)}^+/NH_{3(aq)}\right)$ by using tree curves. | 0,5 | |
+| 6-1 | Curve (3) | 0,25 | -Explot the curve or the results of the titration. |
+| 6-2 | Method : $\left[NH_{3(aq)}\right]$=2.10$^{-3}$ mol.L$^{-1}$ | 0,25 0,25 | |
+
+**Exercise2 : Nuclear transformations (2.5 points)**
+
+| Questionn | Answer elements | Marking scheme | Reference of the answer in the reference framework |
+| :--- | :--- | :--- | :--- |
+| 1 | Equation of the reaction | 0,25 | Write the equations of nuclear fission and fusion by applying the two laws of conservation. |
+| 2 | 02 | 0,5 | - Define and calculate the mass defect and the binding energy. - Calculate the energy released (produced) by a nuclear reaction. $E_{pro}=\left|\Delta E\right|$ . - Define the fission and fusion. |
+| 3-1 | $E_\nu$=E$_1$-E$_2$=28,29 MeV | 0,5 | - Define and calculate the mass defect and the binding energy. - Establish the energy balance $\Delta E$ of a nuclear reaction using: mass energies and/or binding energies and/or the energy diagram. - Calculate the energy released (produced) by a nuclear reaction: $E_{pro}=\left|\Delta E\right|$ . |
+| 3-2 | $\left|\Delta E\right|$=E$_2$-E$_3$=17,59 MeV . | 0,5 | |
+| 4 | $\left|\Delta E\right|$=N$_A$.$\left|\Delta E\right|$=1,06.10$^{25}$ MeV | 0,25 | |
+| 5 | n=40,4 | 0,5 | |
+
+**III-1 Equation of the reaction at the anode** | 0,5 | -Write the half-equationthat occurred in each electrode (use double arrows) and write the overall equation of the reaction during electrolysis (use one arrow).
+**2** | $2Cl^-_{(aq)} + 2H^+_{(aq)} \longrightarrow H_{2(g)} + Cl_{2(g)}$ | 0,5 |
+**3** | Method; pH=1,5 . | 0,25+0,25 | -Determine the pH for an aqueous solution. -Establish the relationship between the amount of substance of chemical species produced or consumed, the current intensity and the duration of electrolysis. Use this relation to determine other quantities (quantity of charge, progress of the reaction, changeof the mass, volume of a gas, etc.)
+
+-- 6 of 6 --
+
+**Exercice 3 : Electricity (5 points)**
+
+| Question | Answer elements | Marking scheme | Reference of the answer in the reference framework |
+| :--- | :--- | :--- | :--- |
+| 1/1-1 | Differential equation. | 0,5 | - Know and exploit the relationship $i=\frac{dq}{dt}$ for a capacitor in receiver convention. |
+| 1-2 | i=6mA | 0,25 | - Know and exploit the relationship q=C.u. |
+| 1-3 | Check the value of C. | 0,5 | - Find out the differential equation and verify its solution when the RC dipole is submitted to a step voltage. - Know the capacitance of the equivalent capacitor in series or in parallelassemblies; and recalculate the interest of each one |
+| | | | - Recognise that the voltage between capacitor terminals is a continuous function of time at t=0, and the current intensity is a discontinuous function at t=0. |
+| | | | - Recognise and represent the variation curves of $u_c(t)$ between the capacitor terminals and different physical quantities associated to it, and exploit them. |
+| | | | - Know and exploit the time-constant expression. |
+| 1-4-1 | Differential equation. | 0,5 | - Find out the differential equation for the voltage between the capacitor terminals or for its charge $q(t)$ in the damping case. |
+| 1-4-2 | Lead to $\frac{dE_1}{dt}=-R_q.i^2$ | 0,5 | - Know and exploit the expression of the total energy in the circuit.. |
+| | Justification of the diminution | 0,25 | |
+| 2/2-1 | Method, $N_0$=9,19kHz | 2x0,25 | - Recognise the electric resonance phenomenon and its characteristics |
+| 2-2 | Check of the boundary ; Q=1,4. | 0,25 0,25 | - Know and exploit the impedance expression $Z=\frac{U}{I}$ of a circuit. |
+| 2-3 | R=99,6 $\Omega$ | 0,25 | - Know and exploit the quality factor expression $Q=\frac{N_0}{\Delta N}$ |
+| 2-4 | The expression ; P=50 W | 2x0,25 | - Find out and exploit the average power expression P=U.I.cos $\varphi$ |
+| 3/3-1 | Meaning. | 0,25 | - Exploit the different experimental obtained curves - Recognise the different stages of amplitude modulation and amplitude demodulation through their corresponding assembly schemes. |
+| 3-2 | (1)------ $u_{Qc}$ ; (2)------ $u_{TM}$ | 2x0,25 | - Know the role of different used filters. - Know the stages of demodulation. - Recognise the essential components required to assemble an AM radio, and their roles in the demodulation. |
+
+**Exercise 4 : Mechanics (5 points)**
+
+| Question | Answer elements | Marking scheme | Reference of the answer in the reference framework |
+| :--- | :--- | :--- | :--- |
+| Part I | 1 | Demonstration | 0,5 | -Apply Newton's second law to find outthe differential equation of a solid's centre of inertia motion in frictional vertical fall. |
+| | 2 | $\lambda=\frac{m.g}{v_t}$ ; $\lambda$=5,10$^{-2}$ SI . | 2x0,25 | -Exploit the curve $v_G=f(t)$ to determine: * theterminal speed; * the characteristic time $\tau$ ; * the initial state and the steady state |
+| | 3 | - Transient state : P>R ; - Steady state: P=R . | 0,25 0,25 | |
+| | 4 | Appearance of the curve | 0,5 | |
+| Part II | 1 | Lead to the differential equation. | 0,5 | -Know and apply the fundamental relationship of dynamics in the case of rotation around a fixed axis in order to establish the differential equation of the motion, and solve it. |
+| | 2-2-1 | Lead to the requested expression. | 0,75 | -Know and exploit the expression of the torsional potential energy. |
+| | 2-2 | $\ddot{\theta}+\frac{C-mg\ell}{J_\Delta}\theta=0$ . | 0,5 | - Exploit the conservation and the non-conservation of the mechanical energy of the torsional pendulum. -Exploit the conservation of the mechanical energy of a physical pendulum in the small oscillations case. |
+| | 2-3-1 | Lead to $T_0=2\pi\sqrt{\frac{J_\Delta}{C-mg\ell}}$ | 0,5 | -- Establish the expression of the natural period of the torsional pendulum. -Establish the expression of the natural period for the physical pendulum. |
+| | 2-3-2 | g=9,82ms$^{-2}$ . | 0,5 | |
+| | 2-4-1 | E$_m$=0,59J | 0,25 | -Exploit the energy diagrams. -Exploit the conservation of the mechanical energy of a physical pendulum in the small oscillations case. |
+| | 2-4-2 | Method; $\left|\dot{\theta}\right|$=0,9 rad.s$^{-1}$ . | 2x0,25 | -Exploit the expression of the gravitational potential energy and the expression of the kinetic energy to determine the mechanical energy of the physical pendulum in the small oscillations case. - Know and exploit the expression of the mechanical energy of a torsional pendulum. |
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1] ---
+- **Contexte de l'exercice** : Physique - Mécanique (Étude de la chute d'une balle)
+- **Description du dispositif ou montage** : Schéma montrant un point O, une balle (S) de masse m. Un axe vertical z orienté vers le bas avec l'unité $\vec{k}$. Vecteur vitesse $\vec{v}$.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma de dispositif).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2] ---
+- **Contexte de l'exercice** : Physique - Mécanique (Étude de la chute d'une balle)
+- **Description du dispositif ou montage** : Graphe représentant l'évolution de la vitesse v(t) en fonction du temps.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées : v (m.s$^{-1}$), échelle de 0 à 20. Axe des abscisses : t (s), échelle de 0 à 8. La courbe part de l'origine, croît de manière concave et tend vers une asymptote horizontale (vitesse terminale).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3] ---
+- **Contexte de l'exercice** : Physique - Mécanique (Le gravimètre)
+- **Description du dispositif ou montage** : Schéma d'une tige OA tournant autour d'un axe $\Delta$ (vertical). Plan (Oxy). Point G (centre d'inertie) à distance OG = $\ell$ de l'axe. Angle $\theta$ indiqué entre la tige et la verticale. Vecteurs $\vec{i}, \vec{j}, \vec{k}$.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma de dispositif).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 4] ---
+- **Contexte de l'exercice** : Physique - Mécanique (Le gravimètre)
+- **Description du dispositif ou montage** : Graphe représentant l'énergie potentielle totale $E_p$ en fonction de l'angle $\theta$.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées : $E_p$ (mJ), valeurs visibles autour de 565, 575, 580. Axe des abscisses : $\theta$ (rad), de -0,2 à 0,2. La courbe est une parabole ouverte vers le haut avec un minimum en $\theta=0$.

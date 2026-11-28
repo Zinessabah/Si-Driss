@@ -1,52 +1,625 @@
-
-
 -- 1 of 13 --
 
+الامتحان الوطني الموحد لجذع البكالوريا
+المدة الزمنية: ساعتان
+الشعبة: علوم الحياة والأرض
+الدورة العادية 2020
+الموضوع: - الفيزياء -
 
+SSSSSSSSSSSSSSSSSSS | RS 34F
+
+| 3 | مدة الجلسة | العلم والحياة والارض | المادة |
+| 5 | المادة | شعبة الحياة والارض العلمية (خيار فرنسية) | الشعبة أو المسلك |
+
+**Orientations générales pour répondre au sujet de l'examen**
+
+Le sujet de l'examen contient :
+- Des exercices à y répondre obligatoirement : les questions de la première partie et les exercices 1, 2 et 3 de la deuxième partie.
+- Des exercices au choix : l'exercice 4 et l'exercice 5 de la deuxième partie. Répondez obligatoirement soit à l'exercice 4 ou à l'exercice 5 selon votre choix.
+
+Il est permis d'utiliser la calculatrice non programmable
+
+**Exercices à y répondre obligatoirement**
+
+**Première partie : restitution des connaissances (5 pts)**
+
+**I. Définissez les notions suivantes : - Cycle de Krebs - Phosphocréatine. (1pt)**
+
+**II. Les myogrammes ci-dessous présentent des enregistrements obtenus suite à des stimulations efficaces d'un muscle squelettique. Donnez le nom correspondant à chacun de ces myogrammes numérotés de 1 à 4. (1pt)**
+
+[Graphique 1] Y-axis: Tension. Label: 1. Caption: Une stimulation.
+[Graphique 2] Y-axis: Tension. Label: 2. Caption: Deux stimulations.
+[Graphique 3] Y-axis: Tension. Label: 3. Caption: Stimulations.
+[Graphique 4] Y-axis: Tension. Label: 4. Caption: Stimulations.
 
 -- 2 of 13 --
 
+الامتحان الوطني الموحد لجذع البكالوريا - 2020 - الدورة العادية
+المدة الزمنية: ساعتان
+الشعبة: علوم الحياة والأرض - مادة: الفيزياء والحياة والارض (خيار فرنسية)
+RS 34F
 
+**III. Reliez chaque phénomène à la réaction bilan qui lui convient. Recopiez les couples (1;...) ; (2;...) ; (3;...) ; (4;...) et adressez à chaque numéro la lettre correspondante. (1 pt)**
+
+| Phénomène | Réaction bilan |
+| :--- | :--- |
+| 1- La glycolyse | a- $\mathrm{C_6H_{12}O_6 + 2 ADP + 2 Pi \rightarrow 2 CH_3CH_2OH + 2 CO_2 + 2 ATP}$ |
+| 2- Le cycle de Krebs | b- $\mathrm{C_6H_{12}O_6 + 2 ADP + 2 Pi \rightarrow 2CH_3CHOHCOOH + 2ATP}$ |
+| 3- La fermentation lactique | c- $\mathrm{C_6H_{12}O_6 + 2 ADP + 2 Pi + 2 NAD^+ \rightarrow 2 C_3H_4O_3 + 2ATP + 2NADH,H^+}$ |
+| 4- La fermentation alcoolique | d- $\mathrm{CH_3COCOOH + 2ATP \rightarrow CH_3COOH + 2ADP + 2Pi}$ |
+| | e- $\mathrm{CH_3SO-CoA + 3NAD^+ + 3H_2O + FAD + GDP + Pi \rightarrow 2CO_2 + HSCoA + 3NADH,H^+ + FADH_2 + GTP}$ |
+
+**IV. Pour chacune des propositions numérotées de 1 à 4, une seule suggestion est correcte. Recopiez les couples (1 ...); (2 ...); (3 ...); (4 ...) et écrivez dans chaque couple la lettre correspondante à la suggestion correcte. (2 pts)**
+
+| 1- Lors de la contraction musculaire, on observe au niveau des sarcomères un raccourcissement : | 2- La tête de myosine possède deux sites de fixation spécifiques à: |
+| :--- | :--- |
+| a. des bandes sombres (A) ; | a. l'ATP et l'actine ; |
+| b. des bandes claires (I) ; | b. l'ATP et la tropomyosine ; |
+| c. des filaments de myosine ; | c. l'actine et la troponine ; |
+| d. des filaments d'actine. | d. l'actine et les ions $\mathrm{Ca^{2+}}$. |
+
+| 3- La chaîne respiratoire permet la synthèse d'ATP suite à une : | 4- Lors de la phosphorylation oxydative : |
+| :--- | :--- |
+| a. réduction de RH2 en R et du dioxygène en eau ; | a. Le transfert des électrons engendre une accumulation des protons $\mathrm{H^+}$ dans la matrice mitochondriale ; |
+| b. réduction de R en RH2 et oxydation d'eau en dioxygène; | b. le flux des protons $\mathrm{H^+}$ vers la matrice se fait à travers le complexe protéique Cv ; |
+| c. oxydation de R en RH2 et une réduction du dioxygène en eau ; | c. le transfert des électrons vers l'oxygène se fait par les complexes de la chaîne respiratoire ; |
+| d. oxydation de RH2 en R et une réduction du dioxygène en eau. | d. les différents complexes de la chaîne respiratoire pompent les protons vers l'espace intermembranaire de la mitochondrie. |
+
+**Deuxième partie : Raisonnement scientifique et communication écrite et graphique (15 pts)**
+
+**Exercice 1 : (3 pts)**
+
+Lors de la contraction musculaire, l'énergie chimique (ATP) est convertie en énergie mécanique au niveau du muscle squelettique strié, ce qui nécessite un renouvellement continu d'ATP. Pour mettre en évidence les conditions de la synthèse de l'ATP et les voies de son renouvellement au niveau des cellules musculaires, on suggère les résultats des expériences suivantes :
+
+La première expérience : a été réalisée sur une suspension de mitochondries dans un milieu saturé en dioxygènes ayant un pH de 7,5. Le document 1 présente les conditions et les résultats de cette expérience.
 
 -- 3 of 13 --
 
+الامتحان الوطني الموحد لجذع البكالوريا - 2020 - الدورة العادية
+المدة الزمنية: ساعتان
+الشعبة: علوم الحياة والأرض - مادة: الفيزياء والحياة والارض (خيار فرنسية)
+RS 34F
 
+**Document 1**
+
+**Figure a**
+Concentration de dioxygène
+En % de saturation
+Axes: Y (0, 50, 100), X (Temps: $t_0, t_1, t_2, t_3, t_4$)
+Annotations: Ajout du glucose ($t_1$), Ajout du pyruvate ($t_2$), Ajout de ADP+Pi ($t_3$), Ajout du cyanure ($t_4$).
+
+**Figure b**
+Concentration d'ATP en UA
+Axes: Y (0, 50, 100), X (Temps: $t_0, t_1, t_2, t_3, t_4$)
+Annotations: Ajout du glucose ($t_1$), Ajout du pyruvate ($t_2$), Ajout de ADP+Pi ($t_3$), Ajout du cyanure ($t_4$).
+
+Remarque : Le cyanure est une substance qui inhibe l'action d'enzymes mitochondriales spécifiques.
+
+**1. En exploitant le document 1, déduisez les conditions de synthèse d'ATP au niveau des mitochondries (1.25 pts)**
+
+**La deuxième expérience :** Trois muscles de grenouille ont subi des stimulations électriques dans les conditions expérimentales suivantes :
+- Le muscle 1 : n'a été soumis à aucun traitement (témoin) ;
+- Le muscle 2 : est traité avec l'acide iodo-acétique qui inhibe la glycolyse ;
+- Le muscle 3 : a subi le même traitement que le deuxième muscle avec l'ajout d'un inhibiteur de l'enzyme "phosphocréatine-kinase" qui catalyse la réaction présentée par le document 2.
+
+**Document 2**
+
+$\mathrm{CP + ADP \xrightarrow{Phosphocréatine-kinase} ATP + C}$
+Sous CP : Phosphocréatine. Sous C : Créatine.
+
+**Le tableau du document 3 résume la réponse des trois muscles et les résultats de mesure des molécules d'ATP et de phosphocréatine au niveau du muscle.**
+
+**Document 3**
+
+| Les muscles | Muscle 1 | Muscle 2 | Muscle 3 |
+| :--- | :--- | :--- | :--- |
+| **Réponse des muscles** | Contraction pendant trois minutes | Contraction pendant trois minutes | Contraction pendant quelques secondes |
+| **Dosage d ATP en mg/g de muscle.** | | | |
+| Avant la contraction | 2 | 2 | 2 |
+| Après la contraction | 2 | 2 | 0 |
+| **Dosage de la phosphocréatine en mg/g de muscle.** | | | |
+| Avant la contraction | 1,5 | 1,5 | 1,5 |
+| Après la contraction | 1,5 | 0,4 | 1,5 |
+
+**2. A partir des documents 2 et 3 :**
+
+a. Comparez les résultats enregistrés pour le muscle 2 et le muscle 3 avec ceux du muscle 1. (1pt)
+
+b. Expliquez les résultats enregistrés pour le muscle 2 et le muscle 3, en mettant en évidence les réactions de renouvellement de l'ATP au niveau de la cellule musculaire. (0.75pt)
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Myogrammes 1 à 4 (Page 1)] ---
+- **Contexte de l'exercice** : Biologie / Physiologie musculaire (Première partie : restitution des connaissances).
+- **Description du dispositif ou montage** : Quatre graphiques numérotés de 1 à 4. Axe Y : Tension. Axe X : Temps (implicite).
+- **Analyse détaillée du graphe / courbe / tableau** :
+    - Graphique 1 ("Une stimulation") : Une seule courbe en cloche (pic unique).
+    - Graphique 2 ("Deux stimulations") : Deux pics distincts séparés par un retour à la baseline.
+    - Graphique 3 ("Stimulations") : Succession de pics rapprochés (tétanos incomplet).
+    - Graphique 4 ("Stimulations") : Plateau élevé et soutenu (tétanos complet).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure a et Figure b (Page 3, Document 1)] ---
+- **Contexte de l'exercice** : Biochimie / Mitochondries (Exercice 1).
+- **Description du dispositif ou montage** : Deux graphiques côte à côte.
+    - Figure a : Y-axis "Concentration de dioxygène En % de saturation" (0 à 100). X-axis "Temps" ($t_0$ à $t_4$).
+    - Figure b : Y-axis "Concentration d'ATP en UA" (0 à 100). X-axis "Temps" ($t_0$ à $t_4$).
+- **Analyse détaillée du graphe / courbe / tableau** :
+    - Figure a : La courbe reste à 100% jusqu'à $t_2$, puis chute brusquement après l'ajout de ADP+Pi à $t_3$, puis se stabilise à un niveau bas (~25%) après l'ajout de cyanure à $t_4$.
+    - Figure b : La courbe est basse (~25 UA) jusqu'à $t_3$, puis monte brusquement à 100 UA après l'ajout de ADP+Pi, puis reste stable après l'ajout de cyanure à $t_4$.
+    - Flèches d'annotation : "Ajout du glucose" ($t_1$), "Ajout du pyruvate" ($t_2$), "Ajout de ADP+Pi" ($t_3$), "Ajout du cyanure" ($t_4$).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 2 (Page 3)] ---
+- **Contexte de l'exercice** : Biochimie / Renouvellement de l'ATP.
+- **Description du dispositif ou montage** : Schéma de réaction chimique.
+- **Analyse détaillée du graphe / courbe / tableau** :
+    - Réaction : $\mathrm{CP + ADP \rightarrow ATP + C}$.
+    - Enzyme indiquée au-dessus de la flèche : Phosphocréatine-kinase.
+    - Légendes sous les formules : CP = Phosphocréatine, C = Créatine.
+
+--- [TABLEAU / SCHÉMA DÉCODÉ : Document 3 (Page 3)] ---
+- **Contexte de l'exercice** : Physiologie musculaire / Expérimentation sur muscles de grenouille.
+- **Description du dispositif ou montage** : Tableau comparatif de 3 muscles.
+- **Analyse détaillée du graphe / courbe / tableau** :
+    - Colonnes : Muscle 1 (témoin), Muscle 2 (inhibiteur glycolyse), Muscle 3 (inhibiteur glycolyse + inhibiteur phosphocréatine-kinase).
+    - Lignes : Réponse des muscles (durée de contraction), Dosage ATP (Avant/Après), Dosage Phosphocréatine (Avant/Après).
+    - Valeurs notables : Muscle 3 ATP après contraction = 0. Muscle 2 Phosphocréatine après contraction = 0,4.
 
 -- 4 of 13 --
 
+[En-tête du document : L'examen national unifié de la session ordinaire - Deuxième année du Baccalauréat - 2020 - Filiales scientifiques et techniques (Option Française) - Matière: Sciences de la Vie et de la Terre - Filière: Sciences de la Vie et de la Terre (Option Française) - Code: RS 34F]
 
+**Exercice 2 : (4 pts)**
+
+Le cancer du poumon est une maladie de plus en plus courante. Elle est due à l'apparition des cellules cancéreuses qui finissent par la formation d'une tumeur pulmonaire. La prolifération des cellules pulmonaire est contrôlée par le gène EGFR, localisé au niveau du chromosome 7 chez l'Homme. Pour comprendre l'origine de cette maladie on propose les données suivantes :
+
+Le document 1 présente les résultats de mesure de la vitesse de duplication de l'ADN des cellules normales et des cellules cancéreuses (figure a) et de dénombrement des cellules normales et des cellules cancéreuses après leur culture dans les mêmes conditions (figure b).
+
+**Document 1**
+
+*Figure a* : Graphique "Quantité d'ADN synthétisé (U.A)" en fonction du "Temps (min)". Deux courbes : "Cellule cancéreuse" (plateau plus haut, autour de 5-6 U.A) et "Cellule normale" (plateau plus bas).
+*Figure b* : Graphique "Nombre de cellules par boîte en million" en fonction du "Temps (heures)". Deux courbes : "Cellules cancéreuses" (croissance exponentielle jusqu'à ~20 millions) et "Cellules normales" (croissance plus lente jusqu'à ~10 millions).
+
+**1. En exploitant le document 1, proposez une hypothèse pour expliquer l'apparition du cancer du poumon chez l'Homme. (1 pt)**
+
+Le document 2 présente un fragment du brin transcrit du gène EGFR chez une personne saine et une personne atteinte du cancer du poumon. Le document 3 présente un extrait du tableau du code génétique.
+
+**Document 2**
+
+| Numéro du triplet : | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| Fragment du brin transcrit du gène EGFR d'une personne saine : | ... | CCC | GTC | GCT | ATC | AAG | GAA | TTA | AGA |
+| Fragment du brin transcrit du gène EGFR d'une personne malade : | ... | CCC | GTC | CGC | TAT | CAA | GGA | ATT | AAG |
+
+*Sens de lecture* (indiqué par une flèche vers la droite).
+
+**Document 3**
+
+| Codons | CAG CAA | UGA UAG UAA | UCC UCG UCU | GUU GUC | GGU GGA GGG | UUU UUC | AUC AUA AUU | CGA CGU | GCG GCU | CCA CCU |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Acides aminés | Gln | Codon stop | Ser | Val | Gly | Phe | Ile | Arg | Ala | Pro |
+
+**2. En vous aidant des documents 2 et 3 :**
+
+a. Donnez la séquence de l'ARNm et la séquence des acides aminés correspondantes aux fragments du brin transcrit du gène EGFR chez la personne saine et la personne malade. (1 pt)
+
+b. vérifiez l'hypothèse proposée dans votre réponse à la question 1, en déterminant l'origine génétique de la maladie. (2 pt)
 
 -- 5 of 13 --
 
+[En-tête du document : Identique à la page précédente]
 
+**Exercice 3 : (4 pts)**
+
+Pour comprendre le mode de transmission de deux caractères héréditaires (couleur et la forme de la corolle) chez la plante du mûrier, on propose l'exploitation des résultats des deux croisements suivants :
+
+**- Premier croisement :** entre deux lignées pures de mûrier, l'une à corolle blanche et personée et l'autre à corolle rouge à symétrie axiale. La première génération F1 composée d'individus à corolle rose et personée.
+
+**- Deuxième croisement :** entre les individus de F1, ce qui a donné une génération F2 composée de :
+- 94 plantes à corolle rose et personée ;
+- 45 plantes à corolle blanche et personée ;
+- 15 plantes à corolle rouge à symétrie axiale ;
+- 39 plantes à corolle rouge et personée ;
+- 28 plantes à corolle rose à symétrie axiale ;
+- 13 plantes à corolle blanche à symétrie axiale.
+
+**1. En vous basant sur les résultats des deux croisements, déterminez le mode de transmission des deux caractères héréditaires étudiés. (1.5 pts)**
+
+**2. Donnez l'interprétation chromosomique du deuxième croisement en établissant l'échiquier de croisement. (1.5 pts)**
+
+Utilisez les symboles R ou r pour le caractère couleur rouge de la corolle et B ou b pour le caractère couleur blanche de la corolle les symboles A et a pour le caractère forme de la corolle.
+
+Un agriculteur souhaite obtenir la plus grande proportion possible de plantes de mûrier à corolle rose à symétrie axiale, mais il hésite entre les deux croisements suivants :
+- Croisement A : entre des plantes à corolle rose à symétrie axiale ;
+- Croisement B : entre des plantes à corolle blanche à symétrie axiale et des plantes à corolle rouge à symétrie axiale ;
+
+**3. Déterminez, parmi les croisements A et B, le croisement qui permet à cet agriculteur d'obtenir la plus grande proportion possible de plantes de mûrier à corolle rose à symétrie axiale. Justifiez votre réponse. (1pt)**
+
+**Répondre obligatoirement à l'un deux exercice 4 ou 5 selon votre choix**
+
+**Exercice 4 : (4 pts)**
+
+L'ozone (O$_3$) est présent dans l'atmosphère terrestre (en quantité limitée, cette molécule joue un rôle essentiel en filtrant les rayons solaires ultra-violets dont les effets sont nocifs pour les êtres vivants. Dès 1980, une baisse de la quantité totale d'ozone a été observée (trou d'ozone) au-dessus de l'Antarctique. Pour mettre en évidence les causes à l'origine de cette baisse, on propose l'étude des données suivantes :
+
+Le document 1 montre une représentation simplifiée des réactions de production et destruction d'ozone dans la stratosphère. Le document 2 présente la distribution verticale d'ozone dans la stratosphère (figure a) et la variation de la pression atmosphérique en fonction de l'altitude (figure b).
+
+**Document 1**
+
+*Réaction de formation d'ozone* :
+UV + O$_2$ $\rightarrow$ O + O
+O + O$_2$ $\rightarrow$ O$_3$
+
+*Réaction de destruction d'ozone* :
+UV + O$_3$ $\rightarrow$ O + O$_2$
+O$_3$ + O $\rightarrow$ 2O$_2$
+
+Légende : O$_3$: Ozone, O$_2$: Dioxygène, O: Atome d'oxygène, UV: Ultra-violet.
+
+**Remarque :** La réaction dominante (formation ou destruction de l'ozone) au niveau de la stratosphère est liée à la pression atmosphérique.
 
 -- 6 of 13 --
 
+[En-tête du document : Identique à la page précédente]
 
+**Document 2**
+
+*Figure a* : Graphique "Altitude (km)" en ordonnée et "Concentration d'ozone (ppm)" en abscisse. La courbe montre une augmentation puis une diminution de la concentration avec l'altitude. Zone "Troposphère" (0-10 km approx) et "Stratosphère" (au-dessus).
+*Figure b* : Graphique "Altitude (km)" en ordonnée et "Pression atmosphérique (hPa)" en abscisse (échelle logarithmique 0.01 à 1000). La pression diminue lorsque l'altitude augmente. Zone "Stratosphère" indiquée entre 10 et 50 km approx.
+
+**1. En exploitant les documents 1 et 2 :**
+
+a. Décrivez la distribution verticale d'ozone dans la stratosphère. (0,5 pt)
+
+b. Etablissez la relation entre la variation de la pression et la pression atmosphérique au niveau de la stratosphère en mettant en évidence les réactions dominantes. (1 pt)
+
+Pour déterminer la relation entre la baisse de la quantité totale d'ozone et la concentration de certains composés d'origine industrielles ou agricoles (composés azotés, chlorés ou bromés) dans l'atmosphère, on propose le document 3 qui donne la variation de la monoxyde du chlore et d'ozone dans l'atmosphère (figure a) et l'effet du monoxyde du chlore sur l'ozone (figure b).
+
+**Document 3**
+
+*Figure a* : Graphique montrant la variation de "ozone (O$_3$)" (curbe pleine) et "Monoxyde du chlore (ClO)" (curbe pointillée) en fonction de la latitude (60°S vers le pôle sud). L'ozone diminue puis augmente, le ClO suit une tendance inverse.
+*Figure b* : Schéma du cycle du chlore.
+- dioxygène (O$_2$)
+- atome du chlore (Cl)
+- ozone (O$_3$)
+- Cycle de destruction d'ozone : Cl + O$_3$ $\rightarrow$ ClO + O$_2$ ; ClO + O $\rightarrow$ Cl + O$_2$.
+- Monoxyde de chlore (ClO).
+- atome d'oxygène (O).
+- Destruction d'ozone.
+
+**2. En vous basant sur le document 3 :**
+
+a. Décrivez la variation de la quantité du monoxyde du chlore et d'ozone dans l'atmosphère. (0.5pt)
+
+b. Montrez la dangerosité du chlore sur l'ozone stratosphérique. (0.5pt)
+
+Dans le but d'éliminer progressivement la production des substances qui détruisent la couche d'ozone, l'accord de Copenhague en 1992 a recommandé l'abandonnement complet des composés CFC. Le document 4 montre la variation de la quantité de CFC dans la stratosphère de la région de Wallonie après l'application de cet accord. Les pays producteurs et utilisateurs de CFC, qui ont ratifié cet accord, ont décidé de mettre sur le marché des produits de remplacement moins nocifs pour l'ozone.
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 1 - Figure a (Page 4)] ---
+- **Contexte de l'exercice** : Biologie - Génétique / Cancer du poumon.
+- **Description du dispositif ou montage** : Graphique cartésien. Axe des ordonnées : "Quantité d'ADN synthétisé (U.A)". Axe des abscisses : "Temps (min)". Origine à (0,0). Deux courbes partant de l'origine.
+- **Analyse détaillée du graphe / courbe / tableau** : La courbe "Cellule cancéreuse" monte rapidement puis plateau vers 5-6 U.A. La courbe "Cellule normale" monte moins vite et plateau vers 2-3 U.A.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 1 - Figure b (Page 4)] ---
+- **Contexte de l'exercice** : Biologie - Génétique / Cancer du poumon.
+- **Description du dispositif ou montage** : Graphique cartésien. Axe des ordonnées : "Nombre de cellules par boîte en million" (0 à 25). Axe des abscisses : "Temps (heures)" (0 à 120).
+- **Analyse détaillée du graphe / courbe / tableau** : Courbe "Cellules cancéreuses" : croissance sigmoïde/exponentielle atteignant ~20 millions à 120h. Courbe "Cellules normales" : croissance plus lente atteignant ~10 millions à 120h.
+
+--- [TABLEAU DÉCODÉ : Document 2 (Page 4)] ---
+- **Contexte de l'exercice** : Biologie - Génétique / Gène EGFR.
+- **Description du dispositif ou montage** : Tableau comparant les triplets d'ADN d'une personne saine et d'une personne malade.
+- **Analyse détaillée du graphe / courbe / tableau** : Colonnes numérotées 1 à 8. Différences observées aux positions 3 (GCT vs CGC), 4 (ATC vs TAT), 5 (AAG vs CAA), 6 (GAA vs GGA), 7 (TTA vs ATT), 8 (AGA vs AAG).
+
+--- [TABLEAU DÉCODÉ : Document 3 (Page 4)] ---
+- **Contexte de l'exercice** : Biologie - Code génétique.
+- **Description du dispositif ou montage** : Tableau de correspondance Codons / Acides aminés.
+- **Analyse détaillée du graphe / courbe / tableau** : Liste des codons (ex: CAG, CAA pour Gln; UGA, UAG, UAA pour Codon stop; etc.).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 1 - Réactions (Page 5)] ---
+- **Contexte de l'exercice** : Chimie - Ozone / Stratosphère.
+- **Description du dispositif ou montage** : Deux schémas de réactions chimiques encadrés.
+- **Analyse détaillée du graphe / courbe / tableau** : 
+  - Formation : O$_2$ --(UV)--> O + O ; puis O + O$_2$ --> O$_3$.
+  - Destruction : O$_3$ --(UV)--> O + O$_2$ ; puis O$_3$ + O --> 2O$_2$.
+  - Légende définissant O$_3$, O$_2$, O, UV.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 2 - Figure a (Page 6)] ---
+- **Contexte de l'exercice** : Chimie - Ozone / Atmosphère.
+- **Description du dispositif ou montage** : Graphique. Axe Y : Altitude (km) de 0 à 60. Axe X : Concentration d'ozone (ppm) de 0 à 10.
+- **Analyse détaillée du graphe / courbe / tableau** : Courbe montrant un pic de concentration d'ozone autour de 30-40 km d'altitude (zone stratosphère). Zones "Troposphère" et "Stratosphère" indiquées par des flèches verticales.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 2 - Figure b (Page 6)] ---
+- **Contexte de l'exercice** : Chimie - Ozone / Atmosphère.
+- **Description du dispositif ou montage** : Graphique. Axe Y : Altitude (km) de 0 à 80. Axe X : Pression atmosphérique (hPa) échelle log (0.01 à 1000).
+- **Analyse détaillée du graphe / courbe / tableau** : Ligne droite décroissante. La pression passe de ~1000 hPa au sol à ~0.01 hPa à 80 km. Zone "Stratosphère" indiquée entre 10 et 50 km.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 3 - Figure a (Page 6)] ---
+- **Contexte de l'exercice** : Chimie - Ozone / Chlore.
+- **Description du dispositif ou montage** : Graphique. Axe X : Latitude (60°S vers le pôle sud). Axe Y : Quantité relative.
+- **Analyse détaillée du graphe / courbe / tableau** : Courbe "ozone (O$_3$)" diminue vers le pôle sud. Courbe "Monoxyde du chlore (ClO)" augmente vers le pôle sud.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 3 - Figure b (Page 6)] ---
+- **Contexte de l'exercice** : Chimie - Ozone / Chlore.
+- **Description du dispositif ou montage** : Schéma de cycle chimique (Cycle de destruction d'ozone).
+- **Analyse détaillée du graphe / courbe / tableau** : 
+  - Cl + O$_3$ $\rightarrow$ ClO + O$_2$
+  - ClO + O $\rightarrow$ Cl + O$_2$
+  - Régénération de Cl. 
+  - Composés impliqués : dioxygène (O$_2$), atome du chlore (Cl), ozone (O$_3$), Monoxyde de chlore (ClO), atome d'oxygène (O).
 
 -- 7 of 13 --
 
+Le document 5 présente la durée de vie de trois composés dans l'atmosphère et leur capacité de destruction d'ozone ; le CFC et deux produits de remplacement : l'Hydrochlorofluorocarbures (HCFC) et l'Hydrofluorocarbures (HFC).
 
+**Document 4**
+[Graphique à barres : Émissions (tonnes éq. CFC) en fonction des Années]
+- Axe des ordonnées : Émissions (tonnes éq. CFC), gradué de 0 à 500 par pas de 50.
+- Axe des abscisses : Années, de 1995 à 2004.
+- Les barres montrent une décroissance des émissions de 1995 à 2004.
+
+**Document 5**
+| Composés | Durée de vie en années | Capacité de destruction d'ozone (en U.A.) |
+| :--- | :--- | :--- |
+| CFC | 100 | 1 |
+| HFC | 28 | 0 |
+| HCFC | 1,6 | 0,01 |
+
+3. En vous basant sur le document 4 et 5, exprimez votre opinion sur l'efficacité de la décision prise par les pays producteurs de CFC. Justifiez votre réponse. (1.5 pts)
+
+**Exercice 5 : (4 pts)**
+
+Les Andes est une chaîne de subduction qui s'étendent tout au long de la côte pacifique de l'Amérique du sud sur près de 8900 kilomètres. Sa formation est accompagnée par un magmatisme intense. Afin de montrer l'origine de ce magmatisme et sa relation avec la tectonique des plaques on propose les données suivantes :
+
+Le document 1 présente la situation géodynamique d'une partie de la chaîne des Andes (figure a) et une coupe géologique au niveau de cette chaîne de montagne (figure b).
+
+**Document 1**
+[Figure a : Carte géodynamique]
+- Légende : Ligne reliant les foyers sismiques de même profondeur (Km), Fosse océanique, Sens de mouvement des plaques, Volcan.
+- Éléments : Fosse du Pérou, Plaque de Nazca, Plaque Amérique du sud, Fosse du Chili.
+- Flèches indiquant les mouvements relatifs des plaques.
+
+[Figure b : Coupe géologique]
+- Légende : Andésite, Granodiorites, Socle ancien, Terrains primaires, Couches plissées.
+- Éléments : Volcans, Faille.
+
+1. A partir du document 1, dégagez quatre indices indiquant que les Andes est une chaîne de subduction. (1 pt)
+
+Les géologues supposent que le magma des zones de subduction résulte d'une fusion partielle de la péridotite à l'aplomb de la zone océanique et au-dessus de la plaque plongeante. La profondeur de cette zone oscille entre 80 et 100 km. Pour déterminer l'origine de ce magma on propose le document 2 qui présente un modèle de tracé des isothermes (figure a) et les conditions de la fusion de la péridotite (figure b) dans une zone de subduction.
 
 -- 8 of 13 --
 
+**Document 2**
+[Figure a : Modèle de tracé des isothermes]
+- Axe vertical : Profondeur (Km), de 0 à 100 Km.
+- Axe horizontal : Profondeur (Km), de 0 à 150 Km.
+- Isothermes : 200 °C, 400 °C, 600 °C, 800 °C, 1000 °C, 1200 °C.
+- Zones : Lithosphère continentale, Lithosphère océanique, Fosse.
 
+[Figure b : Diagramme P-T]
+- Axe des abscisses : T (°C), de 200 à 2000.
+- Axe des ordonnées : Pression (GPa), de 2,5 à 7,5.
+- Domaines : Solide, Solide + Liquide, Liquide, Solidus humide, Solidus sec.
+- Courbe : Géotherme de zone de subduction.
+- Profondeur (Km) indiquée sur une échelle secondaire.
+
+2. En exploitant le document 2 :
+a. A partir de la figure a, déterminez l'intervalle de la température régnante dans la zone de fusion partielle de la péridotite au niveau de la zone de subduction. (0.25 pt)
+b. En se basant sur la figure b, expliquez la nécessité de la présence d'eau pour la fusion partielle de la péridotite dans la zone de subduction. (1,25 pts)
+
+Pour déterminer l'origine de l'hydratation des péridotites dans une zone de subduction, on propose le document 3 qui montre la localisation des échantillons de métagabbros appartenant à des faciès métamorphiques différents dans une zone de subduction (figure a) et leur composition minéralogique (figure b). Le document 4 présente des réactions minéralogiques engendrées sous l'effet des conditions régnantes dans une zone de subduction (figure a) et les domaines de stabilité de certains minéraux (figure b).
+
+**Document 3**
+[Figure a : Schéma de subduction]
+- Légende : Cc : croûte continentale, Co : croûte océanique, M : manteau, SV : schiste vert, SB : schiste bleu, E : éclogite.
+- Éléments : Fosse, SV, SB, E, M, Co, Cc.
+- Axe vertical : Profondeur (Km), de 0 à -100.
+
+[Figure b : Tableau]
+| Echantillon de métagabbros à faciès de | Composition minéralogique |
+| :--- | :--- |
+| Schiste vert | Plagioclase, chlorite et actinote |
+| Schiste bleu | Glaucophane |
+| Eclogite | Grenat et jadéite |
+
+3. En exploitant les documents 3 et 4, montrez que les métagabbros de la croûte océanique plongeante ont subi un métamorphisme ! dynamique en déduisant l'origine de l'eau nécessaire à la genèse du magma dans les zones de subduction. (1 pt)
+
+**Document 4**
+[Figure a : Réactions]
+Réaction 1 : plagioclase + chlorite + actinote $\rightarrow$ glaucophane + eau
+Réaction 2 : plagioclase + glaucophane $\rightarrow$ grenat + jadéite + eau
+* chlorite et actinote sont des minéraux hydratés présents dans la lithosphère océanique plongeante.
+
+[Figure b : Tableau]
+| Minéraux | Conditions de stabilité |
+| :--- | :--- |
+| | Pression | Température |
+| Chlorite - Actinote | 0 à 0,5 GPa | 300 à 450 °C |
+| Glaucophane | > 0.5 GPa | 100 à 450 °C |
+| Grenat - Jadéite | > 1 GPa | > 200 °C |
+
+4. En se basant sur ce qui précède, montrez la relation entre la tectonique des plaques et la genèse du magma dans les zones de subduction. (0.5 pt)
 
 -- 9 of 13 --
 
+[En-tête administratif : Ministère de l'Éducation Nationale, du Préscolaire et des Sports, Académie Régionale d'Éducation et de Formation...]
+[Tableau des notes : Question | Les éléments de réponse | Note]
 
+**Première partie (5 pts)**
+
+| I | Acceptez toute définition correcte à titre d'exemple : - Cycle de Krebs : ensemble de réactions, ayant lieu dans la matrice mitochondriale, aboutissant à une dégradation complète de l'acide pyruvique (acetyl-coA) en CO2 et H2O, à une réduction des R en RH2 et à une synthèse d'GTP. - Phosphocréatine : est une molécule riche en énergie, utilisée dans le muscle pour régénérer l'ATP sous l'action de la créatine kinase | 0.5 pt 0.5 pt |
+| II | 1 $\rightarrow$ sécosse musculaire isolée ; 2 $\rightarrow$ fusion incomplète de deux sécoasses musculaires ; 3 $\rightarrow$ tétanos imparfait ; 4 $\rightarrow$ tétanos parfait | (4$\times$0.25) 1 pt |
+| III | (1 ; c) ; (2 ; e) ; (3 ; b) ; (4 ; 2a) | (4$\times$0.25) 1 pt |
+| IV | (1 ; b) ; (2 ; a) ; (3 ; d) ; (4 ; c) | (4$\times$0.5) 2 pts |
+
+**Deuxième partie (15 pts)**
+
+**Exercice 1 (3 pts)**
+
+| 1 | Exploitation du document 1 : - L'ajout du pyruvate entraîne une légère augmentation de la production d'ATP et une faible consommation du dioxygène ; - L'ajout d'ADP + Pi en présence de pyruvate, entraîne une production importante d'ATP et une consommation importante du dioxygène ; - L'ajout du cyanure, inhibiteur de l'action d'enzymes mitochondriales spécifiques, entraîne l'arrêt de la consommation du dioxygène et de la production d'ATP. Conditions de production de l'ATP : - Présence du pyruvate ; - Présence des enzymes spécifiques de production d'AT ; - Présence ADP + Pi ; - présence de dioxygène. | 0.75 pt 0.5 pt |
+| 2.a | Comparaison des résultats obtenus entre les muscles 2 et 1 : - Enregistrement d'une contraction musculaire de même durée pour les deux muscles ; - La quantité d'ATP reste inchangeable dans les deux muscles après la contraction musculaire ; - Diminution de la quantité de la phosphocréatine dans le muscle 2 alors qu'elle ne change pas dans le muscle 1. | 0.5 pt |
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 4] ---
+- **Contexte de l'exercice** : Chimie / Environnement (Couche d'ozone)
+- **Description du dispositif ou montage** : Graphique à barres verticales.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe Y : Émissions (tonnes éq. CFC) de 0 à 500. Axe X : Années de 1995 à 2004. Tendance décroissante des émissions.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 5] ---
+- **Contexte de l'exercice** : Chimie / Environnement
+- **Description du dispositif ou montage** : Tableau de données.
+- **Analyse détaillée du graphe / courbe / tableau** : Colonnes : Composés, Durée de vie (années), Capacité de destruction d'ozone (U.A.). Lignes : CFC (100, 1), HFC (28, 0), HCFC (1,6, 0,01).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 1 - Figure a] ---
+- **Contexte de l'exercice** : Physique / Géodynamique (Chaîne des Andes)
+- **Description du dispositif ou montage** : Carte schématique de subduction.
+- **Analyse détaillée du graphe / courbe / tableau** : Montre la Fosse du Pérou, la Plaque de Nazca, la Plaque Amérique du sud, la Fosse du Chili. Flèches de mouvement des plaques. Légende : foyers sismiques, fosse océanique, sens des plaques, volcans.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 1 - Figure b] ---
+- **Contexte de l'exercice** : Physique / Géodynamique
+- **Description du dispositif ou montage** : Coupe géologique transversale.
+- **Analyse détaillée du graphe / courbe / tableau** : Montre Volcans, Faille, Andésite, Granodiorites, Socle ancien, Terrains primaires, Couches plissées.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 2 - Figure a] ---
+- **Contexte de l'exercice** : Physique / Géodynamique (Isothermes)
+- **Description du dispositif ou montage** : Carte de contours (isothermes).
+- **Analyse détaillée du graphe / courbe / tableau** : Axe Y : Profondeur (0-100 Km). Axe X : Profondeur (0-150 Km). Isothermes de 200°C à 1200°C. Zones : Lithosphère continentale, Lithosphère océanique, Fosse.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 2 - Figure b] ---
+- **Contexte de l'exercice** : Physique / Thermodynamique (Diagramme P-T)
+- **Description du dispositif ou montage** : Diagramme de phases Pression-Température.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe Y : Pression (GPa) 2,5 à 7,5. Axe X : T (°C) 200 à 2000. Domaines : Solide, Solide+Liquide, Liquide. Courbes : Solidus humide, Solidus sec, Géotherme de zone de subduction.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 3 - Figure a] ---
+- **Contexte de l'exercice** : Physique / Géodynamique (Métamorphisme)
+- **Description du dispositif ou montage** : Schéma de zone de subduction avec localisation d'échantillons.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe Y : Profondeur (0 à -100 Km). Points : Cc, Co, M, SV, SB, E. Légende : croûte continentale, croûte océanique, manteau, schiste vert, schiste bleu, éclogite.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 3 - Figure b] ---
+- **Contexte de l'exercice** : Chimie / Minéralogie
+- **Description du dispositif ou montage** : Tableau de correspondance.
+- **Analyse détaillée du graphe / courbe / tableau** : Colonnes : Echantillon de métagabbros à faciès de, Composition minéralogique. Lignes : Schiste vert (Plagioclase, chlorite, actinote), Schiste bleu (Glaucophane), Eclogite (Grenat, jadéite).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 4 - Figure a] ---
+- **Contexte de l'exercice** : Chimie / Réactions minéralogiques
+- **Description du dispositif ou montage** : Texte de réactions chimiques.
+- **Analyse détaillée du graphe / courbe / tableau** : Réaction 1 : plagioclase + chlorite + actinote $\rightarrow$ glaucophane + eau. Réaction 2 : plagioclase + glaucophane $\rightarrow$ grenat + jadéite + eau.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 4 - Figure b] ---
+- **Contexte de l'exercice** : Chimie / Stabilité minérale
+- **Description du dispositif ou montage** : Tableau de conditions de stabilité.
+- **Analyse détaillée du graphe / courbe / tableau** : Colonnes : Minéraux, Pression, Température. Lignes : Chlorite-Actinote (0-0.5 GPa, 300-450°C), Glaucophane (>0.5 GPa, 100-450°C), Grenat-Jadéite (>1 GPa, >200°C).
 
 -- 10 of 13 --
 
-
+| المادة | 5 | 2 | RR 34F | الامتحان الوطني الموحد للبكالوريا - الدورة العادية 2020 - شعبة العلوم التجريبية (خيار فرنسية) - مادة: علوم الحياة والأرض والعلوم البيئية والتقنية شعبة العلوم التجريبية | * |
+| :--- | :---: | :---: | :--- | :--- | :---: |
+| | | | Comparaison des résultats obtenus entre les muscles 3 et 1 : .................................................................... 0.5 pt | | |
+| | | | - Enregistrement d'une contraction musculaire qui dure quelques secondes pour le muscle 3 et trois minutes pour le muscle 1 ; | | |
+| | | | - Epuisement d'ATP dans le muscle 3 après la contraction musculaire, alors que sa quantité ne change pas pour le muscle 1 ; | | |
+| | | | - Après la contraction musculaire, la quantité de la phosphocréatine ne change pas dans les deux muscles 3 et 1. | | |
+| | | | Pour le muscle 2 : après l'inhibition de la glycolyse, le muscle régénère l'ATP par la voie de la phosphocréatine ce qui explique la stabilité de la quantité d'ATP et la diminution de la quantité de la phosphocréatine après la contraction musculaire ; .................................................................... 0.25 pt | | |
+| | | | Pour le muscle 3 : après l'inhibition de la glycolyse et de l'activité de la phosphocréatine kinase, la régénération de l'ATP à partir de la phosphocréatine et du glucose est bloquée. Le muscle consomme son stock d'ATP ce qui explique l'épuisement d'ATP et la stabilité de la quantité de la phosphocréatine.................................................................... 0.25 pt | | |
+| | | | Les réactions de la régénération de l'ATP sont : .................................................................... 0.25 pt | | |
+| | | | Réaction de dégradation du glucose (respiration et fermentation). | | |
+| | | | Réaction de dégradation de la phosphocréatine. | | |
+| | | | **Exercice 2 (4 pts)** | | |
+| | | | **1** **Exploitation du document 1 :** | | |
+| | | | - Par rapport aux tissus sains, on constate au niveau des tissus cancéreux une élévation de la vitesse de la duplication de l'ADN et une augmentation rapide du nombre des cellules, ce qui indique une multiplication rapide et aléatoire des cellules cancéreuses. ... 0.5pt | | |
+| | | | Acceptez toutes hypothèses reliant l'apparition de la tumeur à une mutation qui provoque la prolifération aléatoire des cellules .................................................................... 0.5pt | | |
+| | | | **2.a** **-Pour la personne saine :** | | |
+| | | | ARNm : GGG CAG CGA UAG UUC CUU AAU UCU .................................................................... 0.25 pt | | |
+| | | | Séquence d'acides aminés : Gly - Gln - Arg .................................................................... 0.25 pt | | |
+| | | | **- Pour la personne malade :** | | |
+| | | | ARNm : GGG CAG GCG AUA GUU CCU UAA UUC .................................................................... 0.25 pt | | |
+| | | | Séquence d'acides aminés : Gly - Gln - Ala - Ile - Val - Pro .................................................................... 0.25 pt | | |
+| | | | **2.b** Mutation par addition du nucléotide C à la fin du triplet 2 (ou au début du triplet 3) du brin transcrit du gène EGFR → changement des codons au niveau de l'ARNm à partir du triplet 3 → apparition du codon non-sens à la position 7 au lieu de la position 4 → prolongation de la traduction et synthèse d'une séquence d'acides aminés plus longue et modifiée (protéine non fonctionnel) → prolifération aléatoire des cellules de poumon et apparition du cancer du poumon → hypothèse vérifiée (ou non). .................................................................... 2 pt | | |
 
 -- 11 of 13 --
 
-
+| المادة | 5 | 3 | RR 34F | الامتحان الوطني الموحد للبكالوريا - الدورة العادية 2020 - شعبة العلوم التجريبية (خيار فرنسية) - مادة: علوم الحياة والأرض والعلوم البيئية والتقنية شعبة العلوم التجريبية | * |
+| :--- | :---: | :---: | :--- | :--- | :---: |
+| | | | *Premier croisement : | | |
+| | | | - F1 est homogène, la première loi de Mendel est vérifiée → Hérédité non liée au sexe ..... 0.25pt | | |
+| | | | **1** - Les individus de F1 ont un phénotype parental pour le caractère de la forme de corolle et un phénotype intermédiaire pour le caractère de la couleur de la corolle : | | |
+| | | | → dominance de l'allèle responsable de la forme personenée (A) par apport à l'allèle récessif responsable de la forme symétrie axiale (a) .................................................................... 0.25 pt | | |
+| | | | → codominance entre l'allèle responsable de la couleur rouge de la corolle (R) et l'allèle responsable à la couleur blanche de la corolle (B). .................................................................... 0.25 pt | | |
+| | | | * Deuxième croisement : | | |
+| | | | la génération F2 obtenu est composée de six phénotypes : | | |
+| | | | - [RB, A] avec un pourcentage de 94 / 234 = 40.17 % → 6/ 16. | | |
+| | | | - [R, A] avec un pourcentage de 39 / 234 = 16.66 % → 3/ 16. .................................................................... 0. 5 pt | | |
+| | | | - [B, A] avec un pourcentage de 45 / 234 = 19.23 % → 3/ 16. | | |
+| | | | -[RB, a] avec un pourcentage de 28 / 234 = 11.96 % → 2/ 16 | | |
+| | | | - [R, a] avec un pourcentage de 15 / 234 = 6.41 % → 1/ 16. | | |
+| | | | - [B, a] avec un pourcentage de 13 / 234 = 5.55 % → 1/ 16. | | |
+| | | | les deux gènes étudiés sont indépendants .................................................................... 0.25 pt | | |
+| | | | **2** **Interprétation chromosomique des résultats du deuxième croisement :** | | |
+| | | | Phénotypes : F1 : [RB,A] F1 : [RB,A] | | |
+| | | | Gynotypes : R/B A/a R/B A/a | | |
+| | | | [Diagramme avec flèches indiquant la ségrégation des allèles] | | |
+| | | | Gamètes : R/ A / ¼ ; R/ a / ¼ R/ A / ¼ ; R/ a / ¼ | | |
+| | | | B/ A / ¼ ; B/ a / ¼ B/ A / ¼ ; B/ a / ¼ .................................................................... 0.25 pt .................................................................... 0.25 pt | | |
+| | | | **Echiquier de croisement :** .................................................................... 0.75 pt | | |
+| | | | | Gamètes males | R/,A/ ¼ | R/,a/ ¼ | B/,A/ ¼ | B/,a/ ¼ | |
+| | | | R/,A/ ¼ | R/R A/A [R,A] 1/16 | R/R A/a [R,A] 1/16 | R/B A/A [RB,A] 1/16 | R/B A/a [RB,A]1/16 | |
+| | | | R/,a/ ¼ | R/R A/a [R,A] 1/16 | R/R a/a [R, a] 1/16 | R/B A/a [RB,A] 1/16 | R/B a/a [RB, a] 1/16 | |
+| | | | B/,A/ ¼ | R/B A/A [RB,A] 1/16 | R/B A/a [RB,A] 1/16 | B/B A/A [B,A] 1/16 | B/B A/a [B,A] 1/16 | |
+| | | | B/,a/ ¼ | R/B A/a [RB,A] 1/16 | R/B a/a [RB, a] 1/16 | B/B A/a [B,A] 1/16 | B/B a/a [B, a] 1/16 | |
+| | | | On obtient: 6/16 [RB, A]; 3/16 [R, A]; 3/16 [B, A]; 2/16 [RB, a]; 1/16 [R, a]; 1/16 [B, a] | | |
+| | | | Les résultats théoriques sont conformes aux résultats expérimentaux. .................................................................... 0.25 pt | | |
 
 -- 12 of 13 --
 
+| المادة | 5 | 4 | RR 34F | الامتحان الوطني الموحد للبكالوريا - الدورة العادية 2020 - شعبة العلوم التجريبية (خيار فرنسية) - مادة: علوم الحياة والأرض والعلوم البيئية والتقنية شعبة العلوم التجريبية | * |
+| :--- | :---: | :---: | :--- | :--- | :---: |
+| | | | **3** - Détermination du croisement qui permet d'obtenir la plus grande proportion possible des plantes de mufiler à corolle rose à symétrie axiale : | | |
+| | | | - Le croisement b : entre des plantes à corolle blanche à symétrie axiale et des plantes à corolle rouge à symétrie axiale. .................................................................... 0.5 pt | | |
+| | | | Justification : le croisement entre le phénotype [B, a] et le phénotype [R, a] donnera 100% des plantes de phénotype [RB, a] .................................................................... 0.5 pt | | |
+| | | | **Si le candidat a répondu aux exercices 4 et 5, prenez compte de l'exercice qui a la meilleure note** | | |
+| | | | **Exercice 4 (4 pts)** | | |
+| | | | **1.a** - Description correcte, à titre d'exemple : | | |
+| | | | - La concentration en ozone dans la stratosphère augmente progressivement avec l'altitude pour atteindre un maximum de 8 ppm à 35 km d'altitude ; .................................................................... 0.25 pt | | |
+| | | | - Après 35 Km d'altitude la concentration d'ozone diminue progressivement jusqu'à 2.5 ppm à l'environ de 50 km d'altitude. .................................................................... 0.25 pt | | |
+| | | | **1.b** **Etablissement de la relation :** | | |
+| | | | - Dans les altitudes inférieure à 35 km de la stratosphère, l'augmentation de la concentration d'ozone en fonction de l'altitude est corrélée à des valeurs de pression atmosphérique supérieures à 7 hPa → dominance des réactions de formation d'ozone ($O_2 \rightarrow 2O$) et ($O_2+O \rightarrow O_3$). .................................................................... 0.5 pt | | |
+| | | | - Dans les altitudes dépassant 35 km de la stratosphère, la diminution de la concentration de l'ozone est corrélée à des valeurs de pression atmosphérique inférieures à 7hPa → dominance des réactions de destruction d'ozone ($O_3+O \rightarrow 2O_2$)..................................................................... 0.5 pt | | |
+| | | | **2.a** Description correcte, à titre d'exemple : | | |
+| | | | - En dépassant une latitude de $60^{\circ}$ sud, on constate une augmentation de la concentration du monoxyde du chlore dans la stratosphère qui atteint son maximum puis se stabilise à partir d'une latitude de $68^{\circ}$sud, alors que la concentration de l'ozone dans la stratosphère diminue pour atteindre son minimum vers $67^{\circ}$ et se stabilise. .................................................................... 0.5 pt | | |
+| | | | - Il existe une anticorrélation entre les concentrations d'$O_3$ et du ClO dans la stratosphère ; une diminution de la concentration d'$O_3$ est corrélée à une augmentation de la concentration de ClO. | | |
+| | | | **2.b** - La dangerosité du chlore réside dans sa capacité à diminuer la quantité d'ozone dans la stratosphère par le biais de la réaction suivante : Cl + $O_3 \rightarrow$ ClO + $O_2$ .................................................................... 0.25 pt | | |
+| | | | - La libération du chlore à partir du ClO par le biais de la réaction : ClO + O $\rightarrow$ Cl + $O_2$ permet son insertion dans de nouveaux cycles de destruction d'ozone. .................................................................... 0.25 pt | | |
+| | | | **3** - Document 4 : l'application de l'accord de Copenhague dans la région de Wallonie a permis une diminution importante de la quantité du complexe CFC dans la stratosphère de 450 tonnes en 1995 à 120 tonnes en 2004. .................................................................... 0.5pt | | |
+| | | | - Document 5 : les produits de substitution HFC et HCFC se caractérisent par une durée de vie courte et une capacité de destruction d'ozone très faibles à nulle en comparaison avec les CFC. .................................................................... 0.5pt | | |
+| | | | - Accepter tout opinion logique : La décision prise dans l'accord de Copenhague est efficace pour la protection de la couche d'ozone de sa destruction par le CFC. .................................................................... 0.5pt | | |
 
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Tableau de barème Page 10] ---
+- **Contexte de l'exercice** : Biologie (Physiologie musculaire et Cancer)
+- **Description du dispositif ou montage** : Tableau de notation avec colonnes pour le numéro de question, l'énoncé de la réponse attendue et les points attribués.
+- **Analyse détaillée du graphe / courbe / tableau** : Aucune courbe. Structure tabulaire standard pour la correction.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Diagramme de ségrégation des gamètes Page 11] ---
+- **Contexte de l'exercice** : Biologie (Génétique - Deuxième croisement)
+- **Description du dispositif ou montage** : Schéma montrant la formation des gamètes à partir des génotypes F1 ($R/B \ A/a$). Des flèches indiquent la séparation des allèles $R/B$ et $A/a$.
+- **Analyse détaillée du graphe / courbe / tableau** : Indique les combinaisons de gamètes possibles : $R/A$, $R/a$, $B/A$, $B/a$ chacune avec une probabilité de $1/4$.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Echiquier de croisement Page 11] ---
+- **Contexte de l'exercice** : Biologie (Génétique - Croisement dihbride)
+- **Description du dispositif ou montage** : Tableau de Punnett 4x4 croisant les gamètes mâles et femelles ($R/A, R/a, B/A, B/a$).
+- **Analyse détaillée du graphe / courbe / tableau** : Les cellules contiennent les génotypes des descendants (ex: $R/R \ A/A$) et leur phénotype associé (ex: $[R,A]$) avec une fréquence de $1/16$. En bas du tableau, un résumé des phénotypes obtenus et leurs fréquences théoriques ($6/16 [RB, A]$, etc.).
 
 -- 13 of 13 --
 
+**Exercice 5**
+
+| | | |
+| :--- | :--- | :--- |
+| **1** | **Quatre indices parmi :** ....................................................................(4× 0.25 pt)<br>- Convergence des deux plaques, Nazca et Amérique de sud ;<br>- Présence d'une fosse océanique ;<br>- Distribution des volcans tout au long de la marge océanique de l'Amérique de sud ;<br>- Présence des séismes dont la profondeur des foyers augmente en s'éloignant de la fosse vers l'Amérique de sud ;<br>- Présence de l'andésite et des granodiorites ;<br>- Présence des plis et des failles inverses. | 1 pt |
+| **2.a** | **La température régnante dans une zone de fusion partielle de la péridotite :**<br>$600 ^\circ\text{C}$ à $1200^\circ\text{C}$ (accepter $600$ à $1000^\circ\text{C}$) | 0.25 pt |
+| **2.b** | - Pour les péridotites non hydratées ou « sèches », le géotherme ne recoupe pas le solidus → la température régnante dans la zone de subduction est insuffisante à la fusion partielle de la péridotite en absence d'eau → pas de genèse du magma andésitique.<br>- Pour les péridotites hydratées, le solidus est déplacé vers de plus basses températures, il recoupe alors le géotherme de la zone de subduction entre $80$ et $200 \text{ Km}$ de profondeur → les conditions (P et T) sont favorables pour la fusion partielle de la péridotite en présence d'eau → genèse du magma andésitique.<br>- En présence d'eau, la température de la fusion partielle de la péridotite baisse, ce qui permet la genèse du magma à une profondeur de $80\text{km}$ à $200\text{km}$ et une température de $800^\circ\text{C}$ à $1300^\circ\text{C}$. | 0.5 pt<br>0.5 pt<br>0.25 pt |
+| **3** | **Lors de l'enfouissement de la lithosphère océanique le métagabbro subi un métamorphisme dynamique car :**<br>- Le métagabbro à faciès de schiste vert se transforme en métagabbro à faciès de schiste bleu → disparition du chlorite et de l'actinote, apparition du glaucophane et libération d'eau sous l'effet d'une haute pression et une basse température.<br>- Le métagabbro à faciès de schiste bleu se transforme en métagabbro à faciès d'éclogite → disparition du glaucophane, apparition du grenat et de la jadéite et libération d'eau sous l'effet d'une haute pression et une basse température.<br>**Déduction :** l'eau nécessaire à la fusion partielle des péridotites de la plaque chevauchante est libérée par les réactions minéralogiques au niveau des métagabbros de la plaque océanique plongeante sous l'effet d'une haute pression et une basse température. | 0.25 pt<br>0.25 pt<br>0.5 pt |
+| **4** | Dans les zones de subduction, la pression augmente suite à la convergence des deux plaques → les roches de la plaque plongeante subissent des réactions minéralogiques accompagnées d'une libération d'eau suite à un métamorphisme dynamique → hydratation des péridotites de la plaque chevauchante → baisse de la température nécessaire à la fusion partielle des péridotites → genèse d'un magma andésitique. | 0.5 pt |
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+Aucun schéma, graphe, montage ou tableau de mesures n'est présent sur cette page. Le document contient uniquement un tableau de corrigé textuel pour l'Exercice 5.

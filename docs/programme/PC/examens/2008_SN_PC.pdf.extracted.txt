@@ -1,24 +1,236 @@
-
-
 -- 1 of 6 --
 
+L'usage de la calculatrice scientifique non programmable est autorisé
 
+Le sujet comporte 4 exercices
+
+Chimie : (7 pts) :
+
+🔹 Etude des propriétés d’un acide carboxylique.
+
+Physique : (13 pts) :
+
+Exercise 1 : (2 pts)
+
+🔹 Les transformations nucléaires - Applications dans le domaine médical.
+
+Exercise 2 : (5 pts)
+
+🔹 Electricité - Les utilisations du condensateur.
+
+Exercise 3 : (6 pts)
+
+🔹 Mécanique - Etude de la chute d’un corps solide dans un champ de pesanteur uniforme.
+
+Les différentes parties des exercices sont indépendantes et peuvent être traitées dans un ordre différent.
+
+Traduction : A. EL AAMRANI
 
 -- 2 of 6 --
 
+CHIMIE Propriétés d’un acide carboxylique
 
+L’Ibuprofène est un acide carboxylique de formule brute C$_{13}$H$_{18}$O$_2$. Il est considéré parmi les médicaments anti-inflammatoires qui soulagent les douleurs et la fièvre. On le trouve dans les pharmacies sous forme de sachets qui portent la notation 200mg soluble dans l’eau.
+
+On note l’acide Ibuprofène par RCOOH et sa base conjuguée par RCOO$^-$.
+
+Données :
+- M(RCOOH) = 206 g.mol$^{-1}$
+- Toutes les mesures ont été effectuées à la température 25°C
+
+Partie 1 : Détermination de la constante d’équilibre de l’acide Ibuprofène avec l’eau :
+
+On dissout une masse m=200mg d’acide RCOOH, contenu dans un sachet d’Ibuprofène, dans l’eau pure, pour obtenir une solution aqueuse (S$_0$) de concentration C$_0$ et de volume V$_0$=100ml.
+
+1.1. Calculer C$_0$ (0.75pts)
+
+1.2. La mesure du pH de la solution S$_0$ a donnée la valeur pH=3,17 :
+
+1.2.1. Vérifier, à l’aide du tableau d’avancement, que la réaction d’Ibuprofène avec l’eau est limitée. (1.25pts)
+
+1.2.2. Donner l’expression du quotient de réaction Q$_r$ de cette transformation. (0.5pts)
+
+1.2.3. Montrer que l’expression de Q$_r$ à l’équilibre, s’écrit sous la forme $Q_{r,éq} = \frac{x_{max}.\tau^2}{V_0(1-\tau)}$, avec $\tau$ : le taux d’avancement final de la reaction et $x_{max}$ : l’avancement maximal exprimé en mol. (1pt)
+
+1.2.4. Déduire la valeur de la constante d’équilibre k de la réaction étudiée. (0.75pts)
+
+Partie 2 : Vérification de la grandeur transcrite sur le sachet :
+
+Pour vérifier la valeur de la masse transcrite sur le sachet, on dissout la même masse (200mg) dans un volume V$_B$=60.0mL d’une solution aqueuse (S$_B$) d’hydroxyde de sodium (Na$^+$$_{aq}$ + HO$^-$$_{aq}$) de concentration C$_B$=3,0.10$^{-2}$ mol.L$^{-1}$, pour obtenir une solution aqueuse (S).
+(on considère que le volume de la solution (S) est V$_B$)
+
+2.1. Etablir l’équation de la réaction entre l’acide RCOOH et la solution (S$_B$), en considérant que la réaction est totale. (0.75pts)
+
+2.2. Montrer que la quantité de matière n(HO$^-$) des ions HO$^-$, initialement présents dans la solution (S$_B$) est plus grande que la quantité de matière n(RCOOH) dissoute. (On considère que la valeur transcrite sur le sachet est exacte). (0.5pts)
+
+Traduction : A. EL AAMRANI
 
 -- 3 of 6 --
 
+2.3. Pour doser les ions HO$^-$ restants dans la solution (S), on ajoute à un volume V=20,0ml, de cette solution (S), une solution aqueuse (S$_A$) d’acide chloridrique de concentration C$_A$=1,0.10$^{-2}$ mol.L$^{-1}$. On obtient l’équivalence après avoir versé V$_{AE}$=27,7ml de la solution (S$_A$).
 
+Au cours du dosage, seuls les ions HO$^-$ restants dans la solution (S) réagissent avec les ions H$_3$O$^+$ issus de la solution (S$_A$), selon l’équation : H$_3$O$^+$$_{(aq)}$ + HO$^-$$_{(aq)}$ $\rightarrow$ 2H$_2$O$_{(l)}$
+
+2.3.1. Trouver la quantité de matière des ions HO$^-$ qui ont réagi avec l’acide RCOOH contenu dans le sachet (1pt)
+
+2.3.2. Calculer la masse d’acide d’Ibuprofène contenu dans le sachet. Conclure. (0.5pts)
+
+PHYSIQUE Exercice 1 : Les transformations nucléaires - Applications dans le domaine médical
+
+La médecine est l'un des principaux domaines dans lesquels sont appliquées de nombreuses activités nucléaires. Des substances radioactives sont associées au diagnostic des maladies et à la thérapie. Parmi les substances utilisées, on trouve le sodium $^{24}_{11}$Na qui permet d'étudier le flux sanguin dans l'organisme humain.
+
+1. Le sodium $^{24}_{11}$Na est un nucléide radioactif, sa désintégration conduit à la formation du nucléide de magnésium $^{24}_{12}$Mg
+
+1.1. Ecrire l’équation de la désintégration d’un nucléide de sodium $^{24}_{11}$Na et préciser le type de cette radioactivité (0.5pts)
+
+1.2. Calculer $\lambda$, la constante radioactive, de ce nucléide sachant que la demi-vie du sodium 24 est $t_{\frac{1}{2}}$=15 h (0.25pts)
+
+2. Suite a un accident de circulation, une personne a perdu un volume de sang. Afin de déterminer le volume sanguin perdu, on injecte au patient à l’instant $t_0$ = 0 un volume $v_0$ = 5,00 ml d’une solution de sodium 24 de concentration $c_0$ = 10$^{-3}$ mol.l$^{-1}$.
+
+2.1. Déterminer n$_1$ la quantité de matière du sodium $^{24}_{11}$Na restante dans le sang du patient à l’instant t$_1$=3h (0.5pts)
+
+2.2. Calculer l’activité a$_1$ de cet échantillon à l’instant t$_1$ .
+(Constante d’Avogadro N$_a$ = 6,02.10$^{23}$ mol$^{-1}$) (0.25pts)
+
+2.3. A l’instant t$_1$=3h, l’analyse d’une prise de sang du patient de volume v$_2$ = 2,00ml, indique la présence de n$_2$ = 2,1.10$^{-9}$ mol de sodium 24.
+
+En déduire le volume V$_p$ du sang perdu, en considérant que l’organisme humain contient 5L du sang, et que le sodium est uniformément réparti dans le sang. (0.5pts)
+
+Traduction : A. EL AAMRANI
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
 
 -- 4 of 6 --
 
+**En-tête du document (Traduction de l'arabe) :**
+Examen national unifié des écoles mission - session ordinaire 2008 - niveau 2ème (option français)
+Matière : Physique et Chimie - Filière sciences expérimentales - filières scientifiques (option français)
+Page 4 / 6
 
+**Exercice 2 : Electricité - Les utilisations du condensateur**
+
+Les condensateurs sont caractérisés par leur aptitude à stocker l'énergie électrique et à la récupérer au besoin. Ce qui permet d'utiliser les condensateurs dans plusieurs appareils comme le fonctionnement de flash qui équipe quelques appareils photos.
+
+**Partie 1 : La charge du condensateur**
+
+On réalise le montage expérimental représenté dans la *figure 1* et qui est constitué d'un condensateur déchargé de capacité C et associé en série avec un conducteur ohmique de résistance R et un interrupteur R.
+Le dipôle RC subit un échelon de tension défini comme suit :
+* Pour $t < 0 : U=0$ * Pour $t > 0 : U=E$ avec $E = 12V$.
+
+On ferme le circuit à l'instant $t=0$ et on observe, à l'aide d'une interface d'acquisition, sur l'écran d'un ordinateur, les variations de la tension $U_c$ aux bornes du condensateur en fonction du temps $U_c=f(t)$, comme le montre la *figure 2*.
+
+![Figure 1](image1_fig1)
+*Figure 1 : Circuit série RC avec source E, interrupteur K, résistance R, condensateur C. Tension $u_c$ aux bornes de C.*
+
+![Figure 2](image1_fig2)
+*Figure 2 : Graphe de $u_c$ (V) en fonction de $t$ (s).*
+
+**1.1.** Établir l'équation différentielle vérifiée par la tension $U_c(t)$ (**1pt**)
+**1.2.** Montrer que l'expression $U_c(t) = E.(1-e^{-t/\tau})$ est la solution de l'équation différentielle pour $t \geqslant 0$ ; avec $\tau$ est la constante de temps. (**0.5pts**)
+**1.3.** Donner l'expression de $\tau$ et montrer, à l'aide de l'analyse dimensionnelle, que $\tau$ est homogène au temps. (**0.5pts**)
+**1.4.** Déterminer $\tau$ graphiquement et déduire que la valeur de C est $C = 100 \mu F$. On donne $R=10 k\Omega$ (**0.75pts**)
+**1.5.** Calculer l'énergie électrique emmagasinée par le condensateur en régime permanent. (**0.75pts**)
+
+**Partie2 : La décharge du condensateur**
+
+Le fonctionnement normal du flash de l'appareil photo demande une importante énergie qui ne peut pas être délivrée en utilisant le générateur précédent. Pour trouver l'énergie nécessaire, le condensateur précédent se charge à l'aide d'un circuit électronique qui permet d'appliquer une tension constante, de valeur $U_c=360 V$, entre les bornes du condensateur.
+
+![Figure 3](image1_fig3)
+*Figure 3 : Circuit de décharge avec condensateur C, interrupteur K, résistance r. Courant i, tension $u_c$.*
+
+*Traduction : A. EL AAMRANI*
 
 -- 5 of 6 --
 
+**En-tête du document (Traduction de l'arabe) :**
+Examen national unifié des écoles mission - session ordinaire 2008 - niveau 2ème (option français)
+Matière : Physique et Chimie - Filière sciences expérimentales - filières scientifiques (option français)
+Page 5 / 6
 
+A l'instant $t=0$, le condensateur est déchargé dans le flash de l'appareil photo que nous assimilons à un conducteur ohmique de résistance $r$ (*figure 3*), la tension varie aux bornes du condensateur selon l'équation suivante : $U_c=360.e^{-t/\tau'}$. Avec $\tau'$ la constante du temps et $U_c(t)$ est exprimée en Volt (V).
+
+**2.1.** Trouver la valeur de $r$ la résistance du flash de l'appareil photo, sachant que la tension entre les bornes du condensateur prend la valeur $U_c(t)=132.45 V$ à l'instant $t=2ms$ (**1pt**)
+**2.2.** Expliquer comment faut-il choisir la résistance du flash de l'appareil photo pour assurer une décharge rapide du condensateur. (**0.5pts**)
+
+**Exercice 3 : Mécanique - Étude de la chute d'un corps solide dans un champ de pesanteur uniforme**
+
+Parfois, les hélicoptères sont utilisés pour acheminer des aides humanitaires aux régions touchées par des désastres et qui sont inaccessibles par les voies routières.
+
+Une caisse de matières alimentaires de centre d'inertie $G_0$ est lâchée depuis un hélicoptère s'élevant d'une hauteur constante H du sol avec une vitesse verticale constante $\vec{v_0}$. La caisse tombe sur terre en un point T (*Figure 1*).
+
+![Figure 1](image2_fig1)
+*Figure 1 : Schéma du lâcher. Hélicoptère, vecteur $\vec{v_0}$, origine O, axes x (horizontal) et y (vertical vers le bas), point T au sol, hauteur H.*
+
+On étudie le mouvement de $G_0$ dans un repère orthonormé $R (O, \vec{i}, \vec{j})$ lié au référentiel terrestre, considéré galiléen.
+On donne :
+$g=10 m.s^{-1}$ (l'intensité de pesanteur) et $H=405 m$. On néglige les dimensions de la caisse.
+
+**Partie 1 : Etude de la chute libre**
+
+On néglige les frottements de l'air sur la caisse.
+La caisse tombe à l'instant $t=0$ à partir du point A ($x_A=450 m$ ; $y_A=0$) avec une vitesse initiale verticale $\vec{V_0}$ d'une valeur $V_0=50 m.s^{-1}$.
+
+**1.1.** Trouver, en appliquant la 2ème loi de Newton, les deux équations horaires $x(t)$ et $y(t)$ du mouvement de $G_0$ dans le repère $R(O, \vec{i}, \vec{j})$. (**1.5pts**)
+**1.2.** Préciser l'instant où la caisse arrive au sol. (**0.75pts**)
+**1.3.** Trouver l'équation de la trajectoire du mouvement de $G_0$. (**0.5 pts**)
+
+*Traduction : A. EL AAMRANI*
 
 -- 6 of 6 --
 
+**En-tête du document (Traduction de l'arabe) :**
+Examen national unifié des écoles mission - session ordinaire 2008 - niveau 2ème (option français)
+Matière : Physique et Chimie - Filière sciences expérimentales - filières scientifiques (option français)
+Page 6 / 6
+
+**Partie2 : Etude de la chute avec frottement**
+
+Pour ne pas détruire les matières alimentaires quand elles arrivent au sol, la caisse est attachée à un parachute afin de ralentir sa chute. L'hélicoptère reste immobile à la même hauteur H qu'auparavant au point O. La caisse tombe avec son parachute verticalement sans vitesse initiale à l'instant $t_0=0$.
+
+Les forces de frottements avec l'air sont données par la relation $\vec{f} = - 100 . \vec{v}$, avec $\vec{v}$ le vecteur vitesse de la caisse à l'instant t.
+On néglige la poussée d'Archimède pendant la chute.
+On donne la masse du système {La caisse et le parachute} : $m=150 kg$
+
+**2.1.** Trouver l'équation différentielle dans le repère $R(O, \vec{i}, \vec{j})$ que vérifie la vitesse de $G_1$ le centre d'inertie du système. (**1.25pts**)
+**2.2.** La courbe de la *figure 2* représente la variation de la vitesse de $G_1$ en fonction du temps ; préciser la vitesse limite $V_{lim}$ et le temps caractéristique $\tau$ de la chute. (**0.5pts**)
+**2.3.** Donner une valeur approximative de la durée du régime transitoire. (**0.5pts**)
+**2.4.** En se basant sur la méthode d'Olère et le tableau suivant, préciser la valeur de la vitesse $v_4$ et celle de l'accélération $a_4$. (**1pt**)
+
+| $t_i(s)$ | 0 | 0,1 | 0,2 | 0,3 | 0,4 | 0,5 | 0,6 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| $v_i(m.s^{-1})$ | 0 | 1,00 | 1,93 | 2,80 | $v_4$ | 4,37 | 5,08 |
+| $a_i(m.s^{-2})$ | 10,00 | 9,33 | 8,71 | 8,12 | $a_4$ | 7,07 | 6,60 |
+
+![Figure 2](image3_fig2)
+*Figure 2 : Graphe de $v$ (m.s$^{-1}$) en fonction de $t$ (s).*
+
+*Traduction : A. EL AAMRANI*
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1 (Page 4)] ---
+- **Contexte de l'exercice** : Physique - Électricité - Charge du condensateur
+- **Description du dispositif ou montage** : Circuit série constitué d'une source de tension continue $E$, d'un interrupteur $K$, d'une résistance ohmique $R$ et d'un condensateur $C$ de capacité $C$. La tension $u_c$ est mesurée aux bornes du condensateur.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma de circuit).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2 (Page 4)] ---
+- **Contexte de l'exercice** : Physique - Électricité - Charge du condensateur
+- **Description du dispositif ou montage** : Graphe de la tension $u_c$ en fonction du temps $t$.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des abscisses : $t$ (s), graduations de 0 à 4. Axe des ordonnées : $u_c$ (V), graduations de 0 à 12. La courbe commence à l'origine (0,0) et croît vers une asymptote horizontale à $u_c = 12 V$.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3 (Page 4)] ---
+- **Contexte de l'exercice** : Physique - Électricité - Décharge du condensateur
+- **Description du dispositif ou montage** : Circuit de décharge contenant un condensateur $C$ (préchargé à 360 V), un interrupteur $K$ et une résistance $r$. Le courant $i$ et la tension $u_c$ sont indiqués.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma de circuit).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1 (Page 5)] ---
+- **Contexte de l'exercice** : Physique - Mécanique - Chute d'un corps solide
+- **Description du dispositif ou montage** : Schéma montrant un hélicoptère lâchant une caisse. Repère $R(O, \vec{i}, \vec{j})$ avec $O$ en haut à gauche, $\vec{i}$ horizontal vers la droite, $\vec{j}$ vertical vers le bas. Vecteur vitesse $\vec{v_0}$ indiqué. Hauteur $H$ indiquée entre le point de lâcher et le sol. Point T d'impact au sol.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma cinématique).
+
+--- [TABLEAU / GRAPHE : Tableau et Figure 2 (Page 6)] ---
+- **Contexte de l'exercice** : Physique - Mécanique - Chute avec frottements
+- **Description du dispositif ou montage** : Tableau de valeurs numériques pour $t_i$, $v_i$ et $a_i$. Graphe de la vitesse $v$ en fonction du temps $t$.
+- **Analyse détaillée du graphe / courbe / tableau** : 
+  - Tableau : $t_i$ de 0 à 0,6 s par pas de 0,1. $v_i$ de 0 à 5,08 m/s. $a_i$ de 10,00 à 6,60 m/s². Valeurs manquantes $v_4$ et $a_4$ à $t=0,4$ s.
+  - Graphe (Figure 2) : Axe des abscisses $t(s)$ de 0 à 15. Axe des ordonnées $v (m.s^{-1})$ de 0 à 16. La courbe part de l'origine et tend vers une asymptote horizontale autour de $v = 16 m/s$.

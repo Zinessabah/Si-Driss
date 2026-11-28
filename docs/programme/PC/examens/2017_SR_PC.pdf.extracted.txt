@@ -1,24 +1,416 @@
-
-
 -- 1 of 6 --
 
+**المملكة المغربية**
+**وزارة التربية الوطنية والتكوين المهني والتعليم العالي والبحث العلمي**
+**الأكاديمية الجهوية للتربية والتكوين**
+**جهة الدار البيضاء سطات**
+**المديرية الإقليمية للدار البيضاء - أنفا**
 
+**الدورة العادية - 2017**
+**RS 34F**
+
+| 3 | مادة الامتحان | علوم الحياة والأرض | اللغة |
+|---|---|---|---|
+| 5 | الشعب | مسلك العلوم التجريبية - خيار علوم الحياة والأرض | اللغة العربية |
+
+**Il n'est pas permis d'utiliser la calculatrice**
+
+**Première partie : restitution des connaissances (5 pts)**
+
+**I. Définissez les notions suivantes :** Ophiolite - Structure foliée. _(1pt)_
+
+**II. Citez trois propriétés structurales et pétrographiques caractérisant les chaînes d'obduction.** _(0.75pt)_
+
+**III. Pour chacune des données numérotées de 1 à 4, une seule suggestion est correcte. Recopiez les couples suivants, et choisissez pour chaque couple la lettre qui correspond à la suggestion correcte.** _(2 pts)_
+(1 ; ...) ; (2 ; ...) ; (3 ; ...) ; (4 ; ...)
+
+| 1- La série métamorphique des roches argileuses résultant d'un métamorphisme de pression et de température croissantes est : | 3- L'ecglote est une roche métamorphique formée sous les conditions suivantes : |
+|---|---|
+| a. argile $\rightarrow$ gneiss $\rightarrow$ schiste $\rightarrow$ micaschiste. | a. haute pression et haute température. |
+| b. argile $\rightarrow$ schiste $\rightarrow$ gneiss $\rightarrow$ micaschiste. | b. haute pression et basse température. |
+| c. argile $\rightarrow$ schiste $\rightarrow$ micaschiste $\rightarrow$ gneiss. | c. basse pression et haute température. |
+| d. argile $\rightarrow$ gneiss $\rightarrow$ micaschiste $\rightarrow$ schiste. | d. basse pression et basse température. |
+
+| 2- Le granite intrusif est entouré par : | 4- Les migmatites forment un complexe rocheux qui sépare: |
+|---|---|
+| a. les migmatites. | a. les roches du métamorphisme de contact du domaine de la fusion. |
+| b. l'auréole métamorphique. | b. les roches du métamorphisme dynamique du domaine de la fusion. |
+| c. le gneiss. | c. le granite anatectique du granite intrusif. |
+| d. la péridotite. | d. le gneiss du granite anatectique. |
+
+**IV. Les figures ci-dessous représentent des schémas de déformations tectoniques accompagnant la formation des chaînes de montagnes.**
+
+[Image de 5 schémas géologiques étiquetés Figure 1, Figure 2, Figure 3, Figure 4, Figure 5]
+
+- **Recopier les numéros des figures sur votre feuille de production et écrivez le nom qui convient à chaque figure parmi les noms suivants:** chevauchement ; faille normale ; faille inverse ; faille horizontale ; pli droit ; pli couché ; pli déversé. _(1.25pts)_
 
 -- 2 of 6 --
 
+**المملكة المغربية**
+**وزارة التربية الوطنية والتكوين المهني والتعليم العالي والبحث العلمي**
+**الأكاديمية الجهوية للتربية والتكوين**
+**جهة الدار البيضاء سطات**
+**المديرية الإقليمية للدار البيضاء - أنفا**
 
+**الدورة العادية - 2017**
+**RS 34F**
+
+**مادة علوم الحياة والأرض - مسلك العلوم التجريبية - خيار علوم الحياة والأرض**
+
+**Deuxième partie : Exploitation des documents (15 pts)**
+
+**Exercice 1 (5 pts)**
+
+Certains sportifs trichent lors des compétitions sportives en consommant des produits dopants interdits à l'échelle internationale par la fédération des jeux olympique. Afin d'étudier l'effet de l'entraînement et du dopage sur les voies métaboliques produisant l'énergie au niveau des cellules musculaires chez ces sportifs, on propose les données suivantes :
+
+• La mesure de la concentration de certains métabolites au niveau du muscle strié, et la détermination des pourcentages de consommation du glucose et de la phosphocréatine chez un nageur après une épreuve de 100m et chez un autre après une épreuve de 1500m, ont permis l'obtention des résultats présentés par les documents 1 et 2.
+
+**Document 1**
+
+| | Concentrations des métabolites en $10^{-5}$ mol/g du muscle |
+|---|---|
+| | Acide lactique | Glycogène | Phospho-créatine | ATP |
+| 1- état de repos | 1.1 | 80 | 17 | 4.6 |
+| 2- nage libre 100 m (1min) | 30.5 | 60 | 10 | 3.4 |
+| 3- nage libre 1500 m (15min) | 3 | 38 | 16 | 4.7 |
+
+**Document 2**
+
+[Graphique à barres empilées : Pourcentage de consommation des métabolites. Axe X : nage libre 100m, nage libre 1500m. Axe Y : 0 à 100%. Légende : Métabolisme aérobie du glucose, Voie anaérobie de la phosphocréatine, Métabolisme anaérobie du glucose.]
+
+**1-a. À partir du document 1, déterminez les variations de la concentration des métabolites chez les deux nageurs après l'effort musculaire.** _(1 pt)_
+
+**b. En se basant sur le document 2, dégagez les voies métaboliques utilisées par le muscle de chacun des deux nageurs pour produire l'énergie.** _(1pt)_
+
+Pour comprendre l'effet de l'effort musculaire de longue durée sur le métabolisme du muscle, on propose les données présentées par les documents 3 et 4.
+
+**Document 3**
+
+* Un entraînement de longue durée (1500m nage libre pendant 21 semaines à raison de 5 séances par semaine) permet d'observer dans les cellules musculaires une augmentation:
+- du nombre de mitochondries de 120% ;
+- de la taille des mitochondries de 14 à 40%.
+* Des mesures de l'activité des enzymes du cycle de Krebs sont réalisées à partir d'extraits de muscles prélevés chez différents sportifs (1500m nage libre) avant et après l'entraînement ont permis l'obtention du graphe ci-contre.
+
+[Graphique : Activité des enzymes du cycle de Krebs en U.A. Axe X : Temps en semaines (0 à 30). Axe Y : 1 à 2.4. Courbe montante puis descendante. Annotations : Début de l'entraînement, Arrêt de l'entraînement.]
 
 -- 3 of 6 --
 
+**المملكة المغربية**
+**وزارة التربية الوطنية والتكوين المهني والتعليم العالي والبحث العلمي**
+**الأكاديمية الجهوية للتربية والتكوين**
+**جهة الدار البيضاء سطات**
+**المديرية الإقليمية للدار البيضاء - أنفا**
 
+**الدورة العادية - 2017**
+**RS 34F**
+
+**مادة علوم الحياة والأرض - مسلك العلوم التجريبية - خيار علوم الحياة والأرض**
+
+**Document 4**
+
+La mesure de la quantité de l'acide lactique en fonction de la vitesse de la natation chez un nageur qui a bénéficié d'un entraînement et chez un nageur qui n'a pas bénéficié d'entraînement a permis la réalisation du graphe ci-contre.
+
+[Graphique : Concentration de l'acide lactique en mmole/L (4 à 20) en fonction de Vitesse (km/h) (14 à 26). Deux courbes : trait déchiré "Nageur qui n'a pas bénéficié d'entraînement", trait plein "Nageur qui a bénéficié d'entraînement".]
+
+**2- En utilisant les données des documents 3 et 4, déterminez l'effet de l'entraînement sur le métabolisme musculaire, puis expliquez l'effet de l'effort musculaire de longue durée sur les réactions métaboliques du muscle.** _(1 pt)_
+
+• Malgré les graves effets secondaires des produits dopants sur la santé, pour améliorer leur performance sportive, certains nageurs utilisent différents produits dopants adéquats à leur activité sportive. Pour comprendre le mécanisme d'action des produits dopants, nous proposons les données du document 5.
+
+**Document 5**
+
+[Encadré gauche]
+L'EPO ou Erythropoïétine est une hormone sécrétée par le rein. Cette substance se trouve sous forme synthétique que les nageurs de longue distance utilisent comme produit dopant. Le tableau ci-dessous présente les changements enregistrés au niveau du sang d'un individu avant et après l'injection de l'EPO.
+
+**Figure a**
+
+| | Avant l'injection d'EPO | Après injection d'EPO |
+|---|---|---|
+| Nombre de globule rouge par litre de sang | $4,9.10^{12}$ | $6.10^{12}$ |
+| Quantité d'hémoglobine en g/L de sang | 150 | 200 |
+
+[Encadré droit]
+La concentration d'ATP est déterminée dans les quadriceps de deux nageurs spécialistes des épreuves de 100 m nage libre ; le premier a bénéficié d'un supplément de créatine (pilules de créatine) pendant 5 jours, l'autre nageur a reçu un placebo (pilules ne contenant pas de créatine). Cette concentration est évaluée avant le début de l'exercice (repos), juste à la fin d'exercice et après 3 minutes de récupération. Les résultats obtenus sont résumés dans le graphe suivant :
+
+**Figure b**
+
+[Graphique à barres : mmole.kg-ATP. Axe X : repos, fin d'exercice, après 3min de récupération. Légende : utilisation de placebo, utilisation de la créatine.]
+
+**3- En exploitant le document 5 et vos connaissances, déduisez l'effet de la consommation de l'EPO et de la créatine sur le métabolisme musculaire.** _(1pt)_
+
+Certains sportifs ont recours à s'entraîner dans des régions montagneuses (Ifrane par exemple) pour améliorer leur ventilation pulmonaire et augmenter le nombre de leurs globules rouges ainsi que la quantité de l'hémoglobine.
+
+**4- À partir de vos réponses précédentes, montrez qu'on peut améliorer la performance sportive sans utilisation d'EPO.** _(1pt)_
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1] ---
+- **Contexte de l'exercice** : Première partie : restitution des connaissances - Géologie externe (Déformations tectoniques).
+- **Description du dispositif ou montage** : Schéma montrant des couches rocheuses pliées en forme de "N" ou "S" asymétrique.
+- **Analyse détaillée du graphe / courbe / tableau** : Représente un pli. Les couches sont déformées.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2] ---
+- **Contexte de l'exercice** : Première partie : restitution des connaissances - Géologie externe.
+- **Description du dispositif ou montage** : Schéma montrant des couches rocheuses avec un pli recumbant ou couché.
+- **Analyse détaillée du graphe / courbe / tableau** : Représente un pli couché.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3] ---
+- **Contexte de l'exercice** : Première partie : restitution des connaissances - Géologie externe.
+- **Description du dispositif ou montage** : Schéma montrant des couches sédimentaires avec une faille inverse (compression).
+- **Analyse détaillée du graphe / courbe / tableau** : Représente une faille inverse.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 4] ---
+- **Contexte de l'exercice** : Première partie : restitution des connaissances - Géologie externe.
+- **Description du dispositif ou montage** : Schéma montrant des blocs rocheux avec une faille normale (extension).
+- **Analyse détaillée du graphe / courbe / tableau** : Représente une faille normale.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 5] ---
+- **Contexte de l'exercice** : Première partie : restitution des connaissances - Géologie externe.
+- **Description du dispositif ou montage** : Schéma montrant un chevauchement de nappes de charriage.
+- **Analyse détaillée du graphe / courbe / tableau** : Représente un chevauchement.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 1] ---
+- **Contexte de l'exercice** : Deuxième partie : Exploitation des documents - Exercice 1 - Physiologie musculaire.
+- **Description du dispositif ou montage** : Tableau de données numériques.
+- **Analyse détaillée du graphe / courbe / tableau** : Colonnes : Acide lactique, Glycogène, Phospho-créatine, ATP. Lignes : état de repos, nage libre 100m, nage libre 1500m. Unités : $10^{-5}$ mol/g du muscle.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 2] ---
+- **Contexte de l'exercice** : Deuxième partie : Exploitation des documents - Exercice 1.
+- **Description du dispositif ou montage** : Graphique à barres empilées.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe X : nage libre 100m, nage libre 1500m. Axe Y : Pourcentage (0-100%). Légende : Métabolisme aérobie du glucose, Voie anaérobie de la phosphocréatine, Métabolisme anaérobie du glucose.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 3] ---
+- **Contexte de l'exercice** : Deuxième partie : Exploitation des documents - Exercice 1.
+- **Description du dispositif ou montage** : Texte descriptif + Graphique linéaire.
+- **Analyse détaillée du graphe / courbe / tableau** : Graphique "Activité des enzymes du cycle de Krebs en U.A". Axe X : Temps en semaines (0 à 30). Axe Y : 1 à 2.4. Courbe augmentant puis diminuant. Annotations : Début de l'entraînement, Arrêt de l'entraînement.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 4] ---
+- **Contexte de l'exercice** : Deuxième partie : Exploitation des documents - Exercice 1, Question 2.
+- **Description du dispositif ou montage** : Graphique linéaire.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe Y : Concentration de l'acide lactique en mmole/L (4 à 20). Axe X : Vitesse (km/h) (14 à 26). Deux courbes : trait déchiré (non entraîné), trait plein (entraîné).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure a (Document 5)] ---
+- **Contexte de l'exercice** : Deuxième partie : Exploitation des documents - Exercice 1, Question 3.
+- **Description du dispositif ou montage** : Tableau comparatif.
+- **Analyse détaillée du graphe / courbe / tableau** : Colonnes : Avant l'injection d'EPO, Après injection d'EPO. Lignes : Nombre de globule rouge ($4,9.10^{12}$ vs $6.10^{12}$), Quantité d'hémoglobine (150 vs 200 g/L).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure b (Document 5)] ---
+- **Contexte de l'exercice** : Deuxième partie : Exploitation des documents - Exercice 1, Question 3.
+- **Description du dispositif ou montage** : Graphique à barres groupées.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe Y : mmole.kg-ATP (0 à 6). Axe X : repos, fin d'exercice, après 3min de récupération. Légende : utilisation de placebo, utilisation de la créatine.
 
 -- 4 of 6 --
 
+**Exercice 2 (3 pts)**
 
+Pour étudier certains aspects de la transmission et d'expression de l'information génétique, on propose les données suivantes :
+
+• Au cours de chaque cycle cellulaire, la cellule subit un ensemble de phénomènes biologiques qui interviennent dans le maintien de l'information génétique lors de sa transmission d'une cellule à une autre. Pour mettre en évidence un de ces phénomènes ainsi que son importance, on propose l'expérience présentée par le document 1.
+
+**Remarque :** La thymidine (T) est utilisée dans la synthèse d'ADN.
+
+1. Expliquez les résultats de l'expérience du document 1, en justifiant votre réponse à l'aide d'un schéma adéquat du phénomène biologique mis en évidence. (1.5 pts)
+
+• Le Xeroderma pigmentosum de type B est une maladie génétique rare, caractérisée par une hypersensibilité aux rayons UV, et provoque des lésions au niveau de la peau et des yeux qui peuvent évoluer en cancers. Cette maladie est la conséquence de la perte des cellules de leur capacité à réparer les erreurs au niveau de l'ADN.
+
+Les UV provoquent des modifications de la structure de l'ADN en formant des liaisons covalentes entre 2 thymines (T) successives du même brin de l'ADN.
+
+A l'état normal, cette aberration est corrigée par l'intervention d'une enzyme appelée ERCC3 avant la duplication de l'ADN. Le document 2 résume le mode d'action de cette enzyme.
+
+**Document 1**
+
+[Diagramme montrant deux boîtes en haut :]
+- Boîte gauche : "Transfert d'une plantule de feu d'un milieu normal à un milieu radioactif pendant un cycle cellulaire"
+- Boîte droite : "Transfert de cette plantule à un milieu non radioactif pendant un cycle cellulaire"
+[Flèches pointant vers des images de cellules en bas :]
+- Image gauche : "Premier cycle cellulaire" (chromosomes visibles)
+- Image droite : "Deuxième cycle cellulaire" (chromosomes visibles)
+[Légende :]
+- Symbole croisé : Thymidine radioactive
+- Symbole cercle : Thymidine non radioactive
+- Symbole carré hachuré : radioactivité
+
+**Document 2**
+
+[Diagramme montrant le mécanisme de réparation :]
+- Brin d'ADN avec "Liaison covalente" entre deux T.
+- Flèche vers "Reconnaissance et liaison au niveau de l'erreur" avec enzyme ERCC3.
+- Flèche vers "Réparation" avec ERCC3.
+- Flèche vers "Libération" d'ERCC3 et brin d'ADN réparé.
+
+Le document 3 présente la séquence nucléotidique d'une partie du gène codant pour l'enzyme ERCC3 chez un individu sain et un autre individu atteint de XPB. Le tableau du document 4 donne un extrait du code génétique.
+
+**Document 3**
+
+| Individu sain | Brin non transcrit | 66 | CCA | ACT | TGT | GAT | AAC | TGC | 71 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| | Brin transcrit | | GGT | TGA | ACA | CTA | TTG | ACG | |
+| Individu atteint de XPB | Brin non transcrit | 66 | CCA | ATT | GTG | ATA | ACT | GCA | 71 |
+| | Brin transcrit | | GGT | TAA | CAC | TAT | TGA | CGT | |
+
+**Document 4**
+
+| | Codons | ACC ACG | GUG GUG | UAA UAG | CCU CCA | UGU UGC | GCU GCA GCG | AAA AAC | AUA AUC | UUU UUC | GAU GAC |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| **Acides aminés** | Thr | Val | Non sens | Pro | Cys | Ala | Asn | Ile | Phe | Asp |
 
 -- 5 of 6 --
 
+2- En utilisant les données des documents 2, 3 et 4, déterminez la séquence des acides aminés correspondante à chaque partie du gène contrôlant la synthèse de la protéine ERCC3 chez les deux individus étudiés, et expliquez l'origine génétique de cette maladie. (1.5 pts)
 
+**Exercice 3 (2 pts)**
+
+Chez les pigeons, la femelle est hétérogamète XY et le mâle est homogamète XX. Pour comprendre le mode de transmission de deux caractères (la couleur du plumage et la couleur des yeux) chez une race de pigeons dite Romaine, on propose l'étude des résultats des croisements suivants :
+
+**Croisement 1 :** Des mâles de race pure à plumage bleu et yeux noirs avec des femelles de race pure à plumage brun et yeux orange. La première génération F1 est constituée uniquement d'individus à plumage bleu et yeux noirs.
+
+**Croisement 2 :** Des mâles de race pure à plumage brun et yeux orange avec des femelles de race pure à plumage bleu et yeux noirs. La génération F1 obtenue est composée de 50% d'individus mâles à plumage bleu et yeux noirs et 50% d'individus femelles à plumage brun et yeux noirs.
+
+1. Analysez les résultats des deux croisements 1 et 2, puis déduisez le mode de transmission des caractères étudiés chez le pigeon romain. (1pt)
+
+2. A l'aide d'un échiquier de croisement, Donnez les résultats attendus dans le cas de croisement des mâles de F1 avec des femelles à plumage brun et yeux orange. (1pt)
+
+Utiliser les symboles (B,b) pour le caractère couleur de plumage et (N,n) pour le caractère couleur des yeux.
+
+**Exercice 4 (5 pts)**
+
+A la 22ème Conférence des parties (COP22) à la convention-cadre des Nations Unies sur les changements climatiques, tenue du 7 au 18 novembre 2016 à Marrakech, les pays participants se sont mis d'accord pour concrétiser les différents axes retenus dans l'accord de Paris (COP21) afin d'éviter des catastrophes écologiques éminentes à l'horizon 2050 qui résulteraient de l'aggravation de l'effet de serre. L'accord a fixé comme objectif la réduction du réchauffement de la planète de 2°C.
+
+Pour mettre l'accent sur les engagements du Maroc et sur sa vision stratégique dans le domaine de l'énergie, par rapport à l'expérience d'autres pays, nous proposons l'étude des données suivantes :
+
+• Le dioxyde de carbone CO2 est un gaz à effet de serre, son émission dans l'atmosphère a connu une augmentation progressive le long du dernier siècle. Le document 1 montre la production mondiale d'électricité selon les différentes ressources utilisées en 2006 (figure a) et l'émission de CO2 dans l'atmosphère selon ces ressources (figure b).
+
+**Document 1**
+
+**Figure a** (Camembert : Évolution de la production d'électricité selon les différentes sources au Maroc.)
+- Parts : "autres énergies renouvelables -lables 3%", "hydraulique 16%", "nucléaire 13%", "Gaz 21%", "pétrole 6%", "charbon 41%".
+
+**Figure b** (Histogramme : Emission de CO2 en g/KWh)
+- Axe Y : 0, 200, 400, 600, 800, 1000.
+- Axe X : Charbon, Pétrole, Gaz, Solaire, Eolien, Nucléaire, Hydro-électrique.
+- Barres : Charbon (~1000), Pétrole (~900), Gaz (~800), Solaire (~150), Eolien (~50), Nucléaire (~20), Hydro-électrique (~20).
+
+1. En exploitant les figures du document 1 :
+   a. Montrez la relation entre l'effet de serre et la production d'électricité. (1.5pts)
+   b. Proposez deux procédures adéquates pour limiter l'aggravation de l'effet de serre. (0.5 pt)
 
 -- 6 of 6 --
 
+Lors du COP21 à Paris, le Maroc s'est engagé à réduire ses émissions de CO2 de 32% à l'horizon de 2030, pour cela, et dans une approche écologique, le Maroc a adopté une stratégie énergétique basée sur le développement des énergies renouvelables. Les figures du document 2 présentent des données relatives aux projets énergétiques réalisés.
+
+**Document 2**
+
+**Figure a** : Évolution de la production d'électricité selon les différentes sources au Maroc.
+[Histogramme empilé pour les années 2009, 2015, 2020]
+- Légende : Eolien (pointillé), Fossile (hachuré), Solaire (blanc), Hydroélectrique (gris foncé).
+- 2009 : Blocs 4%, 29%, 67%.
+- 2015 : Blocs 12%, 5%, 21%, 62%.
+- 2020 : Blocs 14%, 14%, 14%, 58%.
+
+**Figure b** : les projets des énergies renouvelables au Maroc.
+| Centrales ou Parcs réalisés (2000-2015) | Energie éolienne | Energie solaire |
+| :--- | :--- | :--- |
+| | 8 parcs avec une productivité qui atteint 1060 MW | 6 centrales avec une productivité qui atteint 1660 MW |
+| Objectif attendu à l'horizon de 2020 | - 14% de la production nationale d'électricité. <br> - Diminution des émissions de CO2 de 5.6 millions tonnes par an. | - 14% de la production nationale d'électricité. <br> - Diminution des émissions de CO2 de 3.7 millions tonnes par an. |
+
+2. En se basant sur les données du document 2, montrez l'efficacité des procédures concernant l'engagement du Maroc envers COP21. (1pt)
+
+• A l'inverse du Maroc, d'autre pays ont continué à utiliser l'énergie nucléaire pour la production de l'électricité. Certaines centrales nucléaires ont connu des incidents causant des fuites radioactives dans l'environnement. Le document 3 présente des données en relation avec certains de ces incidents.
+
+**Document 3**
+
+| | Tchernobyl* | Fukushima ** |
+| :--- | :--- | :--- |
+| Iode radioactif | 4260 PBq | 408 PBq |
+| Césium radioactif | 168 PBq | 85 PBq |
+| Gaz rares | 6533 PBq | 6550 PBq |
+
+* l'agence internationale d'énergie nucléaire 2005.
+** estimation de l'institut de radioprotection et de sûreté nucléaire.
+
+Figure a : émissions radioactives après la catastrophe de Tchernobyl et de Fukushima en becquerel (Bq).
+
+| Type du cancer | Nombre total des cas | Nombre total des décès | Pourcentage des décès |
+| :--- | :--- | :--- | :--- |
+| Goitre | 137000 | 13700 | 10% |
+| Sang | 12000 | 8040 | 67% |
+| Autres | 123000 | 71340 | 58% |
+
+Figure b : estimation du nombre des décès atteint des cancers suite à la catastrophe de Tchernobyl.
+
+3. En exploitant les données du document 3, déterminez les effets de l'utilisation de l'énergie nucléaire dans la production de l'électricité. (1pt)
+
+4. A partir des données précédentes, donnez votre opinion à propos des choix énergétiques du Maroc par rapport au modèle d'énergie nucléaire adopté par d'autres pays. (1pt)
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 1 (Page 4)] ---
+- **Contexte de l'exercice** : Biologie - Génétique (Transmission de l'information génétique).
+- **Description du dispositif ou montage** : Deux scénarios de transfert de plantule.
+  1. Milieu normal -> Milieu radioactif (1 cycle).
+  2. Milieu radioactif -> Milieu non radioactif (1 cycle).
+  Observation des chromosomes après métaphase.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A (Schéma illustratif).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 2 (Page 4)] ---
+- **Contexte de l'exercice** : Biologie - Réparation de l'ADN.
+- **Description du dispositif ou montage** : Schéma du mode d'action de l'enzyme ERCC3.
+  - Brin d'ADN avec liaison covalente entre deux thymines.
+  - Reconnaissance par ERCC3.
+  - Réparation et libération de l'enzyme.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A (Schéma illustratif).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 3 (Page 4)] ---
+- **Contexte de l'exercice** : Biologie - Séquençage ADN / Code génétique.
+- **Description du dispositif ou montage** : Tableau de séquences nucléotidiques.
+  - Individu sain vs Individu atteint de XPB.
+  - Brins transcrits et non transcrits.
+- **Analyse détaillée du graphe / courbe / tableau** : Tableau avec positions 66 à 71. Différences de nucléotides entre les deux individus (ex: ACT vs ATT).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 4 (Page 4)] ---
+- **Contexte de l'exercice** : Biochimie - Code génétique.
+- **Description du dispositif ou montage** : Table de correspondance Codons / Acides aminés.
+- **Analyse détaillée du graphe / courbe / tableau** : Liste de codons (ex: ACC, ACG pour Thr) et acides aminés associés (Thr, Val, Pro, Cys, Ala, Asn, Ile, Phe, Asp, Non sens).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 1 - Figure a (Page 5)] ---
+- **Contexte de l'exercice** : Physique-Chimie - Énergie / Environnement (COP22).
+- **Description du dispositif ou montage** : Diagramme circulaire (Camembert).
+- **Analyse détaillée du graphe / courbe / tableau** : Production mondiale d'électricité en 2006.
+  - Charbon : 41%
+  - Gaz : 21%
+  - Nucléaire : 13%
+  - Hydraulique : 16%
+  - Pétrole : 6%
+  - Autres énergies renouvelables : 3%
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 1 - Figure b (Page 5)] ---
+- **Contexte de l'exercice** : Physique-Chimie - Énergie / Environnement.
+- **Description du dispositif ou montage** : Histogramme à barres verticales.
+- **Analyse détaillée du graphe / courbe / tableau** : Émission de CO2 en g/KWh.
+  - Axe Y : 0 à 1000 g/KWh.
+  - Axe X : Charbon, Pétrole, Gaz, Solaire, Eolien, Nucléaire, Hydro-électrique.
+  - Valeurs approximatives : Charbon (~1000), Pétrole (~950), Gaz (~800), Solaire (~150), Eolien (~50), Nucléaire (~20), Hydro-électrique (~20).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 2 - Figure a (Page 6)] ---
+- **Contexte de l'exercice** : Physique-Chimie - Énergies renouvelables (Maroc).
+- **Description du dispositif ou montage** : Histogrammes empilés pour les années 2009, 2015, 2020.
+- **Analyse détaillée du graphe / courbe / tableau** : Évolution de la production d'électricité au Maroc.
+  - Légende : Eolien, Fossile, Solaire, Hydroélectrique.
+  - 2009 : Hydro (67%), Fossile (29%), Solaire (4%).
+  - 2015 : Hydro (62%), Fossile (21%), Eolien (5%), Solaire (12%).
+  - 2020 : Hydro (58%), Fossile (14%), Eolien (14%), Solaire (14%).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 2 - Figure b (Page 6)] ---
+- **Contexte de l'exercice** : Physique-Chimie - Projets énergétiques.
+- **Description du dispositif ou montage** : Tableau comparatif Énergie éolienne vs Énergie solaire.
+- **Analyse détaillée du graphe / courbe / tableau** :
+  - Réalisés (2000-2015) : 8 parcs éoliens (1060 MW), 6 centrales solaires (1660 MW).
+  - Objectif 2020 : 14% production nationale, réduction CO2 (5.6 Mt pour éolien, 3.7 Mt pour solaire).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 3 (Page 6)] ---
+- **Contexte de l'exercice** : Physique-Chimie - Nucléaire / Santé.
+- **Description du dispositif ou montage** : Deux tableaux.
+  1. Émissions radioactives (Tchernobyl vs Fukushima).
+  2. Statistiques cancers (Type, Cas totaux, Décès totaux, % Décès).
+- **Analyse détaillée du graphe / courbe / tableau** :
+  - Tableau 1 : Iode (4260 PBq vs 408 PBq), Césium (168 PBq vs 85 PBq), Gaz rares (6533 PBq vs 6550 PBq).
+  - Tableau 2 : Goitre (10% décès), Sang (67% décès), Autres (58% décès).

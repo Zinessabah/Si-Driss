@@ -1,24 +1,338 @@
-
-
 -- 1 of 6 --
 
+**En-tête du document :**
+- Établissement : المعهد الوطني للتدريب في مهنة التدريس - 2025 - المسلك: العلوم الطبيعية والحياة - الفرع: العلوم الفيزيائية والكيميائية (فرع فرنسي)
+- Code : RS28F
+- Informations administratives : Durée 3h, Coefficient 7, Matière: Physique et Chimie, Série: Sciences de la Vie et de la Terre (Branche Française)
 
+**Consignes générales :**
+- L'usage de la calculatrice scientifique **non programmable** est autorisé.
+- On donnera les expressions littérales avant de passer aux applications numériques.
+- Les exercices peuvent être traités selon l'ordre choisi par le candidat.
+- Le sujet comporte quatre exercices : un exercice de chimie et trois exercices de physique.
+
+**Exercice 1 : Chimie (7 points)**
+- Étude de quelques réactions avec l'acide éthanoïque
+- Étude d'une hydrolyse basique d'un ester
+
+**Exercice 2 : Ondes lumineuses (2,5 points)**
+- Diffraction d'une onde lumineuse
+
+**Exercice 3 : Électricité (5 points)**
+- Établissement et rupture du courant électrique dans un circuit RL
+- Modulation d'amplitude
+
+**Exercice 4 : Mécanique (5,5 points)**
+- Mouvement d'un skieur
+- Mouvement d'un pendule de torsion
 
 -- 2 of 6 --
 
+**Exercice 1 : Chimie (7 points)**
 
+Dans cet exercice on se propose d'étudier une :
+- solution aqueuse d'acide éthanoïque ;
+- réaction d'estérification ;
+- hydrolyse basique d'un ester.
+
+**1- Étude d'une solution aqueuse d'acide éthanoïque**
+
+On prépare une solution aqueuse $S_A$ d'acide éthanoïque $CH_3COOH$ de volume $V$ et de concentration molaire $C_A = 4,2.10^{-3} mol.L^{-1}$. Son pH vaut $pH = 3,6$.
+
+**1-1-** Écrire l'équation chimique modélisant la réaction de l'acide éthanoïque avec l'eau. (0,5pt)
+
+**1-2-** Exprimer $\tau$, le taux d'avancement final de cette réaction, en fonction de $C_A$ et $pH$. Calculer sa valeur. (0,5pt)
+
+**1-3-** Déterminer la valeur de $pK_A$ du couple $CH_3COOH_{(aq)} / CH_3COO^-_{(aq)}$. (0,5pt)
+
+**1-4-** Les courbes de la figure 1 représentent le diagramme de distribution des espèces acide et base conjuguée du couple $CH_3COOH_{(aq)} / CH_3COO^-_{(aq)}$.
+
+**1-4-1-** À partir du graphe, déterminer, à nouveau, la valeur du $pK_A$. (0,5pt)
+
+**1-4-2-** Justifier que la courbe 1 correspond à l'espèce acide. (0,25pt)
+
+**1-4-3-** On dilue la solution $S_A$ pour obtenir une solution $S_{A1}$ de concentration $C_{A1}$ et de $pH = 4,2$.
+
+On définit la proportion de l'espèce basique $CH_3COO^-$ dans une solution par :
+
+$$ \alpha(CH_3COO^-) = \frac{[CH_3COO^-_{(aq)}]_{eq}}{[CH_3COOH_{(aq)}]_{eq} + [CH_3COO^-_{(aq)}]_{eq}} \times 100 $$
+
+En se basant sur les courbes de la figure 1, trouver la nouvelle valeur $\tau$, du taux d'avancement final de la réaction de l'acide éthanoïque avec l'eau. Que peut-on conclure à propos de l'effet de la dilution sur le taux d'avancement final ? (0,5pt)
+
+**2- Étude d'une réaction d'estérification avec l'acide éthanoïque**
+
+Pour synthétiser l'éthanoate d'éthyle noté $E$, on fait réagir $0,100 mol$ d'acide éthanoïque avec $0,100 mol$ d'éthanol $C_2H_5OH$. Lorsque la réaction est terminée, on dose, dans des conditions expérimentales bien déterminées, l'acide restant avec une solution aqueuse $S_b$ d'hydroxyde de sodium $Na^+_{(aq)} + HO^-_{(aq)}$ de concentration $C_B = 1,50 mol.L^{-1}$. Le volume de $S_b$ versé à l'équivalence est $V_{be} = 22,0 mL$.
+
+**2-1-** Écrire, en utilisant les formules semi-développées, l'équation de la réaction d'estérification qui s'est produite. (0,75pt)
+
+**2-2-** Calculer la quantité de matière $n$, d'acide restant en fin de la réaction d'estérification. (0,5pt)
+
+**2-3-** En exploitant le tableau d'avancement de la réaction d'estérification, déterminer son rendement. (0,75pt)
+
+**Figure 1** (visible en bas de page) : Graphique en pourcentage (%) en fonction du pH. Deux courbes sigmoïdales se coupent. L'une est décroissante (Courbe 1), l'autre croissante (Courbe 2).
 
 -- 3 of 6 --
 
+**3- Étude d'une hydrolyse basique d'un ester**
 
+On étudie la cinétique chimique de la réaction d'hydrolyse basique (saponification) de l'éthanoate d'éthyle. À un instant choisi comme origine des dates ($t=0$), on introduit $n_{e0} = 0,8 mmol$ d'éthanoate d'éthyle dans un bécher contenant une solution d'hydroxyde de sodium où $n_{o}(HO^-_{(aq)}) = 1,0 mmol$. On obtient ainsi un volume $V = 50 mL$ du mélange réactionnel. La réaction est totale et se produit à une température $\theta$.
+
+La courbe de la figure 2 représente l'évolution temporelle de l'avancement $x$ de la réaction de saponification étudiée. La droite (T) représente la tangente à la courbe au point d'abscisse $t=3 min$.
+
+**3-1-** Écrire, en utilisant les formules semi-développées, l'équation de la réaction associée à l'hydrolyse basique de l'éthanoate d'éthyle. (0,5pt)
+
+**3-2-** Répondre par vrai ou faux, en justifiant, à l'affirmation suivante : « La vitesse volumique $v(t)$ de cette réaction diminue au cours du temps ». (0,5pt)
+
+**3-3-** Déterminer graphiquement $t_{1/2}$ le temps de demi-réaction. (0,5pt)
+
+**3-4-** Déterminer, en unité $mmol.L^{-1}.min^{-1}$, la vitesse volumique de la réaction à l'instant $t=3 min$. (0,75pt)
+
+**Figure 2** (visible en haut de page) : Graphique $x (mmol)$ en fonction de $t (min)$. Courbe croissante avec une tangente (T) en $t=3 min$.
+
+**Exercice 2 : Ondes lumineuses (2,5 points)**
+
+Cet exercice vise à déterminer l'indice de réfraction d'un liquide pour une lumière monochromatique. Une source laser émet, dans l'air, un faisceau de lumière monochromatique de longueur d'onde $\lambda_a$.
+
+**Données :**
+- La célérité de la lumière dans le vide ou dans l'air : $c = 3.10^8 m.s^{-1}$ ;
+- On prend l'indice de réfraction de l'air $n_a = 1$.
+
+**1-** Choisir la proposition juste parmi les propositions suivantes : (0,5pt)
+
+| A | La lumière émise par la source laser est une onde mécanique. |
+|---|---|
+| B | La vitesse de la lumière est plus grande dans les fibres optiques en verre que dans le vide. |
+| C | Les radiations du spectre visible ont des longueurs d'onde dans le vide comprises entre $0,4 nm$ et $0,8 nm$. |
+| D | La fréquence d'une lumière monochromatique ne dépend pas du milieu de propagation. |
+
+**2-** Le dispositif expérimental représenté sur la figure ci-contre est constitué de :
+- la source laser précédente ;
+- une fente de largeur $a$ ;
+- un écran parallèle à la fente et placé à une distance $D$ de la fente.
+
+Le faisceau de lumière émis par la source laser arrive perpendiculairement à la fente. On observe sur l'écran des taches lumineuses comme le montre la figure. La tache centrale a une largeur $L = 2,4 cm$.
+
+**Schéma du montage** (visible en bas de page) : Source laser, Fente de largeur $a$, Lentille, Écran, Distance $D$, Largeur $L$, Angle $\theta$.
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1] ---
+- **Contexte de l'exercice** : Exercice 1 : Chimie - Étude d'une solution aqueuse d'acide éthanoïque
+- **Description du dispositif ou montage** : Graphique en coordonnées cartésiennes. Axe des abscisses : pH (échelle de 1 à environ 8). Axe des ordonnées : % (échelle de 0 à 100). Deux courbes sigmoïdales se croisant.
+- **Analyse détaillée du graphe / courbe / tableau** : La courbe 1 est décroissante (de 100% vers 0%). La courbe 2 est croissante (de 0% vers 100%). Elles se coupent au point d'équimolarité où pH = pK_A.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2] ---
+- **Contexte de l'exercice** : Exercice 1, partie 3 : Étude d'une hydrolyse basique d'un ester
+- **Description du dispositif ou montage** : Graphique en coordonnées cartésiennes. Axe des abscisses : $t (min)$. Axe des ordonnées : $x (mmol)$. Une courbe croissante concave. Une tangente notée (T) est tracée au point d'abscisse $t=3 min$.
+- **Analyse détaillée du graphe / courbe / tableau** : La courbe part de l'origine. La pente de la tangente (T) en $t=3 min$ permet de déterminer la vitesse volumique instantanée.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Montage d'expérience (Exercice 2, Q2)] ---
+- **Contexte de l'exercice** : Exercice 2 : Ondes lumineuses - Diffraction
+- **Description du dispositif ou montage** : Schéma optique. De gauche à droite : Source laser, Fente de largeur $a$, Lentille convergente, Écran. La distance entre la lentille et l'écran est notée $D$. L'angle de diffraction est noté $\theta$. La largeur de la tache centrale sur l'écran est notée $L$.
+- **Analyse détaillée du graphe / courbe / tableau** : Le schéma montre des taches lumineuses sur l'écran, avec une tache centrale plus large. La valeur $L = 2,4 cm$ est donnée dans l'énoncé.
 
 -- 4 of 6 --
 
+2-1- Nommer le phénomène observé. Quel est alors l'aspect de la lumière mise en évidence ? (0,5pt)
 
+2-2- Montrer que l'expression de la largeur L est : $L = \frac{2\lambda_a D}{a}$, sachant que l'écart angulaire $\theta$ est suffisamment petit pour prendre $\tan\theta \approx 0$, avec $\theta$ en radian. (0,5pt)
+
+3- On réalise l'expérience précédente dans un liquide d'indice $n_l$ en gardant la même distance D. On remarque que la largeur de la tache centrale prend la valeur $L' = 1,8\text{cm}$.
+
+3-1- Vérifier que $n_l = 1,33$. (0,5pt)
+
+3-2- Déduire $v_l$, la vitesse de propagation de la lumière dans ce liquide. (0,5pt)
+
+**Exercise 3 : Électricité (5 points)**
+
+Les deux parties sont indépendantes
+
+Le but de cet exercice est d'étudier :
+- l'établissement et la rupture du courant électrique dans un circuit RL ;
+- un circuit LC idéal ;
+- la modulation d'amplitude.
+
+**Partie I : L'établissement et la rupture du courant dans un circuit RL**
+
+Le dispositif schématisé dans la figure 1 ci-contre comporte :
+- Un générateur de force électromotrice $E=10\text{V}$ et de résistance interne négligeable ;
+- Une bobine d'inductance L et de résistance négligeable ;
+- Deux conducteurs ohmiques l'un de résistance $R=100\ \Omega$ et l'autre de résistance $R_1=1\text{k}\Omega$ ;
+- Une diode supposée idéale de tension seuil $u_s = 0$ ;
+- Un interrupteur K.
+
+![Figure 1]
+*Circuit électrique avec générateur E, interrupteur K, bobine L, résistance R, diode, résistance R1. Tensions $u_R$ et $u_b$ indiquées.*
+
+1- À la date t=0, on ferme K et par suite un courant électrique d'intensité i circule dans le circuit.
+
+1-1- Montrer que l'équation différentielle vérifiée par la tension $u_R$ aux bornes du conducteur ohmique de résistance R s'écrit :
+$$\frac{du_R}{dt} + \frac{R}{L}u_R = \frac{RE}{L}.$$ (0,5pt)
+
+1-2- On visualise à l'aide d'un dispositif adéquat l'évolution temporelle de la tension $u_R$. On obtient ainsi la courbe de la figure 2. La droite (T) représente la tangente à la courbe au point d'abscisse t=0.
+
+En exploitant la courbe de la figure 2, déterminer $\tau$ la constante du temps du circuit et $I_0$ l'intensité du courant en régime permanent. (0,75pt)
+
+1-3- Vérifier que $L=0,10\text{H}$. (0,5pt)
+
+1-4- Quand le régime permanent est atteint, calculer la tension $u_R$ aux bornes de la bobine et $E_m$ l'énergie qui y est emmagasinée. (0,75pt)
+
+2- Le régime permanent étant établi. À un instant t=0 choisi comme nouvelle origine des dates, on ouvre l'interrupteur K.
+
+Juste après l'ouverture de K (à l'instant t=0') :
+
+2-1- déterminer l'intensité du courant traversant la bobine. (0,25pt)
+
+2-2- vérifier que la tension aux bornes du conducteur ohmique de résistance $R_1$ est $u_{R1} = 100\text{V}$. (0,25pt)
+
+![Figure 2]
+*Graphe de $u_R$ (V) en fonction de t (ms). Courbe montante asymptotique. Tangente (T) en t=0.*
 
 -- 5 of 6 --
 
+2-3- déduire la valeur de $u_m$ la tension aux bornes de la bobine. (0,25pt)
 
+3- On forme un circuit oscillant LC considéré idéal par la bobine précédente et un condensateur de capacité $C=1\mu\text{F}$ totalement chargé par le générateur de f.e.m E.
+
+3-1- Calculer $N_0$ la fréquence propre de cet oscillateur. (0,25pt)
+
+3-2- Déterminer $I_m$ l'intensité maximale du courant électrique circulant dans ce circuit. (0,25pt)
+
+**Partie II : Modulation d'amplitude**
+
+Le but de cette partie est d'étudier la technique de modulation d'amplitude afin de transmettre une onde sonore audible de fréquence f.
+
+On réalise le montage de modulation d'amplitude schématisé sur la figure 3.
+
+On applique respectivement aux entrées $E_1$ et $E_2$ du circuit multiplicateur X :
+- la tension $u(t) = U_0 + S_m \cos(2\pi ft)$ constituée d'une composante continue $U_0$ et de la tension $S(t) = S_m \cos(2\pi ft)$ correspondant à l'onde sonore qu'on désire transmettre.
+- la tension porteuse $p(t) = P_m \cos(2\pi Ft)$ de fréquence F.
+
+A la sortie du multiplicateur, on visualise à l'aide d'un dispositif adéquat l'évolution temporelle de la tension de sortie $u_s(t) = k.u(t).p(t)$, avec k constante relative au multiplicateur. On obtient alors le graphique de la figure 4.
+
+On peut écrire la tension $u_s(t)$ sous la forme :
+$$u_s(t) = A(1 + m.\cos(2\pi ft)).\cos(2\pi Ft),$$
+avec A et m des paramètres du circuit.
+
+En s'aidant du graphique :
+
+1- Déterminer la fréquence F de la porteuse et la fréquence f de l'onde sonore. (0,5pt)
+
+2- Déterminer la valeur de A et celle de m. Conclure à propos de la qualité de la modulation. (0,75pt)
+
+![Figure 3]
+*Montage de modulation d'amplitude. Entrées $E_1, E_2$, bloc X, sortie S. Signaux $u(t), p(t), u_s(t)$.*
+
+![Figure 4]
+*Graphe de $u_s$ (V) en fonction de t ($\mu$s). Signal modulé avec enveloppe.*
+
+**Exercise 4 : Mécanique (5,5 points)**
+
+Les deux parties sont indépendantes
+
+**Partie I : Mouvement d'un skieur**
+
+On étudie dans cette partie le mouvement de chute libre d'un skieur.
+
+Le skieur part du point A de la piste AO et arrive au point O avec une vitesse $V_0 = 30\text{m.s}^{-1}$ (figure 1). A son arrivé au point O, le skieur quitte la piste et on le considère en chute libre.
+
+La trajectoire du mouvement du skieur est située dans un plan vertical.
+
+On modélise le skieur et son équipement par un solide (S), de masse m et de centre d'inertie G.
+
+**Donnée :** - Intensité de la pesanteur : $g = 10\text{m.s}^{-2}$.
+
+On étudie le mouvement de chute libre du skieur dans un référentiel terrestre supposé galiléen.
+
+A t=0, le centre d'inertie G coïncide avec O.
+
+![Figure 1]
+*Trajectoire du skieur. Points A, O, E, Q. Axes x, y. Vecteur $\vec{V_0}$ en O. Angle $\alpha$.*
 
 -- 6 of 6 --
 
+1- En appliquant la deuxième loi de Newton, établir, dans le repère orthonormé $(O, \vec{i}, \vec{j})$ lié au référentiel terrestre, les équations horaires numériques du mouvement x(t) et y(t) du centre d'inertie G. (0,5pt)
+
+2- Déduire que l'équation de la trajectoire du centre d'inertie G s'écrit : $y = -5,56.10^{-2} x^2$. (0,5pt)
+
+3- Le skieur tombe au point E du plan incliné de l'angle $\alpha = 20^\circ$ par rapport à l'horizontale. Trouver la distance d = OE. (1pt)
+
+**Partie II : Pendule de torsion**
+
+Dans cette partie on se propose d'étudier le mouvement d'un pendule de torsion afin de déterminer quelques grandeurs qui lui sont liées.
+
+Le dispositif de la figure 2 comporte un fil de torsion de masse négligeable et de constante de torsion C et une barre métallique homogène AB. L'une des extrémités du fil est fixée en un point O et l'autre est fixée au centre d'inertie G de la barre.
+
+La barre AB effectue, sans frottement, dans le plan horizontal un mouvement de rotation autour de l'axe ($\Delta$) confondu avec le fil. Le moment d'inertie de AB par rapport à ($\Delta$) est $J_\Delta = 6,67.10^{-3} \text{kg.m}^2$.
+
+On fait tourner, dans le sens positif, la barre AB, autour de l'axe ($\Delta$) d'un angle $\theta_m$ par rapport à sa position d'équilibre et on la libère sans vitesse initiale à un instant t=0 qu'on prend comme origine des dates.
+
+On étudie le mouvement de ce système dans un repère lié à un référentiel terrestre supposé galiléen, et on repère la position de AB à chaque instant t par son abscisse angulaire $\theta(t)$ par rapport à sa position d'équilibre $\theta=0$ (Figure2).
+
+1- En appliquant la relation fondamentale de la dynamique dans le cas de la rotation au pendule de torsion étudié, établir l'équation différentielle du mouvement vérifiée par $\theta(t)$. (0,5pt)
+
+2- La solution de cette équation différentielle s'écrit sous la forme :
+$$\theta(t) = \theta_m \cos\left(\frac{2\pi}{T_0}t\right)$$
+avec $T_0$ étant la période propre de l'oscillateur.
+
+2-1- Établir que : $T_0 = 2\pi\sqrt{\frac{J_\Delta}{C}}$. (0,5pt)
+
+2-2- La courbe de la figure 3 représente l'évolution temporelle de la vitesse angulaire $\dot{\theta}(t)$.
+
+Déterminer $T_0$ et $\theta_m$. (0,75pt)
+
+2-3- Calculer C (on prend $\pi^2 = 10$). (0,5pt)
+
+3- On prend la position d'équilibre du pendule comme référence de l'énergie potentielle de torsion ($E_p = 0$) et plan horizontal passant par G comme référence de l'énergie potentielle de pesanteur ($E_{pp} = 0$).
+
+En s'aidant du graphique de la figure 3 et en exploitant la conservation de l'énergie mécanique:
+
+3-1- Calculer $E_m$ l'énergie mécanique du système étudié. (0,5pt)
+
+3-2- Déterminer $W_c$ le travail du couple de torsion entre les instants $t_1 = 0\text{s}$ et $t_2 = 3,4\text{s}$. (0,75pt)
+
+![Figure 2]
+*Pendule de torsion. Fil de torsion, barre AB, axe ($\Delta$), angle $\theta$.*
+
+![Figure 3]
+*Graphe de $\dot{\theta}$ (rad.s$^{-1}$) en fonction de t (s). Courbe sinusoïdale.*
+
+![Diagramme bas de page]
+*Dispositif de pendule de torsion avec masses aux extrémités.*
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1 (Page 4)] ---
+- **Contexte de l'exercice** : Physique - Électricité - Circuit RL
+- **Description du dispositif ou montage** : Circuit en boucle contenant un générateur de f.e.m $E=10\text{V}$, un interrupteur K, une bobine d'inductance L, une résistance $R=100\ \Omega$, une diode idéale ($u_s=0$) et une résistance $R_1=1\text{k}\Omega$. Les tensions $u_R$ (aux bornes de R) et $u_b$ (aux bornes de la bobine/diode) sont indiquées.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2 (Page 4)] ---
+- **Contexte de l'exercice** : Physique - Électricité - Circuit RL
+- **Description du dispositif ou montage** : Graphe de la tension $u_R$ en Volts (V) en fonction du temps t en millisecondes (ms).
+- **Analyse détaillée du graphe / courbe / tableau** : Courbe croissante tendant vers une asymptote horizontale (régime permanent). Une tangente (T) est tracée à l'origine (t=0). L'axe des abscisses va de 0 à plus de 4 ms avec des graduations. L'axe des ordonnées va de 0 à plus de 5 V.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3 (Page 5)] ---
+- **Contexte de l'exercice** : Physique - Électricité - Modulation d'amplitude
+- **Description du dispositif ou montage** : Bloc multiplicateur X avec deux entrées $E_1$ et $E_2$ et une sortie S. Les signaux appliqués sont $u(t)$ sur $E_1$ et $p(t)$ sur $E_2$. La sortie délivre $u_s(t)$.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 4 (Page 5)] ---
+- **Contexte de l'exercice** : Physique - Électricité - Modulation d'amplitude
+- **Description du dispositif ou montage** : Graphe de la tension de sortie $u_s$ en Volts (V) en fonction du temps t en microsecondes ($\mu$s).
+- **Analyse détaillée du graphe / courbe / tableau** : Signal oscillant rapide (porteuse) dont l'amplitude varie lentement (modulation). L'enveloppe est visible. Valeurs indiquées sur le graphe : $0,10$, $0,33$, $-0,33$. Période de la porteuse et de la modulation peuvent être lues sur l'axe des abscisses.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1 (Page 5)] ---
+- **Contexte de l'exercice** : Physique - Mécanique - Mouvement d'un skieur
+- **Description du dispositif ou montage** : Schéma de la trajectoire d'un skieur dans un repère $(O, \vec{i}, \vec{j})$. Points A (départ), O (sortie de piste), E (chute), Q. Vecteur vitesse $\vec{V_0}$ en O. Angle d'inclinaison $\alpha$ du sol.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2 (Page 6)] ---
+- **Contexte de l'exercice** : Physique - Mécanique - Pendule de torsion
+- **Description du dispositif ou montage** : Barre métallique homogène AB suspendue par un fil de torsion fixé en O. Axe de rotation ($\Delta$) confondu avec le fil. Angle de déviation $\theta$ par rapport à l'équilibre. Centre d'inertie G.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3 (Page 6)] ---
+- **Contexte de l'exercice** : Physique - Mécanique - Pendule de torsion
+- **Description du dispositif ou montage** : Graphe de la vitesse angulaire $\dot{\theta}$ en rad.s$^{-1}$ en fonction du temps t en secondes (s).
+- **Analyse détaillée du graphe / courbe / tableau** : Courbe sinusoïdale centrée sur l'axe des abscisses. Valeurs maximales indiquées : $0,1$ et $-0,1$. Période lisible sur l'axe des abscisses.

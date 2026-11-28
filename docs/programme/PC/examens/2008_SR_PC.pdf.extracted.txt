@@ -1,28 +1,319 @@
-
-
 -- 1 of 7 --
 
+**En-tête (Arabe/Français) :**
+- Haut gauche : "الصفحة 1 / 7" (Page 1 sur 7)
+- Centre : "الامتحان الوطني الموحد للبكالوريا - الدورة العادية - سنة 2008 - الموضوع - فيزياء و الكيمياء - مسلك العلوم التجريبية (خيار علوم الحياة والأرض)" (Examen national unifié du baccalauréat - session ordinaire - année 2008 - sujet - Physique et Chimie - Filière Sciences expérimentales (option Sciences de la vie et de la Terre))
+- Haut droit : Logos du Ministère de l'Éducation Nationale, du Royaume du Maroc, etc.
 
+**Tableau d'information :**
+- Durée de l'examen : 3
+- Matière : الفيزياء و الكيمياء (Physique et Chimie)
+- Coefficient : 7
+- Filière/Spécialité : مسلك العلوم التجريبية (خيار علوم الحياة والأرض) (Sciences expérimentales (option Sciences de la vie et de la Terre))
+
+**Texte principal :**
+L'usage de la calculatrice scientifique non programmable est autorisé
+
+Le sujet comporte 4 exercices
+
+**Chimie : (7 pts) :**
+Etude du vinaigre commercial
+
+**Physique : (13 pts) :**
+
+*Exercise 1 : (3 pts)*
+Les ondes - Mesure du diamètre d'un fil fin.
+
+*Exercise 2 : (4 ,5 pts)*
+Electricité - Principe du lancement d'une étincelle dans le moteur d'une voiture.
+
+*Exercise 3 : (5,5 pts)*
+Mécanique - Étude du mouvement d'un satellite dans le champ de pesanteur.
+
+Les différentes parties des exercices sont indépendantes et peuvent être traitées dans un ordre différent.
+
+Traduction : A. EL AAMRANI
 
 -- 2 of 7 --
 
+**En-tête :** Identique à la page 1 (Page 2 sur 7).
 
+**CHIMIE Etude du vinaigre commercial**
+
+Le vinaigre commercial est une solution aqueuse de l’acide éthanoïque (CH$_3$COOH), il est caractérisé par un degré d’acidité (X°), qui représente la masse X en grammes (g) d’acide éthanoïque contenue dans 100g de vinaigre.
+
+**Données :**
+- Toutes les mesures ont été réalisées à la température de 25°C
+- La masse volumique du vinaigre : $\rho=1\text{g/mL}$
+- La masse molaire d’acide éthanoïque $M(\text{CH}_3\text{COOH}) = 60 \text{ g.mol}^{-1}$
+- La conductivité molaire ionique de H$_3$O$^+$ : $\lambda_{\text{H}_3\text{O}^+} = 3,49.10^2 \text{ S.m}^2.\text{mol}^{-1}$
+- La conductivité molaire ionique de CH$_3$COO$^-$ : $\lambda_{\text{CH}_3\text{COO}^-} = 4,09.10^{-3} \text{ S.m}^2.\text{mol}^{-1}$
+
+* Rappel :
+- La conductivité $\sigma$ s’écrit en fonction des concentrations effectives des ions Xi en solution et des conductivités molaires ioniques $\lambda_i$ de ces ions comme suit : $\sigma = \sum_{i}^{n} \lambda_i . [X_i]$.
+
+**Partie 1 : Etude de la dissolution de l’acide éthanoïque dans l’eau :**
+On dispose de deux solutions aqueuses (S$_1$) et (S$_2$) d’acide éthanoïque :
+- La solution (S$_1$) de concentration molaire $C_1=5.10^{-2} \text{ mol.L}^{-1}$ et de conductivité $\sigma_1= 3,5.10^{-2} \text{ S.m}^{-1}$
+- La solution (S$_2$) de concentration molaire $C_2=5.10^{-3} \text{ mol.L}^{-1}$ et de conductivité $\sigma_2= 1,1.10^{-2} \text{ S.m}^{-1}$
+
+On admet que la dissolution de l’acide éthanoïque dans l’eau est une réaction limitée.
+
+**1.1.** Ecrire l’équation de la réaction de dissolution de l’acide éthanoïque dans l’eau. **(0,75pts)**
+
+**1.2.** Trouver l’expression de la concentration molaire effective $[\text{H}_3\text{O}^+]_{\text{eq}}$ des ions oxonium à l’équilibre en fonction de $\sigma$ et $\lambda_{\text{H}_3\text{O}^+}$ et $\lambda_{\text{CH}_3\text{COO}^-}$. **(0,75pts)**
+
+**1.3.** Calculer $[\text{H}_3\text{O}^+]_{\text{eq}}$ dans chacune des deux solutions (S$_1$) et (S$_2$). **(0,5pts)**
+
+**1.4.** Déterminer la valeur du taux d’avancement final $\tau_1$ et $\tau_2$ de la réaction de l’acide éthanoïque avec l’eau dans chaque solution. **(1pt)**
+
+**1.5.** Déterminer la constante d’équilibre de la réaction de l’acide éthanoïque avec l’eau pour (S$_1$) et (S$_2$). Que peut-on déduire ? **(1pt)**
+
+**Partie 2 : Vérification du degré d’acidité du vinaigre commercial :**
+On prend un volume $V_0=1\text{mL}$ d’un vinaigre commercial de degré d’acidité $(7^\circ)$ et de concentration molaire $C_0$, et on lui ajoute de l’eau distillée pour préparer une solution aqueuse (S) de concentration molaire $C_s$ et de volume $V_s=100 \text{ mL}$.
+
+Traduction : A. EL AAMRANI
 
 -- 3 of 7 --
 
+**En-tête :** Identique à la page 1 (Page 3 sur 7).
 
+On dose un volume $V_A=20 \text{ mL}$ de la solution (S) par une solution aqueuse (S$_B$) d’hydroxyde de sodium ($\text{Na}^+_{\text{aq}} + \text{HO}^-_{\text{aq}}$) de concentration $C_B= 1,5.10^{-2} \text{ mol.L}^{-1}$.
+
+On obtient l’équivalence après avoir versé un volume $V_{\text{BE}} = 15,7 \text{ mL}$ de la solution (S$_B$).
+
+**2.1.** Ecrire l’équation de la réaction acido-basique. **(0,75pts)**
+
+**2.2.** Calculer $C_s$. **(0,75pts)**
+
+**2.3.** Déterminer le degré d’acidité du vinaigre étudié, ce résultat est-il en accord avec la valeur marquée sur le vinaigre commercial. **(1,5pts)**
+
+**PHYSIQUE Exercise 1 : Les ondes - Mesure du diamètre d’un fil fin**
+
+Les rayons lasers sont utilisés dans plusieurs domaines grâce à leurs propriétés optiques et énergétiques. Parmi ces utilisations, l’emploi des rayons lasers pour déterminer les dimensions microscopiques de certains corps.
+
+Pour mesurer le diamètre d’un fil fin, on réalise les deux expériences suivantes :
+
+**Expérience 1 :**
+On éclaire une plaque (P) comportant une fente de largeur $a_1$ par une lumière monochromatique de longueur d’onde $\lambda$ émise par une source LASER, puis on place un écran E à une distance $D = 1,6 \text{ m}$ de la fente (figure 1), on observe sur l’écran E plusieurs taches lumineuses, telle que la largeur de la tache centrale est $L_1 = 4,8 \text{ cm}$ (figure 2).
+
+[Figure 1 : Schéma montrant une plaque (P) avec une fente de largeur $a$, des rayons lumineux incidents, un écran E à distance D]
+[Figure 2 : Schéma d'un motif de diffraction avec une tache centrale de largeur $L_1$]
+
+**1.1.** Recopier la figure (1) et compléter le trajet du rayon lumineux après son passage à travers la fente; puis donner le nom du phénomène représenté sur la figure (2). **(0,5pts)**
+
+**1.2.** Citer la condition que doit satisfaire la largeur de la fente « a » pour que ce phénomène aura lieu. **(0,25pts)**
+
+**1.3.** Ecrire l’expression de l’écart angulaire $\Theta$ entre le milieu de la tache centrale et l’une de ses extrémités en fonction de $L_1$ et D. **(0,5pts)**
+
+Traduction : A. EL AAMRANI
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1] ---
+- **Contexte de l'exercice** : Physique - Chapitre Ondes - Mesure du diamètre d'un fil fin
+- **Description du dispositif ou montage** : Schéma optique montrant une source de lumière parallèle (flèches horizontales) illuminant une plaque (P) comportant une fente de largeur $a$. Un écran E (représenté par une barre hachurée) est placé à une distance $D$ de la fente.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A (Schéma de montage expérimental)
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2] ---
+- **Contexte de l'exercice** : Physique - Chapitre Ondes - Mesure du diamètre d'un fil fin
+- **Description du dispositif ou montage** : Schéma du motif d'interférence/diffraction observé sur l'écran. Il montre une série de taches lumineuses (ovales gris), avec une tache centrale plus large que les taches latérales. Une double flèche indique la largeur $L_1$ de la tache centrale.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A (Schéma de résultat expérimental indiquant la valeur $L_1$)
 
 -- 4 of 7 --
 
+1.4. La courbe de la figure 3 (Page 4) représente les variations de $\theta$ en fonction de $(1/a)$.
 
+1.4.1. Comment varie la largeur de la tache centrale avec la variation de a. (0,5pts)
+
+1.4.2. Déterminer $\lambda$ graphiquement et calculer $a_1$. (1pt)
+
+**Expérience 2 :**
+
+On remplace la plaque (P) par un fil fin de diamètre « d », fixé par un support, et on obtient le même schéma que celui de la figure 2 avec une largeur de la tache centrale $L_2 = 2,5$ cm. Déterminer d. (0,5pts)
+
+![Graphique $\theta$ en fonction de $1/a$]
+$\theta$ (rad)
+0,4
+0,2
+1/a ($10^5.m^{-1}$)
+2   4   6
+
+**Exercice 2 : Electricité - Principe du lancement d'une étincelle dans le moteur d'une voiture**
+
+Le système de lancement d'une étincelle dans un moteur de voiture est basé sur deux circuits électriques. Un circuit primaire constitué d'une bobine d'inductance L et de résistance interne r, alimentée par la batterie de la voiture et un circuit secondaire constitué d'une autre bobine et une bougie d'allumage. L'ouverture du circuit primaire provoque l'apparition d'une étincelle aux bornes de la bougie d'allumage ce qui engendre l'inflammation du mélange air-benzène. Cette étincelle apparaît lorsque la valeur absolue de la tension aux bornes de la bougie est supérieure à U=10000V.
+
+On peut modéliser le système de lancement d'une étincelle dans un moteur de voiture par le schéma (figure 1) :
+
+![Figure 1 : Circuit primaire et secondaire]
+circuit primaire          circuit secondaire
+E (source) --- K --- (b) || --- U --- bougie
+
+Traduction : A. EL AAMRANI
 
 -- 5 of 7 --
 
+**Partie 1 : Etablissement du courant électrique dans le circuit primaire :**
 
+On modélise le circuit primaire selon le montage représenté dans la figure 2 :
+
+• G : La batterie de la voiture, considérée comme un générateur idéal de tension E = 12 V.
+• (b) : Bobine d'inductance L et de résistance interne r = 1,5 $\Omega$.
+• D : Un conducteur ohmique équivalent aux autres constituants du circuit de résistance R = 4,5 $\Omega$.
+• K : Interrupteur du courant.
+
+![Figure 2 : Schéma du circuit primaire]
+G (+) --- (b) --- D --- K --- G (-)
+
+1. On ferme l'interrupteur du courant à l'instant t=0, dès lors, un courant i(t) traverse le circuit électrique.
+
+1.1. Recopier le schéma de la (figure 2) en représentant les tensions en convention récepteur. (0,5pts)
+
+1.2. Montrer que l'équation différentielle vérifiée par l'intensité du courant i(t) s'écrit sous la forme
+$$ \frac{di}{dt} + \frac{i}{\tau} = A $$
+en précisant les expressions des constantes A et $\tau$. (1pt)
+
+1.3. Montrer par analyse dimensionnelle que $\tau$ est homogène à un temps. (0,5pts)
+
+1.4. La courbe de la figure 3 montre les variations de l'intensité du courant en fonction du temps.
+
+1.4.1. Déterminer graphiquement la constante du temps $\tau$ et l'intensité du courant $I_0$ en régime permanent. (0,5pts)
+
+1.4.2. En déduire l'inductance L de la bobine (b). (0,5pts)
+
+![Figure 3 : Graphique i(A) en fonction de t($\mu$s)]
+i(A)
+4,5
+4
+3,5
+3
+2,5
+2
+1,5
+1
+0,5
+0   10   20   30   40   50   t($\mu$s)
+
+Traduction : A. EL AAMRANI
 
 -- 6 of 7 --
 
+**Partie 2 : Interruption du courant dans le circuit primaire**
 
+2. On ouvre le circuit primaire à une date choisie pour origine des dates (t=0). L'intensité du courant i(t) diminue et une étincelle se produit aux bornes de la bougie d'allumage dans le circuit secondaire.
+
+2.1. Laquelle de ces deux expressions de i(t) est celle qui correspond à ce cas. Justifier. (0,5pts)
+$$ i(t) = B.e^{-\frac{t}{\tau}} \quad ; \quad i(t) = B(1 - e^{-\frac{t}{\tau}}) \text{ avec B une constante.} $$
+
+2.2. Les deux courbes (A) et (B) de la figure 4 représentent des allures de l'évolution de l'intensité du courant en fonction du temps pour deux bobines A et B de même résistance r et d'inductances différentes. Sachant que la tension U dans le circuit secondaire est directement proportionnelle à $|\frac{di}{dt}|$ et que l'allumage de la bougie se fait d'une manière efficace plus la tension U est élevée. Préciser la bobine avec laquelle la bougie s'allume mieux. (1pt)
+
+![Figure 4 : Graphique i en fonction de t]
+i
+(A)
+(B)
+0   t
+
+**Exercice 3 : Mécanique - Étude du mouvement d'un satellite dans le champ de pesanteur**
+
+Zarkae Al Yamama, est un satellite marocain qui permet la surveillance des limites géographiques du royaume, ainsi que la communication et la télédétection. Ce satellite a été créé par des experts du centre royal de télédétection spatiale en collaboration avec des experts internationaux.
+
+Zarkae Al Yamama a été placée dans son orbite le 10 décembre 2001 à une hauteur h de la surface de la terre. Ce satellite (S) effectue environ 14 tours par jour autour de la terre.
+
+• On suppose que la trajectoire de (S) est circulaire, et on étudie son mouvement dans le référentiel géocentrique.
+• On admet que la terre a une distribution à symétrie sphérique de masse.
+• On néglige les dimensions de (S) devant la distance qui le sépare du centre de la terre.
+
+Traduction : A. EL AAMRANI
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphique page 4] ---
+- **Contexte de l'exercice** : Optique (Diffraction), Exercice 1, Question 1.4.
+- **Description du dispositif ou montage** : Graphique cartésien. Axe des ordonnées : $\theta$ (rad). Axe des abscisses : $1/a$ ($10^5.m^{-1}$). Une droite passe par l'origine.
+- **Analyse détaillée du graphe / courbe / tableau** : La droite passe par l'origine (0,0). Elle passe approximativement par le point (6, 0,4). L'échelle des abscisses est marquée tous les 2 unités. L'échelle des ordonnées est marquée 0,2 et 0,4.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1 page 4] ---
+- **Contexte de l'exercice** : Exercice 2, Électricité, Principe du lancement d'une étincelle.
+- **Description du dispositif ou montage** : Schéma électrique comprenant deux circuits couplés par induction.
+  - Circuit primaire : Source de tension E, interrupteur K, bobine (b).
+  - Circuit secondaire : Bobine, bougie d'allumage aux bornes de laquelle apparaît la tension U.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2 page 5] ---
+- **Contexte de l'exercice** : Partie 1, Etablissement du courant électrique dans le circuit primaire.
+- **Description du dispositif ou montage** : Boucle fermée en série contenant :
+  - G : Générateur idéal (batterie), tension E = 12 V.
+  - (b) : Bobine d'inductance L et résistance r = 1,5 $\Omega$.
+  - D : Conducteur ohmique de résistance R = 4,5 $\Omega$.
+  - K : Interrupteur.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3 page 5] ---
+- **Contexte de l'exercice** : Partie 1, Question 1.4.
+- **Description du dispositif ou montage** : Graphique de l'intensité du courant i en fonction du temps t.
+  - Axe des ordonnées : i (A), gradué de 0 à 4,5 par pas de 0,5.
+  - Axe des abscisses : t ($\mu$s), gradué de 0 à 50 par pas de 10.
+- **Analyse détaillée du graphe / courbe / tableau** : Courbe d'établissement typique d'un circuit RL. Commence à l'origine (0,0). Tendance asymptotique vers une valeur $I_0 \approx 4$ A. Une tangente en l'origine est tracée.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 4 page 6] ---
+- **Contexte de l'exercice** : Partie 2, Question 2.2, Interruption du courant.
+- **Description du dispositif ou montage** : Graphique de l'intensité du courant i en fonction du temps t lors de l'ouverture du circuit.
+  - Axe des ordonnées : i.
+  - Axe des abscisses : t.
+- **Analyse détaillée du graphe / courbe / tableau** : Deux courbes exponentielles décroissantes (A) et (B) partant de la même valeur initiale au temps t=0. La courbe (A) est au-dessus de la courbe (B) pour t > 0, indiquant une décroissance plus lente (constante de temps $\tau_A > \tau_B$). Les deux tendent vers 0.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Texte Exercice 3 page 6] ---
+- **Contexte de l'exercice** : Exercice 3, Mécanique, Satellite Zarkae Al Yamama.
+- **Description du dispositif ou montage** : Texte descriptif encadré. Pas de schéma visuel associé sur cette page, mais description d'un satellite en orbite circulaire.
+- **Analyse détaillée du graphe / courbe / tableau** : Données textuelles : hauteur h, date de placement (10/12/2001), fréquence (14 tours/jour). Hypothèses : trajectoire circulaire, référentiel géocentrique, Terre symétrique sphérique, dimensions du satellite négligeables.
 
 -- 7 of 7 --
 
+**En-tête (Traduction du texte arabe) :**
+Examen national unifié pour l'obtention du baccalauréat - session ordinaire 2008 - année scolaire
+Matière : Physique et Chimie - Filière Sciences Physiques - Filières scientifiques (Option Français)
+
+**Données :**
+
+- Constante de gravitation universelle : $G = 6,67 \cdot 10^{-11}$ (SI).
+- Rayon de la terre : $r_t = 6350$ km.
+- L'intensité du champ de pesanteur : $g_0 = 9,8 \text{ m.s}^{-2}$.
+- La période $T$ de la terre autour de son axe polaire : $T = 84164$ s.
+- La hauteur $h$ : $h = 1000$ km.
+- $\vec{u}_{TS}$ : vecteur unitaire dirigé de O vers (S)
+
+![Figure 1]
+(Schéma montrant la Terre au centre O, une orbite pointillée, un satellite S, un vecteur $\vec{u}_{TS}$ de O vers S, une distance h, et un sens de rotation indiqué par un signe +)
+
+**Figure 1**
+
+1. Recopier le schéma de la *figure 1* puis représenter, sur ce dessin, le vecteur vitesse $\vec{V}_S$ du satellite (S) ainsi que le vecteur force gravitationnelle exercée par la terre sur (S). (**0,5pt**)
+
+2. Donner l'expression vectorielle de la force d'attraction gravitationnelle exercée par la terre sur (S). (**0,25pt**)
+
+3. Ecrire l'expression du vecteur accélération du mouvement de (S) dans la base de Frenet. (**0,5pt**)
+
+4. En appliquant la deuxième loi de Newton sur le centre d'inertie du satellite (S) :
+
+4.1. Montrer que le mouvement de (S) est circulaire uniforme. (**0,75pt**)
+
+4.2. Ecrire l'expression de $V_S$ en fonction de $g_0$, $r_t$, et $h$ ; puis calculer sa valeur. (**0,75pt**)
+
+5. Montrer que la masse de la terre vaut $M_t \approx 6 \cdot 10^{24}$ kg. (**0,5pt**)
+
+6. Montrer que le satellite (S) ne semble pas immobile pour un observateur terrestre. (**0,75pt**)
+
+7. Un satellite (S') tourne autour de la terre avec une vitesse angulaire $\omega$ tel qu'il semble immobile pour un observateur terrestre et il transmet des images à la terre exploitées dans les prévisions météorologiques.
+
+7.1. Démontrer la relation : $\omega^2 \cdot (r_t + z)^3 = \text{Cte}$ ; telle que $z$ est la distance séparant la surface de la terre et le satellite. (**0,75pt**)
+
+7.2. Trouver la valeur de $z$. (**0,75pt**)
+
+*Traduction : A. EL AAMRANI*
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1] ---
+- **Contexte de l'exercice** : Physique - Mécanique (Mouvement circulaire, Gravitation universelle).
+- **Description du dispositif ou montage** : Le schéma représente la Terre sous forme d'un cercle gris centré en O. Une orbite est tracée par une ligne pointillée autour de la Terre. Un point (S) représente la position du satellite sur cette orbite. Un segment radial relie la surface terrestre au satellite, noté $h$ (hauteur). Un vecteur unitaire $\vec{u}_{TS}$ est représenté, dirigé du centre O vers le point (S). En haut à gauche du schéma, un signe "+" accompagné d'une flèche courbée indique le sens de rotation du satellite (sens trigonométrique / anti-horaire).
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (il s'agit d'un schéma cinématique et non d'un graphe de fonction ou d'un tableau de mesures).

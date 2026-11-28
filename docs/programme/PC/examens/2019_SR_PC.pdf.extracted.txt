@@ -1,40 +1,539 @@
-
-
 -- 1 of 10 --
 
+**En-tête du document :**
+- Royaume du Maroc
+- Ministère de l'Éducation Nationale, de l'Enseignement Supérieur, de la Formation des Cadres et de la Recherche Scientifique
+- Session de rattrapage - 2019
+- Épreuves
+- Code : RS34F
 
+**Tableau d'information :**
+| Année | Durée de l'examen | Matière | Matière |
+| :---: | :---: | :---: | :---: |
+| 1 | 3 | Sciences de la vie et de la terre | |
+| 6 | Domaine | Branche : Sciences expérimentales - Option Sciences de la vie et de la terre : Matière Sciences de la vie et de la terre | Branche ou Option |
+
+**Note :** Il est permis d'utiliser la calculatrice non programmable
+
+# Première partie : restitution des connaissances (5 pts)
+
+**I. Définissez les notions suivantes :** - Lexiviat - Fertilisant organique. (1pt)
+
+**II. Pour chacune des propositions numérotées de 1 à 4, une seule suggestion est correcte. Recopiez les couples (1 ; ...); (2 ; ...); (3 ; ...); (4 ; ...) et écrivez dans chaque couple la lettre correspondante à la suggestion correcte. (2 pts)**
+
+| 1- L'effet de serre est le résultat de la pollution de l'air par : | 2- L'eutrophisation des lacs résulte de: |
+| :--- | :--- |
+| a. les rayonnements radioactifs. | a. la prolifération de ses êtres vivants. |
+| b. le méthane (CH₄). | b. l'enrichissement de ses eaux par le calcium. |
+| c. l'azote N₂. | c. l'enrichissement de ses eaux par les nitrates. |
+| d. l'hydrogène H₂. | d. l'enrichissement de ses eaux par les pesticides chimiques. |
+
+| 3- La pollution des eaux par les nitrates résulte principalement de : | 4- Les déchets radioactifs du type B sont de : |
+| :--- | :--- |
+| a. l'utilisation excessive des engrais chimiques. | a. forte activité radioactive et de courte durée de vie. |
+| b. lexiviat. | b. forte activité radioactive et de longue durée de vie. |
+| c. l'utilisation excessive des pesticides. | c. faible activité radioactive et de courte durée de vie. |
+| d. polluants industriels. | d. faible activité radioactive et de longue durée de vie. |
+
+**III- Recopiez le numéro de chaque suggestion, et écrivez devant chacun d'eux « vrai » ou « faux » : (1pt)**
+
+1- Le biogaz résulte de l'oxydation des déchets organiques en anaérobie sous l'action des microorganismes.
+2- Les pluies acides résultent de l'interaction de l'eau atmosphérique avec le complexe CFC.
+3- L'amincissement de la couche d'ozone résulte de l'interaction des oxydes du soufre avec les molécules d'ozone.
+4- La demi-vie est le temps au bout duquel toute la matière radioactive est désintégrée.
+
+**IV. Reliez chaque élément du groupe 1 à la définition qui lui convient du groupe 2. Recopiez les couples (1 ; ...); (2 ; ...); (3 ; ...); (4 ; ...) et adressez à chaque numéro la lettre correspondante. (1 pt)**
+
+**Groupe 1 :** | **Groupe 2 :**
+:--- | :---
+1- DBO5 | a- indicateur de l'état du sol basé sur le peuplement des macro-invertébrés.
+2- IB | b- indicateur qui exprime la demande en oxygène nécessaire pour l'oxydation biologique de la matière organique dans un litre d'eau pendant cinq jours en obscurité.
+3- IBQS | c- indicateur qui exprime la demande en oxygène nécessaire pour l'oxydation chimique de la matière organique dans un litre d'eau.
+4- DCO | d- indicateur d'estimation de la pollution des eaux basé sur son peuplement en invertébrés aquatiques.
 
 -- 2 of 10 --
 
+**En-tête du document :** (Identique à la page 1, numéro de page 2)
 
+# Deuxième partie : raisonnement scientifique et communication graphique et écrite (15 pts)
+
+## Exercice 1 (5 pts)
+
+L'ATP est un intermédiaire métabolique indispensable pour toutes activités cellulaires. Les cellules vivantes régénèrent leur ATP par oxydation des molécules organiques en adoptant des voies métaboliques différentes. Afin d'expliquer la différence de la taille des colonies chez deux souches de levure de boulangerie P et G (*Saccharomyces cerevisiae*) et sa relation avec la voie métabolique adoptée on propose les données suivantes :
+
+Dans deux boîtes de Pétri identiques, on cultive les deux souches de levures sur un milieu gélosé complet contenant notamment 5% de glucose et abondamment oxygéné. Les cultures sont placées à une température constante. Le document 1 montre l'aspect des colonies des levures au début et à la fin de cette culture.
+
+**1. sachant qu'une colonie est le résultat de la multiplication des cellules :**
+
+a. Comparez les résultats à la fin de culture (document 1) pour les deux souches de levures P et G. (0.5 pt)
+b. Proposez une hypothèse pour expliquer la différence observée au niveau des colonies des souches P et G. (0.5 pt)
+
+**Document 1**
+
+| | L'aspect des colonies de levures |
+| :--- | :--- |
+| | **Début de culture** | **Fin de culture** |
+| **Souche P** | [Image : boîte de Pétri avec de nombreux petits points] | [Image : boîte de Pétri avec quelques colonies de taille moyenne] |
+| **Souche G** | [Image : boîte de Pétri avec de nombreux petits points] | [Image : boîte de Pétri avec quelques colonies de très grande taille] |
+
+Pour expliquer la différence observée et sa relation avec le métabolisme cellulaire, on cultive les deux souches P et G sur un milieu gélosé dépourvu de glucose et abondamment oxygéné placé à une température constante, puis on mesure la variation de la concentration de dioxygène avant et après l'ajout de la même quantité de glucose dans le milieu de culture.
+
+Les résultats obtenus sont représentés dans le document 2. Une observation des deux souches de levures au microscope électronique à la fin de cette expérience a permis d'obtenir les résultats présentés par le document 3.
+
+**2. En exploitant les résultats présentés par les documents 2 et 3, déduisez la voie métabolique adoptée par chacune des deux souches de levure P et G. (1.5 pt)**
+
+**Document 2**
+
+[Graphique gauche]
+- Titre : Concentration en O₂ dans le milieu de culture de la souche G (U.A)
+- Axe X : Temps en min
+- Axe Y : Concentration en O₂
+- Courbe : Diminue après "Ajout du glucose"
+- Annotation : Flèche vers le haut "Ajout du glucose"
+
+[Graphique droit]
+- Titre : Concentration en O₂ dans le milieu de culture de la souche P (U.A)
+- Axe X : Temps en min
+- Axe Y : Concentration en O₂
+- Courbe : Reste élevée/stable après "Ajout du glucose"
+- Annotation : Flèche vers le haut "Ajout du glucose"
+
+**Document 3**
+
+| | Levure G | Levure P |
+| :--- | :--- | :--- |
+| **Nombre de Mitochondries** | environ 15 par cellule | environ 4 à 5 par cellule |
+| **Aspect des mitochondries** | [Image : mitochondrie étendue avec crêtes] | [Image : mitochondrie plus petite/ronde] |
 
 -- 3 of 10 --
 
+**En-tête du document :** (Identique à la page 1, numéro de page 3)
 
+Pour comparer l'activité métabolique adoptée par chaque souche de levure, on applique le triphényl-tetrazolium sur chaque colonie des deux souches G et P. Parallèlement, on a mesuré la quantité d'ATP produite par les souches G et P et calculé le rendement énergétique respectif pour chacune de deux souches. Le document 4 présente les résultats obtenus.
+
+Le document 5 représente les deux voies métaboliques utilisées par les souches P et G pour produire l'ATP.
+
+**Document 4**
+
+[Image gauche]
+- Légende : Colonies de levures de la souche G (colorées en rouge)
+- Image : Colonies sombres/rouges
+- Texte : Rendement énergétique : 40%
+
+[Image droite]
+- Légende : Colonies de levures de la souche P (pas de coloration rouge)
+- Image : Colonies claires/pâles
+- Texte : Rendement énergétique : 2%
+
+**Remarque :** Le triphényl-tétrazolium est utilisé par les levures comme accepteur final des électrons de la chaîne respiratoire des mitochondries à la place du dioxygène. Dans ces conditions, il est réduit en un composé de couleur rouge : le formazan.
+
+**3. En utilisant les données des documents 4 et 5 expliquez la différence du rendement énergétique observé chez les deux souches P et G. (1.5 pt)**
+
+**Document 5**
+
+[Schéma de voie métabolique]
+- glucose $\rightarrow$ 2ADP+2Pi $\rightarrow$ 2ATP
+- 2NAD$^+$ $\rightarrow$ 2NADH + H$^+$
+- 2 acides pyruviques
+- Branche droite : 2 Ethanol $\rightarrow$ 2CO$_2$
+- Cycle de Krebs :
+  - 1 Acétyle - coA $\rightarrow$ 1 NADH + H$^+$
+  - $\rightarrow$ 1 FADH$_2$
+  - $\rightarrow$ 2CO$_2$
+  - $\rightarrow$ 1ATP
+- Phosphorylation oxydative :
+  - O$_2$ + H$_2$O
+  - Synthèse d'ATP
+
+*bilan de consommation d'une molécule de pyruvate au niveau de la mitochondrie.
+Au niveau de la mitochondrie, l'oxydation de 1NADH,H$^+$ donne 3ATP et l'oxydation de 1FDH$_2$ donne 2ATP.
+
+**4. En mettant en lien la taille des colonies, la structure cellulaire et la voie métabolique adoptée, vérifiez votre hypothèse. (1pt)**
+
+## Exercice 2 (5 points)
+
+Dans le cadre de l'étude de la transmission de l'information génétique et des mécanismes de son expression, on propose les données suivantes :
+
+Le caractère de pilosité chez la race des chiens mexicains est gouverné par un gène non lié au sexe à deux allèles (Hr et hr). Pour sélectionner une souche de chiens mexicains à peau nue (chiens hairless), un éleveur a réalisé plusieurs fois des croisements entre des mâles et des femelles de phénotypes différents (présence ou absence de poils). Les résultats obtenus sont présentés dans le document 1.
+
+**Document 1**
+
+| Croisement 1 : | Croisement 2 : | Croisement 3 : |
+| :--- | :--- | :--- |
+| Chien normal (à poils) X Chienne normale (à poils) | Chienne normale (à poils) X Chien hairless (sans poils) | Chien hairless (sans poils) X Chienne hairless (sans poils) |
+| $\downarrow$ | $\downarrow$ | $\downarrow$ |
+| 12 Chiots normaux (à poils) | 8 Chiots normaux à poils<br>8 Chiots hairless sans poils | 6 Chiots normaux à poils<br>12 Chiots hairless sans poils |
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 1 (Exercice 1)] ---
+- **Contexte de l'exercice** : Biologie - Métabolisme cellulaire (Levures)
+- **Description du dispositif ou montage** : Tableau comparatif présentant l'aspect des colonies de levures (Souche P et Souche G) au "Début de culture" et à la "Fin de culture". Représentation visuelle de boîtes de Pétri contenant des colonies circulaires.
+- **Analyse détaillée du graphe / courbe / tableau** : Au début, les deux souches présentent de nombreuses petites colonies. À la fin, la souche P montre des colonies de taille moyenne et peu nombreuses, tandis que la souche G montre très peu de colonies mais de très grande taille.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 2 (Exercice 1)] ---
+- **Contexte de l'exercice** : Biologie - Métabolisme cellulaire (Consommation d'O₂)
+- **Description du dispositif ou montage** : Deux graphiques de courbes.
+  - Graphique gauche : "Concentration en O₂ dans le milieu de culture de la souche G (U.A)" en fonction du "Temps en min".
+  - Graphique droit : "Concentration en O₂ dans le milieu de culture de la souche P (U.A)" en fonction du "Temps en min".
+  - Annotation commune : Flèche indiquant "Ajout du glucose".
+- **Analyse détaillée du graphe / courbe / tableau** :
+  - Souche G : La concentration en O₂ diminue significativement après l'ajout du glucose (consommation d'oxygène).
+  - Souche P : La concentration en O₂ reste élevée et stable après l'ajout du glucose (peu ou pas de consommation d'oxygène).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 3 (Exercice 1)] ---
+- **Contexte de l'exercice** : Biologie - Structure cellulaire (Mitochondries)
+- **Description du dispositif ou montage** : Tableau comparatif entre Levure G et Levure P.
+- **Analyse détaillée du graphe / courbe / tableau** :
+  - Nombre de mitochondries : Souche G (~15 par cellule) vs Souche P (~4 à 5 par cellule).
+  - Aspect : Images schématiques de mitochondries. La souche G présente des mitochondries développées avec de nombreuses crêtes internes. La souche P présente des mitochondries plus simples.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 4 (Exercice 1)] ---
+- **Contexte de l'exercice** : Biologie - Rendement énergétique (Test au TTC)
+- **Description du dispositif ou montage** : Deux boîtes de Pétri avec colonies de levures.
+  - Gauche : Souche G, colonies colorées en rouge. Texte : "Rendement énergétique : 40%".
+  - Droite : Souche P, colonies sans coloration rouge. Texte : "Rendement énergétique : 2%".
+- **Analyse détaillée du graphe / courbe / tableau** : Différence de coloration indiquant une activité respiratoire mitochondriale différente (réduction du formazan).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 5 (Exercice 1)] ---
+- **Contexte de l'exercice** : Biochimie - Voies métaboliques (Glycolyse, Fermentation, Cycle de Krebs, Phosphorylation oxydative)
+- **Description du dispositif ou montage** : Schéma de voies métaboliques à partir du glucose.
+- **Analyse détaillée du graphe / courbe / tableau** :
+  - Glycolyse : Glucose $\rightarrow$ 2 ATP + 2 NADH + H$^+$ + 2 Acides pyruviques.
+  - Voie anaérobie (Fermentation alcoolique) : 2 Acides pyruviques $\rightarrow$ 2 Ethanol + 2 CO$_2$.
+  - Voie aérobie : Acétyle-coA $\rightarrow$ Cycle de Krebs $\rightarrow$ NADH, FADH$_2$, ATP, CO$_2$.
+  - Chaîne respiratoire : NADH/FADH$_2$ + O$_2$ $\rightarrow$ Phosphorylation oxydative $\rightarrow$ Synthèse d'ATP + H$_2$O.
+  - Encadré : Rendement ATP par molécule de pyruvate (3 ATP pour NADH, 2 ATP pour FADH$_2$).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 1 (Exercice 2)] ---
+- **Contexte de l'exercice** : Génétique - Transmission de l'information génétique (Chiens mexicains)
+- **Description du dispositif ou montage** : Tableau présentant trois croisements (Croisement 1, 2, 3) avec phénotypes des parents et descendance.
+- **Analyse détaillée du graphe / courbe / tableau** :
+  - Croisement 1 : Normal x Normal $\rightarrow$ 12 Normaux.
+  - Croisement 2 : Normal x Hairless $\rightarrow$ 8 Normaux, 8 Hairless.
+  - Croisement 3 : Hairless x Hairless $\rightarrow$ 6 Normaux, 12 Hairless.
 
 -- 4 of 10 --
 
+1. A partir des résultats du croisement 1 et 2, donnez les génotypes probables des chiens normaux et des chiens hairless, justifiez votre réponse. (1.5 pts)
 
+2. Donnez l'interprétation chromosomique du croisement 3 en vous aidant par un échiquier de croisement. (1 pt)
+
+Pour expliquer l'absence de pilosité chez les mammifères, on propose l'étude de l'alopécie totale (absence totale de poils) chez les souris. Ce phénotype résulte de l'incapacité du follicule pileux à initier son propre renouvellement cyclique après une apparence normale du premier poil.
+Le maintien du cycle des follicules pileux fait intervenir une protéine structurale et régulatrice nommée HR qui se localise dans le noyau et régule la synchronisation de la différenciation des cellules épithéliales dans les follicules pileux et leur renouvellement cyclique.
+Le document 2 présente les phases du cycle pileux chez une souris normale (figure a) et une souris hairless (figure b) et les résultats d'une étude moléculaire de la taille et la quantité de la protéine HR chez les deux souris (figure c).
+
+**Souris normale :**
+Phase 1 : formation continue du poil à partir du follicule qui s'allonge dans le derme
+Phase 2 : dégradation du follicule et régression du poil
+Phase 3 : Régénération du follicule et chute du poil
+[Flèche de retour vers le haut] Protéine HR normale
+
+**Souris hairless :**
+Apparence normale du premier poil (1<sup>er</sup> cycle pileux normal selon les étapes de la figure a)
+Désintégration du poil
+Malformations : dilatation des follicules et formation des kystes dermiques.
+Perturbation de l'organisation des cellules épithéliales, rupture des follicules pileux et l'apparition de rides cutanées
+[Flèche de retour vers le haut] Protéine HR anormale
+
+**Figure c**
+| | Taille de la protéine HR | Quantité de la proteine HR |
+| :--- | :--- | :--- |
+| Souris normale | normale | normale |
+| Souris hairless | normale | élevé |
+
+Document 2
+
+3. En vous basant sur le document 1, comparez les données de la souris normale à celles de la souris hairless, puis déduisez la relation protéine-caractère. (1.5 pt)
+
+La synthèse de la protéine HR est contrôlée par un gène à deux allèles. Le document 3 présente un tronçon du brin non transcrit de l'allèle normal chez une souris normale et un tronçon du brin non transcrit de l'allèle mutant chez une souris hairless. Le document 4 présente un extrait et tableau du code génétique.
+
+**Document 3**
+Numéro du triplet : 957 958 959 960 961 962 963
+Tronçon de l'allèle normal (brin non transcrit) : GCC CAC CAA GGG AAA CTC AAC
+Tronçon de l'allèle mutant (brin non transcrit) : GCC CAC CAA TGG AAA CTC AAC
+[Flèche] Sens de lecture
 
 -- 5 of 10 --
 
+**Document 4**
+|codons|GGU GGC GGA GGG|CAA CAG|AAA AAG|CAU CAC|UGG|CUU CUC CUA CUG|AAU AAC|GCC GGC GCA GCG|UGA UAA UAG Non sens|CGU CGC CGA CGG|
+|---|---|---|---|---|---|---|---|---|---|
+|Acides aminés|Gly|Gln|Lys|His|Trp|Leu|Asn|Ala|Non sens|Arg|
 
+4. En utilisant les données du document 3 et 4, déterminez la séquence d'ARNm et la séquence des acides aminés correspondante à chaque tronçon du gène contrôlant la synthèse de la protéine HR chez les deux souris étudiées et expliquez l'apparition du caractère hairless chez les souris. (1 pt)
+
+**Exercice 3 (5 pts)**
+
+La chaîne de l'Himalaya s'étend sur 3000 km entre l'Inde et l'Asie et comprend trois unités tectoniques formées il y a 55 millions d'années. Pour déterminer les phénomènes géologiques accompagnant la formation de cette chaîne on propose les documents suivants :
+Le document 1 présente une carte géologique simplifiée de l'Himalaya (figure a), et une coupe géologique dans la même chaîne de montagne (figure b).
+
+**Document 1**
+Figure a : Carte géologique simplifiée.
+- Labels : MCT, MBT, MFT, Plaque Eurasiatique, Plaque Indienne, Sommet de l'Everest 8850m.
+- Légende : Granite, Sédiments marins, Ophiolites.
+Figure b : Coupe géologique.
+- Axes : Profondeur (Km), Distance (Km).
+- Labels : N, Sub-Himalaya, Moyen Himalaya, Haut Himalaya, Tibet, S.
+- Points : MFT, MBT, MCT.
+- Légende : Sédiments sub-Himalaya, Schiste du moyen Himalaya, Massif cristallin du haut Himalaya, Sédiments marins de la Tethys.
+
+1. En exploitant le document 1 déterminez deux phénomènes géologiques à l'origine de la formation de l'Himalaya. (1pt)
+
+2. L'étude géophysique de l'unité du haut Himalaya a permis l'obtention des résultats présentés par le document 2. Décrivez la variation de la température de la lithosphère au niveau de cette unité (document 2), puis expliquez cette variation. (1pt)
+
+**Document 2**
+Graphique :
+- Axe X : Distance (Km) de SSW à NNE (0 à 200+).
+- Axe Y : Profondeur (km) (0 à 100).
+- Isothermes : 500°C, 600°C, 700°C, 800°C.
+- Label : MCT.
+- Échelle : 50 Km.
+
+Le haut Himalaya se caractérise par l'affleurement des blocs d'écologite résultant du métamorphisme du gabbro, et des roches continentales métamorphiques. Le document 3 présente le trajet PTt (pression – température – temps) de l'évolution des roches appartenant au complexe ophiolitique de l'Himalaya, et le document 4 présente la limite séparant les associations de minéraux présents dans la séquence métamorphique continentale formant le massif cristallin du haut Himalaya (figure a), et le diagramme des faciès métamorphiques (figure b).
 
 -- 6 of 10 --
 
+**Document 3**
+Graphique PTt :
+- Axe X : Température en °C (300 à 700+).
+- Axe Y : Pression en kbar (0 à 25).
+- Trajet avec points G, A, B, C, D, E, F.
+- Point B encerclé avec 53. Point près de A avec 57. Point près de D avec 47.
+- Légende :
+  A : Schistes bleus à lawsonite ;
+  B : Schistes bleus à épidote ;
+  C : Schistes verts ;
+  D : Amphibolites ;
+  E : Eclogites ;
+  F : Granulites ;
+  G : Conditions pression-température qui n'existent pas sur terre.
+- Cercles : 47 53 57 les âges en millions d'années obtenus à ces conditions pression et température.
 
+Document 3
+
+**Document 4**
+Figure a :
+- Coupe W à E.
+- Zones : schiste, gneiss, granite, Migmatite.
+- Minéraux indiqués : Chl, Grt, St, Dis, Sil.
+- Légende : Chl : chlorite, Grt : grenat, St : staurotide, Dis : disthène, Sil : sillimanite, + : apparition du minéral.
+
+Figure b :
+- Diagramme P-T.
+- Axe X : T (°C) (0 à 1000).
+- Axe Y : Pression (kbar) (0 à 16).
+- Zones ombragées : Métamorphisme dynamique, thermodynamique, thermique.
+- Ligne pointillée : Géotherme moyen.
+- Zones numérotées 1, 2, 3, 4, 5.
+- Légende :
+  A : Andalousite ; S : sillimanite ; D : Disthène.
+  1 : Schistes bleus (Glaucophane + Grenat + Épidote) ;
+  2 : Schistes verts (Actinote + Chlorite) ;
+  3 : Amphibolites (Hornblende + Plagioclases) ;
+  4 : Eclogites (Jadéite + Grenat) ;
+  5 : Granulites.
+
+Document 4
+
+3. En exploitant les documents 3 et 4 :
+a- Déterminez le type de métamorphisme aboutissant à la formation de l'écologite, justifiez votre réponse. (0.75 pt)
+b- Déterminez le type de métamorphisme aboutissant à la formation du massif cristallin de haut Himalaya, justifiez votre réponse. (0.75 pt)
+
+4. En vous basant sur vos réponses précédentes, déterminez les étapes de la formation de la chaîne de l'Himalaya en mettant en évidence les phénomènes géologiques qu'a connue la région. (1.5 pts)
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure a (Document 2)] ---
+- **Contexte de l'exercice** : Biologie, cycle pileux et protéine HR.
+- **Description du dispositif ou montage** : Diagramme de flux avec trois boîtes reliées par des flèches dans le sens horaire.
+  - Boîte 1 : "Phase 1 : formation continue du poil à partir du follicule qui s'allonge dans le derme".
+  - Boîte 2 : "Phase 2 : dégradation du follicule et régression du poil".
+  - Boîte 3 : "Phase 3 : Régénération du follicule et chute du poil".
+  - Une flèche de rétroaction part du bas vers le haut avec l'étiquette "Protéine HR normale".
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma de processus).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure b (Document 2)] ---
+- **Contexte de l'exercice** : Biologie, cycle pileux chez souris hairless.
+- **Description du dispositif ou montage** : Diagramme de flux avec quatre boîtes reliées séquentiellement.
+  - Boîte 1 : "Apparence normale du premier poil (1<sup>er</sup> cycle pileux normal selon les étapes de la figure a)".
+  - Boîte 2 : "Désintégration du poil".
+  - Boîte 3 : "Malformations : dilatation des follicules et formation des kystes dermiques."
+  - Boîte 4 : "Perturbation de l'organisation des cellules épithéliales, rupture des follicules pileux et l'apparition de rides cutanées".
+  - Une flèche de rétroaction part du bas vers le haut avec l'étiquette "Protéine HR anormale".
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma de processus).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure c (Document 2)] ---
+- **Contexte de l'exercice** : Biologie, étude moléculaire de la protéine HR.
+- **Description du dispositif ou montage** : Tableau à 3 colonnes et 3 lignes (dont l'en-tête).
+  - En-têtes : (Vide), "Taille de la protéine HR", "Quantité de la proteine HR".
+  - Ligne 1 : "Souris normale", "normale", "normale".
+  - Ligne 2 : "Souris hairless", "normale", "élevé".
+- **Analyse détaillée du graphe / courbe / tableau** : Comparaison quantitative et qualitative de la protéine HR entre deux phénotypes.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure a (Document 1)] ---
+- **Contexte de l'exercice** : Géologie, chaîne de l'Himalaya.
+- **Description du dispositif ou montage** : Carte géologique simplifiée.
+  - Notations : MCT, MBT, MFT (failles), Plaque Eurasiatique, Plaque Indienne.
+  - Symbole : Triangle noir pour "Sommet de l'Everest 8850m".
+  - Zones hachurées selon la légende : Granite, Sédiments marins, Ophiolites.
+- **Analyse détaillée du graphe / courbe / tableau** : Représentation spatiale des unités tectoniques et des failles majeures.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure b (Document 1)] ---
+- **Contexte de l'exercice** : Géologie, coupe géologique de l'Himalaya.
+- **Description du dispositif ou montage** : Coupe géologique en profil.
+  - Axe Y : Profondeur (Km) de 0 à 100.
+  - Axe X : Distance (Km) de 0 à 200+.
+  - Notations : N (Nord), S (Sud), Sub-Himalaya, Moyen Himalaya, Haut Himalaya, Tibet.
+  - Failles : MFT, MBT, MCT.
+  - Zones : Sédiments sub-Himalaya, Schiste du moyen Himalaya, Massif cristallin du haut Himalaya, Sédiments marins de la Tethys.
+- **Analyse détaillée du graphe / courbe / tableau** : Représentation de la structure en profondeur et du chevauchement des unités.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 2 (Graphique)] ---
+- **Contexte de l'exercice** : Géophysique, variation de température.
+- **Description du dispositif ou montage** : Graphique de courbes (isothermes).
+  - Axe X : Distance (Km), orientation SSW vers NNE.
+  - Axe Y : Profondeur (km).
+  - Courbes : Isothermes à 500°C, 600°C, 700°C, 800°C.
+  - Annotation : MCT (Main Central Thrust).
+  - Échelle : 50 Km.
+- **Analyse détaillée du graphe / courbe / tableau** : Variation de la température en fonction de la profondeur et de la distance horizontale.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 3 (Diagramme PTt)] ---
+- **Contexte de l'exercice** : Géologie, métamorphisme et datation.
+- **Description du dispositif ou montage** : Diagramme Pression-Température.
+  - Axe X : Température en °C (300 à 700).
+  - Axe Y : Pression en kbar (0 à 25).
+  - Trajet : Chemin avec points G, A, B, C, D, E, F.
+  - Données : Cercles noirs avec âges 47, 53, 57 (millions d'années).
+  - Légende des roches : A (Schistes bleus à lawsonite), B (Schistes bleus à épidote), C (Schistes verts), D (Amphibolites), E (Eclogites), F (Granulites), G (Conditions inexistantes).
+- **Analyse détaillée du graphe / courbe / tableau** : Trajectoire métamorphique PTt avec datation des étapes.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure a (Document 4)] ---
+- **Contexte de l'exercice** : Métamorphisme, zones minérales.
+- **Description du dispositif ou montage** : Coupe stratigraphique W vers E.
+  - Zones : schiste, gneiss, granite, Migmatite.
+  - Isogrades minéraux : Chl, Grt, St, Dis, Sil.
+  - Notation : + pour apparition du minéral.
+- **Analyse détaillée du graphe / courbe / tableau** : Zonation métamorphique et isogrades.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure b (Document 4)] ---
+- **Contexte de l'exercice** : Faciès métamorphiques.
+- **Description du dispositif ou montage** : Diagramme P-T avec champs.
+  - Axe X : T (°C) de 0 à 1000.
+  - Axe Y : Pression (kbar) de 0 à 16.
+  - Champs : 1, 2, 3, 4, 5.
+  - Ligne : Géotherme moyen (pointillée).
+  - Légende des champs : 1 (Schistes bleus), 2 (Schistes verts), 3 (Amphibolites), 4 (Eclogites), 5 (Granulites).
+  - Types de métamorphisme indiqués : Dynamique, thermodynamique, thermique.
+- **Analyse détaillée du graphe / courbe / tableau** : Diagramme des faciès métamorphiques montrant les conditions de formation des roches.
 
 -- 7 of 10 --
 
+الصفحة 3
+الاختبارات الوطنية الموحدة للبكالوريا - 2019 - الدورة العادية - شعبة علوم الحياة والأرض
+المادة: الفيزياء والكيمياء
+المدة: 3 ساعات
+المعهد: RR34F
 
+| Question | Les éléments de réponse | Note |
+| :--- | :--- | :--- |
+| | **Première partie (5 pts)** | |
+| I | - Acceptez toute définition correcte à titre d'exemple :<br>- Lixiviat : est le liquide résiduel engendré par le percolation de l'eau et des liquides à travers une zone de stockage de déchets, il se caractérise par son enrichissement par les microbes, les métaux lourds et la matière organique ........................ 0.5 pt<br>- Fertilisant organique : fertilisant obtenu par la décomposition de la matière organique des déchets en aérobie sous l'action des microorganismes ........................ 0.5 pt | |
+| II | (1,b) ; (2,c) ; (3,a) ; (4,d) ........................(4×0.5) | 2 pt |
+| III | 1- Vrai 2- Faux 3- Faux 4- Faux ........................(4×0.25) | 1 pts |
+| IV | (1 ; b) ; (2 ; d) ; (3 ; a) ; (4 ; c) ........................(4×0.25) | 1 pt |
+| | **Deuxième partie (15 pts)** | |
+| | **Exercice 1 (5 pts)** | |
+| 1.a | - il y a une multiplication des deux souches P et G et la formation de colonies ;<br>- La taille des colonies de la souche G est plus grande que celle des colonies de la souche P. | 0.5 pt |
+| 1.b | Acceptez toute hypothèse logique qui relie la taille des colonies avec la voie métabolique adoptée, par exemple :<br>La souche G adopte une voie métabolique aérobie ce qui lui permet de former des colonies de grande taille alors que la souche P adopte une voie métabolique anaérobie et par conséquence ces colonies restent de petite taille. | 0.5 pt |
+| 2 | Exploitation du document 2 :<br>Pour la souche G : diminution de la concentration en O2 après l'ajout du glucose au milieu de culture ;<br>Pour la souche P : une très faible diminution de la concentration en O2 après l'ajout du glucose au milieu de culture ;<br>Exploitation du document 3 :<br>la souche G : possède des mitochondries développées (avec des crêtes), de grande taille et nombreuses ;<br>la souche P : possède des mitochondries non développées (sans crêtes), de petite taille et peu nombreuses ; | 0.5 pt<br>0.5 pt |
 
 -- 8 of 10 --
 
+الصفحة 2
+الاختبارات الوطنية الموحدة للبكالوريا - 2019 - الدورة العادية - شعبة علوم الحياة والأرض
+المادة: الفيزياء والكيمياء
+المدة: 3 ساعات
+المعهد: RR34F
 
+| | Déduction :<br>Les cellules de la souche G adoptent la voie de la respiration<br>Les cellules de la souche P adoptent la voie de la fermentation | 0.5 pt |
+|---|---|---|
+| 3 | - La coloration rouge de la colonie de la souche G est due au fait que ses cellules ont réduit l'accepteur final des électrons au niveau de la chaîne respiratoire, car elles adoptent la voie respiratoire. ........................ 0.25 pt<br>- Par respiration, la souche G produit, à partir de l'oxydation d'une molécule de glucose, 4ATP, 10NADH.H+ et 2FADH2 → bilan énergétique 38 ATP → rendement énergétique important 40% ; ........................ 0.5 pt<br>- Les colonies de la souche P non colorées en rouge indiquent qu'elles n'ont pas réduit l'accepteur final des électrons car elles adoptent la voie de fermentation alcoolique............ 0.25 pt<br>- Par fermentation, la souche P produit, à partir de l'oxydation d'une molécule de glucose, 2ATP, → bilan énergétique 2 ATP → rendement énergétique faible 2% ; ... 0.5 pt | |
+| 4 | vérification de l'hypothèse :<br>- la souche G possède des mitochondries développées et nombreuse ce qu'elle rend capable d'oxyder le glucose par la voie de respiration à fort rendement énergétique ce qui lui a permit de former de colonies de grande taille ; ................... 0.5 pt<br>- la souche P adopte la voie de fermentation alcoolique à faible rendement énergétique, pour libérer l'énergie emmagasinée dans le glucose, ce qui explique la taille petite des colonies. ........................... 0.5 pt | |
+| | **Exercice 2 (5 pts)** | |
+| 1 | - le premier croisement donne toujours une progéniture de chiens normaux → les chiens normaux sont de lignée pure. ........................ 0.25 pt<br>- le deuxième croisement donne une progéniture hétérogène → présence de deux phénotypes (50% chenau)→ les chiens hairless sont hétérozygotes. ........................ 0.25 pt<br>- L'allèle responsable de l'absence du pelage (hairless) est dominant (Hr ) et l'allèle responsable du pelage normal est récessif (hr). ........................ 0.5 pt<br>- les chiens normaux sont homozygotes récessifs hr/hr, ........................... 0.25 pt<br>- les chiens hairless sont hétérozygotes Hr/hr. ........................... 0.25 pt | |
+| 2 | L'interprétation chromosomique du troisième croisement :<br>Parents : chienne hairless × chien hairless<br>Phénotypes : [Hr] [Hr]<br>Génotypes : Hr/hr Hr/hr<br>Gamètes : 50% Hr/ hr/ 50% 50% Hr/ hr/ 50%<br>Echiquier de croisement :<br><br>| Gamètes | Hr /50% | hr / 50% |<br>|---|---|---|<br>| Hr /50% | Hr // Hr [Hr] | Hr // hr [Hr] |<br>| hr / 50% | Hr // hr [Hr] | hr// hr [hr] |<br>| 0.25 pt<br>0.5 pt |
 
 -- 9 of 10 --
 
+الصفحة 3
+الاختبارات الوطنية الموحدة للبكالوريا - 2019 - الدورة العادية - شعبة علوم الحياة والأرض
+المادة: الفيزياء والكيمياء
+المدة: 3 ساعات
+المعهد: RR34F
 
+| | Théoriquement on obtient 1/4 [hr] et 3/4 [Hr] ; ces résultats théoriques ne peuvent être conformes aux résultats expérimentaux sauf dans le cas où le génotype Hr/Hr est létal ; ainsi les résultats théorique deviennent 1/3 [hr] et 2/3 [Hr]. | 0.25 pt |
+|---|---|---|
+| 3 | Comparaison :<br>- Le premier cycle pilaire est normal chez la souris normale et la souris hairless, et la taille de la protéine HR est la même chez les deux souris. ........................ 0.25 pt<br>- Chez la souris normale, à la fin de chaque cycle pilaire on assiste au renouvellement du follicule pileux et la croissance des poils sous l'action d'une protéine HR normale. ........................ 0.25 pt<br>- La souris Hairless possède une protéine HR anormale, à la fin du premier cycle pilaire, les follicules se dilatent avec formation des kystes dermiques d'où la rupture des follicules pileux et apparition de rides cutanés sans renouvellement des poils. ... 0.25 pt<br>- Par rapport à la souris normale, la souris hairless dispose d'une quantité élevée de la protéine HR ........................... 0.25 pt<br>Relation protéine -caractère :<br>- Le phénotype des souris est lié à la nature et à la quantité de la protéine HR synthétisée, d'où la protéine synthétisée contrôle le phénotype pour un caractère donné. 0.5 pt | |
+| 4 | Chez la souris normale : ........................... 0.25 pt<br>ARNm : GCC CAC CAA GGG AAA CUC AAC<br>Séquence d'acides aminés : Ala-His-Gln-Arg-Lys-Leu-Asn<br>Chez la souris Hairless : ........................... 0.25 pt<br>ARNm : GCC CAC CAA UGG AAA CUC AAC<br>Séquence d'acides aminés : Ala-His-Gln-Trp-Lys-Leu-Asn<br>Explication de l'apparition du caractère hairless:<br>Mutation par substitution de C par A au niveau du triplet 960 du brin transcrit (substitution de G par T au niveau du brin non transcrit) du gène responsable de la synthèse de la protéine HR → substitution de l'acide amine Gly par Trp → synthèse d'une protéine HR non fonctionnel et en grande quantité → apparition du phénotype Hairless. 0.5 pt | |
+| | **Exercice 3 (5 pts)** | |
+| 1 | Phénomènes géologiques à l'origine de la formation de l'Himalaya :<br>- la subduction : présence des sédiments océaniques dans un domaine continental et de la suture ophiolitique ........................... 0.5 pt<br>- la collision : présence des chevauchements, épaississement crustal ........................... 0.5 pt | |
+| 2 | - La température augmente avec la profondeur au-dessus et en dessous du chevauchement central. ........................... 0.25 pt<br>- Au niveau de la région MCT, les courbes des isothermes dévient vers la profondeur, ce qui indique la présence d'anomalies thermiques. ........................... 0.25 pt<br>- Les anomalies thermiques peuvent être expliquer par l'enfoncement de la lithosphère océanique froide dans le manteau chaud par le phénomène de subduction. 0.5 pt | |
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Tableau d'échiier de croisement (Exercice 2, Q2)] ---
+- **Contexte de l'exercice** : Physique-Chimie / Biologie (Génétique mendélienne)
+- **Description du dispositif ou montage** : Tableau de croisement (carré de Punnett) représentant le troisième croisement entre une chienne hairless et un chien hairless.
+- **Analyse détaillée du graphe / courbe / tableau** : Le tableau est une matrice 2x2.
+  - En-têtes colonnes : Gamètes Hr /50% et hr / 50%.
+  - En-têtes lignes : Gamètes Hr /50% et hr / 50%.
+  - Cellules internes :
+    - Ligne 1, Col 1 : Hr // Hr [Hr]
+    - Ligne 1, Col 2 : Hr // hr [Hr]
+    - Ligne 2, Col 1 : Hr // hr [Hr]
+    - Ligne 2, Col 2 : hr// hr [hr]
+  - Points associés : 0.25 pt et 0.5 pt.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Comparaison des séquences ARN et acides aminés (Exercice 2, Q4)] ---
+- **Contexte de l'exercice** : Physique-Chimie / Biologie (Biologie Moléculaire)
+- **Description du dispositif ou montage** : Blocs de texte structurés comparant l'ARNm et la séquence d'acides aminés pour deux phénotypes de souris.
+- **Analyse détaillée du graphe / courbe / tableau** :
+  - **Souris normale** :
+    - ARNm : GCC CAC CAA GGG AAA CUC AAC
+    - Séquence d'acides aminés : Ala-His-Gln-Arg-Lys-Leu-Asn
+  - **Souris Hairless** :
+    - ARNm : GCC CAC CAA UGG AAA CUC AAC
+    - Séquence d'acides aminés : Ala-His-Gln-Trp-Lys-Leu-Asn
+  - Différence notable : Le codon GGG (Arg) est remplacé par UGG (Trp).
 
 -- 10 of 10 --
 
+\begin{tabular}{ccc}
+\multicolumn{3}{c}{المفتشون الجدد لمادة العلوم الطبيعية (الشعبة العلمية: الحياة والأرض) - الدورة العادية 2019 - امتحان الإرشاد - مادة: علوم الحياة والأرض - شعبة: علوم الحياة والأرض - مستوى: الجذع المشترك - مفتش: خليل فتيحة} \\
+\multirow{2}{*}{3} & -Pour l'églogite : & 0.75 pt \\
+ & Le trajet PTT montre le passage des faciès de schiste bleu vers le faciès d'éclogite $\rightarrow$ & \\
+ & le gabbro subit une pression élevée et une température faible $\rightarrow$ métamorphisme & \\
+ & dynamique (subduction). & \\
+ & - Pour les roches continentales métamorphiques : & 0.75pt \\
+ & Présence des roches de la séquence métamorphique argileuse (schiste et le gneiss) & \\
+ & et de migmatite et du granite. Les associations minéralogiques montrent le passage & \\
+ & du domaine de la chlorite (schiste vert) vers le domaine du grenant (schiste bleu) en & \\
+ & suite vers le domaine du disthène et de la sillimanite (amphibolite) $\rightarrow$ les roches & \\
+ & continentales ont subi une pression et une température élevées $\rightarrow$ métamorphisme & \\
+ & dynamothermique. & \\
+\multirow{2}{*}{4} & La succession des événements qui ont abouti à la formation de la chaîne de & 1.5 pt \\
+ & l'Himalaya & \\
+ & - Subduction d'une ancienne lithosphère océanique(Tethys) sous la plaque & \\
+ & eurasiatique sous l'effet de force de compression et formation de prisme d'accrétion à & \\
+ & partir des sédiments océaniques, ainsi que la transformation du gabbro en éclogite ; & \\
+ & - Fermeture de la Téthys et blocage de la subduction et suite aux forces tectoniques & \\
+ & convergentes, les sédiments océaniques (prismes d'accrétion) s'avancent sur la croute & \\
+ & continentale. & \\
+ & - La collision des deux continents aboutit à des chevauchements responsables de & \\
+ & seulement des reliefs et la formation de la chaîne d'Himalaya. Ceci est accompagné & \\
+ & par un métamorphisme régional et la formation du massif cristallin du haut himalaya. & \\
+\end{tabular}
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===

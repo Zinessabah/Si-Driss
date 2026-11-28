@@ -1,28 +1,410 @@
-www.khaymasvt.ma
+-- 1 of 6 --
 
--- 1 of 7 --
+<table>
+  <tr>
+    <td>الصفحة</td>
+    <td colspan="2">الامتحان الموحد للمترشحين الأحرار للرباط</td>
+    <td>+212 537 66 40 06</td>
+    <td>الرباط</td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td rowspan="2">2024 الدورة العادية</td>
+    <td rowspan="2">- الامتحان الموحد -</td>
+    <td>+212 537 66 40 10</td>
+    <td>وزارة التربية الوطنية</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>+212 537 66 40 10</td>
+    <td>الرباط - سلا - القنيطرة</td>
+  </tr>
+  <tr>
+    <td>*1</td>
+    <td colspan="2">SSSSSSSSSSSSSSSSSSS-SSSS</td>
+    <td>NS 28F</td>
+    <td>المركز الوطني للتقويم والامتحانات</td>
+  </tr>
+  <tr>
+    <td>3h</td>
+    <td>المدة</td>
+    <td>الفصل الدراسي والاختيارات</td>
+    <td></td>
+    <td>المادة</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>المعامل</td>
+    <td>شعبة علوم الحياة والأرض (خيار فرنسي) العلوم الفيزيائية</td>
+    <td></td>
+    <td>الشعبة العلمية</td>
+  </tr>
+</table>
 
+www.AdrarPhysic.Fr
 
+✓ L'usage de la calculatrice scientifique **non programmable** est autorisé.
+✓ On donnera les expressions littérales avant de passer aux applications numériques.
+✓ Les exercices peuvent être traités selon l'ordre choisi par le candidat.
 
--- 2 of 7 --
+Le sujet comporte cinq exercices : un exercice de chimie et quatre exercices de physique.
 
+**Exercice 1 : (7 points)**
+- Suivi temporel d'une transformation chimique
+- Dosage d'une solution aqueuse
 
+**Exercice 2 : (2,5 points)**
+- Propagation d'un signal mécanique
 
--- 3 of 7 --
+**Exercice 3 : (2 points)**
+- Désintégration d'un radioélément
 
+**Exercice 4 : (3,5 points)**
+- Décharge d'un condensateur dans un dipôle RL
+- Réponse d'un dipôle RL à un échelon de tension
 
+**Exercice 5 : (5 points)**
+- Chute verticale d'une bille dans un liquide
+- Mouvement d'un système mécanique
 
--- 4 of 7 --
+-- 2 of 6 --
 
+<table>
+  <tr>
+    <td>الصفحة</td>
+    <td>NS 28F</td>
+    <td>الامتحان الموحد للمترشحين الأحرار للرباط - 2024 الدورة العادية</td>
+    <td>α</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>2</td>
+    <td>شعبة علوم الحياة والأرض (خيار فرنسي) العلوم الفيزيائية</td>
+    <td></td>
+  </tr>
+</table>
 
+**EXERCICE 1 (7 points) : Chimie**
 
--- 5 of 7 --
+L'acide ascorbique, de formule brute $C_6H_8O_6$, appelé vitamine C, est un antioxydant présent dans de nombreux fruits et légumes. La vitamine C possède des propriétés rédox et acido-basiques. Cette vitamine se dégrade à la chaleur, à l'air ; ...
 
+On se propose d'étudier dans cet exercice :
+- le suivi temporel de la dégradation de la vitamine C dans un jus d'orange,
+- le dosage d'une solution aqueuse contenant de la vitamine C.
 
+**Partie 1 : Suivi temporel de la dégradation de la vitamine C dans un jus d'orange**
 
--- 6 of 7 --
+On dispose d'une solution (S) de jus d'orange de volume $V = 200 \text{ mL}$ à une température $\theta$. Si on expose ce jus à l'air, la vitamine C qu'il contient se dégrade par oxydation avec le dioxygène.
+On suit, par dosage, l'évolution temporelle de la dégradation de cette vitamine. Le graphe de la figure 1 représente l'évolution temporelle de l'avancement $x$ de la réaction d'oxydation de la vitamine C. La droite (T) dans la figure 1 représente la tangente à la courbe au point d'abscisse $t = t_1 = 60 \text{ h}$.
 
+1- Répondre par vrai ou faux (sans justification) aux affirmations suivantes : (0,75 pt)
+a- La concentration initiale des réactifs est un facteur cinétique.
+b- L'évolution d'un système chimique est toujours considérée comme terminée au bout d'une durée égale à deux fois le temps de demi-réaction.
+c- Plus les chocs entre les espèces réactives sont nombreux et efficaces, plus la réaction chimique est rapide.
 
+2- Déterminer graphiquement $t_{1/2}$ le temps de demi-réaction. (0,5 pt)
 
--- 7 of 7 --
+3- Déterminer, en unité $\text{mmol.L}^{-1}.\text{h}^{-1}$, la vitesse volumique de la réaction à l'instant $t_1$. (1 pt)
 
+**Partie 2 : Dosage d'une solution aqueuse de la vitamine C**
+
+Un comprimé de vitamine C contient 250 mg d'acide ascorbique. Ce comprimé a été laissé plusieurs jours à l'air libre. La vitamine C qu'il contient a réagi avec le dioxygène de l'air. On souhaite déterminer la masse d'acide ascorbique restant dans le comprimé à l'aide d'un titrage pH-métrique.
+
+**Données :**
+- Toutes les mesures sont effectuées à $25^\circ\text{C}$ ;
+- Produit ionique de l'eau : $K_e = 10^{-14}$ ;
+- L'acide ascorbique $C_6H_8O_6$ est noté AH et le couple acide/base associé est $\text{AH(aq)} / \text{A}^-(\text{aq})$ ;
+- Masse molaire : $M(\text{AH}) = 176 \text{ g.mol}^{-1}$ ;
+- On écrase le comprimé laissé à l'air libre et on le dissout dans l'eau, ainsi on obtient une solution aqueuse $S_A$ d'acide ascorbique AH de concentration molaire $C_A$ et de volume $V_{SA} = 50,0 \text{ mL}$.
+
+![Figure 1](image_placeholder)
+Graphe : $x (\text{mmol})$ en fonction de $t (\text{h})$. Courbe croissante tendant vers une asymptote. Tangente (T) en $t=60$.
+
+![Figure 2](image_placeholder)
+Graphe : pH et $\frac{dpH}{dV_B}$ en fonction de $V_B (\text{mL})$. Courbes $(C_1)$ et $(C_2)$.
+
+-- 3 of 6 --
+
+<table>
+  <tr>
+    <td>الصفحة</td>
+    <td>NS 28F</td>
+    <td>الامتحان الموحد للمترشحين الأحرار للرباط - 2024 الدورة العادية</td>
+    <td>α</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>3</td>
+    <td>شعبة علوم الحياة والأرض (خيار فرنسي) العلوم الفيزيائية</td>
+    <td></td>
+  </tr>
+</table>
+
+On prend le volume $V_A = 15,0 \text{ mL}$ de $S_A$ auquel on ajoute progressivement un volume $V_B$ d'une solution aqueuse $S_B$ d'hydroxyde de sodium $\text{Na}^+(\text{aq}) + \text{HO}^-(\text{aq})$, de concentration $C_B = 1,50.10^{-2} \text{ mol.L}^{-1}$.
+Seule la réaction acido-basique entre l'acide ascorbique AH et l'hydroxyde de sodium sera prise en compte.
+La courbe $(C_1)$ de la figure 2 (page 2/6) représente les variations de pH du mélange réactionnel en fonction de $V_B$ et la courbe $(C_2)$ représente les variations de $\frac{dpH}{dV_B}$ en fonction de $V_B$.
+
+1- Écrire l'équation modélisant la réaction qui a lieu lors de ce dosage. (0,5 pt)
+2- Déterminer graphiquement le volume $V_{BE}$ vers l'équivalence. (0,5 pt)
+3- Déterminer la valeur de $C_A$. (0,5 pt)
+4- En déduire la masse $m$ restante de vitamine C dans le comprimé laissé à l'air libre. (0,75 pt)
+5/1- À partir de l'expression de la constante d'acidité $K_a$ du couple $\text{AH(aq)} / \text{A}^-(\text{aq})$, établir l'expression de son $pK_a$ en fonction de pH du mélange réactionnel et des concentrations molaires $[\text{AH(aq)}]_{eq}$ et $[\text{A}^-(\text{aq})]_{eq}$ à l'équilibre. (0,5 pt)
+5/2- Pour un volume $V_B$ versé de $S_B$ tel que $0 < V_B < V_{BE}$ montrer, en s'aidant du tableau d'avancement de la réaction de dosage, que : $\frac{[\text{AH(aq)}]_{eq}}{[\text{A}^-(\text{aq})]_{eq}} = \frac{V_{BE}}{V_B} - 1$. (0,75 pt)
+5/3- On choisit $V_B = 8,5 \text{ mL}$. Déduire de ce qui précède la valeur du $pK_a$ du couple $\text{AH(aq)} / \text{A}^-(\text{aq})$. (0,75 pt)
+5/4- Déterminer la valeur de la constante d'équilibre $K$ associée à l'équation de la réaction de dosage. (0,5 pt)
+
+**EXERCICE 2 (2,5 points) : Propagation d'un signal à la surface de l'eau**
+
+On se propose dans cet exercice d'étudier la propagation d'un signal mécanique à la surface de l'eau.
+Un caillou jeté, en un point O, dans une cuve contenant de l'eau de profondeur $h$, provoque la formation d'une onde circulaire qui se propage à la surface de l'eau. (Figure ci-dessous)
+
+1- Choisir la proposition juste parmi les propositions suivantes : (0,5 pt)
+
+| A | Une onde progressive périodique est caractérisée par sa célérité. |
+| B | Un milieu est dispersif si la célérité de l'onde dépend de sa période T. |
+| C | Lors de la diffraction dans un même milieu, la célérité de l'onde est modifiée. |
+| D | Les ondes mécaniques progressives peuvent se propager dans le vide. |
+
+2- La figure suivante donne l'aspect de la surface de l'eau à deux instants $t_1$ et $t_2$.
+Le tableau suivant donne les valeurs des rayons du front d'onde à des instants donnés :
+
+| t(s) | 0 | $t_1$ | $t_2 = t_1 + 1,5$ |
+| r(cm) | 0 | $r_1 = 14$ | $r_2 = 56$ |
+
+![Schéma Exercice 2](image_placeholder)
+Schéma : Caillou au point O. Ondes circulaires de rayons $r(t_1)$ et $r(t_2)$.
+
+2-1- Déterminer la valeur de la célérité $v$ de l'onde. (0,5 pt)
+2-2- En déduire la valeur de l'instant $t_2$. (0,5 pt)
+2-3- On peut estimer la célérité $v$ de l'onde qui se propage à la surface d'eau par la relation : $v = \sqrt{g.h}$ avec $g = 9,8 \text{ m.s}^{-2}$ étant l'intensité de la pesanteur et $h$ la profondeur de l'eau.
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE 1] ---
+- **Contexte de l'exercice** : Chimie - Suivi temporel de la dégradation de la vitamine C.
+- **Description du dispositif ou montage** : Graphe de l'avancement $x$ (en mmol) en fonction du temps $t$ (en h). La courbe commence à l'origine, croît puis tend vers une asymptote horizontale (réaction terminée). Une droite tangente (T) est tracée au point d'abscisse $t = t_1 = 60 \text{ h}$.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des abscisses : $t$ (h), graduations de 0 à 80+. Axe des ordonnées : $x$ (mmol), graduations de 0 à 0.2+. La courbe montre une cinétique de réaction typique (ralentissement avec le temps).
+
+--- [FIGURE 2] ---
+- **Contexte de l'exercice** : Chimie - Dosage pH-métrique de la vitamine C.
+- **Description du dispositif ou montage** : Graphe représentant pH et $\frac{dpH}{dV_B}$ en fonction du volume $V_B$ de base versée (en mL). Deux courbes sont présentes : $(C_1)$ et $(C_2)$.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des abscisses : $V_B$ (mL), graduations 0, 5, 10. Axe des ordonnées gauche : pH (0 à 4+). Axe des ordonnées droite : $\frac{dpH}{dV_B}$. La courbe $(C_1)$ est probablement la courbe de titration pH (croissante). La courbe $(C_2)$ présente un pic sharp correspondant à l'équivalence.
+
+--- [SCHÉMA EXERCICE 2] ---
+- **Contexte de l'exercice** : Physique - Propagation d'un signal mécanique à la surface de l'eau.
+- **Description du dispositif ou montage** : Schéma d'une cuve contenant de l'eau. Un caillou est jeté au point O. Une onde circulaire se propage. Deux instants sont représentés : $t_1$ et $t_2$ avec des rayons $r(t_1)$ et $r(t_2)$.
+- **Analyse détaillée du graphe / courbe / tableau** : Tableau de valeurs associé : $t=0, r=0$; $t=t_1, r_1=14 \text{ cm}$; $t=t_2=t_1+1.5, r_2=56 \text{ cm}$.
+
+-- 4 of 6 --
+
+**En-tête du document :**
+- Niveau : 6
+- Code : NS 28F
+- Titre : les examens nationaux du baccalauréat - 2024 - la session ordinaire
+- Matière : sciences physiques et chimiques
+- Série : Sciences Expérimentales, option Sciences Physiques et Chimiques (Chimie)
+- Symbole : $\alpha$
+
+**3-1-** En utilisant les équations aux dimensions, vérifier l'homogénéité de cette relation. (0,5pt)
+
+**3-2-** Calculer h. (0,5pt)
+
+**EXERCICE 3 (2 points) : Désintégration de l'iridium 192**
+
+La curiethérapie est une technique qui consiste à traiter des tumeurs cancéreuses par insertion d'une source radioactive à proximité de ces tumeurs. L'un des éléments radioactifs utilisés pour cette technique est l'iridium $^{192}_{77}Ir$. La source radioactive émet des rayonnements qui détruisent les cellules tumorales qu'ils traversent.
+
+Lors du traitement d'une tumeur, l'iridium 192 donne, essentiellement par désintégration, un noyau de platine $^{192}_{78}Pt$ et une particule chargée avec émission d'un rayonnement $\gamma$ (gamma).
+
+**Donnée :** La demi-vie de l'iridium 192 : $t_{1/2} = 74$ jours $= 6,3936.10^6$ s.
+
+**1-** Déterminer la composition du noyau de l'iridium $^{192}_{77}Ir$. (0,5pt)
+
+**2-** Écrire l'équation de désintégration de l'iridium 192 en précisant le type de cette désintégration. (0,5pt)
+
+**3-** On suppose que le corps humain ne contient pas initialement de l'iridium. À la date $t=0$, on implante à un patient un fil métallique contenant une source d'iridium 192. L'activité de cette source à cette date est : $a_0 = 1,08.10^{-2}$ Bq.
+
+**3-1-** Calculer $N_0$ le nombre de noyaux d'iridium 192 se trouvant dans cette source à $t=0$. (0,5pt)
+
+**3-2-** Déterminer $N_d$ le nombre de noyaux d'iridium 192 désintégrés au bout de deux ans ($\Delta t = 730$ jours). Commenter le résultat obtenu. (0,5pt)
+
+**EXERCICE 4 (3,5 points) : Électricité**
+
+Dans les circuits électriques, une bobine peut se comporter comme un conducteur ohmique ou différemment selon le type du courant électrique utilisé et les condensateurs peuvent stocker de l'énergie et la restituer en cas de besoin.
+
+On se propose dans cet exercice d'étudier :
+- la décharge d'un condensateur dans un dipôle RL,
+- la réponse d'un dipôle RL à un échelon de tension.
+
+**1-Décharge d'un condensateur dans un dipôle RL**
+
+Le circuit électrique de la figure 1 comporte :
+- un condensateur de capacité $C=0,22$ nF,
+- une bobine (b) d'inductance L et de résistance r,
+- un conducteur ohmique de résistance R ajustable,
+- un interrupteur K.
+
+Le condensateur est initialement chargé totalement par un générateur de tension idéale de force électromotrice E.
+
+On ajuste la résistance R à une valeur $R=R_0$.
+
+On ferme l'interrupteur K à l'instant $t=0$.
+
+La courbe de la figure 2 représente l'évolution temporelle de la tension $u_C(t)$ aux bornes du condensateur.
+
+![Figure 1 : Circuit avec C, K, R, (L,r), $u_C$](image_placeholder_fig1)
+*Figure 1*
+
+![Figure 2 : Graphe $u_C(V)$ en fonction de $t$](image_placeholder_fig2)
+*Figure 2*
+
+-- 5 of 6 --
+
+**En-tête du document :**
+- Niveau : 6
+- Code : NS 28F
+- Titre : les examens nationaux du baccalauréat - 2024 - la session ordinaire
+- Matière : sciences physiques et chimiques
+- Série : Sciences Expérimentales, option Sciences Physiques et Chimiques (Chimie)
+- Symbole : $\alpha$
+
+**1-1-** Expliquer de point de vue énergétique l'amortissement observé des oscillations dans le circuit. (0,25pt)
+
+**1-2-** Établir l'équation différentielle vérifiée par la tension $u_C(t)$ aux bornes du condensateur. (0,5pt)
+
+**1-3-** Indiquer, en justifiant, dans quel dipôle est principalement emmagasinée l'énergie totale de l'oscillateur à l'instant $t_1$ puis à l'instant $t_2$ (figure 2). (0,5pt)
+
+**1-4-** Calculer $E_J = |AE_1|$ l'énergie dissipée par effet joule dans le circuit entre les instants $t=0$ et $t=t_2$. (0,75pt)
+
+**2-Réponse d'un dipôle RL à un échelon de tension**
+
+On réalise le circuit schématisé dans la figure 3 en utilisant le générateur de tension de force électromotrice $E=6$ V ; la bobine (b) et le conducteur ohmique de résistance R ajustable et l'interrupteur K, précédemment utilisés.
+
+On ajuste la valeur de la résistance R à une valeur R, et on ferme l'interrupteur K à l'instant $t_0=0$.
+
+![Figure 3 : Circuit avec E, K, R, (L,r), i](image_placeholder_fig3)
+*Figure 3*
+
+**2-1-** En appliquant la loi d'additivité des tensions, montrer que : $\frac{di}{dt} = -(\frac{R+r}{L})i + \frac{E}{L}$. (0,5pt)
+
+**2-2-** La courbe de la figure 4 représente les variations de $\frac{di}{dt}$ en fonction de l'intensité i.
+
+En s'aidant du graphe de la figure 4 :
+
+**2-2-1-** Vérifier que la valeur de L est : $L=2$ mH. (0,5pt)
+
+**2-2-2-** Déterminer la valeur de la constante de temps $\tau$ du circuit. (0,5pt)
+
+![Figure 4 : Graphe $\frac{di}{dt}$ en fonction de i](image_placeholder_fig4)
+*Figure 4*
+
+**EXERCICE 5 (5 points) : Mécanique**
+
+**Les parties 1 et 2 sont indépendantes**
+
+**Partie 1 : Chute verticale d'une bille dans un liquide**
+
+On étudie le mouvement, dans un liquide (L), d'une bille (S) de centre d'inertie G, homogène, de masse $m_b$, de volume $V_b$ et de masse volumique $\rho_b$.
+
+On étudie le mouvement de G dans un repère $(O, \vec{k})$ lié à un référentiel terrestre supposé galiléen.
+
+On repère la position de G à chaque instant t par la cote z sur l'axe vertical $(O, \vec{k})$ dirigé vers le bas.
+
+À l'instant de date $t_o$, prise comme origine des dates ($t_o=0$), on lâche la bille dans le liquide (L) sans vitesse initiale d'une position où la cote de G est nulle ($z=0$) (figure 1).
+
+Au cours de la chute dans le liquide, la bille (S) est soumise, en plus de son poids, à :
+- la force de frottement fluide : $\vec{f} = -\mu \vec{v}$ où $\vec{v} = v_z \vec{k}$ et $\mu$ le coefficient de frottement fluide ;
+- la poussée d'Archimède : $\vec{F} = -\rho_L V_b \vec{g}$ où g est l'intensité de la pesanteur et $\rho_L$ la masse volumique du liquide (L).
+
+**Données :** - Intensité de la pesanteur : $g=10$ m.s$^{-2}$ ; $m_b=5,0$ g ; $\rho_B=5,526.10^3$ kg.m$^{-3}$
+
+![Figure 1 : Bille dans un liquide, axe z](image_placeholder_fig5)
+*Figure 1*
+
+-- 6 of 6 --
+
+**En-tête du document :**
+- Niveau : 6
+- Code : NS 28F
+- Titre : les examens nationaux du baccalauréat - 2024 - la session ordinaire
+- Matière : sciences physiques et chimiques
+- Série : Sciences Expérimentales, option Sciences Physiques et Chimiques (Chimie)
+- Symbole : $\alpha$
+
+**1-** En appliquant la deuxième loi de Newton, montrer que la vitesse $v_z(t)$ de G obéit à l'équation différentielle : $\frac{dv_z}{dt} + \frac{1}{\tau}v_z = g(1 - \frac{\rho_L}{\rho_B})$ avec $\tau$ le temps caractéristique du mouvement de (S). (0,75 pt)
+
+**2-** L'exploitation d'un enregistrement vidéo du mouvement de G à l'aide d'un logiciel adéquat, a permis d'obtenir la courbe de la figure 2 représentant l'évolution temporelle de la vitesse $v_z(t)$ de G.
+
+Dans la figure 2, (T) représente la tangente à la courbe au point d'abscisse $t_0=0$.
+
+Par exploitation de la courbe de la figure 2, déterminer la valeur de :
+
+**2-1-** la vitesse limite $v_c$ du mouvement de G. (0,25 pt)
+
+**2-2-** $\tau$ le temps caractéristique du mouvement de G. (0,25 pt)
+
+**2-3-** l'accélération $a_0$ du mouvement de G à l'instant $t_0=0$. (0,5 pt)
+
+**3-** Déduire la valeur de $\mu$ et celle de $\rho_L$. (1 pt)
+
+**Partie 2 : Mouvement d'un système mécanique**
+
+On se propose d'étudier le mouvement d'un système mécanique et de déterminer quelques paramètres de ce mouvement. Ce système mécanique représenté sur la figure 3 est constitué :
+- d'une charge (C) de masse m et de centre d'inertie G susceptible de glisser sans frottement sur un plan incliné d'un angle $\alpha$ par rapport au plan horizontal ;
+- d'un cylindre (S) de rayon r et de moment d'inertie $J_\Delta$ par rapport à son axe de rotation ($\Delta$). Le cylindre est susceptible de tourner sans frottement autour de l'axe ($\Delta$) sous l'effet d'un couple de moment M constant ;
+- d'un câble inextensible de masse négligeable qui s'enroule sans glissement sur (S) et attaché à la charge (C).
+
+**Données :** Intensité de la pesanteur : $g=10$ m.s$^{-2}$ ; $r=10$ cm ; $m=100$ kg ; $\alpha=45^\circ$ ; $J_\Delta=2.10^{-2}$ kg.m$^2$.
+
+![Figure 3 : Système mécanique, cylindre et charge](image_placeholder_fig6)
+*Figure 3*
+
+On étudie le mouvement du système mécanique {(C) ; (S)} dans un repère lié à un référentiel terrestre supposé galiléen.
+
+On repère la position d'un point de la charge à chaque instant t par son abscisse angulaire $\theta$ et la position du centre d'inertie G de (C) par son abscisse x suivant l'axe $(O, \vec{i})$.
+
+**1-L'équation horaire du mouvement d'un point du cylindre (S) s'écrit :** $\theta(t) = 20t^2$ avec $\theta$ en rad et t en s.
+
+**1-1-** Vérifier que l'accélération du mouvement de G est : $a_G = 4$ m.s$^{-2}$. (0,5 pt)
+
+**1-2-** Déterminer la distance d parcourue par G pendant les deux premières secondes. (0,75 pt)
+
+**2-** En appliquant la deuxième loi de Newton et la relation dynamique de rotation au système mécanique {(C) ; (S)}, montrer que $M = \frac{a_G}{r}(J_\Delta + mr^2) + mgr \sin \alpha$.
+
+Calculer la valeur de M. (1 pt)
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1 (Page 4)] ---
+- **Contexte de l'exercice** : Électricité - Exercice 4, Partie 1 (Décharge d'un condensateur dans un dipôle RL)
+- **Description du dispositif ou montage** : Circuit électrique en boucle fermée contenant un interrupteur K, un condensateur C, une résistance R ajustable, et une bobine modélisée par une inductance L en série avec une résistance r (notée (L,r)). La tension aux bornes du condensateur est notée $u_C$ avec une flèche indiquant le sens de référence.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (c'est un schéma de circuit).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2 (Page 4)] ---
+- **Contexte de l'exercice** : Électricité - Exercice 4, Partie 1
+- **Description du dispositif ou montage** : Graphe représentant l'évolution temporelle de la tension $u_C$ aux bornes du condensateur.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées : $u_C$ en Volts (V), gradué de -2 à 2 avec une graduation intermédiaire à 0. Axe des abscisses : t (temps), sans unité explicite sur l'axe mais contexte temporel. La courbe est sinusoïdale amortie. Points remarquables : $t_1$ et $t_2$ marqués sur l'axe des abscisses correspondant à des instants spécifiques de l'oscillation. La courbe passe par 0 à l'origine.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3 (Page 5)] ---
+- **Contexte de l'exercice** : Électricité - Exercice 4, Partie 2 (Réponse d'un dipôle RL à un échelon de tension)
+- **Description du dispositif ou montage** : Circuit électrique comportant un générateur de tension idéale E, un interrupteur K, une résistance R, et une bobine (L,r) en série. Le courant i est indiqué avec une flèche sortant du générateur.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (c'est un schéma de circuit).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 4 (Page 5)] ---
+- **Contexte de l'exercice** : Électricité - Exercice 4, Partie 2
+- **Description du dispositif ou montage** : Graphe représentant les variations de la dérivée du courant par rapport au temps en fonction de l'intensité du courant.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées : $\frac{di}{dt}$ en $10^3 A.s^{-1}$, gradué de 0 à 2. Axe des abscisses : i en mA, gradué de 0 à 2. La courbe est une droite décroissante passant par un point sur l'axe des ordonnées (environ 2) et coupant l'axe des abscisses à une valeur maximale de i.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1 (Page 5 - Exercice 5 Partie 1)] ---
+- **Contexte de l'exercice** : Mécanique - Exercice 5, Partie 1 (Chute verticale d'une bille dans un liquide)
+- **Description du dispositif ou montage** : Schéma d'un cylindre contenant un liquide. Une bille noire (S) est immergée. Un axe vertical z est dirigé vers le bas, avec l'origine O à la surface du liquide.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (c'est un schéma de dispositif).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2 (Page 6 - Exercice 5 Partie 1)] ---
+- **Contexte de l'exercice** : Mécanique - Exercice 5, Partie 1
+- **Description du dispositif ou montage** : Graphe représentant l'évolution temporelle de la vitesse $v_z$ de la bille G.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées : $v_z$ en m.s$^{-1}$, gradué de 0 à 0,4. Axe des abscisses : t en secondes (s), gradué de 0 à 0,2. La courbe commence à l'origine, croît concrète puis tend vers une asymptote horizontale (vitesse limite). Une tangente (D) est tracée à l'origine $t_0=0$.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3 (Page 6 - Exercice 5 Partie 2)] ---
+- **Contexte de l'exercice** : Mécanique - Exercice 5, Partie 2 (Mouvement d'un système mécanique)
+- **Description du dispositif ou montage** : Schéma d'un plan incliné d'angle $\alpha$. Un disque (C) de centre G est sur le plan. Un câble relie le disque à un cylindre (S) en haut du plan. Un repère $(O, \vec{i}, \vec{j})$ est défini avec $\vec{i}$ le long du plan vers le bas et $\vec{j}$ perpendiculaire au plan.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (c'est un schéma de dispositif).

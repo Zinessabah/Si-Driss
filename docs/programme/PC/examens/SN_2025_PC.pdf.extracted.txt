@@ -1,24 +1,329 @@
-
-
 -- 1 of 6 --
 
+**En-tête du document :**
+- Ministère de l'Éducation Nationale du Préscolaire et des Sports
+- Direction Régionale de l'Éducation et de la Formation
+- Académie de ...
+- L'examen national unifié du baccalauréat - 2025
+- Filière : Sciences expérimentales - Branche : Sciences de la vie et de la terre
+- Durée : 3h
+- Coefficient : 7
+- Code : NS28F
 
+**Instructions générales :**
+- L'usage de la calculatrice scientifique non programmable est autorisé.
+- On donnera les expressions littérales avant de passer aux applications numériques.
+- Les exercices peuvent être traités séparément selon le choix du candidat(e).
+
+Le sujet comporte quatre exercices : un exercice de chimie et trois exercices de physique.
+
+---
+
+**Exercice 1 : Chimie (7 points)**
+- Dosage d'une solution acide
+- Suivi cinétique d'une transformation chimique
+
+**Exercice 2 : Transformations nucléaires (2,5 points)**
+- Désintégration d'un radioélément
+
+**Exercice 3 : Électricité (5 points)**
+- Charge d'un condensateur et sa décharge dans un dipôle RL
+- Sélection et démodulation d'une onde modulée en amplitude
+
+**Exercice 4 : Mécanique (5,5 points)**
+- Mouvement d'un satellite artificiel
+- Mouvement d'un oscillateur
 
 -- 2 of 6 --
 
+**EXERCICE 1 : Chimie (7 points)**
+Les deux parties sont indépendantes
+- le dosage d'une solution acide ;
+- le suivi cinétique d'une réaction d'estérification.
 
+**Partie 1 : Dosage d'une solution aqueuse d'hydrogénosulfite de sodium**
+
+L'hydrogénosulfite de sodium $\text{NaHSO}_3$ est utilisé pour le blanchiment de la pâte à papier. L'étiquette d'un flacon contenant une solution commerciale $(\text{S}_0)$ d'hydrogénosulfite de sodium $\text{Na}^+_{(\text{aq})} + \text{HSO}_3^-_{(\text{aq})}$ porte l'indication : $500\text{g.L}^{-1}$. La concentration molaire de $(\text{S}_0)$ est $\text{C}_0$.
+
+**Données :** Toutes les mesures sont effectuées à $25^\circ\text{C}$ ;
+- Le produit ionique de l'eau : $\text{K}_e = 10^{-14}$ ;
+- Masse molaire de l'hydrogénosulfite de sodium : $\text{M}(\text{NaHSO}_3) = 104\text{g.mol}^{-1}$ ;
+- Le couple acide/base : $\text{HSO}_3^-_{(\text{aq})} / \text{SO}_3^{2-}_{(\text{aq})}$ ;
+- $\text{pK}_a (\text{HSO}_3^-_{(\text{aq})} / \text{SO}_3^{2-}_{(\text{aq})}) = 7,2$.
+
+Cette partie de l'exercice vise à vérifier par dosage acido-basique l'indication $500\text{g.L}^{-1}$ inscrite sur l'étiquette de la solution commerciale.
+Pour vérifier cette indication, on procède comme suit :
+- On dilue 100 fois la solution $(\text{S}_0)$ de concentration molaire $\text{C}_0$ et on obtient ainsi une solution $(\text{S}_\text{A})$ de concentration molaire $\text{C}_\text{A}$ ;
+- On prélève un volume $\text{V}_\text{A} = 20,0\text{mL}$ de $(\text{S}_\text{A})$ que l'on dose avec une solution aqueuse $(\text{S}_\text{b})$ d'hydroxyde de sodium $\text{Na}^+_{(\text{aq})} + \text{OH}^-_{(\text{aq})}$ de concentration molaire $\text{C}_\text{b} = 0,10\text{mol.L}^{-1}$.
+Le volume de la solution $(\text{S}_\text{b})$ versé à l'équivalence est $\text{V}_\text{BE} = 9,6\text{mL}$.
+
+**1-1- Écrire l'équation chimique modélisant la réaction de dosage.** (0,5pt)
+
+**1-2- Déterminer la valeur de $\text{C}_\text{A}$.** (0,75pt)
+
+**1-3- Déduire que $\text{C}_0 = 4,80\text{mol.L}^{-1}$.** (0,25pt)
+
+**1-4- Justifier si l'indication inscrite sur l'étiquette du flacon est vérifiée.** (0,75pt)
+
+**1-5- Déterminer la valeur de la constante d'équilibre $\text{K}$ associée à l'équation de la réaction de dosage.** (0,75pt)
+
+**1-6- En se basant sur le tableau d'avancement de la réaction de dosage à l'équivalence, trouver la concentration molaire $\text{C}_\text{eq}$ de la solution de sulfite de sodium $2\text{Na}^+_{(\text{aq})} + \text{SO}_3^{2-}_{(\text{aq})}$ obtenue à l'équivalence.** (0,75pt)
+
+**Partie 2 : Suivi cinétique d'une réaction d'estérification**
+
+On étudie la cinétique de la réaction entre l'acide éthanoïque $\text{CH}_3\text{COOH}$ et le propan-1-ol $\text{C}_3\text{H}_7\text{CH}_2\text{OH}$. On réalise cette estérification dans différentes conditions expérimentales :
 
 -- 3 of 6 --
 
+**Expérience (1) :**
+On mélange $0,200\text{mol}$ d'acide éthanoïque avec $0,200\text{mol}$ du propan-1-ol à la température $\theta_1$.
 
+**Expérience (2) :**
+On mélange $0,200\text{mol}$ d'acide éthanoïque avec $0,200\text{mol}$ du propan-1-ol à la température $\theta_2$ avec $\theta_2 > \theta_1$.
+
+**Expérience (3) :**
+On mélange $0,200\text{mol}$ d'acide éthanoïque avec $0,200\text{mol}$ du propan-1-ol à la température $\theta_2$ avec ajout de quelques gouttes d'acide sulfurique concentré.
+
+Les courbes de la figure ci-contre représentent l'évolution temporelle de l'avancement $x$ de la réaction qui se produit pour chaque condition expérimentale.
+
+**Graphique :**
+- Axe des abscisses : $t(\text{min})$
+- Axe des ordonnées : $x(\text{mmol})$
+- Courbes tracées : Courbe (a), Courbe (b), Courbe (c).
+- Valeurs repères sur l'axe des ordonnées : $26,6$ et $53,2$.
+- Valeurs repères sur l'axe des abscisses : $30$, $60$.
+
+**2-1- Écrire, en utilisant les formules semi-développées, l'équation modélisant la réaction d'estérification qui se produit. Donner le nom de l'ester (E) formé.** (0,75 pt)
+
+**2-2- Indiquer, en justifiant, la courbe correspondant à l'expérience (3).** (0,5pt)
+
+**2-3- Répondre, en justifiant, par vrai ou faux à l'affirmation suivante : "La valeur de l'avancement final $x_f$ de la réaction sera la même pour les trois conditions expérimentales".** (0,75pt)
+
+**2-4- Déterminer graphiquement $t_{1/2}$ le temps de demi-réaction correspondant à l'expérience (2).** (0,75 pt)
+
+**2-5- Calculer le rendement de la réaction pour le cas de l'expérience (3).** (0,5pt)
+
+---
+
+**EXERCICE 2 : Désintégration du cadmium 107 (2,5 points)**
+
+On se propose dans cet exercice d'étudier la désintégration du cadmium 107.
+Le cadmium radioactif $^{107}_{48}\text{Cd}$, donne, en se désintégrant, le noyau d'argent $^{107}_{47}\text{Ag}$ et une particule $^0_{-1}\text{e}$ avec émission d'un rayonnement $\gamma$ (gamma).
+
+**Données :** Masses : $\text{m}(^{107}_{48}\text{Cd}) = 106,88045\text{ u}$ ; $\text{m}(^{107}_{47}\text{Ag}) = 106,87947\text{ u}$ ; $\text{m}(^0_{-1}\text{e}) = 5,486.10^{-4}\text{ u}$ ;
+- Demi-vie du $^{107}_{48}\text{Cd}$ : $t_{1/2} = 6,93\text{ heures}$ ;
+- $1\text{u} = 931,49\text{ MeV.c}^{-2}$.
+
+**1- Choisir parmi les affirmations suivantes la affirmation juste :** (0,5 pt)
+
+| A | Dans le noyau $^{107}_{48}\text{Cd}$ il y a 59 protons. |
+|---|---|
+| B | La désintégration d'un échantillon radioactif est d'autant plus rapide que sa constante radioactive $\lambda$ est plus petite. |
+| C | Dans le diagramme (N, Z) de Ségre, les isotopes sont sur une ligne perpendiculaire à l'axe des Z. |
+| D | La cohésion du noyau est d'autant plus forte que son énergie de liaison par nucléon est petite. |
+
+**2- Écrire l'équation de désintégration d'un noyau de cadmium $^{107}_{48}\text{Cd}$ en précisant le type de cette désintégration.** (0,5 pt)
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphique de suivi cinétique (Exercice 1, Partie 2)] ---
+- **Contexte de l'exercice** : Chimie - Suivi cinétique d'une réaction d'estérification.
+- **Description du dispositif ou montage** : Graphique cartésien représentant l'avancement $x$ en fonction du temps $t$.
+- **Analyse détaillée du graphe / courbe / tableau** :
+    - Axe des abscisses : temps $t$ en minutes (min). Graduations visibles : 30, 60.
+    - Axe des ordonnées : avancement $x$ en millimoles (mmol). Graduations visibles : 26,6 et 53,2.
+    - Trois courbes sont tracées et étiquetées : Courbe (a), Courbe (b), Courbe (c).
+    - La Courbe (a) est la plus élevée (cinétique la plus rapide).
+    - La Courbe (b) est intermédiaire.
+    - La Courbe (c) est la plus basse (cinétique la plus lente).
+    - Toutes les courbes partent de l'origine (0,0).
+
+--- [TABLEAU / QCM : Exercice 2, Question 1] ---
+- **Contexte de l'exercice** : Physique - Désintégration du cadmium 107.
+- **Description du dispositif ou montage** : Tableau à quatre lignes (A, B, C, D) proposant des affirmations à choisir.
+- **Analyse détaillée du graphe / courbe / tableau** :
+    - Option A : "Dans le noyau $^{107}_{48}\text{Cd}$ il y a 59 protons."
+    - Option B : "La désintégration d'un échantillon radioactif est d'autant plus rapide que sa constante radioactive $\lambda$ est plus petite."
+    - Option C : "Dans le diagramme (N, Z) de Ségre, les isotopes sont sur une ligne perpendiculaire à l'axe des Z."
+    - Option D : "La cohésion du noyau est d'autant plus forte que son énergie de liaison par nucléon est petite."
 
 -- 4 of 6 --
 
+المستوى: 4 NS28F الامتحان الوطني الموحد لجهة الرباط سلا القنيطرة - الدورة العادية 2025 - مادة: الفيزياء والكيمياء - الشعبة: علوم الحياة والأرض (نظام فاصل)
 
+3- Un laboratoire reçoit à la date $t=0$ un échantillon de $^{48}\text{Cd}$ d'activité $a_0=1,25.10^{12} \text{ Bq}$.
+A l'instant $t_1=2t_{1/2}$ l'activité de cet échantillon est $a_1$, et à l'instant $t_2=3t_{1/2}$ son activité est $a_2$.
+
+**3-1-** Établir l'expression $a_2=\frac{a_1}{2}$. (0,5 pt)
+
+**3-2-** Montrer que l'expression de $N_d$ le nombre de noyaux désintégrés entre les instants $t_1$ et $t_2$ est :
+$$N_d=\frac{a_0 t_{1/2}}{8 \ln 2}.$$ (0,5 pt)
+
+**3-3-** Déterminer, en unité MeV, la valeur de l'énergie libérée $E$ lors de la désintégration de cet échantillon entre les instants $t_1$ et $t_2$. (0,5 pt)
+
+**EXERCICE 3 : Electricité(5 points)**
+
+Les composantes électroniques telle que les diodes, les bobines, les condensateurs se trouvent dans différents circuits électriques et électroniques de plusieurs appareils électriques qui sont utilisés dans le domaine industriel, de communication, de numérisation....
+
+On se propose dans cet exercice d'étudier :
+- la charge d'un condensateur et sa décharge dans un dipôle RL ;
+- la sélection et la démodulation d'une onde modulée en amplitude.
+
+Le montage électrique représenté par le schéma de la figure 1 comporte un circuit de charge d'un condensateur et un autre de sa décharge.
+
+**Figure 1**
+*Circuit avec générateur G, interrupteur K (positions 1 et 2), résistance R, condensateur $C_0$, bobine (b) $(L, r)$, voltmètre M mesurant $u_c$.*
+
+**1- Charge d'un condensateur par une source de courant**
+
+On veut déterminer la capacité $C_0$ d'un condensateur, initialement déchargé, en utilisant le montage présenté sur la figure 1. Le générateur de courant G débite un courant électrique d'intensité constante $I_0=1 \mu\text{A}$.
+
+A un instant choisi comme origine des dates ($t_0=0$), on met l'interrupteur K en position (1). Un système d'acquisition informatisé adéquat permet d'obtenir la courbe d'évolution temporelle de la tension $u_c(t)$ aux bornes du condensateur lors de sa charge (figure 2).
+
+**1-1-** Exprimer la tension $u_c(t)$ en fonction de $I_0$, $C_0$ et $t$. (0,5pt)
+
+**1-2-** Vérifier que $C_0=1 \mu\text{F}$. (0,5pt)
+
+**Figure 2**
+*Graphe $u_c(\text{V})$ en fonction de $t(\text{s})$. Courbe droite passant par l'origine. Axe des abscisses gradué de 0 à 4. Axe des ordonnées gradué de 0 à 4.*
+
+**2- Décharge d'un condensateur dans un dipôle RL**
+
+Lorsque la tension entre les bornes du condensateur prend la valeur $u_c = U_0=10 \text{ V}$, on bascule l'interrupteur K en position (2) à un instant pris comme nouvelle origine des dates ($t_0=0$). Un système d'acquisition informatisé adéquat permet d'obtenir la courbe représentant la tension $u_c(t)$ (figure 3).
+
+**2-1-** Établir l'équation différentielle vérifiée par $u_c(t)$. (0,5pt)
 
 -- 5 of 6 --
 
+المستوى: 5 NS28F الامتحان الوطني الموحد لجهة الرباط سلا القنيطرة - الدورة العادية 2025 - مادة: الفيزياء والكيمياء - الشعبة: علوم الحياة والأرض (نظام فاصل)
 
+**2-2-** En exploitant la courbe de la figure 3, déterminer :
+
+**2-2-1-** la valeur de la pseudopériode des oscillations. (0,5pt)
+
+**2-2-2-** le signe de l'intensité du courant $i$ entre l'instant $t_a$ et l'instant $t_b$. (0,5pt)
+
+**2-3-** Montrer que : $\frac{dE_t}{dt}=-ri^2$, avec $E_t$ l'énergie totale du circuit à un instant $t$. (0,5pt)
+
+**2-4-** Calculer $|E_d|$ l'énergie dissipée par effet joule dans le circuit entre les instant $t=0$ et $t=t_a$. (0,5pt)
+
+**Figure 3**
+*Graphe $u_c(\text{V})$ en fonction de $t$. Oscillations amorties. Marque $7.10^{-3}$ indiquant une demi-période ou intervalle. Points $t_a, t_b$ marqués sur l'axe des temps.*
+
+**3- Sélection et démodulation d'une onde modulée en amplitude**
+
+On utilise une chaîne électronique simplifiée représentée sur la figure 4 pour sélectionner et démoduler une onde électromagnétique modulée en amplitude.
+
+**Figure 4**
+*Bloc diagramme: Antenne -> Diode D, Condensateur C (Étage 1 Amplification) -> Diode D, Résistance R, Condensateur $C_0$, Résistance $R_2$, Mètre M (Étage 2) -> Amplification -> HP.*
+
+Dans cette chaîne on utilise une diode D considérée idéale, la bobine (b) (supposée aussi idéale) et le condensateur de capacité $C_0$ précédemment utilisé.
+
+**3-1-** Quel est le rôle de l'étage 2 ? (0,25pt)
+
+**3-2-** Trouver la valeur $C_1$ à laquelle il faut ajuster la capacité $C$ pour capter le signal modulé de fréquence $f_p=162\text{kHz}$ sachant que $L=2 \text{ mH}$ (on prend $\pi^2=10$). (0,75pt)
+
+**3-3-** La fréquence du signal modulant est $f_m=5\text{kHz}$. Si on ajuste $R$ à la valeur $R_0=1,5\text{k}\Omega$, aura-t-on une démodulation de bonne qualité ? Justifier. (0,5pt)
+
+**EXERCICE 4 : Mécanique (5,5 points)**
+
+Les parties 1 et 2 sont indépendantes
+
+**Partie1 : Mouvement d'un satellite artificiel**
+
+On se propose d'étudier dans cette partie le mouvement d'un satellite artificiel autour de la Terre. Un satellite(S) de centre d'inertie $G_s$ et de masse $m_s$ est destiné à l'observation des océans.
+
+Dans le référentiel géocentrique considéré galiléen, (S) décrit une orbite circulaire autour de la Terre avec une période de révolution $T$ . (S) se trouve à une altitude $h$ de la surface de la Terre (figure 1). (On note que dans la figure 1 l'échelle n'est pas respectée).
+
+On considère que la Terre est sphérique, de centre O, de rayon $R_T$ , de masse $m_T$ et ayant une symétrie sphérique de répartition de masse et que (S) n'est soumis qu'à la force gravitationnelle exercée par la Terre.
 
 -- 6 of 6 --
 
+المستوى: 6 NS28F الامتحان الوطني الموحد لجهة الرباط سلا القنيطرة - الدورة العادية 2025 - مادة: الفيزياء والكيمياء - الشعبة: علوم الحياة والأرض (نظام فاصل)
+
+**Données :** - Constante de gravitation universelle : $G=6,67.10^{-11} \text{ kg}^{-1}.\text{m}^3.\text{s}^{-2}$ ;
+- Rayon de la Terre : $R_T=6380 \text{ km}$ ;
+- Période de révolution : $T=1\text{h}52\text{min}$ ;
+- L'altitude : $h=1336 \text{ km}$.
+
+**Figure 1**
+*Diagramme montrant la Terre (centre O) et le satellite (S). Vecteurs $\vec{u}, \vec{n}, h$.*
+
+**1-** Ecrire l'expression vectorielle de la force d'attraction gravitationnelle $\vec{F}$ exercée par la Terre sur (S) dans la base de Freinet $(\vec{u};\vec{n})$ (figure 1). (0,5pt)
+
+**2-** En appliquant la deuxième loi de Newton :
+
+**2-1-** Montrer que le mouvement circulaire du centre d'inertie $G_s$ autour de la Terre est uniforme. (0,5pt)
+
+**2-2-** Déterminer $v_s$ la norme de la vitesse de $G_s$ en fonction de $G, m_T, R_T$ et $h$. (0,75pt)
+
+**2-3-** Déduire la relation : $\frac{T^2}{(R_T+h)^3}=k$ ($k$ étant une constante), traduisant la troisième loi de Kepler relative au mouvement du centre d'inertie $G_s$ autour de la Terre. (0,75pt)
+
+**3-** Calculer alors la valeur de la masse $m_T$. (0,5pt)
+
+**Partie 2 : Mouvement d'un oscillateur**
+
+L'oscillateur mécanique étudié est modélisé par le système (solide-ressort) constitué d'un solide (S) de masse $m=250\text{g}$ et d'un ressort à spires non jointives, de masse négligeable et de raideur $K$ .
+
+**Figure 2**
+*Montage ressort-solide horizontal sur axe x, origine O.*
+
+Le ressort est horizontal, une de ses extrémités est fixe et sur l'autre on accroche le solide (S). Ce solide peut glisser sans frottement sur le plan horizontal.
+
+On étudie le mouvement du centre d'inertie G du solide (S) dans un repère $R(O,\vec{i})$ lié à un référentiel terrestre considéré galiléen.
+
+On repère la position de G à un instant $t$ par l'abscisse $x$ sur l'axe $(O,\vec{i})$. A l'équilibre, l'abscisse de G est nul (figure 2).
+
+On écarte (S) de sa position d'équilibre dans le sens positif d'une distance $X_m$ et on le lâche sans vitesse initiale à un instant choisi comme origine des dates ($t=0$).
+
+L'exploitation d'un enregistrement vidéo du mouvement de G à l'aide d'un logiciel adéquat, a permis d'obtenir la courbe de la figure 3 représentant l'évolution temporelle de la vitesse $v_x(t)$ de G.
+
+**Figure 3**
+*Graphe $v_x (10^{-2} \text{ ms}^{-1})$ en fonction de $t$. Courbe cosinus amortie ou pure. Valeurs max 12,5, min -6,25. Intervalle marqué.*
+
+**1-** En appliquant la deuxième loi de Newton, établir l'équation différentielle vérifiée par l'abscisse $x(t)$. (0,5pt)
+
+**2-** La solution de cette équation différentielle s'écrit $x(t)=X_m \cos(\frac{2\pi}{T_0}t+\varphi)$ avec $T_0$ la période propre de l'oscillateur.
+
+**2-1-** Déterminer les valeurs de : $T_0, X_m$ et $\varphi$. (0,75pt)
+
+**2-2-** Déduire la valeur de la raideur $K$ (On prend $\pi^2=10$). (0,5pt)
+
+**3-** Déterminer la variation de l'énergie potentielle élastique du système (solide (S) - ressort) entre les instants $t=1\text{s}$ et $t=2,5\text{s}$. (0,75pt)
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1 (Page 4)] ---
+- **Contexte de l'exercice** : Exercice 3 : Électricité - Charge d'un condensateur.
+- **Description du dispositif ou montage** : Circuit contenant un générateur de courant G, un interrupteur K avec deux positions (1) et (2), une résistance R, un condensateur $C_0$, une bobine (b) de caractéristiques $(L, r)$, et un voltmètre M mesurant la tension $u_c$ aux bornes du condensateur. Le point N est une borne de sortie.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma de circuit).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2 (Page 4)] ---
+- **Contexte de l'exercice** : Exercice 3 : Électricité - Charge d'un condensateur.
+- **Description du dispositif ou montage** : Graphe de l'évolution temporelle de la tension $u_c(t)$ lors de la charge.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées : $u_c(\text{V})$, gradué de 0 à 4. Axe des abscisses : $t(\text{s})$, gradué de 0 à 4. La courbe est une droite passant par l'origine $(0,0)$, indiquant une variation linéaire de la tension en fonction du temps.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3 (Page 5)] ---
+- **Contexte de l'exercice** : Exercice 3 : Électricité - Décharge d'un condensateur dans un dipôle RL.
+- **Description du dispositif ou montage** : Graphe de la tension $u_c(t)$ lors de la décharge oscillante.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées : $u_c(\text{V})$, gradué de -4 à 7. Axe des abscisses : $t$. La courbe présente des oscillations amorties. Une annotation indique un intervalle de temps $7.10^{-3}$. Des points $t_a$ et $t_b$ sont marqués sur l'axe des temps.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 4 (Page 5)] ---
+- **Contexte de l'exercice** : Exercice 3 : Électricité - Sélection et démodulation d'une onde modulée en amplitude.
+- **Description du dispositif ou montage** : Chaîne électronique simplifiée. Comprend une antenne, une diode D, un condensateur C, un étage d'amplification (Étage 1), un circuit de démodulation avec diode D, résistance R, condensateur $C_0$, résistance $R_2$, et un mètre M (Étage 2), suivi d'un second amplificateur vers une sortie HP.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma bloc).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1 (Page 6)] ---
+- **Contexte de l'exercice** : Exercice 4 : Mécanique - Mouvement d'un satellite artificiel.
+- **Description du dispositif ou montage** : Schéma montrant la Terre (centre O, rayon $R_T$) et un satellite (S) sur une orbite circulaire. Vecteurs position $\vec{u}$, normale $\vec{n}$, et altitude $h$.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma géométrique).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2 (Page 6)] ---
+- **Contexte de l'exercice** : Exercice 4 : Mécanique - Mouvement d'un oscillateur.
+- **Description du dispositif ou montage** : Système masse-ressort horizontal. Un solide (S) de masse $m$ est attaché à un ressort de raideur $K$. L'origine O correspond à la position d'équilibre. Axe des abscisses $x$.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma de montage).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3 (Page 6)] ---
+- **Contexte de l'exercice** : Exercice 4 : Mécanique - Mouvement d'un oscillateur.
+- **Description du dispositif ou montage** : Graphe de l'évolution temporelle de la vitesse $v_x(t)$ du centre d'inertie G.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées : $v_x (10^{-2} \text{ ms}^{-1})$, gradué de -6,25 à 12,5. Axe des abscisses : $t$. La courbe est sinusoïdale (type cosinus) avec des extrémités à +12,5 et -6,25. Un intervalle de temps est marqué par une double flèche.

@@ -1,48 +1,627 @@
-
-
 -- 1 of 12 --
 
+**En-tête du document :**
+- **Établissement** : الامتحان الوطني الموحد للدورة العادية 2021 - المسلك: العلوم التجريبية (شعبة علوم الحياة والأرض)
+- **Durée** : 3h
+- **Coefficient** : 7
+- **Matière** : الفيزياء والكيمياء (Physique et Chimie)
+- **Shu'ba ou Maskaab** : العلوم التجريبية (شعبة علوم الحياة والأرض)
+- **Numéro de série** : SSSSSSSSSSSSSSSSSS
+- **Code** : NS 28F
 
+**Consignes générales :**
+L'usage de la calculatrice scientifique non programmable est autorisée.
+On donnera les expressions littérales avant de passer aux applications numériques.
+Le sujet comporte 5 exercices
+
+**Exercice I (7 points) :**
+- Etude cinétique d'une réaction chimique
+- Etude d'une solution aqueuse d'un acide carboxylique
+
+**Exercice II (3 points) :**
+- Propagation des ondes lumineuses
+
+**Exercice III (2,5 points) :**
+- Désintégration du plutonium 238
+
+**Exercice IV (4,75 points) :**
+- Réponse d'un dipôle RC à un échelon de tension
+- Oscillations électriques non amorties dans un circuit LC
+- Modulation d'amplitude d'un signal
+
+**Exercice V (2,75 points) :**
+- Etude du mouvement d'un parachutiste
 
 -- 2 of 12 --
 
+**En-tête :** Page 2, NS 28F, même titre que la page 1.
 
+**EXERCICE I ( 7 points)**
+
+Les parties 1 et 2 sont indépendantes
+
+**Partie1 : Etude cinétique d'une réaction chimique**
+
+L'une des plus anciennes réactions de synthèse est la fabrication du savon. Le savon est un produit composé de molécules obtenues par réaction chimique, entre un composé organique et une solution aqueuse d'hydroxyde de sodium.
+Cette partie de l'exercice se propose d'étudier, par conductimétrie, la cinétique de la réaction de synthèse d'un savon. Cette réaction se produit entre l'éthanoate d'éthyle de formule $CH_3COOC_2H_5$ et une solution aqueuse d'hydroxyde de sodium $Na^+_{(aq)} + HO^-_{(aq)}$.
+À un instant choisi comme origine des dates $t=0$, on introduit, en excès, l'éthanoate d'éthyle dans un ballon contenant une quantité de matière $n_0(HO^-) = 10^{-3}$ mol d'ions hydroxide. On obtient un mélange réactionnel ayant un volume $V_0 = 100$ mL.
+Il se produit, sous une température constante, une réaction modélisée par l'équation chimique suivante :
+
+$$CH_3COOC_2H_5_{(aq)} + HO^-_{(aq)} \rightarrow CH_3COO^-_{(aq)} + C_2H_5OH_{(aq)}$$
+
+0,75 1) Dresser le tableau d'avancement de cette réaction et déterminer la valeur de l'avancement final $x_r$ sachant que cette réaction est totale.
+
+0,25 2) On mesure, à chaque instant, la conductivité $\sigma$ du mélange réactionnel.
+La courbe de la figure1 donne les variations de la conductivité du mélange réactionnel en fonction du temps.
+La droite (T) représente la tangente à la courbe au point d'abscisse $t_1 = 4$ min.
+L'expression de la conductivité $\sigma$ du mélange réactionnel en fonction de $x$ de la réaction est :
+$\sigma = f(x) = 0,25 - 160.x$ où $\sigma$ est exprimée en $S.m^{-1}$ et $x$ en mol.
+
+0,25 2.1) Définir le temps de demi-réaction $t_{1/2}$.
+
+0,5 2.2) A l'aide de l'expression $\sigma = f(x)$ et de la courbe de la figure1, déterminer la valeur de $t_{1/2}$.
+
+0,5 2.3) Montrer que la vitesse volumique de la réaction à un instant t s'écrit sous la forme :
+$v = - \frac{1}{160.V_0} \frac{d\sigma}{dt}$.
+
+0,5 2.4) Déterminer, en $mol.min^{-1}$, la valeur $v_1$ de cette vitesse à l'instant $t_1 = 4$ min.
+
+**Partie 2 : Etude d'une solution aqueuse d'un acide carboxylique**
+
+Un flacon, dont l'étiquette est illisible, contient une solution aqueuse $S_a$ d'un acide carboxylique de formule et de concentration inconnues. Cette partie de l'exercice se propose :
+- de déterminer la concentration de cette solution aqueuse.
+- d'identifier cet acide.
 
 -- 3 of 12 --
 
+**En-tête :** Page 3, NS 28F, même titre que la page 1.
 
+On notera AH pour désigner l'acide carboxylique et $A^-$ pour désigner sa base conjuguée.
+Toutes les mesures sont réalisées à 25°C.
+
+0,5 1) Dosage de l'acide carboxylique
+1.1) On dose un volume $V_a = 20$ mL de la solution aqueuse $S_a$ de concentration $C_a$ par une solution aqueuse $S_b$ d'hydroxyde de sodium $Na^+_{(aq)} + HO^-_{(aq)}$ de concentration $C_b = 10^{-1} mol.L^{-1}$.
+La courbe de la figure 2 représente les variations du pH du mélange réactionnel en fonction du volume $V_b$ de la solution basique versée.
+
+1.1) Ecrire l'équation de la réaction du dosage.
+
+0,5 1.2) Déterminer graphiquement les coordonnées $pH_{eq}$ et $V_{be}$ du point d'équivalence.
+
+0,5 1.3) Déterminer la valeur de la concentration $C_a$.
+
+2) Identification de l'acide carboxylique
+La solution $S_a$ est préparée par dissolution de l'acide AH dans l'eau. La mesure du pH de la solution $S_a$ donne : pH = 2,88.
+
+0,5 2.1) Ecrire l'équation de la réaction de l'acide AH avec l'eau.
+
+0,5 2.2) Montrer que le taux d'avancement final de la réaction est : $\tau \approx 1,32\%$.
+
+0,75 2.3) Déterminer l'expression du quotient de la réaction $Q_{r,eq}$ à l'équilibre en fonction de $C_a$ et $\tau$.
+Vérifier que sa valeur est : $Q_{r,eq} \approx 1,77.10^{-5}$.
+
+0,5 2.4) Identifier l'acide carboxylique AH étudié en vous aidant du tableau des valeurs de pKa des couples acide/base ci-dessous. Justifier votre réponse.
+
+| Couple acide/base | Valeur de pKa |
+| :--- | :--- |
+| HCOOH/HCOO$^-$ | 3,75 |
+| C$_2$H$_5$-COOH/C$_2$H$_5$-COO$^-$ | 4,2 |
+| CH$_3$COOH/CH$_3$COO$^-$ | 4,75 |
+| CH$_3$-CH$_2$-COOH/CH$_3$-CH$_2$-COO$^-$ | 4,9 |
+
+0,75 3) Déterminer le volume $V_{bt}$ de la solution $S_b$ versée, au cours du dosage, pour que: $\frac{[AH_{(aq)}]}{[A^-_{(aq)}]} = 2,24$
+
+**EXERCICE II ( 3 points)**
+
+**Propagation des ondes lumineuses**
+
+1) Un faisceau cylindrique de lumière blanche, émis par une source S, arrive perpendiculairement à la face d'un prisme (P) en verre (figure 1). Le faisceau lumineux issu du prisme arrive sur un écran (E). On observe alors sur cet écran un spectre lumineux.
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1 (Page 2)] ---
+- **Contexte de l'exercice** : Chimie - Etude cinétique d'une réaction chimique
+- **Description du dispositif ou montage** : Graphique représentant la conductivité $\sigma$ en fonction du temps $t$.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées $\sigma (S.m^{-1})$ gradué de 0 à 0,25. Axe des abscisses $t (min)$ gradué de 0 à 20. Courbe décroissante convexe tendant vers une asymptote horizontale. Une tangente (T) est tracée au point d'abscisse $t_1 = 4$ min.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2 (Page 3)] ---
+- **Contexte de l'exercice** : Chimie - Dosage de l'acide carboxylique
+- **Description du dispositif ou montage** : Graphique représentant le pH en fonction du volume $V_b$ de solution basique versée.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées pH gradué de 0 à 12. Axe des abscisses $V_b (mL)$ gradué de 0 à 25. Courbe sigmoïdale typique d'un dosage acide-base avec une partie verticale autour du point d'équivalence.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1 (Page 3)] ---
+- **Contexte de l'exercice** : Physique - Propagation des ondes lumineuses
+- **Description du dispositif ou montage** : Schéma optique montrant une source ponctuelle S émettant un faisceau cylindrique blanc vers un prisme (P) en verre. Le faisceau traverse le prisme et se décompose en un spectre lumineux sur un écran (E).
+- **Analyse détaillée du graphe / courbe / tableau** : Le schéma indique les points S (source), P (prisme), E (écran) et le spectre lumineux émergent.
 
 -- 4 of 12 --
 
+المدة الزمنية للمادة الواحدة - الدورة العادية - 2021
+المدة : 3 ساعات
+المادة : الفيزياء والكيمياء - الشعب العلمية والتقنية الأصلية - مسلك : علوم الحياة والأرض (شعبة فرنسية)
 
+| المدة | 4 | NS 28F | 8 |
+| :--- | :--- | :--- | :--- |
+
+- Choisir parmi les propositions suivantes, celle qui est juste.
+L'expérience précédente montre que la lumière blanche est :
+
+| A | est monochromatique | B | n'est formée que de deux radiations différentes | C | est polychromatique |
+
+2) On éclaire le prisme (P) successivement par deux radiations lumineuses : l'une est rouge et l'autre est jaune.
+
+**Données :**
+- la célérité de la lumière dans le vide : $c = 3.10^8 \text{ m.s}^{-1}$.
+- la longueur d'onde de la radiation rouge dans le prisme est : $\lambda_r = 474 \text{ nm}$.
+- la fréquence de la radiation rouge est : $\nu_r = 3,91.10^{14} \text{ Hz}$.
+- les longueurs d'onde de la radiation jaune sont : $\lambda_{0j} = 589 \text{ nm}$ dans le vide et $\lambda_j = 355 \text{ nm}$ dans le prisme (P).
+
+**0,5** 2.1) Calculer la fréquence $\nu_j$ de la radiation jaune.
+
+**0,5** 2.2) Calculer les célérités $v_j$ et $v_r$ des radiations jaune et rouge dans le prisme.
+
+**0,25** 2.3) Quelle propriété du prisme est mise en évidence par les résultats de la question 2.2 ?
+
+3) On éclaire, avec une radiation laser ayant une longueur d'onde $\lambda$, une fente fine horizontale de largeur $a = 0,06 \text{ mm}$. On observe sur un écran, placé à une distance D de la fente, un ensemble de taches de direction verticale. La tache centrale a une largeur L (figure 2).
+On change la distance D et on mesure à chaque fois la largeur L. La courbe de la figure 3 donne les variations de L en fonction de D : $L = f(D)$.
+
+**0,5** 3.1) Etablir l'expression de L en fonction de $\lambda$, a et D.
+(0 étant petit, on prend $\tan \theta \approx \theta$).
+
+**0,5** 3.2) En exploitant la courbe $L = f(D)$, montrer que $\lambda = 600 \text{ nm}$.
+
+**0,5** 3.3) On fixe l'écran à une distance $D_1 = 2 \text{ m}$ de la fente, et on remplace la fente par un cheveu fin de diamètre d. On obtient alors, avec la même radiation de longueur d'onde $\lambda$, une tache centrale de largeur $L_1 = 3 \text{ cm}$.
+Déterminer le diamètre d du cheveu.
+
+![Figure 2: Schéma d'un laser, une fente de largeur a, un écran à distance D, et un faisceau lumineux divergent avec angle theta et largeur L.](https://placeholder.com/fig2)
+*Figure 2*
+
+![Figure 3: Graphique de L(cm) en fonction de D(cm). Une droite passant par l'origine.](https://placeholder.com/fig3)
+*Figure 3*
+
+**EXERCICE III (2,5 points)**
+
+**Désintégration du plutonium 238**
+
+Le stimulateur cardiaque (pacemaker) est un dispositif qui, une fois implanté dans l'organisme, fournit des impulsions électriques destinées à stimuler les muscles cardiaques. Ces impulsions permettent d'accélérer la pulsation du cœur lorsqu'il est trop lent. Certains stimulateurs cardiaques fonctionnent à partir de l'énergie libérée lors de la désintégration alpha des noyaux du plutonium 238.
+Cet exercice se propose d'étudier un stimulateur cardiaque au plutonium 238.
 
 -- 5 of 12 --
 
+المدة الزمنية للمادة الواحدة - الدورة العادية - 2021
+المدة : 3 ساعات
+المادة : الفيزياء والكيمياء - الشعب العلمية والتقنية الأصلية - مسلك : علوم الحياة والأرض (شعبة فرنسية)
 
+| المدة | 5 | NS 28F | 8 |
+| :--- | :--- | :--- | :--- |
+
+**Données :**
+
+| noyau | Protactinium 238 | Uranium 234 | Uranium 238 | Neptunium 238 | Plutonium 238 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| symbole | $^{238}_{91} \text{Pa}$ | $^{234}_{92} \text{U}$ | $^{238}_{92} \text{U}$ | $^{238}_{93} \text{Np}$ | $^{238}_{94} \text{Pu}$ |
+
+**0,5** 1) Ecrire l'équation de désintégration alpha du plutonium 238 en identifiant le noyau fils.
+
+2) La courbe de la figure ci-contre représente l'évolution de l'activité a(t) d'un échantillon de plutonium 238, présent dans un stimulateur cardiaque. On choisit l'instant d'implantation de ce stimulateur dans l'organisme d'un patient comme origine des dates t = 0 .
+
+![Graphique de l'activité A (Bq) en fonction du temps t (jours). Courbe décroissante exponentielle.](https://placeholder.com/activity_graph)
+
+**0,5** 2.1) Déterminer graphiquement la demi-vie $t_{1/2}$ du plutonium 238.
+
+**0,5** 2.2) En déduire que la valeur de la constante radioactive $\lambda$ est : $\lambda = 7,88.10^{-10} \text{ ans}^{-1}$.
+
+**0,5** 2.3) Trouver le nombre $N_0$ de noyaux de plutonium 238, présents à t=0, dans ce stimulateur cardiaque. (on prend : 1an = 365 jours).
+
+**0,5** 3) On considère que ce stimulateur fonctionne de façon efficace lorsque le nombre de noyaux de plutonium 238 qui se désintègrent ne dépasse pas 30% du nombre de noyaux présents dans l'échantillon à t = 0. Déterminer, en ans, la durée maximale $t_{max}$ de fonctionnement efficace du stimulateur cardiaque.
+
+**EXERCICE IV (4,75 points)**
+
+Les circuits des appareils électriques, utilisés dans plusieurs domaines de la vie courante, sont constitués de condensateurs, de bobines, de conducteurs ohmiques, de circuits intégrés ...
+L'objectif de cet exercice est d'étudier :
+- la réponse d'un dipôle RC à un échelon de tension.
+- les oscillations électriques non amorties dans un circuit LC.
+- la modulation d'amplitude d'un signal.
+
+**I- Réponse d'un dipôle RC à un échelon de tension**
+
+On réalise le montage, représenté sur le schéma de la figure 1, constitué des éléments suivants :
+- un générateur idéal de tension de force électromotrice E ;
+- un condensateur D de capacité C initialement déchargé ;
+- un conducteur ohmique de résistance R = $10^3 \Omega$ ;
+- un interrupteur K.
+On ferme l'interrupteur à un instant choisi comme origine des dates t = 0. Un système d'acquisition informatisé permet de tracer la courbe de la figure 2, représentant les variations de $\frac{du_c}{dt}$ en fonction de $u_c$ ; $u_c$ étant la tension à un instant t aux bornes du condensateur et $\frac{du_c}{dt}$ sa dérivée par rapport au temps.
+
+![Figure 1: Circuit RC avec générateur E, interrupteur K, résistance R, condensateur D, tension u_c.](https://placeholder.com/fig1)
+*Figure 1*
+
+![Figure 2: Graphique de du_c/dt (V.s^-1) en fonction de u_c (V). Ligne droite décroissante.](https://placeholder.com/fig2_ex4)
+*Figure 2*
 
 -- 6 of 12 --
 
+المدة الزمنية للمادة الواحدة - الدورة العادية - 2021
+المدة : 3 ساعات
+المادة : الفيزياء والكيمياء - الشعب العلمية والتقنية الأصلية - مسلك : علوم الحياة والأرض (شعبة فرنسية)
 
+| المدة | 6 | NS 28F | 8 |
+| :--- | :--- | :--- | :--- |
+
+**0,5** 1) Montrer que l'équation différentielle vérifiée par la tension $u_c(t)$ s'écrit sous la forme :
+$$ \frac{du_c}{dt} = -\frac{1}{RC}u_c + \frac{E}{RC} $$
+
+**0,5** 2) En exploitant la courbe de la figure 2 , montrer que la capacité du condensateur est : $C = 12 \mu\text{F}$.
+
+**II- Oscillations électriques non amorties dans un circuit LC**
+
+On réalise le montage représenté sur le schéma de la figure 3. Ce montage est constitué du condensateur D précédemment chargé, et d'une bobine d'inductance L et de résistance négligeable. Un système d'acquisition informatisé permet de tracer la courbe représentant l'évolution de la charge q(t) du condensateur (figure 4).
+
+![Figure 3: Circuit LC avec bobine L, condensateur D, tension u_c.](https://placeholder.com/fig3_ex4)
+*Figure 3*
+
+**0,25** 1) Préciser, parmi les trois régimes d'oscillations, le régime mis en évidence par la courbe de la figure 4 .
+
+**0,5** 2) Etablir l'équation différentielle vérifiée par la charge q(t) du condensateur.
+
+**0,5** 3) Trouver l'expression de la période propre $T_0$ de l'oscillateur en fonction de L et de C pour que l'expression $q(t) = Q_m \cos(\frac{2\pi}{T_0}t)$ soit solution de cette équation différentielle.
+
+**0,25** 4) Déterminer graphiquement la valeur de $T_0$.
+
+**0,5** 5) En déduire la valeur de L. (on prend $\pi^2 = 10$).
+
+![Figure 4: Graphique de q ($\mu$C) en fonction de t (ms). Oscillations sinusoïdales.](https://placeholder.com/fig4_ex4)
+*Figure 4*
+
+**III- Modulation d'amplitude d'un signal**
+
+Pour obtenir un signal modulé en amplitude, on réalise le montage représenté sur le schéma de la figure 5 où le multiplicateur X est un circuit intégré possédant deux entrées $E_1$ et $E_2$ et une sortie S.
+On applique :
+- sur l'entrée $E_1$ une tension $u_1(t)$ ayant pour expression $u_1(t) = P_m \cos(2\pi f_p t)$.
+- sur l'entrée $E_2$ une tension $u_2(t)$ ayant pour expression $u_2(t) = U_0 + s(t)$ où $s(t) = S_m \cos(2\pi f t)$, t est la tension modulante et $U_0$ est la composante continue de cette tension.
+On obtient à la sortie S du multiplicateur X une tension $u_c(t)$ modulée en amplitude.
+On visualise la tension $u_1(t)$ sur la voie A de l'oscilloscope et la tension $u_2(t)$ sur la voie B (figure 6).
+
+![Figure 5: Schéma bloc du multiplicateur X avec entrées E1, E2 et sortie S.](https://placeholder.com/fig5_ex4)
+*Figure 5*
+
+![Figure 6: Trace d'oscilloscope montrant u1(t) et u2(t).](https://placeholder.com/fig6_ex4)
+*Figure 6*
+
+**Données :** Sensibilité verticale : 1V / div
+Sensibilité horizontale : 2 ms / div
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2 (Page 4)] ---
+- **Contexte de l'exercice** : Physique - Optique (Diffraction)
+- **Description du dispositif ou montage** : Un laser émet un faisceau lumineux qui passe par une fente de largeur $a$. Le faisceau diffracte sur un écran placé à une distance $D$. L'angle de diffraction est noté $\theta$ et la largeur de la tache centrale sur l'écran est $L$.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A (Schéma uniquement)
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3 (Page 4)] ---
+- **Contexte de l'exercice** : Physique - Optique (Diffraction)
+- **Description du dispositif ou montage** : Graphique représentant la largeur $L$ en fonction de la distance $D$.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des abscisses : $D(\text{cm})$ de 0 à 150. Axe des ordonnées : $L(\text{cm})$ de 0 à 2,4. La courbe est une droite passant par l'origine $(0,0)$.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphique d'activité (Page 5)] ---
+- **Contexte de l'exercice** : Chimie - Désintégration radioactive (Plutonium 238)
+- **Description du dispositif ou montage** : Graphique de l'activité $A$ en Becquerel (Bq) en fonction du temps $t$ en jours.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des abscisses : $t (\text{jours})$ de 0 à 100. Axe des ordonnées : $A (\text{Bq})$ échelle logarithmique ou linéaire (valeurs : $0, 2,5.10^9, 5,10^9, 7,5.10^9, 10^{10}$). La courbe est décroissante.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1 (Page 5)] ---
+- **Contexte de l'exercice** : Physique - Électricité (Dipôle RC)
+- **Description du dispositif ou montage** : Circuit série contenant un générateur de tension $E$, un interrupteur $K$, une résistance $R$, et un condensateur $D$. La tension aux bornes du condensateur est notée $u_c$. Le courant $i$ circule dans le circuit.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A (Schéma uniquement)
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2 (Page 5)] ---
+- **Contexte de l'exercice** : Physique - Électricité (Dipôle RC)
+- **Description du dispositif ou montage** : Graphique représentant la dérivée de la tension du condensateur $\frac{du_c}{dt}$ en fonction de la tension $u_c$.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des abscisses : $u_c (\text{V})$ de 0 à 12. Axe des ordonnées : $\frac{du_c}{dt} (\text{V.s}^{-1})$ de 0 à 1000. La courbe est une droite décroissante passant par $(0, 1000)$ environ et coupant l'axe des abscisses vers $u_c = 12$.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3 (Page 6)] ---
+- **Contexte de l'exercice** : Physique - Électricité (Circuit LC)
+- **Description du dispositif ou montage** : Circuit contenant une bobine d'inductance $L$ et un condensateur $D$ en boucle fermée. La tension aux bornes du condensateur est $u_c$. Le courant est $i$.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A (Schéma uniquement)
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 4 (Page 6)] ---
+- **Contexte de l'exercice** : Physique - Électricité (Oscillations LC)
+- **Description du dispositif ou montage** : Graphique de la charge $q$ du condensateur en fonction du temps $t$.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des abscisses : $t (\text{ms})$. Axe des ordonnées : $q (\mu\text{C})$. La courbe est une oscillation sinusoïdale amortie ou non amortie (texte dit non amorties). Valeurs maximales autour de $\pm 72 \mu\text{C}$.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 5 (Page 6)] ---
+- **Contexte de l'exercice** : Physique - Électronique (Modulation d'amplitude)
+- **Description du dispositif ou montage** : Bloc multiplicateur $X$ avec deux entrées $E_1$ (tension $u_1$) et $E_2$ (tension $u_2$) et une sortie $S$ (tension $u_s$). Un interrupteur $S$ est sur la sortie.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A (Schéma uniquement)
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 6 (Page 6)] ---
+- **Contexte de l'exercice** : Physique - Électronique (Oscilloscope)
+- **Description du dispositif ou montage** : Écran d'oscilloscope montrant deux signaux $u_1(t)$ et $u_2(t)$.
+- **Analyse détaillée du graphe / courbe / tableau** : Deux traces visibles. Une trace haute fréquence modulée ($u_1(t)$ ou $u_c(t)$) et une trace basse fréquence enveloppe ($u_2(t)$). Données : Sensibilité verticale : 1V/div, Sensibilité horizontale : 2ms/div.
 
 -- 7 of 12 --
 
+<table>
+  <tr>
+    <td>المدرسة</td>
+    <td>NS 28F</td>
+    <td rowspan="2">الامتحان الوطني الموحد - الدورة العادية 2021 - مادة: فيزياء وكيمياء - الشعبتين: علوم الحياة والأرض وعلوم التقنية (خيار فرنسية)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>8</td>
+    <td></td>
+  </tr>
+</table>
 
+0,25 1) Définir la modulation d'amplitude.
+0,5 2) Déterminer graphiquement :
+0,5 2.1) les fréquences Fp et fc.
+0,5 2.2) la valeur de Sm et celle de U0.
+0,5 3) La modulation réalisée dans ce cas sera-t-elle de bonne qualité ? Justifier votre réponse.
+
+# EXERCICE V (2,75 points)
+
+Le parachute est un dispositif destiné, après son ouverture, à freiner le mouvement d'un parachutiste en chute verticale dans l'air.
+
+Cet exercice se propose d'étudier un modèle simplifié du mouvement d'un parachutiste. Ce dernier se laisse tomber sans vitesse initiale d'un hélicoptère en vol stationnaire situé à une hauteur h au-dessus du sol.
+
+On étudie le mouvement du centre d'inertie G du système (S), constitué d'un parachutiste équipé de son parachute, dans le repère (O, $\vec{k}$) lié à un référentiel terrestre considéré comme galiléen (figure 1). On considère que la trajectoire de G est verticale et que l'accélération de la pesanteur reste constante.
+
+**Données :**
+
+* La masse du système (S) : m=100kg ;
+* Accélération de la pesanteur : g=10ms⁻² ;
+* La hauteur h : h=660m .
+
+Le mouvement du système s'effectue en deux phases.
+
+**1) Phase 1 : parachute fermé**
+
+Le parachutiste se laisse tomber de l'hélicoptère sans vitesse initiale à un instant choisi comme origine des dates t=0. La chute se fait durant cette phase avec le parachute fermé.
+
+On modélise l'évolution de la vitesse du centre d'inertie G du système (S) durant cette phase par la courbe de la figure 2.
+
+0,5 1.1) Quelle est la nature du mouvement de G ? justifier votre réponse.
+
+0,5 1.2) Peut-on considérer que le mouvement du parachutiste, durant cette phase, est une chute libre ? Justifier votre réponse.
+
+**2) Phase 2 : parachute ouvert**
+
+Le parachutiste ouvre son parachute après une durée $\Delta t_1 = 4s$ depuis le début de sa chute. On choisit l'instant d'ouverture du parachute comme nouvelle origine des dates pour cette phase.
+
+Durant cette phase, le système est soumis à son poids et aux frottements de l'air modélisés par une force de contact $\vec{F} = -\alpha.\vec{v}.v$ avec v la vitesse de G et $\alpha$ une constante positive.
+
+On modélise l'évolution de la vitesse de G durant cette phase par la courbe de la figure 3.
+
+0,5 2.1) Montrer que l'équation différentielle vérifiée par la
+
+![Figure 1: Image d'un hélicoptère et d'un parachutiste avec repère (O, k) et axe z vers le bas.](image_placeholder_1)
+![Figure 2: Graphique v(m.s⁻¹) en fonction de t(s), droite passant par l'origine.](image_placeholder_2)
+![Figure 3: Graphique v(m.s⁻¹) en fonction de t(s), courbe décroissante puis constante. Zones "Régime initial" et "Régime permanent".](image_placeholder_3)
 
 -- 8 of 12 --
 
+<table>
+  <tr>
+    <td>المدرسة</td>
+    <td>NS 28F</td>
+    <td rowspan="2">الامتحان الوطني الموحد - الدورة العادية 2021 - مادة: فيزياء وكيمياء - الشعبتين: علوم الحياة والأرض وعلوم التقنية (خيار فرنسية)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>8</td>
+    <td></td>
+  </tr>
+</table>
 
+vitesse v s'écrit : $\frac{dv}{dt} + \frac{\alpha}{m}.v^2 = g$.
+
+0,25 2.2) Trouver l'expression de la vitesse limite $V_g$ du mouvement en fonction de m, g et $\alpha$.
+
+0,25 2.3) Déterminer graphiquement $V_g$.
+
+0,25 2.4) En déduire la valeur de $\alpha$.
+
+0,5 3) Sachant que la durée totale du mouvement de G depuis le début de la chute jusqu'à l'arrivée au sol est $\Delta t = 70s$, trouver la distance d parcourue par G durant le régime initial de la phase 2.
 
 -- 9 of 12 --
 
+<table>
+  <tr>
+    <td>المدرسة</td>
+    <td>NR 28F</td>
+    <td rowspan="2">الامتحان الوطني الموحد - الدورة العادية 2021 - مادة: فيزياء وكيمياء - الشعبتين: علوم الحياة والأرض وعلوم التقنية (خيار فرنسية)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>4</td>
+    <td></td>
+  </tr>
+</table>
 
+<table>
+  <tr>
+    <td colspan="4">EXERCICE I (7 points)</td>
+  </tr>
+  <tr>
+    <td>Question</td>
+    <td>Eléments de réponse</td>
+    <td>Barème</td>
+    <td>Référence de la question dans le cadre de référence</td>
+  </tr>
+  <tr>
+    <td rowspan="5">Partie 1</td>
+    <td>1) xr=10⁻³ mol</td>
+    <td>0,5 0,25</td>
+    <td rowspan="5">- Exploiter les différentes courbes d'évolution de la quantité de matière d'une espèce chimique, sa concentration et l'avancement d'une réaction. - Déterminer graphiquement, sa concentration, la pression ou le volume d'un réactif ou d'un produit. - Dresser le tableau d'avancement d'une réaction et l'exploiter.</td>
+  </tr>
+  <tr>
+    <td>2.1) Définition de t1/2</td>
+    <td>0,25</td>
+  </tr>
+  <tr>
+    <td>Méthode</td>
+    <td>0,25</td>
+  </tr>
+  <tr>
+    <td>2.2) t1/2 = 4 min</td>
+    <td>0,25</td>
+  </tr>
+  <tr>
+    <td>2.3) Méthode</td>
+    <td>0,5</td>
+  </tr>
+  <tr>
+    <td rowspan="5">Partie 2</td>
+    <td>2.4) Méthode v1 ≈ 0,8 mol.m⁻³.min⁻¹</td>
+    <td>0,25 0,25</td>
+    <td rowspan="5">- Interpréter qualitativement la variation de la vitesse de réaction à l'aide d'une des courbes d'évolution tracées. - Déterminer graphiquement la valeur de la vitesse de réaction. - Déterminer le temps de demi-réaction graphiquement ou en exploitant des résultats expérimentaux.</td>
+  </tr>
+  <tr>
+    <td>1.1) AH(aq) + HO(aq) -> A(aq) + H2O(l)</td>
+    <td>0,5</td>
+  </tr>
+  <tr>
+    <td>1.2) pH = 8,8 ; Vb = 20mL</td>
+    <td>2x0,25</td>
+  </tr>
+  <tr>
+    <td>1.3) Cs = Cs.Vs / Va ; Cs = 10⁻¹ mol.L⁻¹</td>
+    <td>0,25 0,25</td>
+  </tr>
+  <tr>
+    <td>2.1) AH(aq) + HO(aq) -> A(aq) + H2O(aq)</td>
+    <td>0,5</td>
+  </tr>
+  <tr>
+    <td rowspan="5"></td>
+    <td>Méthode</td>
+    <td>0,5</td>
+    <td rowspan="5">- Déterminer le taux d'avancement final d'une réaction et le déterminer à partir de données expérimentales. - Déterminer la vitesse de réaction Qr d'un système chimique dans un état donné. - Ecrire et utiliser l'expression de la constante d'acidité Ka et l'associer à l'équation de la réaction d'un acide avec l'eau. - Connaître la relation pKa = - log Ka. - Indiquer l'espèce prédominante connaissant le pH d'une solution aqueuse et le pKa du couple acide/base.</td>
+  </tr>
+  <tr>
+    <td>2.2) Qr,t6 = Cs.t² / 1-t</td>
+    <td>0,5</td>
+  </tr>
+  <tr>
+    <td>2.3) Vérification de la valeur de Qr,t6</td>
+    <td>0,25</td>
+  </tr>
+  <tr>
+    <td>2.4) pKa = 4,75 l'acide est: CH3COOH</td>
+    <td>0,25 0,25</td>
+  </tr>
+  <tr>
+    <td>3) pH = pKa + log [A-]/[AH] ; pH = 4,4 Vb1 = 6 mL</td>
+    <td>0,5 0,25</td>
+  </tr>
+</table>
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1] ---
+- **Contexte de l'exercice** : Physique - Mécanique (Mouvement d'un parachutiste)
+- **Description du dispositif ou montage** : Schéma montrant un hélicoptère dans les airs et un parachutiste descendant avec un parachute ouvert. Repère (O, $\vec{k}$) lié au référentiel terrestre galiléen. Axe z orienté vers le bas.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A (Image illustrative)
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2] ---
+- **Contexte de l'exercice** : Physique - Mécanique (Phase 1 : parachute fermé)
+- **Description du dispositif ou montage** : Graphe de la vitesse v en fonction du temps t.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées : v (m.s⁻¹), échelle de 0 à 30+. Axe des abscisses : t (s), échelle de 0 à 3. Courbe : droite passant par l'origine (0,0), indiquant une vitesse proportionnelle au temps (mouvement rectiligne uniformément accéléré).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3] ---
+- **Contexte de l'exercice** : Physique - Mécanique (Phase 2 : parachute ouvert)
+- **Description du dispositif ou montage** : Graphe de la vitesse v en fonction du temps t.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées : v (m.s⁻¹), échelle de 0 à 40+. Axe des abscisses : t (s), échelle de 0 à 50. Courbe : décroissante rapide puis tendant vers une asymptote horizontale. Zones annotées : "Régime initial" et "Régime permanent". Valeur initiale élevée (environ 40 m.s⁻¹), valeur limite permanente faible (environ 5-10 m.s⁻¹).
 
 -- 10 of 12 --
 
+EXERCICE II (3 points)
 
+| Question | Eléments de réponse | Barème | Référence de la question dans le cadre de référence |
+| :--- | :--- | :--- | :--- |
+| 1) | C | 0,25 | - Définir une lumière monochromatique et une lumière polychromatique. |
+| 2.1) | $v_j = \frac{c}{\lambda_j}$ | 0,25 | - Connaître les limites des longueurs d'onde dans le vide du spectre visible et les couleurs correspondantes. |
+| | $v_j = 5,09.10^{14} \text{ Hz}$ | 0,25 | |
+| 2.2) | $v_r = \lambda_r . v_r ; v_r = 1,85.10^{14} \text{ m.s}^{-1}$ | 0,25 | - Connaître et exploiter la relation $\lambda = c / v$. |
+| | $v_j = \lambda_j . v_j ; v_j = 1,81.10^{14} \text{ m.s}^{-1}$ | 0,25 | - Connaître et exploiter la relation $n = \frac{c}{v}$. |
+| 2.3) | Le prisme est un milieu dispersif | 0,25 | - Déterminer l'indice de réfraction d'un milieu transparent pour une fréquence donnée. |
+| | | | - Exploiter un document ou une figure de diffraction dans le cas des ondes lumineuses |
+| 3.1) | Méthode | 0,25 | - Connaître et exploiter la relation $\theta = \lambda/a$ et connaître |
+| | $L = \frac{2aD}{a}$ | 0,25 | l'unité et la signification de $\theta$ et $\lambda$. |
+| 3.2) | Méthode | 0,5 | - Connaître l'influence de la dimension de l'ouverture |
+| | | | ou de l'obstacle sur le phénomène de diffraction. |
+| 3.3) | $d = \frac{2\lambda D}{L_j}$ | 0,25 | |
+| | $d = 0,08 \text{ mm}$ | 0,25 | |
+
+EXERCICE III (2,5 points)
+
+| Question | Eléments de réponse | Barème | Référence de la question dans le cadre de référence |
+| :--- | :--- | :--- | :--- |
+| 1) | $^{234}_{94}\text{Pu} \rightarrow ^{224}_{92}\text{U} + ^4_2\text{He}$ | 0,25 | - Connaître la signification du symbole $^{A}_{Z}X$ et donner la composition du noyau correspondant. |
+| | Le noyau fils est : $^{234}_{92}\text{U}$ | 0,25 | - Définir les radioactivités $\alpha, \beta^-, \beta^+$ et l'émission $\gamma$. |
+| 2.1) | $t_{1/2} \approx 88 \text{ ans}$ | 0,5 | - Écrire l'équation d'une réaction nucléaire en appliquant les deux lois de conservation. |
+| | | | - Définir la constante de temps $\tau$ et la demi-vie $t_{1/2}$. |
+| 2.2) | $\lambda = \frac{\ln 2}{t_{1/2}}$ | 0,5 | - Exploiter les relations entre $\tau, \lambda$ et $t_{1/2}$. |
+| | | | - Connaître et exploiter la loi de décroissance radioactive et exploiter sa courbe correspondante. |
+| 2.3) | $N_0 = \frac{a_0}{\lambda}$ | 0,25 | |
+| | $N_0 \approx 4.10^{20}$ | 0,25 | |
+| 3) | Méthode | 0,25 | |
+| | $t_{max} \approx 45,26 \text{ ans}$ | 0,25 | |
 
 -- 11 of 12 --
 
+EXERCICE IV (4,75 points)
 
+| Question | Eléments de réponse | Barème | Référence de la question dans le cadre de référence |
+| :--- | :--- | :--- | :--- |
+| I- | | | - Connaître et exploiter la relation $i = \frac{dq}{dt}$ pour un condensateur en convention récepteur. |
+| 1) | Méthode | 0,5 | - Connaître et exploiter la relation $q = C.u$. |
+| | | | - Connaître la capacité d'un condensateur, son unité F et ses multiples $\mu F, nF$ et $pF$. |
+| | | | - Déterminer la capacité d'un condensateur graphiquement et par calcul. |
+| 2) | Méthode | 0,5 | - Connaître la capacité du condensateur équivalent des montages en série et en parallèle, et l'intérêt de chaque montage. |
+| | | | - Établir l'équation différentielle et vérifier sa solution lorsque le dipôle RC est soumis à un échelon de tension. |
+| II- | | | |
+| 1) | Régime périodique | 0,25 | - Définir et reconnaître les régimes périodique, pseudo-périodique et aperiodique. |
+| | | | - Reconnaître et représenter les courbes de variation de la tension aux bornes du condensateur en fonction du temps pour les trois régimes et les exploiter. |
+| 2) | Méthode | 0,25 | - Établir l'équation différentielle pour la tension aux bornes du condensateur ou pour sa charge $q(t)$ dans le cas d'un amortissement négligeable et vérifier sa solution. |
+| | $\frac{d^2q}{dt^2} + \frac{1}{LC}.q = 0$ | 0,25 | - Connaître et exploiter l'expression de la période propre. |
+| | Méthode | 0,25 | |
+| 3) | Méthode | 0,25 | |
+| | $T_0 = 2\pi\sqrt{LC}$ | 0,25 | |
+| | $T_0 = 21 \text{ ms}$ | 0,25 | |
+| 4) | $T_0 = 21 \text{ ms}$ | 0,25 | |
+| 5) | Méthode | 0,25 | |
+| | $L \approx 0,92 \text{ H}$ | 0,25 | |
+| III- | | | - Savoir qu'une modulation d'amplitude est de rendre l'amplitude du signal modulé fonction affine de la tension modulante. |
+| 1) | Définition | 0,25 | - Contrôler les conditions à remplir pour éviter la surmodulation. |
+| 2.1) | $F_p = 1500 \text{ Hz} ; f_c = 125 \text{ Hz}$ | 2x0,25 | - Reconnaître les étapes de la modulation d'amplitude. |
+| | | | - Exploiter les différentes courbes obtenues expérimentalement. |
+| 2.2) | $S_m = 0,5 \text{ V} ; U_o = 1,5 \text{ V}$ | 2x0,25 | - Reconnaitre, à partir d'un schéma, les différents étages du montage de modulation. |
+| | | | - Contrôler les conditions permettant d'obtenir une modulation d'amplitude |
+| 3) | $F_p >> f_c \text{ and } m=0,33 (m<1)$ | 0,25 | |
+| | bonne modulation | 0,25 | |
 
 -- 12 of 12 --
 
+EXERCICE V (2,75 points)
+
+| Question | Eléments de réponse | Barème | Référence de la question dans le cadre de référence |
+| :--- | :--- | :--- | :--- |
+| 1.1) | Mvt. rectiligne uniformément accéléré (ou varié). Justification | 0,25 | - Définir la chute libre verticale. |
+| | | 0,25 | - Appliquer la deuxième loi de Newton pour établir l'équation différentielle du mouvement du centre d'inertie d'un solide en chute libre verticale et la résoudre. |
+| 1.2) | Chute libre Justification | 0,25 | - Exploiter le produit $\vec{a} . \vec{v}$ pour déterminer la nature du mouvement (accéléré - retardé). |
+| | | 0,25 | - Exploiter le diagramme de la vitesse $v_G = f(t)$. |
+| 2.1) | Méthode | 0,5 | - Connaître et exploiter les expressions du vecteur vitesse instantanée et du vecteur accélération. |
+| | | | - Connaître l'unité de l'accélération. |
+| 2.2) | $v_\tau = \sqrt{\frac{mg}{\alpha}}$ | 0,25 | - Appliquer la deuxième loi de Newton pour établir l'équation différentielle du mouvement du centre d'inertie d'un solide en chute verticale avec frottement. |
+| 2.3) | $v_\tau = 5 \text{ m.s}^{-1}$ | 0,25 | - Connaître et exploiter les deux modèles de frottement fluide: $\vec{F} = -k\vec{v}$ et $\vec{F} = -k v^2 \vec{v}$ |
+| 2.4) | $\alpha = 40 (\text{SI})$ | 0,25 | - Exploiter la courbe $v_G = f(t)$ pour déterminer : |
+| | | | * la vitesse limite $v_\tau$ |
+| 3) | méthode | 0,25 | * le temps caractéristique $\tau$ |
+| | $d = 400 \text{ m}$ | 0,25 | * le régime initial et le régime permanent |
+| | | | - Connaître le référentiel galiléen. |
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+Aucune figure, schéma, circuit, tableau de mesures ou courbe n'est présent sur ces pages (pages 10, 11 et 12). Ces pages contiennent exclusivement des tableaux de correction (barèmes) pour les exercices II, III, IV et V.

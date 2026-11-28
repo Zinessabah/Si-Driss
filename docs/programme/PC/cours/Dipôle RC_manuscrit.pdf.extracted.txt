@@ -1,56 +1,606 @@
-Dipôle RC Page 1
-
 -- 1 of 14 --
 
-Dipôle RC Page 2
+Le dipôle RC
+
+1_ Le condensateur.
+
+1. Définition .
+
+Le condensateur est un dipôle électrique constitué par deux armatures entre lesquelles il y a un isolant appelé le diélectrique.
+
+[Diagramme : Symbole de condensateur (deux traits parallèles), flèche "Armature" pointant vers une plaque. Texte : "Diélectrique: {air, verre, plastique, céramique,...}". Image d'un condensateur physique.]
+
+Les condensateurs sont utilisés pour emmagasiner la charge électrique, et les restituées en cas de besoin.
+
+- Charge condensateur A caractérisé par sa capacité C
+
+- Le symbole du condensateur : $| \quad | \quad C$
+
+2_ Charge et décharge d'un condensateur
+
+2.1 Charge d'un condensateur .
+
+[Circuit électrique : Boucle avec générateur $E$, interrupteur $K$ (bornes 1 et 2), ampèremètre $A$, résistance $R$, condensateur $C$, voltmètre $V$ en parallèle avec $C$. Flèche $i$ vers le haut.]
+
+$E \uparrow$ : Générateur de tension continue de force électromotrice $E$
+
+$K$ : Interrupteur, $R$ : Résistor
+
+2.1.1. Expérience
+
+- On bascule l'interrupteur $K$ à la position 1 :
+
+- L'ampèremètre indique le passage d'un courant électrique transitoire qui s'annule dans une durée très courte .
+
+- La tension aux bornes du condensateur augmente jusqu'à atteindre la valeur $E_{M.F} - E$, lieu où le courant s'annule. On dit que le condensateur est chargé.
 
 -- 2 of 14 --
 
-Dipôle RC Page 3
+2.1.2. Interprétation:
+
+- Le courant transitoire de charge est dû à un déplacement d'électrons dans le circuit de l'armature A vers l'armature B
+
+- L'armature A perd des électrons, se charge positivement et l'armature B gagne ces électrons, se charge négativement
+
+- A chaque instant, les deux armatures portent des charges électriques opposées $q = q_A = -q_B$
+
+- $q$ est appelé charge du condensateur.
+
+[Diagramme : Deux armatures A (+) et B (-). Charges $q_A$ et $q_B$ en coulomb (C).]
+
+2.2- Décharge d'un condensateur.
+
+2.2.1 Expérience :
+
+- On bascule l'interrupteur $K$ à la position 2
+
+- L'ampèremètre indique le passage d'un courant transitoire dans le sens contraire et s'annule dans une courte durée : c'est le courant de la décharge du condensateur
+
+- La tension aux bornes du condensateur diminue progressivement de sa valeur maximale $E$ vers une valeur nulle.
+
+2.2.2 Interprétation:
+
+Le basculement de l'interrupteur $K$ vers la position 2 permet aux électrons accumulés sur l'armature B de se déplacer vers l'armature A pour neutraliser les charges positives. La charge du condensateur diminue jusqu'à s'annuler, on dit que le condensateur est déchargé.
 
 -- 3 of 14 --
 
-Dipôle RC Page 4
+est déchargé .
+
+3. Relation charge-intensité.
+
+L'intensité du courant électrique et le débit de charge électrique qui traverse la section d'un conducteur par unité de temps.
+
+* Cas d'un courant continue : $I = \frac{\Delta q}{\Delta t}$ $(C) \quad (A) \quad (S)$
+
+* Cas d'un courant variable : $i = \frac{dq}{dt}$
+
+* Cas du condensateur : $i = \frac{dq_A}{dt} = \frac{dq}{dt}$
+
+[Diagramme : Condensateur avec courant $i$ entrant dans l'armature A.]
+
+Remarque : l'intensité du courant électrique est une grandeur algébrique:
+
+- Si le courant circule dans le sens d'orientation choisi, alors $i > 0$
+
+- Si le courant circule dans le sens contraire, alors $i < 0$.
+
+Conversion récepteur :
+
+[Diagramme : Condensateur avec courant $i$ entrant dans A, tension $u_{AB}$.]
+
+4_ Relation charge-tension.
+
+4.1_ Les mesures .
+
+On charge un condensateur avec un courant continue d'intensité $I= 12 \mu A$. A des intervalles de temps égaux, on mesure la tension aux bornes du condensateur
+
+[Circuit : Générateur de courant continu, Ampèremètre $A$, Condensateur ($u_c$), Voltmètre $V$.]
+
+Tableau :
+
+| $t (s)$ | 0 | 5 | 10 | 15 | 20 | 25 | 30 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| $u_c (V)$ | 0 | 1,32 | 2,64 | 4 | 5,32 | 6,7 | 7,95 |
+| $q (\mu C)$ | 0 | 60 | 120 | 180 | 240 | 300 | 360 |
+
+$q = q_A = I . t .$
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Circuit de charge (Page 1)] ---
+- **Contexte de l'exercice** : Physique-Chimie, Chapitre Dipôle RC, Section Charge d'un condensateur.
+- **Description du dispositif ou montage** : Circuit en série contenant un générateur de tension continue $E$, un interrupteur commutateur $K$ (positions 1 et 2), un ampèremètre $A$, une résistance $R$ et un condensateur $C$. Un voltmètre $V$ est branché en dérivée aux bornes du condensateur $C$. Une flèche indique le sens du courant $i$ montant vers l'ampèremètre.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Armatures du condensateur (Page 2)] ---
+- **Contexte de l'exercice** : Physique-Chimie, Interprétation de la charge électrique.
+- **Description du dispositif ou montage** : Représentation schématique des deux armatures d'un condensateur. L'armature A est marquée avec le signe (+) et l'armature B avec le signe (-). Les charges sont notées $q_A$ et $q_B$ avec l'unité coulomb (C).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Circuit de mesure (Page 3)] ---
+- **Contexte de l'exercice** : Physique-Chimie, Relation charge-tension, Section Les mesures.
+- **Description du dispositif ou montage** : Montage expérimental pour charger un condensateur avec un courant continu. Composants : Générateur de courant continu, Ampèremètre $A$ en série, Condensateur (tension aux bornes notée $u_c$), Voltmètre $V$ en parallèle avec le condensateur.
+
+--- [TABLEAU DE MESURES (Page 3)] ---
+- **Analyse détaillée du graphe / courbe / tableau** : Tableau de données expérimentales à 3 lignes et 7 colonnes de mesures.
+  - Ligne 1 (Temps $t$ en s) : 0, 5, 10, 15, 20, 25, 30.
+  - Ligne 2 (Tension $u_c$ en V) : 0, 1,32, 2,64, 4, 5,32, 6,7, 7,95.
+  - Ligne 3 (Charge $q$ en $\mu$C) : 0, 60, 120, 180, 240, 300, 360.
+  - Relation observée : $q$ est proportionnel à $t$ (pente constante correspondant à $I = 12 \mu A$).
 
 -- 4 of 14 --
 
-Dipôle RC Page 5
+4-2. Tracé de la courbe $q=f(u_C)$
+
+[Graphique : Axe vertical $q$, Axe horizontal $u_C$. Une droite passe par l'origine $O$ avec un coefficient directeur positif.]
+
+- Le graphique $q=f(u_C)$ est une droite passant par l'origine à coefficient directeur positif
+- La charge $q$ et la tension $u_C$ sont deux grandeurs proportionnelles ;
+
+$$ (C) \quad q = C.u_C \quad (F) \quad (V) $$
+
+- Le coefficient du proportionnalité $C$ est appelé : **capacité du condensateur**.
+Il s'exprime en farad (F).
+- Le farad est une grande capacité. Usuellement, on utilise les sous-multiples du farad.
+
+$$ 1 \text{ mF} = 10^{-3} \text{ F} $$
+$$ 1 \text{ \textmu F} = 10^{-6} \text{ F} $$
+$$ 1 \text{ nF} = 10^{-9} \text{ F} $$
+$$ 1 \text{ pF} = 10^{-12} \text{ F} $$
+
+II Association des condensateurs
+
+1- Association en parallèle.
+
+[Schéma : Deux condensateurs $C_1$ et $C_2$ en parallèle entre les bornes A et B. Courants $i$, $i_1$, $i_2$. Tension $U_{AB}$. Équivalent : un condensateur $C_{eq}$ entre A et B avec tension $U_{AB}$.]
+
+Association de deux condensateurs en parallèle. Condensateur équivalent.
+
+Application de la loi des nœuds :
+
+$$ i = i_1 + i_2 $$
+$$ \frac{dq}{dt} = \frac{dq_1}{dt} + \frac{dq_2}{dt} $$
+$$ q = q_1 + q_2 $$
+$$ C.U_{AB} = C_1.U_{AB} + C_2.U_{AB} $$
+$$ C = C_1 + C_2 $$
+
+Généralisation :
+
+$$ \boxed{C = \sum_{i=1}^{n} C_i} $$
 
 -- 5 of 14 --
 
-Dipôle RC Page 6
+2. Association en série.
+
+[Schéma : Deux condensateurs $C_1$ et $C_2$ en série entre A et B via le node D. Courant $i$. Tensions $U_{AD}$, $U_{DB}$, $U_{AB}$. Équivalent : condensateur $C$ entre A et B.]
+
+Montage en série : $i = i_1 = i_2 \Rightarrow q = q_1 = q_2$
+
+Loi d'additivité de tension :
+
+$$ U_{AB} = U_{AD} + U_{DB} $$
+$$ \frac{q}{C} = \frac{q}{C_1} + \frac{q}{C_2} $$
+$$ \frac{1}{C} = \frac{1}{C_1} + \frac{1}{C_2} $$
+
+Généralisation
+
+$$ \boxed{C = \sum \frac{1}{C_i}} $$
+
+Remarque : - Le montage en série des condensateurs permet de diminuer la capacité du condensateur équivalent.
+- Le montage en // des condensateurs permet d'augmenter la capacité du condensateur équivalent.
+
+III Réponse d'un dipôle RC à un échelon de tension
+
+1- le dipôle RC
+
+L'association en série d'un condensateur de capacité $C$ et d'un conducteur ohmique de résistance $R$ constitue un dipôle RC
+
+[Schéma : Dipôle RC série entre A et B. Résistance $R$, Condensateur $C$. Tensions $U_R$ et $u_C$.]
+
+$$ U_{AB} = U_R + u_C $$
+
+2. Réponse d'un dipôle à un échelon montant de tension
+
+On dit qu'un dipôle est soumis à un échelon montant de tension si la tension entre ses bornes varie instantanément d'une valeur nulle à une valeur constante $E$.
+
+$$ t < 0 \Rightarrow U_{AB} = 0 $$
+$$ t > 0 \Rightarrow U_{AB} = E $$
+
+[Graphe : Tension $U_{AB}$ en fonction du temps $t$. Valeur nulle pour $t<0$, saute à $E$ pour $t>0$.]
 
 -- 6 of 14 --
 
-Dipôle RC Page 7
+3- Réponse d'un dipôle à un échelon descendant de tension.
+
+On dit d'un dipôle est soumis à un échelon descendant de tension, si la tension entre ses bornes varie instantanément d'une valeur constante $E$ vers une valeur nulle.
+
+$$ t < 0 \Rightarrow U_{AB} = E $$
+$$ t > 0 \Rightarrow U_{AB} = 0 $$
+
+[Graphe : Tension $U_{AB}$ en fonction du temps $t$. Valeur $E$ pour $t<0$, tombe à 0 pour $t>0$.]
+
+4. Etude expérimentale
+
+4.1- Montage expérimental
+
+Montage 1 : charge et décharge manuelles
+
+[Schéma : Circuit avec générateur continu $E$, interrupteur $K$ (positions 1 et 2), Condensateur $C$, Résistance $R$. Canaux de l'oscilloscope connectés aux bornes de $C$ ($u_C$) et de la masse.]
+
+$K$ en position 1 : charge du condensateur.
+$K$ -- -- 2 : décharge du condensateur.
+
+Montage 2 : Charge et décharge automatique à l'aide d'un générateur de basse fréquence GBF qui délivre une tension rectangulaire.
+
+[Schéma : Circuit avec GBF, Condensateur $C$, Résistance $R$ en série. Tension d'entrée $v_i$. Tensions $u_C$ et $u_R$. Sortie vers $Y$.]
+
+Dipôle RC Page 6
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphique q=f(uc) Page 4] ---
+- **Contexte de l'exercice** : Physique, Chapitre Condensateurs, Propriétés.
+- **Description du dispositif ou montage** : Graphique cartésien. Axe des ordonnées : charge $q$. Axe des abscisses : tension aux bornes du condensateur $u_C$. Origine $O$. Une droite bleue passe par l'origine.
+- **Analyse détaillée du graphe / courbe / tableau** : Relation linéaire proportionnelle. Coefficient directeur positif. Passe par $(0,0)$.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Association en parallèle Page 4] ---
+- **Contexte de l'exercice** : Physique, Association de condensateurs.
+- **Description du dispositif ou montage** : Deux bornes A et B. Entre A et B, deux branches parallèles contenant respectivement un condensateur $C_1$ et un condensateur $C_2$. Courant total $i$ entrant en A, se divisant en $i_1$ et $i_2$. Tension $U_{AB}$ aux bornes. Schéma équivalent à droite : un seul condensateur $C_{eq}$ (noté $(q, C)$) entre A et B.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Association en série Page 5] ---
+- **Contexte de l'exercice** : Physique, Association de condensateurs.
+- **Description du dispositif ou montage** : Bornes A et B. Branche unique contenant $C_1$ puis $C_2$ en série. Node intermédiaire D. Courant $i$ identique partout. Tensions $U_{AD}$ aux bornes de $C_1$, $U_{DB}$ aux bornes de $C_2$. Tension totale $U_{AB}$. Schéma équivalent : condensateur $C$ entre A et B.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Dipôle RC Page 5] ---
+- **Contexte de l'exercice** : Physique, Réponse d'un dipôle RC.
+- **Description du dispositif ou montage** : Bornes A et B. Résistance $R$ et Condensateur $C$ en série. Tension $U_R$ aux bornes de R, tension $u_C$ aux bornes de C. Relation $U_{AB} = U_R + u_C$.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphe échelon montant Page 5] ---
+- **Contexte de l'exercice** : Physique, Réponse à un échelon de tension.
+- **Description du dispositif ou montage** : Graphique $U_{AB} = f(t)$. Axe vertical $U_{AB}$, axe horizontal $t$.
+- **Analyse détaillée du graphe / courbe / tableau** : Pour $t < 0$, $U_{AB} = 0$. Pour $t > 0$, $U_{AB} = E$ (constante). Discontinuité en $t=0$.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphe échelon descendant Page 6] ---
+- **Contexte de l'exercice** : Physique, Réponse à un échelon de tension.
+- **Description du dispositif ou montage** : Graphique $U_{AB} = f(t)$.
+- **Analyse détaillée du graphe / courbe / tableau** : Pour $t < 0$, $U_{AB} = E$. Pour $t > 0$, $U_{AB} = 0$. Discontinuité en $t=0$.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Montage 1 Page 6] ---
+- **Contexte de l'exercice** : Physique, Étude expérimentale (Charge/décharge manuelle).
+- **Description du dispositif ou montage** : Circuit fermé avec générateur continu $E$, interrupteur basculant $K$ (positions 1 et 2), Condensateur $C$, Résistance $R$. Borne de sortie vers "Canal Y de l'oscilloscope" et "la masse".
+- **Analyse détaillée du graphe / courbe / tableau** : Position 1 connecte le générateur et le condensateur (charge). Position 2 connecte le condensateur et la résistance (décharge).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Montage 2 Page 6] ---
+- **Contexte de l'exercice** : Physique, Étude expérimentale (Charge/décharge automatique).
+- **Description du dispositif ou montage** : Générateur de basse fréquence (GBF) en série avec Condensateur $C$ et Résistance $R$. Tension d'entrée $v_i$. Tensions $u_C$ et $u_R$ mesurées. Sortie vers oscilloscope $Y$.
+- **Analyse détaillée du graphe / courbe / tableau** : Le GBF délivre une tension rectangulaire.
 
 -- 7 of 14 --
 
-Dipôle RC Page 8
+4.2 - les graphes de charge du condensateur.
+
+**Graphique 1 :** $i(t)$ en fonction de $t$.
+- Axe vertical : $i(t)$, origine $I_{max}$.
+- Axe horizontal : $t$, origine $0$.
+- Courbe : décroissance exponentielle de $I_{max}$ vers $0$.
+- Zones : `Régime transitoire`, `Régime permanent`.
+
+**Graphique 2 :** $u_c(t)$ en fonction de $t$.
+- Axe vertical : $u_c(t)$, asymptote $E$.
+- Axe horizontal : $t$, origine $0$.
+- Courbe : croissance exponentielle de $0$ vers $E$.
+- Zones : `Régime transitoire`, `Régime permanent`.
+
+4.3 les graphes de décharge du condensateur
+
+**Graphique 3 :** $i(t)$ en fonction de $t$.
+- Axe vertical : $i(t)$, origine $0$, label $-I_{max}$.
+- Axe horizontal : $t$.
+- Courbe : régime transitoire puis régime permanent.
+
+**Graphique 4 :** $u_c(t)$ en fonction de $t$.
+- Axe vertical : $u_c(t)$, origine $E$.
+- Axe horizontal : $t$.
+- Courbe : décroissance exponentielle de $E$ vers $0$.
+- Zones : `Régime transitoire`, `Régime permanent`.
+
+Remarque : Les grandeurs qui influencent la durée de la charge ou la décharge du condensateur sont: la résistance $R$ et la capacité $C$. Plus elles sont grandes plus la durée est grande et inversement.
+
+5. Etude théorique
+
+5.1 Echelon montant de tension
+
+5.1.1- Equation différentielle
+
+On a
+$$q = C.u_c$$
+$$i = \frac{dq}{dt} \Rightarrow i = C.\frac{du_c}{dt}$$
+$$u_R = R.i = R.C.\frac{du_c}{dt}$$
+
+D'après la loi d'additivité des tensions :
+$$u_R + u_c = E$$
+$$R.C.\frac{du_c}{dt} + u_c = E$$
+
+![Schéma du circuit RC série avec source E, interrupteur K, condensateur C et résistance R. Notations : $i$ (courant), $u_c$ (tension aux bornes du condensateur), $u_R$ (tension aux bornes de la résistance).]
 
 -- 8 of 14 --
 
-Dipôle RC Page 9
+On pose $\tau = R.C$. $\tau$ est appelé constante du temps
+
+L'équation devient :
+$$\tau.\frac{du_c}{dt} + u_c = E$$
+
+C'est l'équation différentielle que vérifie la tension aux bornes du condensateur lorsqu'il est soumis à un échelon montant de tension.
+
+5.1.2- Solution de l'équation différentielle.
+
+On montre, en mathématique, que la solution de cette équation différentielle est $u_c(t) = A.e^{\frac{-t}{\tau}} + B$, où $A, B$ et $\tau$ sont des constantes à déterminer.
+
+* Détermination de $A$ et $B$ :
+
+On remplace la solution dans l'équation différentielle :
+$$\tau.\frac{du_c}{dt} + u_c = E$$
+$$\tau.\frac{d}{dt}(A.e^{\frac{-t}{\tau}} + B) + A.e^{\frac{-t}{\tau}} + B = E$$
+$$\tau.(-A.\frac{1}{\tau}.e^{\frac{-t}{\tau}}) + A.e^{\frac{-t}{\tau}} + B = E$$
+$$A.e^{\frac{-t}{\tau}}[- \tau.\frac{1}{\tau} + 1] + B = E$$
+
+d'où
+$$\begin{cases} B = E \\ - \tau.\frac{1}{\tau} + 1 = 0 \end{cases} \Rightarrow \begin{cases} B = E \\ \alpha = \frac{1}{\tau} = \frac{1}{R.C} \end{cases}$$
+
+* On détermine $A$ en utilisant les conditions initiales
+
+$A \ t=0 \Rightarrow u_c = 0$. (Le condensateur n'est pas chargé)
+$$u_c(t) = A.e^{\frac{-t}{\tau}} + E$$
+$$u_c(0) = A.e^0 + E = 0$$
+$$A + E = 0 \Rightarrow A = -E$$
+
+$$u_c(t) = -E.e^{\frac{-t}{\tau}} + E = E(1 - e^{\frac{-t}{\tau}})$$
 
 -- 9 of 14 --
 
-Dipôle RC Page 10
+5.1.3 - Signification de la constante du temps .
+
+* Analyse dimensionnelle de $\tau$
+
+$$\tau = R.C$$
+$$[\tau] = [R].[C]$$
+$$= \frac{[U]}{[I]} \cdot \frac{[q]}{[U]}$$
+$$= \frac{[q]}{[I]} = \frac{[I].[t]}{[I]}$$
+$$[\tau] = [t]$$
+
+$\tau$ est une dimension temporelle. Son unité est la seconde (s)
+
+* Détermination de $\tau$ :
+
+- graphiquement
+La tangente à la courbe à $t=0$ coupe l'asymptote $u_c = E$ au point I.
+$\tau$ correspond à l'abscisse du point I .
+
+- Par calcul en remplaçant $t = \tau$ dans :
+$$u_c(t) = E(1 - e^{\frac{-t}{\tau}})$$
+$$u_c(\tau) = E(1 - e^{-1})$$
+$$u_c(\tau) = 0,63 E$$
+
+N.B. : La constante du temps $\tau$ donne l'ordre de grandeur de la durée de la charge du condensateur (63% de sa valeur maximale).
+
+5.1.4 - Expression de l'intensité du courant dans le circuit RC
+
+Application : Déterminer l'expression de l'intensité du courant $i(t)$ et tracer d'une façon qualitative son allure.
+
+$$u_c(t) = E(1 - e^{\frac{-t}{\tau}})$$
+$$i(t) = \frac{dq}{dt} = C.\frac{du_c}{dt}$$
+$$i(t) = C.\frac{d}{dt}[E(1 - e^{\frac{-t}{\tau}})]$$
+
+![Graphe $u_c(t)$ en fonction de $t$. Asymptote $E$. Tangente en $t=0$ coupant l'asymptote en point I. Abscisse de I notée $\tau$. Point sur la courbe à $t=\tau$ noté $0,63 E$.]
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphes de charge du condensateur (Page 7)] ---
+- **Contexte de l'exercice** : Physique, Chapitre Dipôle RC, Section 4.2.
+- **Description du dispositif ou montage** : Deux graphiques côte à côte.
+  - Gauche : $i(t)$ vs $t$. Axe y gradué avec $I_{max}$ en haut. Courbe bleue décroissante de $I_{max}$ vers 0.
+  - Droite : $u_c(t)$ vs $t$. Axe y gradué avec $E$ en haut. Courbe bleue croissante de 0 vers $E$.
+  - Annotations : "Régime transitoire" et "Régime permanent" séparées par une ligne verticale pointillée.
+- **Analyse détaillée du graphe / courbe / tableau** : Les graphes illustrent l'évolution transitoire puis l'établissement du régime permanent lors de la charge d'un condensateur.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphes de décharge du condensateur (Page 7)] ---
+- **Contexte de l'exercice** : Physique, Chapitre Dipôle RC, Section 4.3.
+- **Description du dispositif ou montage** : Deux graphiques côte à côte.
+  - Gauche : $i(t)$ vs $t$. Axe y avec origine 0 et label $-I_{max}$.
+  - Droite : $u_c(t)$ vs $t$. Axe y avec origine $E$. Courbe décroissante vers 0.
+- **Analyse détaillée du graphe / courbe / tableau** : Illustration de la décharge, tension et courant tendant vers zéro.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Circuit RC série (Page 7)] ---
+- **Contexte de l'exercice** : Physique, Chapitre Dipôle RC, Section 5.1.1.
+- **Description du dispositif ou montage** : Montage en série contenant une source de tension continue $E$, un interrupteur $K$, un condensateur $C$ et une résistance $R$.
+- **Notations** : Courant $i$ indiqué par des flèches vertes. Tensions $u_c$ (aux bornes de C) et $u_R$ (aux bornes de R) indiquées par des flèches verticales.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Détermination graphique de $\tau$ (Page 9)] ---
+- **Contexte de l'exercice** : Physique, Chapitre Dipôle RC, Section 5.1.3.
+- **Description du dispositif ou montage** : Graphe de $u_c(t)$ en fonction de $t$.
+- **Analyse détaillée du graphe / courbe / tableau** :
+  - Axe vertical : $u_c(t)$, asymptote horizontale rouge au niveau $E$.
+  - Axe horizontal : $t$.
+  - Courbe bleue : croissance de 0 vers $E$.
+  - Ligne verte : Tangente à la courbe en $t=0$.
+  - Point I : Intersection de la tangente et de l'asymptote $u_c = E$.
+  - Marque $\tau$ : Abscisse du point I sur l'axe des $t$.
+  - Point remarquable : Sur la courbe à $t=\tau$, l'ordonnée est $0,63 E$.
 
 -- 10 of 14 --
 
-Dipôle RC Page 11
+$$i(t) = C \cdot \left( \frac{E}{C} e^{-\frac{t}{RC}} \right)$$
+$$i(t) = \frac{C.E}{RC} \cdot e^{-\frac{t}{RC}}$$
+$$i(t) = \frac{E}{R} e^{-\frac{t}{RC}}$$
+
+$$i(t) = I_{max} \cdot e^{-\frac{t}{RC}}$$
+
+$\frac{E}{R} = I_{max}$
+
+Graphique : $i(t)$ en fonction de $t$. Curve décroissante exponentielle partant de $I_{max}$ en $t=0$, passant par $\tau$ sur l'axe des abscisses et tendant vers 0.
+
+**5.2. Échelon descendant de tension**
+**5.2.1- Équation différentielle**
+
+On a : $i = C \cdot \frac{d u_c}{dt}$ , $\tau = RC$
+
+D'après la loi d'additivité des tensions :
+$$u_R + u_c = 0$$
+$$R.i + u_c = 0$$
+$$R.C \cdot \frac{d u_c}{dt} + u_c = 0$$
+
+$$\tau \cdot \frac{d u_c}{dt} + u_c = 0$$
+
+C'est l'équation différentielle que vérifie la tension aux bornes du condensateur lorsqu'il est soumis à un échelon descendant de tension.
+
+**5.2.2- Solution de l'équation différentielle**
+
+$$\tau \cdot \frac{d u_c}{dt} + u_c = 0$$
+
+La solution de cette équation différentielle est de la forme :
+$$u_c(t) = A e^{-\frac{t}{\tau}} + B$$
+
+Où A, B et $\alpha$ des constantes à déterminer.
 
 -- 11 of 14 --
 
-Dipôle RC Page 12
+$$\tau \cdot \frac{d u_c}{dt} + u_c = 0 \quad , \quad u_c(t) = A e^{-\frac{t}{\tau}} + B$$
+
+$$\tau \cdot \left( -\frac{A}{\tau} e^{-\frac{t}{\tau}} \right) + A e^{-\frac{t}{\tau}} + B = 0$$
+$$-A e^{-\frac{t}{\tau}} + A e^{-\frac{t}{\tau}} + B = 0$$
+
+Solution $\begin{cases} B = 0 \\ \dots \Rightarrow \alpha = \frac{-1}{\tau} = \frac{-1}{RC} \end{cases}$
+
+Les conditions initiales $t \to 0; u_c(0) = E$ (le condensateur est chargé)
+
+$$u_c(t) = A e^{-\frac{t}{\tau}}$$
+$$u_c(0) = A e^0 = E \Rightarrow A = E$$
+
+$$u_c(t) = E e^{-\frac{t}{\tau}}$$
+
+**5.2.3. Les graphes $u_c(t)$ et $i(t)$**
+
+$$u_c(t) = E e^{-\frac{t}{\tau}}$$
+$$u_c(\tau) = E e^{-1} = 0,37 E$$
+
+Graphique 1 : $u_c(t)$ en fonction de $t$. Curve décroissante partant de $E$ en $t=0$. Point remarquable : en $t=\tau$, $u_c = 0,37 E$.
+
+$$i(t) = C \cdot \frac{d u_c}{dt}$$
+$$i(t) = C \cdot E \left( -\frac{1}{\tau} e^{-\frac{t}{\tau}} \right)$$
+$$= -\frac{C.E}{\tau} e^{-\frac{t}{\tau}}$$
+$$= -\frac{E}{R} e^{-\frac{t}{\tau}}$$
+
+$$i(t) = -I_{max} e^{-\frac{t}{\tau}}$$
+
+Graphique 2 : $i(t)$ en fonction de $t$. Curve croissante (en valeur absolue décroissante) partant de $-I_{max}$ en $t=0$ et tendant vers 0.
+
+Remarque : le signe (-) dans l'expression de $i(t)$ indique que le courant de décharge à un sens opposé par rapport au courant de charge.
 
 -- 12 of 14 --
 
-Dipôle RC Page 13
+**IV. L'énergie électrique emmagasinée dans le condensateur**
+
+**1. Montage expérimentale .**
+
+Schéma du montage :
+- Générateur de tension $E$.
+- Interrupteur $K$ avec positions 1 et 2 (borne $a$).
+- Condensateur $C$.
+- Résistance $R$.
+- Moteur $M$.
+- Sortie : poulie, fil, solide.
+
+- L'interrupteur K en position 1 : le condensateur se charge
+- L'interrupteur K en position 2 : le moteur fonctionne et le solide lié au fil monte vers le haut.
+
+On explique le déplacement du solide vers le haut, par l'acquisition du condensateur, lors de la charge, une énergie électrique.
+Les condensateurs permettent d'emmagasiner de l'énergie électrique et de la restituer au moment besoin.
+
+**2. L'expression de l'énergie électrique emmagasinée dans un condensateur**
+
+$$P = \frac{d E_e}{dt}$$
+$$P = u_c(t) \cdot i(t) \quad ; \quad i(t) = C \cdot \frac{d u_c}{dt}$$
+$$P = u_c(t) \cdot C \cdot \frac{d u_c}{dt}$$
+$$P = C \cdot u_c(t) \cdot \frac{d u_c}{dt}$$
+$$P = \frac{d}{dt} \left( \frac{1}{2} C \cdot u_c^2(t) \right) = \frac{d E_e}{dt}$$
+
+Dipôle RC Page 12
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphique i(t) Page 10] ---
+- **Contexte de l'exercice** : Physique, Chapitre Dipôle RC, décharge d'un condensateur.
+- **Description du dispositif ou montage** : Représentation graphique de l'intensité du courant $i(t)$ en fonction du temps $t$.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées $i(t)$, axe des abscisses $t$. La courbe est une décroissance exponentielle. Elle commence à la valeur $I_{max}$ pour $t=0$. Elle passe par l'abscisse $\tau$ (tau). Elle tend vers 0 lorsque $t \to \infty$. Une tangente verte est dessinée à l'origine.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Circuit décharge Page 10] ---
+- **Contexte de l'exercice** : Physique, Chapitre Dipôle RC, équation différentielle de décharge.
+- **Description du dispositif ou montage** : Boucle fermée contenant un condensateur $C$ et une résistance $R$ en série. Les tensions $u_c$ (aux bornes de C) et $u_R$ (aux bornes de R) sont indiquées avec des flèches. Le courant $i$ circule dans la boucle.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma électrique).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphique u_c(t) Page 11] ---
+- **Contexte de l'exercice** : Physique, Chapitre Dipôle RC, graphes de décharge.
+- **Description du dispositif ou montage** : Représentation graphique de la tension $u_c(t)$ aux bornes du condensateur en fonction du temps $t$.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées $u_c(t)$, axe des abscisses $t$. Valeur initiale $E$ en $t=0$. La courbe décroît exponentiellement. Un point remarquable est marqué en $t=\tau$ avec une ordonnée $0,37 E$ (déchirure rouge indiquant $0,37 E$).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphique i(t) Page 11] ---
+- **Contexte de l'exercice** : Physique, Chapitre Dipôle RC, graphes de décharge.
+- **Description du dispositif ou montage** : Représentation graphique du courant $i(t)$ en fonction du temps $t$ lors de la décharge.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe des ordonnées $i(t)$, axe des abscisses $t$. La courbe commence à une valeur négative $-I_{max}$ (indiqué en rouge) pour $t=0$ et augmente vers 0 asymptotiquement.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Montage expérimental Page 12] ---
+- **Contexte de l'exercice** : Physique, Chapitre Énergie électrique emmagasinée dans un condensateur.
+- **Description du dispositif ou montage** : Circuit comportant un générateur $E$, un interrupteur $K$ (positions 1 et 2, borne $a$), un condensateur $C$, une résistance $R$, et un moteur $M$. Le moteur est relié à une poulie avec un fil et une masse solide suspendue.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma électrique et mécanique).
 
 -- 13 of 14 --
 
-Dipôle RC Page 14
+En considérant à $t=0, q_c(0)=0$ (condensateur non chargé)
+
+[Encadré jaune]
+$$E_e = \frac{1}{2} C . U_c^2$$
+Joule (J) \hspace{2cm} (F) (V)
+
+Autres expressions :
+
+$$q = C . U_c \Rightarrow U_c = \frac{q}{C}$$
+
+$$E_e = \frac{1}{2} C . \frac{q^2}{C^2}$$
+
+[Encadré jaune]
+$$E_e = \frac{1}{2} \frac{q^2}{C}$$
+
+$$E_e = \frac{1}{2} . q . \frac{q}{C}$$
+
+[Encadré jaune]
+$$E_e = \frac{1}{2} q . U_c$$
+
+IV Exercies d'applications
+
+Application 1 :
+
+A l'aide d'un générateur de courant délivrant une intensité de courant constante $I = 12\mu A$, on charge un condensateur de capacité $C$. Le graphe ci-dessous représente la variation de la tension $U_c(t)$ aux bornes du condensateur en fonction du temps.
+Déterminer la valeur de $C$.
+
+[Graphique : Axe des ordonnées $U_c (mV)$, Axe des abscisses $t(s)$. Une droite passe par l'origine $(0,0)$ et un point $(3, 36)$ indiqué par des traits rouges pointillés.]
+
+$$q = C . U_c = I . t$$
+$$U_c = \frac{I}{C} . t \quad \text{①}$$
+selon le graphe $U_c = K . t \quad \text{②}$
+K est le coefficient directeur
+On compare ① et ② \hspace{0.5cm} $K = \frac{I}{C} \Rightarrow C = \frac{I}{K}$
+calcul de $K = \frac{36.10^{-3}}{3-0} = 12.10^{-3} V/s$
+$$C = \frac{12.10^{-6}}{12.10^{-3}} = 10^{-3} F .$$
 
 -- 14 of 14 --
 
+Application 2 :
+
+Montrer que $t_{1/2} = 0.7ms$, avec $t_{1/2}$ est la durée nécessaire pour que la tension aux bornes du condensateur soit égale à la moitié de la valeur maximale .
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphique Application 1] ---
+- **Contexte de l'exercice** : Physique, Chapitre Dipôle RC, Application 1 (Charge d'un condensateur par un générateur de courant constant).
+- **Description du dispositif ou montage** : Représentation graphique cartésienne. Axe des ordonnées noté $U_c (mV)$ représentant la tension aux bornes du condensateur. Axe des abscisses noté $t(s)$ représentant le temps. Une droite affine passant par l'origine $(0,0)$. Un point particulier est repéré par des traits de construction rouges pointillés aux coordonnées $t=3$ et $U_c=36$.
+- **Analyse détaillée du graphe / courbe / tableau** : La courbe est une droite d'équation $U_c = K.t$. Le coefficient directeur $K$ correspond à la pente de la droite. À partir du point $(3, 36)$, on calcule $K = \frac{36 \times 10^{-3} V}{3 s} = 12 \times 10^{-3} V/s$. Cette valeur est utilisée pour déterminer la capacité $C$ via la relation $C = I/K$.

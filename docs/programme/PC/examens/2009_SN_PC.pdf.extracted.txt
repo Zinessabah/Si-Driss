@@ -1,32 +1,332 @@
-
-
 -- 1 of 8 --
 
+**En-tête (Arabe) :**
+الممتحنون الموحدون للبكالوريا
+المسالك الوطنية - خيار فرنسية
+الدورة العادية 2009
+- الموحد -
 
+**Bloc d'informations :**
+- Page : 1 / 8
+- Matière : الفيزياء والكيمياء (Physique et Chimie)
+- Durée : 3 (heures)
+- Coefficient : 7
+- Filière : مسلك العلوم التجريبية (خيار فرنسية) / مسلك العلوم التجريبية (Option Française)
+- Niveau : البكالوريا / الشعبة : المسلك
+
+**Texte principal :**
+L'usage de la calculatrice scientifique non programmable est autorisé
+
+Le sujet comporte 4 exercices
+
+**Chimie : (7 pts) :**
+🔹 Etude de l'acide butanoïque.
+
+**Physique : (13 pts) :**
+
+_Exercise 1 : (2 pts)_
+🔹 Les transformations nucléaires - Datation d'une nappe phréatique stagnante.
+
+_Exercise 2 : (5 pts)_
+🔹 Electricité - Etude d'une bobine.
+
+_Exercise 3 : (6 pts)_
+🔹 Mécanique - Etude de mouvement plan d'un corps solide.
+
+Les différentes parties des exercices sont indépendantes et peuvent être traitées dans un ordre différent.
+
+Traduction : A. EL AAMRANI
 
 -- 2 of 8 --
 
+**En-tête (Arabe) :**
+الممتحنون الموحدون للبكالوريا - الدورة العادية 2009 - المسالك الوطنية - خيار فرنسية
+مدة الإجتماع : الفيزياء والكيمياء - مسلك العلوم التجريبية (خيار فرنسية) - المعلم : الشعبة / المسلك :
 
+**CHIMIE**
+**Etude de l'acide butanoïque**
+
+L'acide butanoïque de formule semi-développée $\text{CH}_3\text{-CH}_2\text{-CH}_2\text{-COOH}$ est caractérisé par une odeur spéciale; sa réaction avec le méthanol mène à la formation d'un composé organique E de bonne odeur et d'un goût délicieux, il est utilisé dans l'industrie alimentaire et aromatique.
+
+Cet exercice a pour objectif d'étudier la réaction de l'acide butanoïque avec l'eau et sa réaction avec le méthanol.
+
+**Données :**
+- Toutes les mesures sont effectuées à $25^\circ\text{C}$
+- On représente l'acide étudié par $\text{AH}$ et sa base conjuguée par $\text{A}^-$
+- Le produit ionique de l'eau : $K_e = 10^{-14}$
+
+**1 - Etude de la réaction de l'acide butanoïque avec l'eau :**
+
+On prépare une solution aqueuse ($\text{S}_\text{A}$) d'acide butanoïque de concentration $C_\text{A}=10^{-2} \text{ mol.L}^{-1}$ et de volume $V_\text{A}$.
+On mesure le pH de la solution ($\text{S}_\text{A}$) et on trouve $\text{pH}=3,41$
+
+**1.1.** Recopier sur votre copie le tableau descriptif de l'évolution du système chimique et le compléter. (0,75pts)
+
+| Equation de la réaction | $\text{AH}_{(aq)} + \text{H}_2\text{O}_{(aq)} \rightleftharpoons \text{A}^-_{(aq)} + \text{H}_3\text{O}^+_{(aq)}$ |
+| :--- | :--- |
+| Etat du système | Avancement X | Quantité de matière en mol |
+| Etat initial | $X = 0$ | $n_i(\text{AH})$ | En excès | ..... | ..... |
+| Etat d'équilibre | $X = X_{\text{éq}}$ | ..... | ..... | ...- | ..... |
+
+**1.2.** Donner l'expression de l'avancement de la réaction $X_{\text{éq}}$ à l'équilibre en fonction de $V_\text{A}$ et $[\text{H}_3\text{O}^+]_{\text{éq}}$ (concentration des ions oxonium à l'équilibre). (0,75pts)
+
+**1.3.** Trouver l'expression du taux d'avancement final $\tau$ à l'équilibre en fonction de pH et $C_\text{A}$, puis calculer sa valeur. Que peut-on déduire ? (0,75pts)
+
+**1.4.** Etablir l'expression de la constante d'acidité $K_\text{A}$ du couple $(\text{AH}/\text{A}^-)$ en fonction de $\tau$ et $C_\text{A}$, en déduire la valeur de $\text{p}K_\text{A}$. (0,75pts)
+
+**2 - Etude de la réaction de l'acide butanoïque avec le méthanol $\text{CH}_3\text{OH}$ :**
+
+La réaction de l'acide butanoïque avec le méthanol, conduit à la formation d'un composé organique E et de l'eau selon l'équation chimique suivante :
+
+$$\text{CH}_3\text{-CH}_2\text{-CH}_2\text{-COOH} + \text{CH}_3\text{OH} \rightleftharpoons \text{CH}_3\text{-CH}_2\text{-CH}_2\text{-COO-CH}_3 + \text{H}_2\text{O}$$
+
+**2.1.** Rappeler le nom du groupe auquel le composé E appartient et donner son nom. (0,5pts)
+
+Traduction : A. EL AAMRANI
 
 -- 3 of 8 --
 
+**En-tête (Arabe) :**
+الممتحنون الموحدون للبكالوريا - الدورة العادية 2009 - المسالك الوطنية - خيار فرنسية
+مدة الإجتماع : الفيزياء والكيمياء - مسلك العلوم التجريبية (خيار فرنسية) - المعلم : الشعبة / المسلك :
 
+**2.2.** On verse dans un ballon, se trouvant dans de l'eau glacée, $n_1=0,1\text{mol}$ d'acide butanoïque et $n_2=0,1\text{mol}$ du méthanol et quelques gouttes d'acide sulfurique concentré et quelques gouttes de phénolphtaléine, on obtient alors un mélange du volume $V = 400\text{mL}$. Citer l'intérêt de l'utilisation de l'eau glacée, et le rôle qu'il joue l'acide sulfurique dans cette réaction. (0,5pts)
+
+**2.3.** Pour suivre l'avancement de cette réaction on verse dans 10 tubes le même volume du mélange, on les ferme bien et on les met dans un bain d'eau portée à une température constante ($100^\circ\text{C}$) puis on déclenche le chronomètre à l'instant $t=0$.
+
+Pour déterminer l'avancement du système chimique en fonction du temps, on sort les tubes du bain d'eau, l'un après l'autre, puis on les met dans l'eau glacée. Ensuite, on dose l'acide restant dans chaque tube par une solution aqueuse d'hydroxyde de sodium de concentration $C=1\text{mol.L}^{-1}$
+
+L'équation associée à la réaction, modélisant le dosage s'écrit comme suit :
+
+$$\text{AH}_{(aq)} + \text{HO}^-_{(aq)} \rightarrow \text{A}^-_{(aq)} + \text{H}_2\text{O}_{(aq)}$$
+
+Montrer que l'expression de l'avancement $x$ de d'estérification à un instant $t$ est donnée par la relation $x(\text{mol}) = 0,1-(10.C.V_{\text{BE}})$, tel que $V_{\text{BE}}$ est le volume d'hydroxyde de sodium ajouté à l'équivalence dans chaque tube. (1pt)
+
+**2.4.** Les résultats de l'étude expérimentale de ce dosage ont permis de tracer la courbe de l'évolution de l'avancement $x$ de l'estérification en fonction de temps :
+
+[Graphique visible]
+- Axe des ordonnées : $x (10^{-2} \text{ mol})$
+- Axe des abscisses : $t(\text{min})$
+- Une courbe partant de l'origine, croissante, tendant vers une asymptote.
+- Une droite $(T)$ tangente à l'origine.
+
+La droite (T) est la tangente à la courbe à l'instant $t=0$
+
+En se basant sur cette courbe, déterminer :
+
+**2.4.1.** La vitesse volumique de la réaction à l'instant $t_0=0$ et à l'instant $t_1=50\text{min}$ (0,75pts)
+
+**2.4.2.** Le temps de demi-réaction $t_{1/2}$ (0,5pts)
+
+**2.4.3.** Le quotient de réaction $Q_{\text{r,éq}}$ à l'équilibre. (0,75pts)
+
+Traduction : A. EL AAMRANI
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphique de l'évolution de l'avancement x en fonction du temps t] ---
+- **Contexte de l'exercice** : Chimie - Etude de la réaction de l'acide butanoïque avec le méthanol (Exercice 2, question 2.4).
+- **Description du dispositif ou montage** : Graphique cartésien à deux axes.
+  - Axe des abscisses : temps $t$ en minutes ($\text{min}$), gradué de 0 à 60 avec des intervalles de 10.
+  - Axe des ordonnées : avancement $x$ en $10^{-2} \text{ mol}$, gradué de 1 à 7 (et au-delà).
+  - Une courbe représentant l'évolution de $x$ en fonction de $t$.
+  - Une droite tangente notée $(T)$ issue de l'origine.
+- **Analyse détaillée du graphe / courbe / tableau** :
+  - La courbe commence à l'origine $(0,0)$.
+  - Elle est croissante et concave (vitesse décroissante).
+  - Elle tend vers une asymptote horizontale située autour de $x \approx 7 \times 10^{-2} \text{ mol}$.
+  - La droite $(T)$ est la tangente en $t=0$, permettant de déterminer la vitesse initiale.
 
 -- 4 of 8 --
 
+**PHYSIQUE** **Exercice 1 : Les transformations nucléaires - Datation d'une nappe phréatique**
 
+Les eaux naturelles, contiennent du chlore 36 radioactif, et qui est constamment renouvelé dans les eaux de surface tel que sa concentration reste constante, contrairement aux eaux souterraines immobiles où elle diminue au cours du temps.
+
+Cet exercice a pour but de dater une nappe phréatique stagnante en utilisant le chlore 36
+
+**Données :**
+
+| Noyau | Chlore 36 | Neutron | Proton |
+| :--- | :--- | :--- | :--- |
+| Symbole | ${}^{36}_{17}Cl$ | ${}^{1}_{0}n$ | ${}^{1}_{1}p$ |
+| Masse (u) | 35,9590 | 1,0087 | 1,0073 |
+
+• Le temps de demi-vie du chlore 36 : $t_{1/2} = 3,01.10^5$ ans
+• $1u = 931,5 \text{ MeV.C}^{-2}$
+
+**1 - Désintégration du noyau de chlore 36 :**
+
+La désintégration du chlore ${}^{36}_{17}Cl$ donne lieu à la formation de l'argon ${}^{36}_{18}Ag$
+
+**1.1.** Donner la composition du noyau de chlore ${}^{36}_{17}Cl$ **(0,25pts)**
+
+**1.2.** Calculer en MeV l'énergie de liaison du noyau du chlore 36 **(0,5pts)**
+
+**1.3.** Ecrire l'équation de cette désintégration. De quel type de radioactivité s'agit-il ? **(0,5pts)**
+
+**2 - Datation d'une nappe phréatique stagnante :**
+
+La mesure de la radioactivité, à un instant t, d'un échantillon d'eaux de surface a donné la valeur $a_1 = 11,7.10^{-6} Bq$ et pour un autre échantillon du même volume d'eaux souterraines stagnantes la valeur $a_2 = 1,19.10^{-6} Bq$
+
+On Suppose que le chlore 36 est l'unique responsable de la radioactivité dans les eaux, et que sa radioactivité dans les eaux de surface est la même que celle dans les eaux souterraines stagnantes au moment de la formation de la nappe phréatique, considéré comme origine des dates.
+
+Déterminer, en années, l'âge de la nappe phréatique étudiée **(0,75pts)**
+
+**Exercice 2 : Electricité - Etude d'une bobine**
+
+Pendant une séance de travaux pratique, deux groupes d'élèves ont fait deux études différentes afin de déterminer l'inductance L et la résistance r d'une bobine
+
+**1 -** Le premier groupe a effectué le montage électrique représenté dans la *figure 1* et qui est composé d'une bobine (b) d'inductance L et de résistance r, d'un conducteur ohmique (D) de résistance R=6$\Omega$, d'un
+
+*Traduction : A. EL AAMRANI*
 
 -- 5 of 8 --
 
+générateur G de force électromotrice E=6V et de résistance interne négligeable, et d'un interrupteur du courant K.
 
+![Figure 1](image-placeholder)
+*Figure 1*
+
+Le groupe a obtenu, en utilisant un dispositif d'acquisition informatique convenable, la courbe de la *figure 2* qui représente les variations de l'intensité du courant passant par le circuit en fonction du temps i=f(t).
+
+**1.1.** Etablir l'équation différentielle vérifiée par l'intensité du courant i(t) **(0,5pts)**
+
+**1.2.** Vérifier que la solution de l'équation différentielle s'écrit sous la forme : $i(t) = I_0(1 - e^{-\frac{t}{\tau}})$, tel que $I_0$ est l'intensité de courant électrique passant par le circuit au régime permanent et $\tau$ la constante du temps. **(0,5pts)**
+
+![Figure 2](image-placeholder)
+*Figure 2*
+
+**1.3.** A partir de la courbe de la *figure 2*, déterminer la valeur de $I_0$, et en déduire la valeur de r. **(0,75pts)**
+
+**1.4.** Déterminer graphiquement $\tau$. **(0,25pts)**
+
+**1.5.** En déduire L **(0,5pts)**
+
+**2 -** Le deuxième groupe a totalement chargé un condensateur de capacité C=10$\mu$F à l'aide d'un générateur G de force électromotrice E=6V, puis il le déchargea dans la bobine (b), et il a visualisé sur l'écran de l'oscilloscope la courbe de la *figure 3* (page 6) représentant les variations de la tension U$_c$ aux bornes du condensateur en fonction du temps
+
+**2.1.** Dessiner le schéma du montage expérimental utilisé. **(0,5pts)**
+
+**2.2.** Justifier l'amortissement des oscillations. **(0,25pts)**
+
+**2.3.** Déterminer graphiquement la valeur de la pseudo-période T, et en déduire la valeur de l'inductance L de la bobine (b) en considérant que la période propre T$_0$ de l'oscillateur est égale à la demi-période T. (on prend $\pi^2= 10$). **(0,75pts)**
+
+**2.4.** Quelle est la nature de l'énergie emmagasinée dans le circuit à l'instant t=25ms ? Justifier. **(0,5pts)**
+
+**2.5.** Le deuxième groupe a monté la bobine (b) et le condensateur précédent en série avec un générateur qui fourni au circuit une tension directement proportionnelle à l'intensité du courant électrique qui le parcourt (u=k.i). Les oscillations sont entretenues quand K prend la valeur k=50 (SI). Trouver r la résistance interne de la bobine. **(0,5pts)**
+
+*Traduction : A. EL AAMRANI*
 
 -- 6 of 8 --
 
+![Figure 3](image-placeholder)
+*Figure 3*
 
+**Exercice 3 : Mécanique - Etude de mouvement plan d'un corps solide**
+
+Le saut d'obstacles et des tranchées par les voitures ou par les motos est considéré l'un des défis qu'affrontent les aventurières.
+
+Cet exercice a pour objectif de connaitre quelques conditions qui doivent être satisfaites pour valider ce défi.
+
+Une course d'aventure est constituée d'une piste rectiligne AB et d'une piste BO inclinée d'un angle $\alpha$ par rapport au plan horizontal AC et un fossé de largeur D (*figure1*).
+
+On modélise {Voiture + Conducteur} par un système S indéformable de masse m et de centre d'inertie G.
+
+On étudie le mouvement du centre d'inertie G dans un repère géocentrique considéré Galiléen et on néglige l'action de l'air sur le système (S), ainsi que les dimensions de ce dernier par rapport aux distances parcours.
+
+**Données :**
+
+• La masse du système (S) : m = 1200 kg
+• L'angle $\alpha = 10^\circ$
+• L'intensité de pesanteur g = 9,80 ms$^{-2}$
+
+**1- l'étude du mouvement rectiligne du système (S)**
+
+Le système (S) passe par le point A à l'instant t$_0$ = 0 et par le point B à l'instant t$_1$ = 9,45s
+
+La *figure 2* représente les variations de la vitesse v du mouvement de G sur la piste AB en faction du temps
+
+*Traduction : A. EL AAMRANI*
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1] ---
+- **Contexte de l'exercice** : Physique - Électricité - Étude d'une bobine (Exercice 2, Question 1)
+- **Description du dispositif ou montage** : Circuit électrique en série fermé. Composants : un interrupteur K, un générateur G (cercle avec lettre G, borne + à gauche, borne - à droite), une résistance ohmique notée (D) (rectangle), et une bobine notée (b) (symbole self). Le générateur est en bas du circuit, l'interrupteur à gauche, la résistance et la bobine en haut.
+- **Analyse détaillée du graphe / courbe / tableau** : N/A (Montage électrique)
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2] ---
+- **Contexte de l'exercice** : Physique - Électricité - Étude d'une bobine (Exercice 2, Questions 1.3, 1.4)
+- **Description du dispositif ou montage** : Graphe cartésien.
+- **Analyse détaillée du graphe / courbe / tableau** : 
+  - Axe des abscisses : temps t en ms, graduations de 0 à 70 par pas de 10.
+  - Axe des ordonnées : intensité i en mA, graduations de 0 à 60 (et au-delà), pas de 20.
+  - Courbe : commence à l'origine (0,0), croît de façon concave, tend vers une asymptote horizontale située à i = 60 mA. Une tangente est tracée à l'origine.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 3] ---
+- **Contexte de l'exercice** : Physique - Électricité - Étude d'une bobine (Exercice 2, Question 2)
+- **Description du dispositif ou montage** : Graphe cartésien.
+- **Analyse détaillée du graphe / courbe / tableau** :
+  - Axe des abscisses : temps t en ms, graduations de 0 à 90 par pas de 10.
+  - Axe des ordonnées : tension u$_C$ en V, graduations de -6 à 6 par pas de 1.
+  - Courbe : oscillation amortie. Valeur initiale u$_C$ = 6 V à t = 0. Premier minimum vers t = 10 ms (u$_C$ ≈ -3,5 V). Premier maximum vers t = 20 ms (u$_C$ ≈ 2,5 V). Les amplitudes décroissent rapidement vers 0.
 
 -- 7 of 8 --
 
+الصفحة
+7 8
 
+الامتحان الوطني الموحد لجهة بكالوريا - السنة الدراسية 2009 - 2010
+مادة الفيزياء و الكيمياء - مسلك العلوم التجريبية - مسلك العلوم الطبيعية (خيار فرنسية)
+
+Figure 1
+
+1.1. Quelle est la nature du mouvement de G sur la piste AB ? Justifier. (0,5pts)
+
+1.2. Déterminer graphiquement la valeur de l'accélération a du mouvement de G. (0,75pts)
+
+1.3. Calculer la distance AB. (0,75pts)
+
+1.4. Sur la piste BO, le système (S) est soumis à la force $\vec{F}$ du moteur et à une force de frottements $\vec{f}$ d'intensité f = 500 N. On considère que les deux forces sont constantes et parallèles à la piste BO.
+Trouver en appliquant la deuxième loi de Newton, l'intensité F de la force poussante pour que le système (S) ait la même valeur d'accélération a durant son mouvement sur la piste AB. (0,75pts)
+
+Figure 2
+
+Traduction : A. EL AAMRANI
 
 -- 8 of 8 --
 
+الصفحة
+8 8
+
+الامتحان الوطني الموحد لجهة بكالوريا - السنة الدراسية 2009 - 2010
+مادة الفيزياء و الكيمياء - مسلك العلوم التجريبية - مسلك العلوم الطبيعية (خيار فرنسية)
+
+2- Etude du mouvement du système (S) dans le champ de pesanteur uniforme.
+
+Le système (S) arrive au point O avec une vitesse $\vec{v}_0$ de valeur v = 30 ms$^{-1}$ et poursuit son mouvement pour qu'il tombe au point E éloigné du point C par une distance CE = 43 m. On prend l'instant où le système (S) commence à dépasser le fossé comme nouvelle origine du repère du temps, tel que G est coïncidé avec O l'origine du repère $(\vec{Ox}, \vec{Oz})$ (Figure 1)
+
+2.1. Etablir les équations horaires x(t) et z(t) du mouvement de G dans le repère $(\vec{Ox}, \vec{Oz})$ (1pt)
+
+2.2. En déduire l'équation de la trajectoire et déterminer les coordonnées de son sommet. (1,25pts)
+
+2.3. Déterminer la hauteur h entre les points C et O. (1pt)
+
+Traduction : A. EL AAMRANI
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 1] ---
+- **Contexte de l'exercice** : Physique - Cinétique (Mouvement rectiligne et mouvement de projectile)
+- **Description du dispositif ou montage** : Le schéma montre une piste horizontale AB sur laquelle se trouve un véhicule (système S). À l'extrémité B, la piste s'arrête et il y a un fossé. La piste reprend au point E. Un repère orthonormé est placé en O (coïncidant avec C au début du mouvement de projectile). L'axe x est horizontal vers la droite, l'axe z est vertical vers le haut. Le vecteur vitesse initiale $\vec{v}_0$ part de O avec un angle $\alpha$ par rapport à l'horizontale. Le vecteur $\vec{k}$ est dirigé vers le haut le long de l'axe z. Le vecteur $\vec{i}$ est dirigé vers la droite le long de l'axe x. La hauteur entre le niveau de la piste AB et le point C est notée h. Une indication "Largeur de la tranchée" montre la largeur du fossé entre le bord C et le bord E.
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (c'est un schéma de dispositif).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Figure 2] ---
+- **Contexte de l'exercice** : Physique - Cinétique (Analyse graphique d'un mouvement rectiligne)
+- **Description du dispositif ou montage** : Graphique représentant la vitesse V en fonction du temps t.
+- **Analyse détaillée du graphe / courbe / tableau** : 
+    - Axe des abscisses : t (s), gradué de 0 à 8 avec des intervalles de 2 unités majeures.
+    - Axe des ordonnées : V (m/s), gradué de 0 à 30 avec des intervalles de 10 unités majeures.
+    - La courbe est une droite ascendante commençant au point (0, 10).
+    - La droite passe approximativement par le point (6, 20).
+    - La droite se termine vers t = 9 avec une valeur de V proche de 29 m/s.

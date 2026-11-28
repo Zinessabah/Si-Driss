@@ -1,36 +1,469 @@
-
-
 -- 1 of 9 --
 
+**En-tête du document :**
+- Logo et texte arabe en haut à gauche : "المملكة المغربية", "وزارة التربية الوطنية والتكوين المهني والتعليم العالي والبحث العلمي", "المديرية الإقليمية".
+- Titre central : "الامتحان الوطني الموحد للبكالوريا دورة 2018 - الاستدراكية - شعبة علوم الحياة والأرض".
+- Code : RS34F.
+- Tableau d'informations :
+    - مدة الامتحان (Durée) : 3 heures.
+    - مادة الامتحان (Matière) : الفيزياء والكيمياء (Physique et Chimie).
+    - الشعبة (Filière) : السنة الثانية باكالوريا - شعبة علوم الحياة والأرض.
+    - رقم الجلوس (N° de place) : 5.
+    - اسم المترشح (Nom du candidat) : [Champ vide].
+- Texte encadré : "Il est permis d'utiliser la calculatrice non programmable".
 
+**Première partie : restitution des connaissances (5 pts)**
+
+**I. Définissez les notions suivantes : Allèle - Mutation** (1pt)
+
+**II. Les caractéristiques des chromosomes (forme et disposition) changent selon les phases de la mitose et la méiose. Citez deux de ces caractéristiques pour chacune des deux phases suivantes :**
+a - l'anaphase I de la méiose. (0.5pt)
+b - l'anaphase de la mitose. (0.5pt)
+
+**III. Les figures ci-dessous présentent trois étapes d'un phénomène biologique en relation avec l'expression de l'information génétique.**
+Donnez le nom du phénomène présenté par les trois étapes et le nom de chacune des étapes 1, 2 et 3. (1pt)
+
+[Zone de figures : Schémas biologiques]
+- **Etape 1** : Schéma montrant un brin d'ADN (ARNt, UAC, ARN m) et un grand sous-unité avec Site P et Site A.
+- **Etape 2** : Schéma montrant un ribosome avec codons (AAA, GGC) et anticodons (UAC).
+- **Etape 3** : Schéma montrant une chaîne polypeptidique en formation avec numéros 1 à 6 et séquences d'ARNm (AAC GUU UAG, UCC, AAC GUU AAG).
+- Tableau à droite : "Les acides aminés : 1 = Met, 2 = Phe, 3 = Pro, 4 = Gly, 5 = Lys, 6 = Arg".
+
+**IV. Pour chacune des propositions numérotées de 1 à 4, une seule suggestion est correcte.**
+Recopiez les couples (1 ...) (2 ...) (3 ...) (4 ...) et écrivez pour chaque couple la lettre correspondante à la suggestion correcte. (2 pts)
+
+**1- Le brassage interchromosomique lors de la méiose résulte de la répartition indépendante et aléatoire de :**
+a. des chromosomes homologues pendant l'anaphase I.
+b. des chromosomes homologues pendant l'anaphase II.
+c. des chromatides pendant l'anaphase I.
+d. des chromatides pendant l'anaphase II.
+
+**2- Durant la métaphase de la mitose, chaque chromosome est formé :**
+a. d'une seule chromatide constituée de deux brins d'ADN.
+b. de deux chromatides constituée chacune d'un brin d'ADN.
+c. de deux chromatides constituée chacune de deux brins d'ADN.
+d. de deux chromatides l'une constituée d'un seul brin d'ADN et l'autre de deux brins d'ADN.
 
 -- 2 of 9 --
 
+**En-tête du document :** (Identique à la page 1 avec numéro de page 2)
 
+**3- Dans le cas du monohybridisme, le croisement entre un individu homozygote récessif et un individu hétérozygote donne :**
+a. 25% de phénotype récessif et 75% de phénotype dominant.
+b. 75% de phénotype récessif et 25% de phénotype dominant.
+c. 25% de phénotype récessif, 50% de phénotype intermédiaire et 25% de phénotype dominant.
+d. 50% de phénotype récessif et 50% de phénotype dominant.
+
+**4- Au cours de la réplication de l'ADN :**
+a. la double hélice parentale reste intacte et une deuxième copie entièrement nouvelle est synthétisée.
+b. chaque brin des deux molécules d'ADN formées contient des fragments anciens et des fragments nouvellement synthétisés.
+c. les deux brins de la double hélice parentale se séparent et chacun d'eux sert de modèle pour la synthèse d'un nouveau brin complémentaire.
+d. la double hélice parentale ne sert pas à la synthèse des deux nouvelles copies d'ADN.
+
+**Deuxième partie : raisonnement scientifique et communication graphique et écrite (15 pts)**
+
+**Exercice 1 (5 pts)**
+
+Le vieillissement de la population est un phénomène universel due à l'amélioration des conditions de vie. Cependant, l'avancée en âge s'accompagne d'une diminution de la masse et de la fonction des muscles, qui peut être liée à une maladie appelée sarcopénie.
+Pour déterminer les causes responsables de la sarcopénie évolutive avec l'âge, on propose les données suivantes :
+Le document 1 présente les résultats de mesure de certaines caractéristiques du muscle squelettique strié en fonction de l'âge.
+
+**1. En vous basant sur le document 1 décrivez les variations subies par le muscle squelettique strié en fonction de l'âge.** (1pt)
+
+[Document 1 : Deux graphiques]
+- Graphique gauche : Axe des ordonnées "Intensité de contraction (mN)", Axe des abscisses "Age (ans)" de 20 à 100. Courbe décroissante.
+- Graphique droite : Axe des ordonnées "Capacité aérobie (L/min)", Axe des abscisses "Age (ans)" de 20 à 100. Courbe décroissante.
+- Remarque : "La capacité aérobie désigne la capacité métabolique des mitochondries à oxyder les glucides et produire de l'ATP."
+
+Pour expliquer ces variations on suggère les deux hypothèses suivantes :
+**Hypothèse 1 :** La variation de l'intensité de la contraction musculaire est liée à un faible pourcentage des fibres musculaires de type II par rapport au pourcentage des fibres de type I.
+**Hypothèse 2 :** La variation de la capacité aérobie est due à la diminution du nombre de mitochondries.
+Pour vérifier ces deux hypothèses nous proposons les documents 2 et 3.
+
+[Document 2 : Diagramme en barres]
+- Titre : "Pourcentage des fibres musculaires (%)".
+- Axe X : "Individu sain", "Individu malade".
+- Légende : Fibres de type I (blanc), Fibres de type II (rayé).
+- Valeurs approximatives : Individu sain (Type I ~48%, Type II ~51%), Individu malade (Type I ~51%, Type II ~48%).
+
+[Document 3 : Tableau]
+- Colonnes : Type de fibres / Caractéristiques / Fibres de Type I / Fibres de Type II.
+- Lignes : Intensité de contraction (+ / ++++), Résistance à la fatigue (++++ / +), Nombre de mitochondries (++++ / +).
+- Note : "+ : indique l'importance de chaque caractéristique".
+
+**2. En vous basant sur les documents 2 et 3 vérifiez les deux hypothèses. Justifiez votre réponse.** (1,5pts)
 
 -- 3 of 9 --
 
+**En-tête du document :** (Identique à la page 1 avec numéro de page 3)
 
+Pour expliquer les causes des variations de la capacité aérobie chez les malades de sarcopénie, des mesures de l'activité enzymatique du cytochrome - c oxydase et du citrate synthase ont été effectuées au niveau du muscle squelettique strié en fonction de l'âge.
+Le document 4 présente les résultats obtenus et le document 5 illustre les sites d'actions des deux enzymes.
+
+[Document 4 : Graphique]
+- Titre : "Activité enzymatique oxydative (nmol/min de protéine)" vs "Age (ans)".
+- Courbe pleine : Cytochrome - c oxydase (valeurs élevées, décroissante).
+- Courbe pointillée : Citrate synthase (valeurs plus faibles, décroissante).
+
+[Document 5 : Figures]
+- **Figure a** : Cycle de Krebs (Acétyl-CoA, Oxaloacétate, Citrate, etc.) avec indication "Site d'action de la citrate synthase" (1).
+- **Figure b** : Chaîne respiratoire (Complexe I, II, III, IV, V, ATP synthase) avec indication "Site d'action du cytochrome-c oxydase" (2) et "Flux d'électrons".
+
+**3. A partir des documents 4, 5 et de vos connaissances expliquez la diminution de la production d'ATP chez l'individu atteint de sarcopénie.** (1,5pts)
+Pour traiter la sarcopénie, les kinésithérapeutes utilisent un programme adéquat d'activités physiques (le sport).
+Pour déterminer l'effet de l'activité physique sur la fonction des mitochondries on propose le document 6 qui présente l'activité de la citrate synthase et le taux d'oxydation des métabolites par le cycle de Krebs chez des personnes qui pratiquent de l'activité physique et des personnes qui ne pratiquent pas d'activités physiques.
+
+**4. A partir de votre réponse à la question 3 et du document 6, déterminez le rôle de l'activité physique dans le traitement médical de la sarcopénie.** (1pt)
+
+[Document 6 : Diagramme en barres groupées]
+- Axe Y : "Unités arbitraires" (0 à 80).
+- Axe X : "Activité enzymatique de citrate synthase", "Taux d'oxydation par le cycle de Krebs".
+- Légende : Personnes qui ne pratiquent pas d'activités physiques (blanc), Personnes qui pratiquent des activités physiques (rayé).
+
+**Exercice 2 : (5 pts)**
+
+La question des ordures ménagères est quotidienne et touche chaque individu tant sur le plan professionnel que familial, car elles ne cessent de croître en quantité, en qualité et en nocivité. Dans le but de connaître l'impact des ordures ménagères sur l'environnement au Maroc et les techniques de traitement et de gestion de ces déchets, on propose les données suivantes :
+Le document 1 présente l'évolution du pourcentage de quelques composantes des ordures ménagères au Maroc et la durée de vie de ces ordures dans la nature. Le document 2 montre les taux de la matière organique et de l'humidité des ordures ménagères au Maroc, en France et aux USA.
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Transcription et Traduction (Page 1)] ---
+- **Contexte de l'exercice** : Biologie - Expression de l'information génétique.
+- **Description du dispositif ou montage** : Trois étapes schématiques (Etape 1, Etape 2, Etape 3) montrant la synthèse d'ARNm à partir d'ADN, la traduction par un ribosome avec tRNA et acides aminés, et la formation d'une chaîne polypeptidique. Présence d'un tableau de correspondance codon/acide aminé (1=Met à 6=Arg).
+- **Analyse détaillée du graphe / courbe / tableau** : Non applicable (schéma conceptuel).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 1 (Page 2)] ---
+- **Contexte de l'exercice** : Physiologie musculaire - Vieillissement.
+- **Description du dispositif ou montage** : Deux graphiques côte à côte.
+- **Analyse détaillée du graphe / courbe / tableau** : 
+    - Graphique 1 : "Intensité de contraction (mN)" en fonction de "Age (ans)". Tendance décroissante linéaire approximative de 20 à 100 ans.
+    - Graphique 2 : "Capacité aérobie (L/min)" en fonction de "Age (ans)". Tendance décroissante linéaire approximative de 20 à 100 ans.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 2 (Page 2)] ---
+- **Contexte de l'exercice** : Histologie musculaire - Fibres musculaires.
+- **Description du dispositif ou montage** : Diagramme en barres groupées comparant "Individu sain" et "Individu malade".
+- **Analyse détaillée du graphe / courbe / tableau** : Axe Y "Pourcentage des fibres musculaires (%)" (44 à 52). Deux séries : Fibres de type I et Fibres de type II.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 3 (Page 2)] ---
+- **Contexte de l'exercice** : Physiologie cellulaire - Caractéristiques des fibres.
+- **Description du dispositif ou montage** : Tableau comparatif.
+- **Analyse détaillée du graphe / courbe / tableau** : Colonnes "Fibres de Type I" et "Fibres de Type II". Lignes : Intensité de contraction, Résistance à la fatigue, Nombre de mitochondries. Notation par signes + (de + à ++++).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 4 (Page 3)] ---
+- **Contexte de l'exercice** : Biochimie enzymatique - Vieillissement.
+- **Description du dispositif ou montage** : Graphique linéaire.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe Y "Activité enzymatique oxydative (nmol/min de protéine)" (0 à 300). Axe X "Age (ans)" (0 à 100). Deux courbes : Cytochrome - c oxydase (supérieure) et Citrate synthase (inférieure), toutes deux décroissantes.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 5 (Page 3)] ---
+- **Contexte de l'exercice** : Biochimie - Respiration cellulaire.
+- **Description du dispositif ou montage** : Deux schémas (Figure a et Figure b).
+- **Analyse détaillée du graphe / courbe / tableau** : 
+    - Figure a : Cycle de Krebs avec molécules (Acétyl-CoA, Citrate, etc.) et flèches de réaction. Site d'action de la citrate synthase indiqué (1).
+    - Figure b : Chaîne de transport électronique avec Complexes I à V, ATP synthase, flux d'électrons et protons. Site d'action du cytochrome-c oxydase indiqué (2).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Document 6 (Page 3)] ---
+- **Contexte de l'exercice** : Physiologie de l'effort - Activité physique.
+- **Description du dispositif ou montage** : Diagramme en barres groupées.
+- **Analyse détaillée du graphe / courbe / tableau** : Axe Y "Unités arbitraires" (0 à 80). Deux groupes de barres : "Activité enzymatique de citrate synthase" et "Taux d'oxydation par le cycle de Krebs". Comparaison entre personnes actives et inactives.
 
 -- 4 of 9 --
 
+<table>
+  <tr>
+    <td><b>Les composantes des ordures ménagères</b></td>
+    <td><b>1960</b></td>
+    <td><b>1999</b></td>
+    <td><b>2004</b></td>
+    <td><b>2013</b></td>
+    <td><b>Duré de décomposition dans la nature</b></td>
+  </tr>
+  <tr>
+    <td>Matières organiques</td>
+    <td>75%</td>
+    <td>70%</td>
+    <td>65%</td>
+    <td>70%</td>
+    <td>3 à 6 mois</td>
+  </tr>
+  <tr>
+    <td>Plastique</td>
+    <td>0,3%</td>
+    <td>3%</td>
+    <td>9%</td>
+    <td>10%</td>
+    <td>450 ans</td>
+  </tr>
+  <tr>
+    <td>Métaux</td>
+    <td>0,4%</td>
+    <td>3%</td>
+    <td>4%</td>
+    <td>2%</td>
+    <td>200 à 500 ans</td>
+  </tr>
+  <tr>
+    <td>Papier - Carton</td>
+    <td>20%</td>
+    <td>20%</td>
+    <td>10%</td>
+    <td>7%</td>
+    <td>3 à 12 mois</td>
+  </tr>
+</table>
 
+**Document 1**
+
+**1.** A partir du document 1, décrivez l'évolution de chaque composante des ordures ménagères au Maroc et montrez pourquoi elles présentent un risque pour l'environnement ? (1,5pt)
+
+**2.** En vous basant sur le document 2, comparez les taux de la matière organique et de l'humidité des ordures ménagères des trois pays et déduisez deux caractéristiques des ordures ménagères au Maroc. (1pt)
+
+**3.** D'après votre réponse à la question 2 et vos connaissances proposez deux techniques adéquates pour valoriser les ordures ménagères au Maroc. (0,5pt)
+
+Les lixiviats issus des ordures ménagères au Maroc constituent l'une des contraintes majeures à la gestion des décharges publiques, parmi elles la décharge contrôlée du Grand Agadir. Des études ont été faites dans le but de développer une technique de traitement des lixiviats par aération intensive ; technique relativement simple et peu coûteuse illustrée par le schéma du document 3.
+
+**Document 3**
+
+![Schema de traitement par aeration intensive]
+- **Lixiviats témoins** (cuve à gauche)
+- **Sortie d'air**
+- **Distributeur d'air**
+- **Lixiviats aérés** (cuve centrale)
+- **Prise de courant** (symbole moteur)
+- **Aérateur** (à gauche et à droite du circuit)
+- **Remarque :** la force du courant d'air généré par les aéateurs du dispositif d'aération contribue à la dégradation des matières oxydables
+
+Le document 4 montre les résultats de l'effet de l'aération intensive des lixiviats issus des déchets ménagers du Grand Agadir sur la DBO5 (figure a) et la DCO (figure b).
+
+**Document 4**
+
+**Figure a**
+- Axe Y : DBO5 (mg/L), échelle 0 à 50000
+- Axe X : Temps (jours), échelle 0 à 60
+- Légende : Lixiviats aérés (ligne pleine), Lixiviats témoins (ligne pointillée)
+
+**Figure b**
+- Axe Y : DCO (mg/L), échelle 0 à 80000
+- Axe X : Temps (jours), échelle 0 à 60
+- Légende : Lixiviats aérés (ligne pleine), Lixiviats témoins (ligne pointillée)
 
 -- 5 of 9 --
 
+**4.** En vous basant sur le document 4, Comparez l'évolution de la DBO5 et DCO dans les lixiviats aérés et les lixiviats témoins. (1pt)
 
+**5.** En vous appuyant sur les documents 3 et 4 et sur vos connaissances, expliquez la variation de la DBO5 et de la DCO dans les lixiviats aérés. (1pt)
+
+**Exercice 3 : (5 pts)**
+
+La chaîne de montagne d'Oman est une chaîne récente qui présente le plus grand affleurement d'ophiolite du monde (500 km de long). Pour en savoir plus sur certaines structures tectoniques et rocheuses de cette chaîne et déterminer les conditions et les étapes de sa formation on présente les données suivantes :
+• Les figures du document 1 montrent la position de la plaque d'Arabie et la plaque Eurasique au temps actuel et avant 20 millions d'années, et le document 2 présente une coupe géologique au niveau de la chaîne d'Oman.
+
+**Document 1**
+
+**Figure a : avant 20 millions d'années**
+- Plaque Arabique (à gauche)
+- Plaque Euro-asiatique (en haut)
+- Domain océanique (entre les plaques)
+- Haut relief issu du rapprochement
+- Sens de déplacement de la plaque (flèches)
+- Faille
+
+**Figure b : au temps actuel**
+- Plaque Arabique
+- Plaque Euro-asiatique
+- Mer rouge
+- Oman
+- Makran
+- Sédiments océaniques
+- Chevauchement
+
+**Document 2**
+
+Coupe géologique SSW vers NNE.
+- Axe Y : Profondeur en Km (0, 10, 20)
+- Localisations : Nappes Hawasina, Semail, Saih Hatat, Golf d'Oman
+- Légende :
+    - Nappe des Hawasina
+    - Roches sédimentaires déformées contenant des inclusions métamorphiques
+    - Ophiolite
+    - Permien - Crétacé supérieur
+    - Croûte continental de la plaque arabique
+    - Pré-cambrien
+
+**Document 3**
+
+<table>
+  <tr>
+    <td><b>Echantillons de roches</b></td>
+    <td colspan="2"><b>Conditions de formation</b></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><b>Pression en GPa</b></td>
+    <td><b>Température en °C</b></td>
+  </tr>
+  <tr>
+    <td>R<sub>1</sub></td>
+    <td>0.3</td>
+    <td>320</td>
+  </tr>
+  <tr>
+    <td>R<sub>2</sub></td>
+    <td>0.8</td>
+    <td>420</td>
+  </tr>
+  <tr>
+    <td>R<sub>3</sub></td>
+    <td>1.6</td>
+    <td>530</td>
+  </tr>
+</table>
+
+**1.** En vous basant sur les documents 1 et 2 relevez les indices montrant la confrontation de deux plaques et les indices d'une obduction. (1pt)
+• L'étude de trois échantillons de roches R<sub>1</sub>, R<sub>2</sub> et R<sub>3</sub> appartenant à Saih Hattat a permis d'obtenir les résultats du document 3. Le diagramme Pression-Température du document 4 montre les domaines de stabilité de quelques associations minéralogiques et les différents faciès métamorphiques.
 
 -- 6 of 9 --
 
+**Document 4**
 
+Diagramme Pression - Température.
+- Axe X (haut) : Température en °C (100 à 1100)
+- Axe Y (gauche) : Profondeur en Km (15 à 75)
+- Axe Y (droite) : Pression Gpa (0.5 à 2)
+- Zones :
+    - 1 : Glaucophane, Actinite Chlorite
+    - 2 : Amphibole
+    - 3 : Clinopyroxène Plagioclase
+    - 4 : Jadéite, Granit
+- Solidus (zone droite)
+- Conditions non réalisées dans la nature
+- Légende :
+    - Limite des réactions minéralogiques
+    - Limite des faciès métamorphiques : 1- Schiste bleu, 2- Schiste vert, 3- Amphibolite, 4- Eclogite
+
+**2-** En vous basant sur les documents 3 et 4 :
+**a-** Déterminez les faciès métamorphiques auxquels appartiennent chacune des roches R<sub>1</sub>, R<sub>2</sub> et R<sub>3</sub>. (0.75pt)
+**b-** Déterminez les transformations minéralogiques lorsqu'on passe de la roche R<sub>1</sub> à la roche R<sub>2</sub>, et de la roche R<sub>2</sub> à la roche R<sub>3</sub> (1 pt)
+**c-** Déduisez le type de métamorphisme dans cette région et le phénomène géologique qui y est responsable, justifiez votre réponse. (0.75pt)
+
+Le document 5 résume les étapes de la formation de la chaîne d'Oman selon le modèle explicatif de Michard.
+
+**Document 5**
+
+Trois panneaux chronologiques :
+1. **-100 à -95 Millions d'années** : Mer du Tethys, Plaque Arabique, Plaque Eurasique, Rupture.
+2. **-95 à -90 Millions d'années** : Croûte océanique, Croûte continentale, Manteau supérieur.
+3. **-90 à -85 Millions d'années** : Croûte continental, OMAN, IRAN, Contraintes tectoniques.
+
+**3-** En vous basant sur le document 5 et les données précédentes, déterminez les étapes de formation de la chaîne d'Oman en précisant les phénomènes géologiques qui ont eu lieu dans la région. (1.5 pt)
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Tableau Document 1 (Page 4)] ---
+- **Contexte de l'exercice** : Chimie - Gestion des déchets / Ordures ménagères
+- **Description du dispositif ou montage** : Tableau présentant la composition des ordures ménagères au Maroc pour les années 1960, 1999, 2004, 2013 et la durée de décomposition dans la nature.
+- **Analyse détaillée du graphe / courbe / tableau** : 
+    - Lignes : Matières organiques, Plastique, Métaux, Papier - Carton.
+    - Colonnes : Pourcentages par année et durée (ex: Plastique 450 ans).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphique Document 2 (Page 4)] ---
+- **Contexte de l'exercice** : Chimie - Comparaison internationale des déchets
+- **Description du dispositif ou montage** : Diagramme en barres groupées comparant le taux en % de la matière organique et de l'humidité pour trois pays : Maroc, France, USA.
+- **Analyse détaillée du graphe / courbe / tableau** : 
+    - Axe Y : Taux en % (0 à 80).
+    - Axe X : Pays (Maroc, France, USA).
+    - Légende : Blanc = La matière organique, Rayé = L'humidité.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Schéma Document 3 (Page 4)] ---
+- **Contexte de l'exercice** : Chimie - Traitement des lixiviats
+- **Description du dispositif ou montage** : Schéma d'un réacteur de traitement par aération intensive. Comprend une cuve de lixiviats témoins, un distributeur d'air, un système de prise de courant, des aérateurs, et des flux d'air (entrée/sortie).
+- **Analyse détaillée du graphe / courbe / tableau** : Flèches indiquant le mouvement de l'air et des liquides. Boîte de remark sur la force du courant d'air.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Graphiques Document 4 (Page 4)] ---
+- **Contexte de l'exercice** : Chimie - Suivi du traitement (DBO5 et DCO)
+- **Description du dispositif ou montage** : Deux courbes (Figure a et Figure b) montrant l'évolution dans le temps.
+- **Analyse détaillée du graphe / courbe / tableau** : 
+    - Figure a : DBO5 (mg/L) vs Temps (jours). Courbe pleine (aérés) chute rapidement, courbe pointillée (témoins) chute lentement.
+    - Figure b : DCO (mg/L) vs Temps (jours). Même tendance.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Cartes Document 1 (Page 5)] ---
+- **Contexte de l'exercice** : Physique - Géologie / Tectonique des plaques (Chaîne d'Oman)
+- **Description du dispositif ou montage** : Deux cartes géologiques. Figure a (avant 20 Ma) et Figure b (au temps actuel).
+- **Analyse détaillée du graphe / courbe / tableau** : 
+    - Notations : Plaque Arabique, Plaque Euro-asiatique, Mer rouge, Oman, Makran.
+    - Symboles : Flèches de déplacement, failles, chevauchements.
+    - Légende : Domain océanique, Haut relief, Sédiments océaniques.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Coupe géologique Document 2 (Page 5)] ---
+- **Contexte de l'exercice** : Physique - Géologie / Structure de la chaîne d'Oman
+- **Description du dispositif ou montage** : Coupe stratigraphique de SSW à NNE.
+- **Analyse détaillée du graphe / courbe / tableau** : 
+    - Axe vertical : Profondeur en Km (0 à 20).
+    - Formations : Nappes Hawasina, Semail, Saih Hatat, Golf d'Oman.
+    - Légende : Ophiolite, Roches sédimentaires déformées, Croûte continentale.
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Tableau Document 3 (Page 5)] ---
+- **Contexte de l'exercice** : Physique - Métamorphisme (Conditions de formation)
+- **Description du dispositif ou montage** : Tableau de données pour les échantillons R1, R2, R3.
+- **Analyse détaillée du graphe / courbe / tableau** : 
+    - Colonnes : Pression en GPa (0.3, 0.8, 1.6), Température en °C (320, 420, 530).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Diagramme P-T Document 4 (Page 6)] ---
+- **Contexte de l'exercice** : Physique - Métamorphisme / Faciès métamorphiques
+- **Description du dispositif ou montage** : Diagramme de stabilité Pression-Température.
+- **Analyse détaillée du graphe / courbe / tableau** : 
+    - Axe X : Température en °C. Axe Y : Pression Gpa / Profondeur Km.
+    - Zones délimitées : Glaucophane, Amphibole, Clinopyroxène Plagioclase, Granit, Jadéite.
+    - Numéros 1, 2, 3, 4 correspondant aux limites des faciès (Schiste bleu, Schiste vert, Amphibolite, Eclogite).
+
+--- [FIGURE / SCHÉMA DÉCODÉ : Diagramme Document 5 (Page 6)] ---
+- **Contexte de l'exercice** : Physique - Géologie / Formation de la chaîne d'Oman
+- **Description du dispositif ou montage** : Trois panneaux illustrant l'évolution tectonique sur 15 millions d'années.
+- **Analyse détaillée du graphe / courbe / tableau** : 
+    - Étapes : -100 à -95 Ma (Rupture Mer du Tethys), -95 à -90 Ma (Obduction croûte océanique), -90 à -85 Ma (Contraintes tectoniques OMAN/IRAN).
+    - Flèches de déplacement des plaques.
 
 -- 7 of 9 --
 
+الوزارة المكلفة بالتربية الوطنية
+التعليم الأولي والرياضة - قطاع التربية
+المديرية الإقليمية - شتوكة آيت باها
+الشهادة: البكالوريا - خيار العلوم الحيوية والأرضية
+الدورة العادية 2018 - RR34F
+المادة: الفيزياء والكيمياء
+المعادل: 3
+المدة: 3 ساعات
 
+| Question | Les éléments de réponse | Note |
+| :--- | :--- | :--- |
+| \multicolumn{3}{c}{**Première partie (5 pts)**} |
+| I | Allèle : une séquence nucléotidique qui représente l'une des formes que peut avoir un gène. ........................................................................................................................ 0.5 pt<br>Mutation : est une modification aléatoire de la séquence de la molécule d'ADN qui peut toucher un ou plusieurs nucléotides. ........................................................................................................................ 0.5 pt | |
+| II | a- Au cours de l'anaphase I de la méiose : chromosomes à deux chromatides - séparation des chromosomes homologues sans clivage du centromère. ........................................................................................................................ 0.5 pt<br>b- Au cours de l'anaphase de la mitose : chromosomes à un seul chromatide - clivage du centromère et séparation des chromatides........................................................................................................................ 0.5 pt | |
+| III | Nom du phénomène : la transcription ........................................................................................................................ 0.25pt<br>Nom correspondant à chaque étape : ........................................................................................................................ 0.75pt<br>étape 1 : initiation ; étape 2 : élongation ; étape 3 : terminaison ....(3×0.25) | |
+| IV | (1,a) ; (2,c) ; (3,d) ; (4,c) ........................................................................................................................(4×0.5) | 2 pt |
+| \multicolumn{3}{c}{**Deuxième partie (15 pts)**} |
+| \multicolumn{3}{c}{**Exercice 1 (5 pts)**} |
+| 1 | les variations subies par le muscle squelettique strié en fonction de l’âge :<br>- Diminution progressive de l’intensité de la contraction musculaire avec l’âge, de 140nm à 40mm ........................................................................................................................ 0.5 pt<br>- Diminution progressive de la capacité aérobie avec l’âge, de 3L/min à 1.5L/min ........................................................................................................................ 0.5 pt | |
+| 2 | Vérification des deux hypothèses avec justification :<br>•Hypothèse 1 : d’après le document 2, par rapport à l’individu normal, on constate qu’il y a une augmentation du pourcentage des fibres de type I et une diminution de pourcentage des fibres de type II chez le malade.<br>D’après le document 3 les fibres de types I sont caractérisées par une faible intensité de contraction ce qui confirme l’hypothèse 1 ............ 0.75 pt<br>•Hypothèse 2 : le malade a un pourcentage élevé de fibres de type I (document2) ; les fibres de type I sont caractérisées par un nombre important des mitochondries en comparaison avec les fibres de type II (document 3) donc l’hypothèse 2 est réfutée ........................................................................................................................ 0.75 pt | |
 
 -- 8 of 9 --
 
-
+| 3 | - document 4: diminution progressive de l’activité enzymatiques du cytochrome – c oxydase et de la citrate synthase en fonction de l’âge .................... 0.5 pt<br>- document 5 : la citrate synthase agit au niveau du cycle de Krebs en transformant l’acetylCoA en citrate, et le cytochrome – c oxydase intervient dans le transfert des électrons à travers le Cyt-c de la chaîne respiratoire .................... 0.5 pt<br>- la diminution de l’activité enzymatique de la citrate synthase et du cytochrome – c oxydase provoque un dysfonctionnement de la chaîne respiratoire, ce qui explique la diminution de la production de l’ATP au niveau du muscle squelettique strié chez les malades de sarcopénie .................... 0.5 pt | |
+| 4 | - document 6 : augmentation de l’activité de la citrate synthase et le taux d’oxydation par le cycle de Krebs chez les personnes qui pratiquent de l’activité physique par rapport aux personnes qui ne pratiquent pas d’activités physiques .... 0.5 pt<br>- la pratique des activités physiques chez les malades de sarcopénie active le fonctionnement de la chaîne respiratoire ce qui permet aux cellules musculaire d’augmenter leur production d’ATP .................... 0.5 pt | |
+| \multicolumn{3}{c}{**Exercice 2 (5 pts)**} |
+| 1 | - La matière organique : faible diminution de son pourcentage de 75% en 1960 à 70% en 2013 .................... 0.25 pt<br>- Le plastique : augmentation importante de son pourcentage de 0,3% en 1960 à 10% en 2013 .................... 0.25 pt<br>- Les métaux : augmentation de son pourcentage de 0,4% en 1960 à 2% en 2013 ... 0.25 pt<br>- Le papier-carton : diminution importante de son pourcentage de 20% en 1960 à 7% en 2013 .................... 0.25 pt<br>- Les ordures ménagères constituent une menace pour l’environnement au Maroc vu la variété de sa composition et son enrichissement par le plastique et les métaux qui demandent une longue durée pour leur décomposition dans la nature ... 0.5 pt | |
+| 2 | - La matière organique : augmentation de son pourcentage dans les ordures ménagères au Maroc (80%) par rapport à la France (30%) et USA (18%) ............ 0.25 pt<br>- L’humidité : augmentation de son taux dans les ordures ménagères au Maroc (60%) par rapport à la France (35%) et USA (33%) .................... 0.25 pt<br>- Les ordures ménagères au Maroc sont caractérisées par leur richesse en matière organique et par leur taux élevé d’humidité .................... 0.5 pt | |
+| 3 | Vu que les ordures ménagères du Maroc sont riche en matière organique on peut utiliser comme technique de traitement : le compostage et la bio- méthanisation ... 0.5pt | |
+| 4 | - DBOS : diminution rapide de sa concentration dans les lixiviats aériens par rapport aux lixiviats témoins .................... 0.5 pt<br>- DCO : diminution rapide de sa concentration dans les lixiviats aériens par rapport aux lixiviats témoins où le DCO diminue légèrement après le 10ème jour ........ 0.5 pt | |
+| 5 | - La diminution de la DCO des lixiviats aériens est expliquée par l’effet de la force du courant d’air qui entraine la dégradation de la matière oxydable .................... 0.5pt<br>- La diminution de la DBOS des lixiviats aériens est due à leur oxygénation (aération) d’où l’augmentation de l’activité des microorganismes aérobies qui oxydent la matière organique .................... 0.5pt | |
 
 -- 9 of 9 --
 
+| \multicolumn{3}{c}{**Exercice 3 (3pts)**} |
+| 1 | - Deux indices de la confrontation des deux plaques tel que : .................... 0.5 pt<br>réduction du domaine océanique<br>rapprochement de la plaque d’Arabie et la plaque eurasiatique<br>chevauchements, plis et failles<br>- Les indices d’obduction : .................... 0.5 pt<br>présence de sédiments océanique dans le domaine continental<br>déplacement des ophiolites sur le domaine continental (les nappes ophiolitiques) | |
+| 2.a | - Roche R1 : facies du schiste vert.<br>- Roche R2 : facies du schiste bleu.<br>- Roche R3 : facies de l’éclogite. .................... 0.75pt | |
+| 2.b | - Lors du passage de la roche R1 vers la roche R2 : disparition du chlorite et de l’actinote et apparition du glaucohane .................... 0.5 pt<br>- Lors du passage de la roche R2 vers la roche R3 : disparition du glaucophane et apparition de la jadéite et du grenat .................... 0.5 pt | |
+| 2.c | - Les roches R1, R2 et R3 ont subi un métamorphisme de haute pression et de basse température → métamorphisme dynamique → phénomène de subduction...... 0.75 pt | |
+| 3 | Détermination des étapes de formation de la chaîne d’Oman :<br>- Entre -100MA et 95MA : rupture de la lithosphère océanique de la mer de Téthys suite au contraintes compressives .................... 0.5 pt<br>- Entre -95MA et -90MA : subduction et déplacement de la lithosphère océanique de la plaque eurasiatique sur la lithosphère océanique de la plaque arabique ...... 0.5 pt<br>- Entre -90MA et 85MA : la croûte océanique de la mer du Téthys surmonte la croûte continentale de la plaque arabique ; obduction et formation des ophiolites de Semail .................... 0.5 pt | |
+
+=== TRANSCRIPTION VISUELLE DES SCHÉMAS & GRAPHES (IA Si Driss) ===
+Aucune figure, schéma, montage, circuit, graphe ou tableau de mesures n'est présent sur ces pages (7, 8, 9). Ces pages contiennent exclusivement le corrigé textuel sous forme de tableau.
